@@ -365,3 +365,4 @@ Open5GS daemon v2.7.5-24-g8e286b6
 09/05 15:40:27.342: [sgwc] INFO: [Added] Number of SGWC-Sessions is now 1 (../src/sgwc/context.c:924)
 09/05 15:40:27.342: [sgwc] INFO: UE IMSI[001011234567895] APN[internet] (../src/sgwc/s11-handler.c:268)
 09/05 15:40:27.344: [gtp] INFO: gtp_connect() [172.22.0.7]:2123 (../lib/gtp/path.c:60)
+09/05 15:56:25.482: [sgwc] INFO: [Removed] Number of SGWC-Sessions is now 0 (../src/sgwc/context.c:930)

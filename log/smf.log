@@ -361,3 +361,10 @@ Open5GS daemon v2.7.5-24-g8e286b6
 09/05 15:40:27.345: [smf] INFO: [Added] Number of SMF-Sessions is now 1 (../src/smf/context.c:3190)
 09/05 15:40:27.345: [smf] INFO: UE IMSI[001011234567895] APN[internet] IPv4[192.168.100.2] IPv6[] (../src/smf/s5c-handler.c:303)
 09/05 15:40:27.361: [gtp] INFO: gtp_connect() [172.22.0.8]:2152 (../lib/gtp/path.c:60)
+09/05 15:56:25.481: [smf] INFO: Removed Session: UE IMSI:[001011234567895] DNN:[internet:0] IPv4:[192.168.100.2] IPv6:[] (../src/smf/context.c:1693)
+09/05 15:56:25.481: [smf] INFO: [Removed] Number of SMF-Sessions is now 0 (../src/smf/context.c:3198)
+09/05 15:56:25.481: [smf] INFO: [Removed] Number of SMF-UEs is now 0 (../src/smf/context.c:1094)
+09/05 15:57:22.316: [diam] ERROR: pid:Receiver (8) SCTP/noTLS) in fd_sctp_recvmeta@sctp.c:1271: ERROR: in 'ret' :	Connection timed out
+ ((null):0)
+09/05 15:57:22.317: [diam] ERROR: pid:PSM/pcrf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'pcrf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
