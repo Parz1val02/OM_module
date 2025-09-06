@@ -41,12 +41,12 @@ docker compose -f srsue_5g_zmq.yaml up -d && docker container attach srsue_5g_zm
 docker compose -f services.yaml up -d
 
 > Officially supported metrics endpoints in open5gs
-- amf (5g)
-- pcf (5g)
-- smf (4g/5g)
-- upf (4g/5g)
-- pcrf (4g)
-- mme (4g)
+>- amf (5g)
+>- pcf (5g)
+>- smf (4g/5g)
+>- upf (4g/5g)
+>- pcrf (4g)
+>- mme (4g)
 
 ## Provisioning of UE information
 
