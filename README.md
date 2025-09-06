@@ -16,6 +16,11 @@ docker tag ghcr.io/herlesupreeth/docker_srslte:master docker_srslte
 docker pull ghcr.io/herlesupreeth/docker_srsran:master
 docker tag ghcr.io/herlesupreeth/docker_srsran:master docker_srsran
 ```
+For metrics components:
+```
+docker pull ghcr.io/herlesupreeth/docker_metrics:master
+docker tag ghcr.io/herlesupreeth/docker_metrics:master docker_metrics
+```
 
 ### 4G core deployment
 docker compose -f 4g_core_only.yaml up -d
@@ -30,6 +35,18 @@ docker compose -f 5g_core_only.yaml up -d
 docker compose -f srsgnb_zmq.yaml up -d && docker container attach srsgnb_zmq
 #### srsRAN ZMQ 5G UE (RF simulated)
 docker compose -f srsue_5g_zmq.yaml up -d && docker container attach srsue_5g_zmq
+
+### O&M services
+#### Grafana and Prometheus deployment
+docker compose -f services.yaml up -d
+
+> Officially supported metrics endpoints in open5gs
+- amf (5g)
+- pcf (5g)
+- smf (4g/5g)
+- upf (4g/5g)
+- pcrf (4g)
+- mme (4g)
 
 ## Provisioning of UE information
 
@@ -47,3 +64,14 @@ IMSI=001011234567895
 KI=8baf473f2f8fd09487cccbd7097c6862
 OP=11111111111111111111111111111111
 ```
+
+### Access Grafana and Prometheus
+
+#### Grafana
+Open (http://<DOCKER_HOST_IP>:3000) in a web browser, where <DOCKER_HOST_IP> is the IP of the machine/VM running the open5gs containers. Login with following credentials
+```
+Username : open5gs
+Password : oopen5gs
+```
+#### Prometheus
+Open (http://<DOCKER_HOST_IP>:90909) in a web browser, where <DOCKER_HOST_IP> is the IP of the machine/VM running the open5gs containers.

@@ -207,6 +207,7 @@ services:
       - "${PCRF_BIND_PORT}/sctp"
       - "5868/tcp"
       - "5868/sctp"
+      - "9091/tcp"
     networks:
       default:
         ipv4_address: ${PCRF_IP}

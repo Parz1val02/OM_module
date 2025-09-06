@@ -11,3 +11,18 @@ Open5GS daemon v2.7.5-24-g8e286b6
 09/05 12:49:36.036: [sbi] INFO: [afe973a0-8a80-41f0-b7d6-9747932c5232] NF registered [Heartbeat:10s] (../lib/sbi/nf-sm.c:295)
 09/05 12:49:36.038: [sbi] INFO: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/nnrf-handler.c:955)
 09/05 12:49:36.038: [sbi] INFO: [afeb7290-8a80-41f0-b5bc-5b9f8085b169] Subscription created until 2025-09-06T12:49:36.037619-05:00 [duration:86400000000,validity:86400.000000,patch:43200.000000] (../lib/sbi/nnrf-handler.c:874)
+Open5GS daemon v2.7.5-24-g8e286b6
+
+09/06 01:00:20.143: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/udr.yaml' (../lib/app/ogs-init.c:144)
+09/06 01:00:20.143: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/udr.log' (../lib/app/ogs-init.c:147)
+09/06 01:00:20.149: [sbi] INFO: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/context.c:459)
+09/06 01:00:20.149: [sbi] INFO: Setup NF EndPoint(addr) [172.22.0.35:7777] (../lib/sbi/context.c:507)
+09/06 01:00:20.154: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+09/06 01:00:20.154: [sbi] INFO: NF Service [nudr-dr] (../lib/sbi/context.c:1994)
+09/06 01:00:20.155: [sbi] INFO: nghttp2_server() [http://172.22.0.14]:7777 (../lib/sbi/nghttp2-server.c:439)
+09/06 01:00:20.155: [app] INFO: UDR initialize...done (../src/udr/app.c:31)
+09/06 01:00:20.160: [sbi] INFO: [c50bfdf0-8ae6-41f0-b327-a98040fe159b] NF registered [Heartbeat:10s] (../lib/sbi/nf-sm.c:295)
+09/06 01:00:20.162: [sbi] INFO: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/nnrf-handler.c:955)
+09/06 01:00:20.162: [sbi] INFO: [c50dca4a-8ae6-41f0-bbd1-eb83b628500e] Subscription created until 2025-09-07T01:00:20.161265-05:00 [duration:86400000000,validity:86400.000000,patch:43200.000000] (../lib/sbi/nnrf-handler.c:874)
+09/06 01:04:18.278: [dbi] INFO: [imsi-001011234567895] Cannot find IMSI in DB (../lib/dbi/subscription.c:63)
+09/06 01:04:18.278: [udr] WARNING: [imsi-001011234567895] Cannot find SUPI in DB (../src/udr/nudr-handler.c:68)
