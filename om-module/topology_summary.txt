@@ -1,0 +1,15 @@
+Network Topology Summary
+========================
+
+Deployment Type: 4G
+Components: 9
+
+- mme (4G-Control-Plane): RUNNING - IP: 172.22.0.9 [docker_open5gs]
+- sgwc (4G-Control-Plane): RUNNING - IP: 172.22.0.5 [docker_open5gs]
+- pcrf (4G-Policy): RUNNING - IP: 172.22.0.4 [docker_open5gs]
+- webui (Web-Interface): RUNNING - IP: 172.22.0.26 [docker_open5gs]
+- smf (5G-Control-Plane): RUNNING - IP: 172.22.0.7 [docker_open5gs]
+- sgwu (4G-User-Plane): RUNNING - IP: 172.22.0.6 [docker_open5gs]
+- upf (5G-User-Plane): RUNNING - IP: 172.22.0.8 [docker_open5gs]
+- hss (4G-Database): RUNNING - IP: 172.22.0.3 [docker_open5gs]
+- mongo (Database): RUNNING - IP: 172.22.0.2 [mongo:6.0]

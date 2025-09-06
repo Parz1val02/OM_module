@@ -13,7 +13,9 @@ func Discover() {
 	if err != nil {
 		panic(err)
 	}
-	defer cli.Close()
+	defer func() {
+		err = cli.Close()
+	}()
 
 	containers, err := cli.ContainerList(ctx, container.ListOptions{})
 	if err != nil {

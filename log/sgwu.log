@@ -214,3 +214,12 @@ Open5GS daemon v2.7.5-24-g8e286b6
 09/06 01:36:11.041: [gtp] INFO: gtp_connect() [172.22.0.8]:2152 (../lib/gtp/path.c:60)
 09/06 01:36:11.299: [gtp] INFO: gtp_connect() [172.22.0.22]:2152 (../lib/gtp/path.c:60)
 09/06 01:44:08.073: [sgwu] INFO: [Removed] Number of SGWU-sessions is now 0 (../src/sgwu/context.c:201)
+Open5GS daemon v2.7.5-24-g8e286b6
+
+09/06 12:06:55.439: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/sgwu.yaml' (../lib/app/ogs-init.c:144)
+09/06 12:06:55.439: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/sgwu.log' (../lib/app/ogs-init.c:147)
+09/06 12:06:55.524: [pfcp] INFO: pfcp_server() [172.22.0.6]:8805 (../lib/pfcp/path.c:30)
+09/06 12:06:55.524: [gtp] INFO: gtp_server() [172.22.0.6]:2152 (../lib/gtp/path.c:30)
+09/06 12:06:55.524: [app] INFO: SGW-U initialize...done (../src/sgwu/app.c:31)
+09/06 12:06:55.525: [sgwu] INFO: PFCP associated [172.22.0.5]:8805 (../src/sgwu/pfcp-sm.c:163)
+09/06 12:06:57.983: [sgwu] WARNING: PFCP[REQ] has already been associated [172.22.0.5]:8805 (../src/sgwu/pfcp-sm.c:248)

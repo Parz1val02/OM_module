@@ -174,3 +174,23 @@ Open5GS daemon v2.7.5-24-g8e286b6
 0010: f7d63ddc 22a4c5ab ff020000 00000000   ..=."...........
 0020: 00000000 00000002 85005f34 00000000   .........._4....
 09/06 01:44:08.065: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:253)
+Open5GS daemon v2.7.5-24-g8e286b6
+
+09/06 12:03:33.286: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+09/06 12:03:33.286: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+09/06 12:03:33.352: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:300)
+09/06 12:03:33.352: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+09/06 12:03:33.353: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+09/06 12:03:33.354: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+09/06 12:03:33.354: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+09/06 12:03:35.799: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.5-24-g8e286b6
+
+09/06 12:06:55.707: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+09/06 12:06:55.707: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+09/06 12:06:55.771: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:300)
+09/06 12:06:55.771: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+09/06 12:06:55.772: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+09/06 12:06:55.772: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+09/06 12:06:55.773: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+09/06 12:06:57.741: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
