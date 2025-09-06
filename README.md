@@ -22,6 +22,8 @@ docker pull ghcr.io/herlesupreeth/docker_metrics:master
 docker tag ghcr.io/herlesupreeth/docker_metrics:master docker_metrics
 ```
 
+## Deployments
+
 ### 4G core deployment
 docker compose -f 4g_core_only.yaml up -d
 #### srsRAN ZMQ eNB (RF simulated)
@@ -48,9 +50,9 @@ docker compose -f services.yaml up -d
 >- pcrf (4g)
 >- mme (4g)
 
-## Provisioning of UE information
+## Access UIs
 
-### Provisioning of UE information in open5gs as follows:
+### Provisioning of UE information in open5gs ui as follows:
 
 Open (http://<DOCKER_HOST_IP>:9999) in a web browser, where <DOCKER_HOST_IP> is the IP of the machine/VM running the open5gs containers. Login with following credentials
 ```
@@ -71,7 +73,7 @@ OP=11111111111111111111111111111111
 Open (http://<DOCKER_HOST_IP>:3000) in a web browser, where <DOCKER_HOST_IP> is the IP of the machine/VM running the open5gs containers. Login with following credentials
 ```
 Username : open5gs
-Password : oopen5gs
+Password : open5gs
 ```
 #### Prometheus
-Open (http://<DOCKER_HOST_IP>:90909) in a web browser, where <DOCKER_HOST_IP> is the IP of the machine/VM running the open5gs containers.
+Open (http://<DOCKER_HOST_IP>:9090) in a web browser, where <DOCKER_HOST_IP> is the IP of the machine/VM running the open5gs containers.
