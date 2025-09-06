@@ -8,19 +8,12 @@
         component: 'upf'
         type: '5G-User-Plane'
 
-- job_name: 'mme'
+- job_name: 'amf'
   static_configs:
-    - targets: ['172.22.0.9:9091']
+    - targets: ['172.22.0.10:9091']
       labels:
-        component: 'mme'
-        type: '4G-Control-Plane'
-
-- job_name: 'pcrf'
-  static_configs:
-    - targets: ['172.22.0.4:9091']
-      labels:
-        component: 'pcrf'
-        type: '4G-Policy'
+        component: 'amf'
+        type: '5G-Control-Plane'
 
 - job_name: 'smf'
   static_configs:
@@ -28,4 +21,11 @@
       labels:
         component: 'smf'
         type: '5G-Control-Plane'
+
+- job_name: 'pcf'
+  static_configs:
+    - targets: ['172.22.0.27:9091']
+      labels:
+        component: 'pcf'
+        type: '5G-Policy'
 
