@@ -26,7 +26,7 @@ type MetricTarget struct {
 	Target      string            `json:"target"`
 	Labels      map[string]string `json:"labels"`
 	Source      MetricSource      `json:"source"`
-	ScrapePath  string            `json:"scrape_path"`
+	ScrapeePath string            `json:"scrape_path"`
 	Interval    string            `json:"interval"`
 	ComponentID string            `json:"component_id"`
 }
@@ -38,21 +38,31 @@ type MetricsRegistry struct {
 
 // MetricsOrchestrator coordinates metrics collection across the topology
 type MetricsOrchestrator struct {
-	discoveryService *discovery.AutoDiscoveryService
-	registry         *MetricsRegistry
-	configPath       string
-	lastTopology     *discovery.NetworkTopology
+	discoveryService     *discovery.AutoDiscoveryService
+	registry             *MetricsRegistry
+	configPath           string
+	lastTopology         *discovery.NetworkTopology
+	containerCollector   *ContainerMetricsCollector
+	containerMetricsPort int
 }
 
 // NewMetricsOrchestrator creates a new metrics orchestrator
-func NewMetricsOrchestrator(discoveryService *discovery.AutoDiscoveryService, configPath string) *MetricsOrchestrator {
+func NewMetricsOrchestrator(discoveryService *discovery.AutoDiscoveryService, configPath string) (*MetricsOrchestrator, error) {
+	// Initialize container metrics collector
+	containerCollector, err := NewContainerMetricsCollector(8080)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create container metrics collector: %w", err)
+	}
+
 	return &MetricsOrchestrator{
 		discoveryService: discoveryService,
 		registry: &MetricsRegistry{
 			Targets: make(map[string]*MetricTarget),
 		},
-		configPath: configPath,
-	}
+		configPath:           configPath,
+		containerCollector:   containerCollector,
+		containerMetricsPort: 8080,
+	}, nil
 }
 
 // Start begins the metrics orchestration process
@@ -64,6 +74,13 @@ func (mo *MetricsOrchestrator) Start(ctx context.Context) error {
 		return fmt.Errorf("failed initial metrics configuration: %w", err)
 	}
 
+	// Start container metrics collector
+	go func() {
+		if err := mo.containerCollector.Start(ctx, mo.lastTopology); err != nil && err != context.Canceled {
+			log.Printf("❌ Container metrics collector error: %v", err)
+		}
+	}()
+
 	// Start periodic monitoring for topology changes
 	ticker := time.NewTicker(10 * time.Second)
 	defer ticker.Stop()
@@ -72,6 +89,9 @@ func (mo *MetricsOrchestrator) Start(ctx context.Context) error {
 		select {
 		case <-ctx.Done():
 			log.Printf("🛑 Stopping Metrics Orchestrator...")
+			if err := mo.containerCollector.Close(); err != nil {
+				log.Printf("⚠️  Failed to update metrics configuration: %v", err)
+			}
 			return ctx.Err()
 		case <-ticker.C:
 			if err := mo.updateMetricsConfiguration(ctx); err != nil {
@@ -105,6 +125,9 @@ func (mo *MetricsOrchestrator) updateMetricsConfiguration(ctx context.Context) e
 		if err := mo.generatePrometheusConfig(); err != nil {
 			return fmt.Errorf("failed to generate Prometheus config: %w", err)
 		}
+
+		// Update container collector with new topology
+		mo.containerCollector.UpdateTopology(topology)
 
 		mo.lastTopology = topology
 
@@ -162,7 +185,7 @@ func (mo *MetricsOrchestrator) registerOfficialEndpoints(topology *discovery.Net
 					JobName:     fmt.Sprintf("%s-official", name),
 					Target:      fmt.Sprintf("%s:9091", component.IP),
 					Source:      SOURCE_OFFICIAL_ENDPOINT,
-					ScrapePath:  "/metrics",
+					ScrapeePath: "/metrics",
 					Interval:    "5s",
 					ComponentID: name,
 					Labels: map[string]string{
@@ -188,9 +211,9 @@ func (mo *MetricsOrchestrator) registerContainerMetrics(topology *discovery.Netw
 
 		target := &MetricTarget{
 			JobName:     fmt.Sprintf("%s-container", name),
-			Target:      fmt.Sprintf("%s:8080", component.IP), // Placeholder for container metrics
+			Target:      fmt.Sprintf("host.docker.internal:%d", mo.containerMetricsPort),
 			Source:      SOURCE_CONTAINER_STATS,
-			ScrapePath:  "/container/metrics",
+			ScrapeePath: "/container/metrics",
 			Interval:    "10s",
 			ComponentID: name,
 			Labels: map[string]string{
@@ -198,7 +221,7 @@ func (mo *MetricsOrchestrator) registerContainerMetrics(topology *discovery.Netw
 				"component_type": component.Type,
 				"source":         string(SOURCE_CONTAINER_STATS),
 				"deployment":     string(topology.Type),
-				"container_id":   component.Name, // Using name as container identifier
+				"container_id":   component.Name,
 			},
 		}
 		mo.registry.Targets[target.JobName] = target
@@ -216,7 +239,7 @@ func (mo *MetricsOrchestrator) registerHealthChecks(topology *discovery.NetworkT
 			JobName:     fmt.Sprintf("%s-health", name),
 			Target:      fmt.Sprintf("%s:8080", component.IP), // Placeholder for health checks
 			Source:      SOURCE_HEALTH_CHECK,
-			ScrapePath:  "/health/metrics",
+			ScrapeePath: "/health/metrics",
 			Interval:    "15s",
 			ComponentID: name,
 			Labels: map[string]string{
@@ -258,7 +281,7 @@ func (mo *MetricsOrchestrator) buildPrometheusConfigContent() string {
 	for _, target := range mo.registry.Targets {
 		builder.WriteString(fmt.Sprintf("  - job_name: '%s'\n", target.JobName))
 		builder.WriteString(fmt.Sprintf("    scrape_interval: %s\n", target.Interval))
-		builder.WriteString(fmt.Sprintf("    metrics_path: '%s'\n", target.ScrapePath))
+		builder.WriteString(fmt.Sprintf("    metrics_path: '%s'\n", target.ScrapeePath))
 		builder.WriteString("    static_configs:\n")
 		builder.WriteString(fmt.Sprintf("      - targets: ['%s']\n", target.Target))
 

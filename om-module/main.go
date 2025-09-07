@@ -76,7 +76,10 @@ func runMetricsOrchestrator(ctx context.Context, discoveryService *discovery.Aut
 
 	// Initialize metrics orchestrator
 	prometheusConfigPath := "./metrics/prometheus.yml"
-	orchestrator := metrics.NewMetricsOrchestrator(discoveryService, prometheusConfigPath)
+	orchestrator, err := metrics.NewMetricsOrchestrator(discoveryService, prometheusConfigPath)
+	if err != nil {
+		log.Fatalf("❌ Failed to initialize metrics orchestrator: %v", err)
+	}
 
 	// Initial discovery to show current state
 	fmt.Printf("🔍 Performing initial topology discovery...\n")
@@ -99,6 +102,7 @@ func runMetricsOrchestrator(ctx context.Context, discoveryService *discovery.Aut
 	fmt.Printf("\n%s\n", strings.Repeat("=", 80))
 	fmt.Printf("🚀 Starting continuous metrics orchestration...\n")
 	fmt.Printf("📊 Monitoring topology changes and updating Prometheus configuration\n")
+	fmt.Printf("📈 Container metrics server will start on port 8080\n")
 	fmt.Printf("🔄 Press Ctrl+C to stop\n")
 	fmt.Printf("%s\n\n", strings.Repeat("=", 80))
 
@@ -185,6 +189,7 @@ func printBanner() {
 ╔════════════════════════════════════════════════════════════════╗
 ║                    🔧 O&M Module Discovery Tool                ║
 ║                   4G/5G Network Topology Scanner               ║
+║                      with Container Metrics                    ║
 ╚════════════════════════════════════════════════════════════════╝
 
 `)
@@ -259,18 +264,21 @@ func printEducationalInsights(topology *discovery.NetworkTopology) {
 		fmt.Printf("   • Key components: MME (Mobility Management), HSS (Subscriber Database)\n")
 		fmt.Printf("   • Architecture: Control and User plane separated (CUPS)\n")
 		fmt.Printf("   • Interfaces: S1, S6a, S11, S5/S8, SGi\n")
+		fmt.Printf("   • Metrics available: MME, PCRF, SMF, UPF (official endpoints)\n")
 
 	case discovery.TYPE_5G:
 		fmt.Printf("📚 This is a 5G Core (5GC) Service Based Architecture deployment\n")
 		fmt.Printf("   • Key components: AMF (Access & Mobility), SMF (Session Management)\n")
 		fmt.Printf("   • Architecture: Microservices with Service Based Interfaces (SBI)\n")
 		fmt.Printf("   • Interfaces: N1, N2, N3, N4, N6, Nnrf, Namf, Nsmf\n")
+		fmt.Printf("   • Metrics available: AMF, SMF, PCF, UPF (official endpoints)\n")
 
 	case discovery.TYPE_MIXED:
 		fmt.Printf("📚 This is a MIXED 4G/5G deployment\n")
 		fmt.Printf("   • Shows evolution from EPC to 5GC architecture\n")
 		fmt.Printf("   • Useful for migration and interworking scenarios\n")
 		fmt.Printf("   • Demonstrates NSA (Non-Standalone) 5G deployment\n")
+		fmt.Printf("   • Metrics available: All 4G + 5G endpoints\n")
 	}
 
 	// Count running vs stopped components
@@ -284,6 +292,9 @@ func printEducationalInsights(topology *discovery.NetworkTopology) {
 
 	fmt.Printf("\n📈 Deployment Health: %d/%d components running (%.1f%%)\n",
 		running, total, float64(running)/float64(total)*100)
+
+	fmt.Printf("📊 Container Metrics: CPU, Memory, Network, Block I/O, Process count\n")
+	fmt.Printf("🔧 O&M Capabilities: Dynamic configuration, real-time monitoring\n")
 	fmt.Println()
 }
 
@@ -405,6 +416,9 @@ func printNextSteps() {
 	fmt.Printf("   • topology.json - Full topology data\n")
 	fmt.Printf("   • topology_summary.txt - Human-readable summary\n")
 	fmt.Printf("   • prometheus_targets.yml - Monitoring configuration\n\n")
-	fmt.Printf("5. 📝 Monitor logs: docker-compose logs -f <component_name>\n")
+	fmt.Printf("5. 📊 Test container metrics:\n")
+	fmt.Printf("   • curl http://localhost:8080/container/metrics\n")
+	fmt.Printf("   • curl http://localhost:8080/health\n\n")
 	fmt.Printf("6. 🔄 Run orchestrator mode: %s orchestrator\n", os.Args[0])
+	fmt.Printf("7. 📝 Monitor logs: docker-compose logs -f <component_name>\n")
 }

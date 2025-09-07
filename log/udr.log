@@ -78,3 +78,16 @@ Open5GS daemon v2.7.5-24-g8e286b6
 09/07 13:46:05.581: [sbi] INFO: [e910ca02-8c1a-41f0-afc1-e5b6d92c3d53] NF registered [Heartbeat:10s] (../lib/sbi/nf-sm.c:295)
 09/07 13:46:05.583: [sbi] INFO: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/nnrf-handler.c:955)
 09/07 13:46:05.583: [sbi] INFO: [e9126ccc-8c1a-41f0-8166-9948e4bcee04] Subscription created until 2025-09-08T13:46:05.582333-05:00 [duration:86400000000,validity:86400.000000,patch:43200.000000] (../lib/sbi/nnrf-handler.c:874)
+Open5GS daemon v2.7.5-24-g8e286b6
+
+09/07 15:20:45.142: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/udr.yaml' (../lib/app/ogs-init.c:144)
+09/07 15:20:45.142: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/udr.log' (../lib/app/ogs-init.c:147)
+09/07 15:20:45.147: [sbi] INFO: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/context.c:459)
+09/07 15:20:45.148: [sbi] INFO: Setup NF EndPoint(addr) [172.22.0.35:7777] (../lib/sbi/context.c:507)
+09/07 15:20:45.151: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+09/07 15:20:45.151: [sbi] INFO: NF Service [nudr-dr] (../lib/sbi/context.c:1994)
+09/07 15:20:45.152: [sbi] INFO: nghttp2_server() [http://172.22.0.14]:7777 (../lib/sbi/nghttp2-server.c:439)
+09/07 15:20:45.152: [app] INFO: UDR initialize...done (../src/udr/app.c:31)
+09/07 15:20:45.159: [sbi] INFO: [225b5248-8c28-41f0-a959-014e34375e94] NF registered [Heartbeat:10s] (../lib/sbi/nf-sm.c:295)
+09/07 15:20:45.160: [sbi] INFO: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/nnrf-handler.c:955)
+09/07 15:20:45.160: [sbi] INFO: [225d36a8-8c28-41f0-9c00-2da06e4dafe3] Subscription created until 2025-09-08T15:20:45.160095-05:00 [duration:86400000000,validity:86400.000000,patch:43200.000000] (../lib/sbi/nnrf-handler.c:874)
