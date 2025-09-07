@@ -204,3 +204,23 @@ Open5GS daemon v2.7.5-24-g8e286b6
 09/06 12:18:06.654: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
 09/06 12:18:06.655: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
 09/06 12:18:09.071: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.5-24-g8e286b6
+
+09/06 19:56:07.942: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+09/06 19:56:07.942: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+09/06 19:56:08.022: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:300)
+09/06 19:56:08.022: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+09/06 19:56:08.022: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+09/06 19:56:08.023: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+09/06 19:56:08.024: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+09/06 19:56:10.486: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.5-24-g8e286b6
+
+09/07 13:45:56.431: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+09/07 13:45:56.431: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+09/07 13:45:56.510: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:300)
+09/07 13:45:56.510: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+09/07 13:45:56.511: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+09/07 13:45:56.512: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+09/07 13:45:56.512: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+09/07 13:45:58.941: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)

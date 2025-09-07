@@ -6,17 +6,25 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/Parz1val02/OM_module/discovery"
+	"github.com/Parz1val02/OM_module/metrics"
 )
 
 func main() {
-	// Initialize auto-discovery service
-	envFile := "../.env" // Default path - same directory
+	// Parse command line arguments
+	var envFile, mode string
 	if len(os.Args) > 1 {
-		envFile = os.Args[1]
+		mode = os.Args[1]
+	}
+	if len(os.Args) > 2 {
+		envFile = os.Args[2]
+	} else {
+		envFile = "../.env" // Default path
 	}
 
 	// Check if env file exists
@@ -24,6 +32,7 @@ func main() {
 		log.Printf("⚠️  Environment file %s not found, using defaults", envFile)
 	}
 
+	// Initialize auto-discovery service
 	discoveryService, err := discovery.NewAutoDiscoveryService(envFile)
 	if err != nil {
 		log.Fatalf("❌ Failed to initialize discovery service: %v", err)
@@ -34,8 +43,77 @@ func main() {
 		}
 	}()
 
+	// Create context with signal handling
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	// Handle shutdown signals
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+	go func() {
+		<-sigChan
+		log.Printf("📝 Received shutdown signal, stopping...")
+		cancel()
+	}()
+
+	// Check mode
+	switch mode {
+	case "orchestrator", "metrics":
+		runMetricsOrchestrator(ctx, discoveryService)
+	case "discovery", "":
+		runDiscoveryMode(ctx, discoveryService)
+	default:
+		log.Printf("❌ Unknown mode: %s", mode)
+		printUsage()
+		os.Exit(1)
+	}
+}
+
+// runMetricsOrchestrator runs the continuous metrics orchestration mode
+func runMetricsOrchestrator(ctx context.Context, discoveryService *discovery.AutoDiscoveryService) {
+	printBanner()
+	fmt.Printf("🔄 Starting O&M Module in Metrics Orchestrator mode...\n\n")
+
+	// Initialize metrics orchestrator
+	prometheusConfigPath := "./metrics/prometheus.yml"
+	orchestrator := metrics.NewMetricsOrchestrator(discoveryService, prometheusConfigPath)
+
+	// Initial discovery to show current state
+	fmt.Printf("🔍 Performing initial topology discovery...\n")
+	topology, err := discoveryService.DiscoverTopology(ctx)
+	if err != nil {
+		log.Fatalf("❌ Failed to discover topology: %v", err)
+	}
+
+	displayTopologyResults(topology)
+
+	// Show initial health status
+	fmt.Printf("🏥 Checking component health...\n")
+	healthStatus, err := discoveryService.GetHealthStatus(ctx)
+	if err != nil {
+		log.Printf("⚠️  Failed to get health status: %v", err)
+	} else {
+		displayHealthStatus(healthStatus)
+	}
+
+	fmt.Printf("\n%s\n", strings.Repeat("=", 80))
+	fmt.Printf("🚀 Starting continuous metrics orchestration...\n")
+	fmt.Printf("📊 Monitoring topology changes and updating Prometheus configuration\n")
+	fmt.Printf("🔄 Press Ctrl+C to stop\n")
+	fmt.Printf("%s\n\n", strings.Repeat("=", 80))
+
+	// Start orchestrator (this will run continuously until context is cancelled)
+	if err := orchestrator.Start(ctx); err != nil && err != context.Canceled {
+		log.Fatalf("❌ Orchestrator failed: %v", err)
+	}
+
+	fmt.Printf("\n✅ Metrics Orchestrator stopped gracefully\n")
+}
+
+// runDiscoveryMode runs the one-time discovery mode (original behavior)
+func runDiscoveryMode(ctx context.Context, discoveryService *discovery.AutoDiscoveryService) {
 	// Create context with timeout for operations
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	timeoutCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
 
 	// Display banner
@@ -43,7 +121,7 @@ func main() {
 
 	// Perform discovery with error handling
 	fmt.Printf("🔍 Discovering network topology...\n")
-	topology, err := discoveryService.DiscoverTopology(ctx)
+	topology, err := discoveryService.DiscoverTopology(timeoutCtx)
 	if err != nil {
 		log.Fatalf("❌ Failed to discover topology: %v", err)
 	}
@@ -53,7 +131,7 @@ func main() {
 
 	// Display health status
 	fmt.Printf("🏥 Checking component health...\n")
-	healthStatus, err := discoveryService.GetHealthStatus(ctx)
+	healthStatus, err := discoveryService.GetHealthStatus(timeoutCtx)
 	if err != nil {
 		log.Printf("⚠️  Failed to get health status: %v", err)
 	} else {
@@ -62,7 +140,7 @@ func main() {
 
 	// List active components
 	fmt.Printf("📋 Active components:\n")
-	activeComponents, err := discoveryService.ListActiveComponents(ctx)
+	activeComponents, err := discoveryService.ListActiveComponents(timeoutCtx)
 	if err != nil {
 		log.Printf("⚠️  Failed to list active components: %v", err)
 	} else {
@@ -79,6 +157,26 @@ func main() {
 
 	// Display next steps
 	printNextSteps()
+}
+
+// printUsage shows usage information
+func printUsage() {
+	fmt.Printf(`
+O&M Module Usage:
+================
+
+Modes:
+  discovery    - One-time topology discovery (default)
+  orchestrator - Continuous metrics orchestration mode
+  metrics      - Alias for orchestrator mode
+
+Examples:
+  %s                           # Discovery mode with default .env
+  %s discovery ../.env         # Discovery mode with custom .env
+  %s orchestrator              # Metrics orchestrator mode
+  %s metrics ../.env           # Metrics orchestrator with custom .env
+
+`, os.Args[0], os.Args[0], os.Args[0], os.Args[0])
 }
 
 // printBanner displays the application banner
@@ -184,52 +282,55 @@ func printEducationalInsights(topology *discovery.NetworkTopology) {
 		}
 	}
 
-	healthPercentage := float64(running) / float64(total) * 100
-	fmt.Printf("\n📊 System Health: %d/%d components running (%.1f%%)\n",
-		running, total, healthPercentage)
-
-	if running < total {
-		fmt.Printf("⚠️  Some components are not running - check your deployment\n")
-		fmt.Printf("   Try: docker-compose logs <component_name> to debug\n")
-	} else if running == total {
-		fmt.Printf("✅ All components are healthy - ready for testing!\n")
-	}
-
+	fmt.Printf("\n📈 Deployment Health: %d/%d components running (%.1f%%)\n",
+		running, total, float64(running)/float64(total)*100)
 	fmt.Println()
 }
 
-// saveTopologyFiles saves the topology to various formats
-func saveTopologyFiles(topology *discovery.NetworkTopology) {
-	// Save detailed JSON
-	if err := saveTopologyToJSON(topology, "topology.json"); err != nil {
-		log.Printf("⚠️  Failed to save topology.json: %v", err)
-	} else {
-		fmt.Printf("💾 Detailed topology saved to topology.json\n")
+// Utility functions for display
+func getStatusEmoji(isRunning bool) string {
+	if isRunning {
+		return "🟢"
 	}
+	return "🔴"
+}
 
-	// Save simplified summary
-	if err := saveTopologySummary(topology, "topology_summary.txt"); err != nil {
-		log.Printf("⚠️  Failed to save topology summary: %v", err)
-	} else {
-		fmt.Printf("📄 Topology summary saved to topology_summary.txt\n")
-	}
-
-	// Save Prometheus targets (for monitoring setup)
-	if err := savePrometheusTargets(topology, "prometheus_targets.yml"); err != nil {
-		log.Printf("⚠️  Failed to save Prometheus targets: %v", err)
-	} else {
-		fmt.Printf("🎯 Prometheus targets saved to prometheus_targets.yml\n")
+func getHealthEmoji(status string) string {
+	switch strings.ToLower(status) {
+	case "healthy", "running":
+		return "🟢"
+	case "unhealthy", "failed":
+		return "🔴"
+	default:
+		return "🟡"
 	}
 }
 
-// saveTopologyToJSON saves the topology to a JSON file
-func saveTopologyToJSON(topology *discovery.NetworkTopology, filename string) error {
-	data, err := json.MarshalIndent(topology, "", "  ")
-	if err != nil {
-		return fmt.Errorf("failed to marshal topology: %w", err)
+// saveTopologyFiles saves topology information to files
+func saveTopologyFiles(topology *discovery.NetworkTopology) {
+	// Save JSON topology
+	if err := saveTopologyJSON(topology, "topology.json"); err != nil {
+		log.Printf("⚠️  Failed to save topology JSON: %v", err)
 	}
 
-	return os.WriteFile(filename, data, 0644)
+	// Save summary
+	if err := saveTopologySummary(topology, "topology_summary.txt"); err != nil {
+		log.Printf("⚠️  Failed to save topology summary: %v", err)
+	}
+
+	// Save Prometheus targets (legacy support)
+	if err := savePrometheusTargets(topology, "prometheus_targets.yml"); err != nil {
+		log.Printf("⚠️  Failed to save Prometheus targets: %v", err)
+	}
+}
+
+// saveTopologyJSON saves the topology as JSON
+func saveTopologyJSON(topology *discovery.NetworkTopology, filename string) error {
+	jsonBytes, err := json.MarshalIndent(topology, "", "  ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(filename, jsonBytes, 0644)
 }
 
 // saveTopologySummary saves a human-readable summary
@@ -239,9 +340,7 @@ func saveTopologySummary(topology *discovery.NetworkTopology, filename string) e
 		return err
 	}
 	defer func() {
-
 		err = file.Close()
-
 	}()
 
 	_, err = fmt.Fprintf(file, "Network Topology Summary\n")
@@ -261,17 +360,14 @@ func saveTopologySummary(topology *discovery.NetworkTopology, filename string) e
 	return nil
 }
 
-// savePrometheusTargets saves Prometheus scrape targets configuration
+// savePrometheusTargets saves Prometheus scrape targets configuration (legacy)
 func savePrometheusTargets(topology *discovery.NetworkTopology, filename string) error {
 	file, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
-
 	defer func() {
-
 		err = file.Close()
-
 	}()
 
 	_, err = fmt.Fprintf(file, "# Auto-generated Prometheus targets\n")
@@ -310,27 +406,5 @@ func printNextSteps() {
 	fmt.Printf("   • topology_summary.txt - Human-readable summary\n")
 	fmt.Printf("   • prometheus_targets.yml - Monitoring configuration\n\n")
 	fmt.Printf("5. 📝 Monitor logs: docker-compose logs -f <component_name>\n")
-	fmt.Printf("6. 🔄 Re-run discovery: ./om-module [path/to/.env]\n\n")
-}
-
-// getStatusEmoji returns appropriate emoji for running status
-func getStatusEmoji(isRunning bool) string {
-	if isRunning {
-		return "🟢 RUNNING"
-	}
-	return "🔴 STOPPED"
-}
-
-// getHealthEmoji returns appropriate emoji for health status
-func getHealthEmoji(status string) string {
-	switch status {
-	case "healthy":
-		return "🟢"
-	case "failed":
-		return "🔴"
-	case "recovering":
-		return "🟡"
-	default:
-		return "⚫"
-	}
+	fmt.Printf("6. 🔄 Run orchestrator mode: %s orchestrator\n", os.Args[0])
 }

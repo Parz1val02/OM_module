@@ -1,0 +1,349 @@
+global:
+  scrape_interval: 5s
+  external_labels:
+    monitor: 'open5gs-om-module'
+
+scrape_configs:
+  - job_name: 'pcf-official'
+    scrape_interval: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['172.22.0.27:9091']
+        labels:
+          source: 'official_endpoint'
+          component: 'pcf'
+          component_type: '5G-Policy'
+          deployment: '5G'
+
+  - job_name: 'bsf-container'
+    scrape_interval: 10s
+    metrics_path: '/container/metrics'
+    static_configs:
+      - targets: ['172.22.0.29:8080']
+        labels:
+          component_type: '5G-Session-Management'
+          deployment: '5G'
+          container_id: 'bsf'
+          source: 'container_stats'
+          component: 'bsf'
+
+  - job_name: 'bsf-health'
+    scrape_interval: 15s
+    metrics_path: '/health/metrics'
+    static_configs:
+      - targets: ['172.22.0.29:8080']
+        labels:
+          source: 'health_check'
+          component: 'bsf'
+          component_type: '5G-Session-Management'
+          deployment: '5G'
+
+  - job_name: 'smf-health'
+    scrape_interval: 15s
+    metrics_path: '/health/metrics'
+    static_configs:
+      - targets: ['172.22.0.7:8080']
+        labels:
+          component_type: '5G-Control-Plane'
+          deployment: '5G'
+          source: 'health_check'
+          component: 'smf'
+
+  - job_name: 'amf-official'
+    scrape_interval: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['172.22.0.10:9091']
+        labels:
+          component: 'amf'
+          component_type: '5G-Control-Plane'
+          deployment: '5G'
+          source: 'official_endpoint'
+
+  - job_name: 'upf-container'
+    scrape_interval: 10s
+    metrics_path: '/container/metrics'
+    static_configs:
+      - targets: ['172.22.0.8:8080']
+        labels:
+          source: 'container_stats'
+          component: 'upf'
+          component_type: '5G-User-Plane'
+          deployment: '5G'
+          container_id: 'upf'
+
+  - job_name: 'smf-container'
+    scrape_interval: 10s
+    metrics_path: '/container/metrics'
+    static_configs:
+      - targets: ['172.22.0.7:8080']
+        labels:
+          container_id: 'smf'
+          source: 'container_stats'
+          component: 'smf'
+          component_type: '5G-Control-Plane'
+          deployment: '5G'
+
+  - job_name: 'scp-health'
+    scrape_interval: 15s
+    metrics_path: '/health/metrics'
+    static_configs:
+      - targets: ['172.22.0.35:8080']
+        labels:
+          source: 'health_check'
+          component: 'scp'
+          component_type: '5G-Service-Communication-Proxy'
+          deployment: '5G'
+
+  - job_name: 'upf-health'
+    scrape_interval: 15s
+    metrics_path: '/health/metrics'
+    static_configs:
+      - targets: ['172.22.0.8:8080']
+        labels:
+          source: 'health_check'
+          component: 'upf'
+          component_type: '5G-User-Plane'
+          deployment: '5G'
+
+  - job_name: 'webui-health'
+    scrape_interval: 15s
+    metrics_path: '/health/metrics'
+    static_configs:
+      - targets: ['172.22.0.26:8080']
+        labels:
+          component: 'webui'
+          component_type: 'Web-Interface'
+          deployment: '5G'
+          source: 'health_check'
+
+  - job_name: 'ausf-container'
+    scrape_interval: 10s
+    metrics_path: '/container/metrics'
+    static_configs:
+      - targets: ['172.22.0.11:8080']
+        labels:
+          source: 'container_stats'
+          component: 'ausf'
+          component_type: '5G-Authentication'
+          deployment: '5G'
+          container_id: 'ausf'
+
+  - job_name: 'nssf-container'
+    scrape_interval: 10s
+    metrics_path: '/container/metrics'
+    static_configs:
+      - targets: ['172.22.0.28:8080']
+        labels:
+          deployment: '5G'
+          container_id: 'nssf'
+          source: 'container_stats'
+          component: 'nssf'
+          component_type: '5G-Slicing'
+
+  - job_name: 'mongo-health'
+    scrape_interval: 15s
+    metrics_path: '/health/metrics'
+    static_configs:
+      - targets: ['172.22.0.2:8080']
+        labels:
+          component: 'mongo'
+          component_type: 'Database'
+          deployment: '5G'
+          source: 'health_check'
+
+  - job_name: 'udm-health'
+    scrape_interval: 15s
+    metrics_path: '/health/metrics'
+    static_configs:
+      - targets: ['172.22.0.13:8080']
+        labels:
+          deployment: '5G'
+          source: 'health_check'
+          component: 'udm'
+          component_type: '5G-User-Management'
+
+  - job_name: 'pcf-health'
+    scrape_interval: 15s
+    metrics_path: '/health/metrics'
+    static_configs:
+      - targets: ['172.22.0.27:8080']
+        labels:
+          source: 'health_check'
+          component: 'pcf'
+          component_type: '5G-Policy'
+          deployment: '5G'
+
+  - job_name: 'nrf-health'
+    scrape_interval: 15s
+    metrics_path: '/health/metrics'
+    static_configs:
+      - targets: ['172.22.0.12:8080']
+        labels:
+          source: 'health_check'
+          component: 'nrf'
+          component_type: '5G-Service-Discovery'
+          deployment: '5G'
+
+  - job_name: 'amf-container'
+    scrape_interval: 10s
+    metrics_path: '/container/metrics'
+    static_configs:
+      - targets: ['172.22.0.10:8080']
+        labels:
+          source: 'container_stats'
+          component: 'amf'
+          component_type: '5G-Control-Plane'
+          deployment: '5G'
+          container_id: 'amf'
+
+  - job_name: 'scp-container'
+    scrape_interval: 10s
+    metrics_path: '/container/metrics'
+    static_configs:
+      - targets: ['172.22.0.35:8080']
+        labels:
+          deployment: '5G'
+          container_id: 'scp'
+          source: 'container_stats'
+          component: 'scp'
+          component_type: '5G-Service-Communication-Proxy'
+
+  - job_name: 'nrf-container'
+    scrape_interval: 10s
+    metrics_path: '/container/metrics'
+    static_configs:
+      - targets: ['172.22.0.12:8080']
+        labels:
+          source: 'container_stats'
+          component: 'nrf'
+          component_type: '5G-Service-Discovery'
+          deployment: '5G'
+          container_id: 'nrf'
+
+  - job_name: 'mongo-container'
+    scrape_interval: 10s
+    metrics_path: '/container/metrics'
+    static_configs:
+      - targets: ['172.22.0.2:8080']
+        labels:
+          component_type: 'Database'
+          deployment: '5G'
+          container_id: 'mongo'
+          source: 'container_stats'
+          component: 'mongo'
+
+  - job_name: 'webui-container'
+    scrape_interval: 10s
+    metrics_path: '/container/metrics'
+    static_configs:
+      - targets: ['172.22.0.26:8080']
+        labels:
+          component: 'webui'
+          component_type: 'Web-Interface'
+          deployment: '5G'
+          container_id: 'webui'
+          source: 'container_stats'
+
+  - job_name: 'ausf-health'
+    scrape_interval: 15s
+    metrics_path: '/health/metrics'
+    static_configs:
+      - targets: ['172.22.0.11:8080']
+        labels:
+          source: 'health_check'
+          component: 'ausf'
+          component_type: '5G-Authentication'
+          deployment: '5G'
+
+  - job_name: 'nssf-health'
+    scrape_interval: 15s
+    metrics_path: '/health/metrics'
+    static_configs:
+      - targets: ['172.22.0.28:8080']
+        labels:
+          component: 'nssf'
+          component_type: '5G-Slicing'
+          deployment: '5G'
+          source: 'health_check'
+
+  - job_name: 'udr-health'
+    scrape_interval: 15s
+    metrics_path: '/health/metrics'
+    static_configs:
+      - targets: ['172.22.0.14:8080']
+        labels:
+          component_type: '5G-Database'
+          deployment: '5G'
+          source: 'health_check'
+          component: 'udr'
+
+  - job_name: 'amf-health'
+    scrape_interval: 15s
+    metrics_path: '/health/metrics'
+    static_configs:
+      - targets: ['172.22.0.10:8080']
+        labels:
+          source: 'health_check'
+          component: 'amf'
+          component_type: '5G-Control-Plane'
+          deployment: '5G'
+
+  - job_name: 'smf-official'
+    scrape_interval: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['172.22.0.7:9091']
+        labels:
+          source: 'official_endpoint'
+          component: 'smf'
+          component_type: '5G-Control-Plane'
+          deployment: '5G'
+
+  - job_name: 'upf-official'
+    scrape_interval: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['172.22.0.8:9091']
+        labels:
+          component: 'upf'
+          component_type: '5G-User-Plane'
+          deployment: '5G'
+          source: 'official_endpoint'
+
+  - job_name: 'udm-container'
+    scrape_interval: 10s
+    metrics_path: '/container/metrics'
+    static_configs:
+      - targets: ['172.22.0.13:8080']
+        labels:
+          source: 'container_stats'
+          component: 'udm'
+          component_type: '5G-User-Management'
+          deployment: '5G'
+          container_id: 'udm'
+
+  - job_name: 'pcf-container'
+    scrape_interval: 10s
+    metrics_path: '/container/metrics'
+    static_configs:
+      - targets: ['172.22.0.27:8080']
+        labels:
+          source: 'container_stats'
+          component: 'pcf'
+          component_type: '5G-Policy'
+          deployment: '5G'
+          container_id: 'pcf'
+
+  - job_name: 'udr-container'
+    scrape_interval: 10s
+    metrics_path: '/container/metrics'
+    static_configs:
+      - targets: ['172.22.0.14:8080']
+        labels:
+          source: 'container_stats'
+          component: 'udr'
+          component_type: '5G-Database'
+          deployment: '5G'
+          container_id: 'udr'
+

@@ -46,3 +46,27 @@ Open5GS daemon v2.7.5-24-g8e286b6
 09/06 12:18:15.241: [sbi] INFO: [79497352-8b45-41f0-9951-c7e7f6fc72cc] NF registered [Heartbeat:10s] (../lib/sbi/nf-sm.c:295)
 09/06 12:18:15.243: [sbi] INFO: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/nnrf-handler.c:955)
 09/06 12:18:15.243: [sbi] INFO: [794a9386-8b45-41f0-8965-b750cc0caeab] Subscription created until 2025-09-07T12:18:15.242131-05:00 [duration:86400000000,validity:86400.000000,patch:43200.000000] (../lib/sbi/nnrf-handler.c:874)
+Open5GS daemon v2.7.5-24-g8e286b6
+
+09/06 19:56:16.542: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/bsf.yaml' (../lib/app/ogs-init.c:144)
+09/06 19:56:16.542: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/bsf.log' (../lib/app/ogs-init.c:147)
+09/06 19:56:16.548: [sbi] INFO: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/context.c:459)
+09/06 19:56:16.548: [sbi] INFO: Setup NF EndPoint(addr) [172.22.0.35:7777] (../lib/sbi/context.c:507)
+09/06 19:56:16.549: [sbi] INFO: NF Service [nbsf-management] (../lib/sbi/context.c:1994)
+09/06 19:56:16.549: [sbi] INFO: nghttp2_server() [http://172.22.0.29]:7777 (../lib/sbi/nghttp2-server.c:439)
+09/06 19:56:16.550: [app] INFO: BSF initialize...done (../src/bsf/app.c:31)
+09/06 19:56:16.553: [sbi] INFO: [756d20ea-8b85-41f0-95b2-6d5a9527be42] NF registered [Heartbeat:10s] (../lib/sbi/nf-sm.c:295)
+09/06 19:56:16.555: [sbi] INFO: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/nnrf-handler.c:955)
+09/06 19:56:16.555: [sbi] INFO: [756e195a-8b85-41f0-912f-05521ff751c0] Subscription created until 2025-09-07T19:56:16.554713-05:00 [duration:86400000000,validity:86400.000000,patch:43200.000000] (../lib/sbi/nnrf-handler.c:874)
+Open5GS daemon v2.7.5-24-g8e286b6
+
+09/07 13:46:05.649: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/bsf.yaml' (../lib/app/ogs-init.c:144)
+09/07 13:46:05.649: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/bsf.log' (../lib/app/ogs-init.c:147)
+09/07 13:46:05.654: [sbi] INFO: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/context.c:459)
+09/07 13:46:05.654: [sbi] INFO: Setup NF EndPoint(addr) [172.22.0.35:7777] (../lib/sbi/context.c:507)
+09/07 13:46:05.654: [sbi] INFO: NF Service [nbsf-management] (../lib/sbi/context.c:1994)
+09/07 13:46:05.654: [sbi] INFO: nghttp2_server() [http://172.22.0.29]:7777 (../lib/sbi/nghttp2-server.c:439)
+09/07 13:46:05.654: [app] INFO: BSF initialize...done (../src/bsf/app.c:31)
+09/07 13:46:05.658: [sbi] INFO: [e91d57ae-8c1a-41f0-b4b8-a71b19cb191e] NF registered [Heartbeat:10s] (../lib/sbi/nf-sm.c:295)
+09/07 13:46:05.659: [sbi] INFO: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/nnrf-handler.c:955)
+09/07 13:46:05.659: [sbi] INFO: [e91e1c70-8c1a-41f0-8166-9948e4bcee04] Subscription created until 2025-09-08T13:46:05.658906-05:00 [duration:86400000000,validity:86400.000000,patch:43200.000000] (../lib/sbi/nnrf-handler.c:874)
