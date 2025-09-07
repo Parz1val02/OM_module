@@ -43,7 +43,9 @@ type MetricsOrchestrator struct {
 	configPath           string
 	lastTopology         *discovery.NetworkTopology
 	containerCollector   *ContainerMetricsCollector
+	healthCollector      *HealthCheckCollector
 	containerMetricsPort int
+	healthCheckPort      int
 }
 
 // NewMetricsOrchestrator creates a new metrics orchestrator
@@ -54,6 +56,9 @@ func NewMetricsOrchestrator(discoveryService *discovery.AutoDiscoveryService, co
 		return nil, fmt.Errorf("failed to create container metrics collector: %w", err)
 	}
 
+	// Initialize health check collector
+	healthCollector := NewHealthCheckCollector(8081)
+
 	return &MetricsOrchestrator{
 		discoveryService: discoveryService,
 		registry: &MetricsRegistry{
@@ -61,7 +66,9 @@ func NewMetricsOrchestrator(discoveryService *discovery.AutoDiscoveryService, co
 		},
 		configPath:           configPath,
 		containerCollector:   containerCollector,
+		healthCollector:      healthCollector,
 		containerMetricsPort: 8080,
+		healthCheckPort:      8081,
 	}, nil
 }
 
@@ -78,6 +85,13 @@ func (mo *MetricsOrchestrator) Start(ctx context.Context) error {
 	go func() {
 		if err := mo.containerCollector.Start(ctx, mo.lastTopology); err != nil && err != context.Canceled {
 			log.Printf("❌ Container metrics collector error: %v", err)
+		}
+	}()
+
+	// Start health check collector
+	go func() {
+		if err := mo.healthCollector.Start(ctx, mo.lastTopology); err != nil && err != context.Canceled {
+			log.Printf("❌ Health check collector error: %v", err)
 		}
 	}()
 
@@ -128,6 +142,9 @@ func (mo *MetricsOrchestrator) updateMetricsConfiguration(ctx context.Context) e
 
 		// Update container collector with new topology
 		mo.containerCollector.UpdateTopology(topology)
+
+		// Update health collector with new topology
+		mo.healthCollector.UpdateTopology(topology)
 
 		mo.lastTopology = topology
 
@@ -237,7 +254,7 @@ func (mo *MetricsOrchestrator) registerHealthChecks(topology *discovery.NetworkT
 
 		target := &MetricTarget{
 			JobName:     fmt.Sprintf("%s-health", name),
-			Target:      fmt.Sprintf("%s:8080", component.IP), // Placeholder for health checks
+			Target:      fmt.Sprintf("host.docker.internal:%d", mo.healthCheckPort),
 			Source:      SOURCE_HEALTH_CHECK,
 			ScrapeePath: "/health/metrics",
 			Interval:    "15s",

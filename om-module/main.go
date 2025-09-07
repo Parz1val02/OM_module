@@ -103,6 +103,7 @@ func runMetricsOrchestrator(ctx context.Context, discoveryService *discovery.Aut
 	fmt.Printf("🚀 Starting continuous metrics orchestration...\n")
 	fmt.Printf("📊 Monitoring topology changes and updating Prometheus configuration\n")
 	fmt.Printf("📈 Container metrics server will start on port 8080\n")
+	fmt.Printf("🏥 Health check server will start on port 8081\n")
 	fmt.Printf("🔄 Press Ctrl+C to stop\n")
 	fmt.Printf("%s\n\n", strings.Repeat("=", 80))
 
@@ -189,7 +190,7 @@ func printBanner() {
 ╔════════════════════════════════════════════════════════════════╗
 ║                    🔧 O&M Module Discovery Tool                ║
 ║                   4G/5G Network Topology Scanner               ║
-║                      with Container Metrics                    ║
+║                      with Container & Health Metrics           ║
 ╚════════════════════════════════════════════════════════════════╝
 
 `)
@@ -294,6 +295,7 @@ func printEducationalInsights(topology *discovery.NetworkTopology) {
 		running, total, float64(running)/float64(total)*100)
 
 	fmt.Printf("📊 Container Metrics: CPU, Memory, Network, Block I/O, Process count\n")
+	fmt.Printf("🏥 Health Monitoring: Service availability, response times, success rates\n")
 	fmt.Printf("🔧 O&M Capabilities: Dynamic configuration, real-time monitoring\n")
 	fmt.Println()
 }
@@ -419,6 +421,10 @@ func printNextSteps() {
 	fmt.Printf("5. 📊 Test container metrics:\n")
 	fmt.Printf("   • curl http://localhost:8080/container/metrics\n")
 	fmt.Printf("   • curl http://localhost:8080/health\n\n")
-	fmt.Printf("6. 🔄 Run orchestrator mode: %s orchestrator\n", os.Args[0])
-	fmt.Printf("7. 📝 Monitor logs: docker-compose logs -f <component_name>\n")
+	fmt.Printf("6. 🏥 Test health check metrics:\n")
+	fmt.Printf("   • curl http://localhost:8081/health/metrics\n")
+	fmt.Printf("   • curl http://localhost:8081/health/status\n")
+	fmt.Printf("   • curl http://localhost:8081/health\n\n")
+	fmt.Printf("7. 🔄 Run orchestrator mode: %s orchestrator\n", os.Args[0])
+	fmt.Printf("8. 📝 Monitor logs: docker-compose logs -f <component_name>\n")
 }
