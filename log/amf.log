@@ -422,3 +422,5 @@ Open5GS daemon v2.7.5-24-g8e286b6
 09/07 15:20:45.109: [sbi] INFO: [22535520-8c28-41f0-a593-fd536e9fe858] (NRF-notify) NF Profile updated [type:PCF] (../lib/sbi/nnrf-handler.c:1154)
 09/07 15:20:45.109: [sbi] INFO: Setup NF EndPoint(addr) [172.22.0.27:80] (../lib/sbi/context.c:2374)
 09/07 15:20:45.109: [sbi] INFO: Setup NF EndPoint(addr) [172.22.0.27:7777] (../lib/sbi/context.c:2113)
+09/07 17:00:39.259: [sbi] INFO: [1bd5beea-8c28-41f0-9001-c1256bf3edc6] (NRF-notify) NF_DEREGISTERED event [type:NSSF] (../lib/sbi/nnrf-handler.c:1172)
+09/07 17:00:49.301: [sbi] INFO: [1cead93c-8c28-41f0-bb1a-a3e34e081168] (NRF-notify) NF_DEREGISTERED event [type:SMF] (../lib/sbi/nnrf-handler.c:1172)

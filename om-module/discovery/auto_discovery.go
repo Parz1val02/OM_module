@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
@@ -38,6 +39,7 @@ type NetworkTopology struct {
 	Type        DeploymentType       `json:"type"`
 	Components  map[string]Component `json:"components"`
 	Environment map[string]string    `json:"environment"`
+	Timestamp   int64                `json:"timestamp"`
 }
 
 // AutoDiscoveryService handles automatic discovery of network components
@@ -83,6 +85,7 @@ func (ads *AutoDiscoveryService) DiscoverTopology(ctx context.Context) (*Network
 		Type:        deploymentType,
 		Components:  components,
 		Environment: envConfig,
+		Timestamp:   time.Now().Unix(),
 	}
 
 	return topology, nil

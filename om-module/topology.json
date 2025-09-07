@@ -6,16 +6,16 @@
       "type": "5G-Control-Plane",
       "ip": "172.22.0.10",
       "ports": [
-        "38412/sctp",
         "7777/tcp",
-        "9091/tcp"
+        "9091/tcp",
+        "38412/sctp"
       ],
-      "status": "Up 35 seconds",
+      "status": "Up About an hour",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "0825a960508e708d5f69cad4ce234b239a5f1711cc5be5a27a0409196d1aad7c",
         "com.docker.compose.container-number": "1",
-        "com.docker.compose.depends_on": "udm:service_started:false,udr:service_started:false,pcf:service_started:false,bsf:service_started:false,nrf:service_started:false,scp:service_started:false,ausf:service_started:false",
+        "com.docker.compose.depends_on": "ausf:service_started:false,udm:service_started:false,udr:service_started:false,pcf:service_started:false,bsf:service_started:false,nrf:service_started:false,scp:service_started:false",
         "com.docker.compose.image": "sha256:745eb013becce80a9567874091c8c18d7efa530edfcf620980bbc3ee5f72c06f",
         "com.docker.compose.oneoff": "False",
         "com.docker.compose.project": "om_module",
@@ -42,7 +42,7 @@
       "ports": [
         "7777/tcp"
       ],
-      "status": "Up 36 seconds",
+      "status": "Up About an hour",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "3d7e1bacefc608397e72d63595c547c2150ea0609599ff56cfce039801606b14",
@@ -74,12 +74,12 @@
       "ports": [
         "7777/tcp"
       ],
-      "status": "Up 36 seconds",
+      "status": "Up About an hour",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "8e607388ad772703b0bf0fc1675a83f281922c93a3a1a6f6ac56ee2a23159d7c",
         "com.docker.compose.container-number": "1",
-        "com.docker.compose.depends_on": "mongo:service_started:false,nrf:service_started:false,scp:service_started:false",
+        "com.docker.compose.depends_on": "scp:service_started:false,mongo:service_started:false,nrf:service_started:false",
         "com.docker.compose.image": "sha256:745eb013becce80a9567874091c8c18d7efa530edfcf620980bbc3ee5f72c06f",
         "com.docker.compose.oneoff": "False",
         "com.docker.compose.project": "om_module",
@@ -104,10 +104,10 @@
       "type": "Database",
       "ip": "172.22.0.2",
       "ports": [
-        "27017/tcp",
-        "27017/udp"
+        "27017/udp",
+        "27017/tcp"
       ],
-      "status": "Up 37 seconds",
+      "status": "Up About an hour",
       "image": "mongo:6.0",
       "labels": {
         "com.docker.compose.config-hash": "7cde63593b73404ef954f0c1618fadbcdcf3980cc51b7232a4a8d209a4ba66e3",
@@ -132,7 +132,7 @@
       "ports": [
         "7777/tcp"
       ],
-      "status": "Up 37 seconds",
+      "status": "Up About an hour",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "d59810f7f58c5229f52c8521acac5cd3f5febae58cda434d140fd1afdf3b150c",
@@ -164,12 +164,12 @@
       "ports": [
         "7777/tcp"
       ],
-      "status": "Up 36 seconds",
+      "status": "Up About an hour",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "60b3fc7b9b685a62330d5933327b0de08bdf209eda0c190c4ab70df3022b26b6",
         "com.docker.compose.container-number": "1",
-        "com.docker.compose.depends_on": "scp:service_started:false,mongo:service_started:false,nrf:service_started:false",
+        "com.docker.compose.depends_on": "mongo:service_started:false,nrf:service_started:false,scp:service_started:false",
         "com.docker.compose.image": "sha256:745eb013becce80a9567874091c8c18d7efa530edfcf620980bbc3ee5f72c06f",
         "com.docker.compose.oneoff": "False",
         "com.docker.compose.project": "om_module",
@@ -197,12 +197,12 @@
         "7777/tcp",
         "9091/tcp"
       ],
-      "status": "Up 36 seconds",
+      "status": "Up About an hour",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "9dfdc03646243ca3097499980b7c858ca79a3172cf813b22b326e673ecda29b4",
         "com.docker.compose.container-number": "1",
-        "com.docker.compose.depends_on": "scp:service_started:false,mongo:service_started:false,nrf:service_started:false",
+        "com.docker.compose.depends_on": "mongo:service_started:false,nrf:service_started:false,scp:service_started:false",
         "com.docker.compose.image": "sha256:745eb013becce80a9567874091c8c18d7efa530edfcf620980bbc3ee5f72c06f",
         "com.docker.compose.oneoff": "False",
         "com.docker.compose.project": "om_module",
@@ -229,7 +229,7 @@
       "ports": [
         "7777/tcp"
       ],
-      "status": "Up 36 seconds",
+      "status": "Up About an hour",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "b37e4d99b934a67821c585c6e8f90f07d8bd1ce3a9bebbcc04bb28316502a6fb",
@@ -268,12 +268,12 @@
         "5868/sctp",
         "5868/tcp"
       ],
-      "status": "Up 34 seconds",
+      "status": "Up About an hour",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "245065f175a0d35baa03d591ccdd4cd4056c8412df8f0ace6ad903e08c26cbb6",
         "com.docker.compose.container-number": "1",
-        "com.docker.compose.depends_on": "amf:service_started:false,nrf:service_started:false,scp:service_started:false",
+        "com.docker.compose.depends_on": "nrf:service_started:false,scp:service_started:false,amf:service_started:false",
         "com.docker.compose.image": "sha256:745eb013becce80a9567874091c8c18d7efa530edfcf620980bbc3ee5f72c06f",
         "com.docker.compose.oneoff": "False",
         "com.docker.compose.project": "om_module",
@@ -300,12 +300,12 @@
       "ports": [
         "7777/tcp"
       ],
-      "status": "Up 36 seconds",
+      "status": "Up About an hour",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "2143a6be26f64eb4ee3d066a23caee59dcab1a5e665ea85fb5a44d10f110eb7b",
         "com.docker.compose.container-number": "1",
-        "com.docker.compose.depends_on": "scp:service_started:false,nrf:service_started:false",
+        "com.docker.compose.depends_on": "nrf:service_started:false,scp:service_started:false",
         "com.docker.compose.image": "sha256:745eb013becce80a9567874091c8c18d7efa530edfcf620980bbc3ee5f72c06f",
         "com.docker.compose.oneoff": "False",
         "com.docker.compose.project": "om_module",
@@ -332,12 +332,12 @@
       "ports": [
         "7777/tcp"
       ],
-      "status": "Up 36 seconds",
+      "status": "Up About an hour",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "c66b72bac7964f10bee1815ab79650eb774319aae645bf42f586c711851fcaa1",
         "com.docker.compose.container-number": "1",
-        "com.docker.compose.depends_on": "scp:service_started:false,mongo:service_started:false,nrf:service_started:false",
+        "com.docker.compose.depends_on": "nrf:service_started:false,scp:service_started:false,mongo:service_started:false",
         "com.docker.compose.image": "sha256:745eb013becce80a9567874091c8c18d7efa530edfcf620980bbc3ee5f72c06f",
         "com.docker.compose.oneoff": "False",
         "com.docker.compose.project": "om_module",
@@ -366,12 +366,12 @@
         "8805/udp",
         "9091/tcp"
       ],
-      "status": "Up 34 seconds",
+      "status": "Up About an hour",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "b6bb9a6c14b36df846d06b83f0808b45b60e20f474563d47b0fd1d211d7a6abc",
         "com.docker.compose.container-number": "1",
-        "com.docker.compose.depends_on": "smf:service_started:false,nrf:service_started:false,scp:service_started:false",
+        "com.docker.compose.depends_on": "scp:service_started:false,smf:service_started:false,nrf:service_started:false",
         "com.docker.compose.image": "sha256:745eb013becce80a9567874091c8c18d7efa530edfcf620980bbc3ee5f72c06f",
         "com.docker.compose.oneoff": "False",
         "com.docker.compose.project": "om_module",
@@ -399,7 +399,7 @@
         "9999:9999/tcp",
         "9999:9999/tcp"
       ],
-      "status": "Up 36 seconds",
+      "status": "Up About an hour",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "6a67381a7668cc178489f77fe0b499faad24022436e48903cae92ed6bd47b80e",
@@ -429,19 +429,34 @@
     "AMF_IP": "172.22.0.10",
     "AUSF_IP": "172.22.0.11",
     "BSF_IP": "172.22.0.29",
+    "CONTAINER_METRICS_PORT": "8080",
+    "DASHBOARD_EXPLANATIONS": "true",
     "DNS_IP": "172.22.0.15",
     "DOCKER_HOST_IP": "192.168.1.223",
+    "EDUCATIONAL_MODE": "true",
     "ENTITLEMENT_SERVER_IP": "172.22.0.30",
     "GRAFANA_IP": "172.22.0.39",
     "GRAFANA_PASSWORD": "open5gs",
     "GRAFANA_USERNAME": "open5gs",
+    "HEALTH_CHECK_INTERVAL": "15s",
+    "HEALTH_CHECK_PORT": "8081",
     "HSS_IP": "172.22.0.3",
     "IBCF_IP": "172.22.0.140",
     "ICSCF_BIND_PORT": "3869",
     "ICSCF_IP": "172.22.0.19",
+    "LOG_LEVEL": "info",
     "MAX_NUM_UE": "1024",
     "MCC": "001",
+    "METRICS_AMF_PORT": "9091",
+    "METRICS_COLLECTION_WORKERS": "4",
     "METRICS_IP": "172.22.0.36",
+    "METRICS_LOG_LEVEL": "debug",
+    "METRICS_MME_PORT": "9095",
+    "METRICS_PCF_PORT": "9093",
+    "METRICS_PCRF_PORT": "9096",
+    "METRICS_SIMULATION": "enabled",
+    "METRICS_SMF_PORT": "9092",
+    "METRICS_UPF_PORT": "9094",
     "MME_IP": "172.22.0.9",
     "MNC": "01",
     "MONGO_IP": "172.22.0.2",
@@ -461,6 +476,8 @@
     "PCRF_IP": "172.22.0.4",
     "PCSCF_BIND_PORT": "3871",
     "PCSCF_IP": "172.22.0.21",
+    "PROMETHEUS_EVALUATION_INTERVAL": "5s",
+    "PROMETHEUS_SCRAPE_INTERVAL": "5s",
     "PYHSS_BIND_PORT": "3875",
     "PYHSS_IP": "172.22.0.18",
     "RTPENGINE_IP": "172.22.0.16",
@@ -480,6 +497,7 @@
     "SWU_CLIENT_IP": "172.22.0.42",
     "TAC": "1",
     "TEST_NETWORK": "172.22.0.0/24",
+    "TOPOLOGY_REFRESH_INTERVAL": "10s",
     "UDM_IP": "172.22.0.13",
     "UDR_IP": "172.22.0.14",
     "UE1_AMF": "8000",
@@ -496,5 +514,6 @@
     "UPF_IP": "172.22.0.8",
     "UPF_TUNTAP_MODE": "tun",
     "WEBUI_IP": "172.22.0.26"
-  }
+  },
+  "timestamp": 1757281515
 }

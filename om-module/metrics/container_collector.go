@@ -64,14 +64,13 @@ func NewContainerMetricsCollector(port int) (*ContainerMetricsCollector, error) 
 	}, nil
 }
 
-// Start starts the container metrics collection server
+// Enhanced Start method with better shutdown messaging
 func (cmc *ContainerMetricsCollector) Start(ctx context.Context, topology *discovery.NetworkTopology) error {
 	cmc.topology = topology
 
-	// Start metrics collection in background
-	go cmc.collectMetricsPeriodically(ctx)
+	log.Printf("📊 Starting Container Metrics Collector on port %d", cmc.port)
 
-	// Start HTTP server for Prometheus scraping
+	// Set up HTTP server
 	mux := http.NewServeMux()
 	mux.HandleFunc("/container/metrics", cmc.handleMetricsRequest)
 	mux.HandleFunc("/health", cmc.handleHealthCheck)
@@ -82,19 +81,50 @@ func (cmc *ContainerMetricsCollector) Start(ctx context.Context, topology *disco
 	}
 
 	// Start server in goroutine
+
+	serverErr := make(chan error, 1)
 	go func() {
 		log.Printf("📊 Container metrics server listening on :%d", cmc.port)
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Printf("❌ Container metrics server error: %v", err)
+			serverErr <- err
 		}
 	}()
 
-	// Wait for context cancellation to shutdown
-	<-ctx.Done()
+	// Start periodic collection
+	ticker := time.NewTicker(10 * time.Second)
+	defer ticker.Stop()
 
-	shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	return server.Shutdown(shutdownCtx)
+	for {
+		select {
+		case <-ctx.Done():
+			log.Printf("📊 Stopping Container Metrics Collector...")
+
+			// Graceful shutdown with timeout
+			shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+
+			if err := server.Shutdown(shutdownCtx); err != nil {
+				log.Printf("⚠️  Container metrics server shutdown error: %v", err)
+			} else {
+				log.Printf("✅ Container metrics server stopped gracefully")
+			}
+
+			return ctx.Err()
+
+		case err := <-serverErr:
+			log.Printf("❌ Container metrics server error: %v", err)
+			return err
+
+		case <-ticker.C:
+			// Only collect if context is still valid
+			if ctx.Err() == nil {
+				if err := cmc.collectAllContainerStats(ctx); err != nil && err != context.Canceled {
+
+					log.Printf("⚠️  Failed to collect container stats: %v", err)
+				}
+			}
+		}
+	}
 }
 
 // collectMetricsPeriodically collects metrics from all containers periodically
@@ -120,22 +150,47 @@ func (cmc *ContainerMetricsCollector) collectAllContainerStats(ctx context.Conte
 		return fmt.Errorf("topology not set")
 	}
 
+	// Check if context is already cancelled to avoid unnecessary work
+	select {
+	case <-ctx.Done():
+
+		log.Printf("📊 Container stats collection stopped (shutdown in progress)")
+		return ctx.Err()
+	default:
+	}
+
 	for name, component := range cmc.topology.Components {
 		if !component.IsRunning {
 			continue
 		}
 
-		// Get container by name
+		// Check context before each container to enable faster shutdown
+		select {
+		case <-ctx.Done():
+			log.Printf("📊 Container stats collection cancelled during processing")
+			return ctx.Err()
+		default:
+		}
+
+		// Get container by name with context check
 		containers, err := cmc.dockerClient.ContainerList(ctx, container.ListOptions{})
 		if err != nil {
+			// Don't log as warning if it's due to context cancellation
+			if ctx.Err() != nil {
+				log.Printf("📊 Container stats collection stopped during shutdown")
+				return ctx.Err()
+
+			}
 			return fmt.Errorf("failed to list containers: %w", err)
 		}
 
 		var targetContainer *container.Summary
 		for _, c := range containers {
+
 			containerName := strings.TrimPrefix(c.Names[0], "/")
 			if containerName == name {
 				targetContainer = &c
+
 				break
 			}
 		}
@@ -144,9 +199,15 @@ func (cmc *ContainerMetricsCollector) collectAllContainerStats(ctx context.Conte
 			continue
 		}
 
-		// Collect stats for this container
+		// Collect stats for this container with context awareness
+
 		stats, err := cmc.collectContainerStats(ctx, targetContainer.ID, name)
 		if err != nil {
+			// Don't log as warning if it's due to context cancellation
+			if ctx.Err() != nil {
+				log.Printf("📊 Container stats collection for %s stopped during shutdown", name)
+				return ctx.Err()
+			}
 			log.Printf("⚠️  Failed to collect stats for %s: %v", name, err)
 			continue
 		}
@@ -157,55 +218,85 @@ func (cmc *ContainerMetricsCollector) collectAllContainerStats(ctx context.Conte
 	return nil
 }
 
-// collectContainerStats collects detailed stats for a specific container using raw JSON parsing
+// Enhanced collectContainerStats with better error handling
 func (cmc *ContainerMetricsCollector) collectContainerStats(ctx context.Context, containerID, name string) (*ContainerStats, error) {
-	// Get container stats
+	// Check context before making Docker API call
+
+	select {
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	default:
+
+	}
+
+	// Get container stats with context
 	statsJSON, err := cmc.dockerClient.ContainerStats(ctx, containerID, false)
 	if err != nil {
+		// Don't treat context cancellation as an error
+		if ctx.Err() != nil {
+
+			return nil, ctx.Err()
+		}
 		return nil, fmt.Errorf("failed to get container stats: %w", err)
 	}
 	defer func() {
-		err = statsJSON.Body.Close()
+		if closeErr := statsJSON.Body.Close(); closeErr != nil {
+			// Only log close errors if not during shutdown
+			if ctx.Err() == nil {
+				log.Printf("⚠️  Failed to close stats response: %v", closeErr)
+			}
+		}
+
 	}()
 
-	// Read raw JSON to handle API version differences
-	body, err := io.ReadAll(statsJSON.Body)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read stats body: %w", err)
+	// Check context before parsing response
+	select {
+	case <-ctx.Done():
+		return nil, ctx.Err()
+	default:
 	}
 
+	// Read and parse stats JSON
+	statsData, err := io.ReadAll(statsJSON.Body)
+	if err != nil {
+		if ctx.Err() != nil {
+			return nil, ctx.Err()
+
+		}
+		return nil, fmt.Errorf("failed to read stats data: %w", err)
+	}
+
+	// Parse the raw JSON stats
 	var rawStats map[string]any
-	if err := json.Unmarshal(body, &rawStats); err != nil {
+	if err := json.Unmarshal(statsData, &rawStats); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal stats: %w", err)
 	}
 
+	// Create stats object
 	stats := &ContainerStats{
+
 		ContainerID: containerID,
 		Name:        name,
 		Timestamp:   time.Now().Unix(),
 	}
 
-	// Extract CPU stats safely
+	// Extract metrics with error handling
 	if err := cmc.extractCPUStats(rawStats, stats, name); err != nil {
 		log.Printf("⚠️  Failed to extract CPU stats for %s: %v", name, err)
 	}
 
-	// Extract memory stats safely
 	if err := cmc.extractMemoryStats(rawStats, stats); err != nil {
 		log.Printf("⚠️  Failed to extract memory stats for %s: %v", name, err)
 	}
 
-	// Extract network stats safely
 	if err := cmc.extractNetworkStats(rawStats, stats); err != nil {
 		log.Printf("⚠️  Failed to extract network stats for %s: %v", name, err)
 	}
 
-	// Extract block I/O stats safely
 	if err := cmc.extractBlockIOStats(rawStats, stats); err != nil {
 		log.Printf("⚠️  Failed to extract block I/O stats for %s: %v", name, err)
 	}
 
-	// Extract PID stats safely
 	if err := cmc.extractPIDStats(rawStats, stats); err != nil {
 		log.Printf("⚠️  Failed to extract PID stats for %s: %v", name, err)
 	}

@@ -11,45 +11,25 @@ import (
 	"github.com/Parz1val02/OM_module/discovery"
 )
 
-// MetricSource represents different types of metric collection sources
-type MetricSource string
+// UpdatedMetricsOrchestrator coordinates all types of metrics collection
+type UpdatedMetricsOrchestrator struct {
+	discoveryService *discovery.AutoDiscoveryService
+	registry         *MetricsRegistry
+	configPath       string
+	lastTopology     *discovery.NetworkTopology
 
-const (
-	SOURCE_OFFICIAL_ENDPOINT MetricSource = "official_endpoint"
-	SOURCE_CONTAINER_STATS   MetricSource = "container_stats"
-	SOURCE_HEALTH_CHECK      MetricSource = "health_check"
-)
+	// Collectors
+	containerCollector *ContainerMetricsCollector
+	healthCollector    *HealthCheckCollector
+	collectorManager   *CollectorManager
 
-// MetricTarget represents a target for Prometheus scraping
-type MetricTarget struct {
-	JobName     string            `json:"job_name"`
-	Target      string            `json:"target"`
-	Labels      map[string]string `json:"labels"`
-	Source      MetricSource      `json:"source"`
-	ScrapeePath string            `json:"scrape_path"`
-	Interval    string            `json:"interval"`
-	ComponentID string            `json:"component_id"`
-}
-
-// MetricsRegistry holds the registry of all available metrics
-type MetricsRegistry struct {
-	Targets map[string]*MetricTarget `json:"targets"`
-}
-
-// MetricsOrchestrator coordinates metrics collection across the topology
-type MetricsOrchestrator struct {
-	discoveryService     *discovery.AutoDiscoveryService
-	registry             *MetricsRegistry
-	configPath           string
-	lastTopology         *discovery.NetworkTopology
-	containerCollector   *ContainerMetricsCollector
-	healthCollector      *HealthCheckCollector
+	// Configuration
 	containerMetricsPort int
 	healthCheckPort      int
 }
 
-// NewMetricsOrchestrator creates a new metrics orchestrator
-func NewMetricsOrchestrator(discoveryService *discovery.AutoDiscoveryService, configPath string) (*MetricsOrchestrator, error) {
+// NewUpdatedMetricsOrchestrator creates a new comprehensive metrics orchestrator
+func NewUpdatedMetricsOrchestrator(discoveryService *discovery.AutoDiscoveryService, configPath string) (*UpdatedMetricsOrchestrator, error) {
 	// Initialize container metrics collector
 	containerCollector, err := NewContainerMetricsCollector(8080)
 	if err != nil {
@@ -59,7 +39,10 @@ func NewMetricsOrchestrator(discoveryService *discovery.AutoDiscoveryService, co
 	// Initialize health check collector
 	healthCollector := NewHealthCheckCollector(8081)
 
-	return &MetricsOrchestrator{
+	// Initialize official collector manager
+	collectorManager := NewCollectorManager()
+
+	return &UpdatedMetricsOrchestrator{
 		discoveryService: discoveryService,
 		registry: &MetricsRegistry{
 			Targets: make(map[string]*MetricTarget),
@@ -67,30 +50,31 @@ func NewMetricsOrchestrator(discoveryService *discovery.AutoDiscoveryService, co
 		configPath:           configPath,
 		containerCollector:   containerCollector,
 		healthCollector:      healthCollector,
+		collectorManager:     collectorManager,
 		containerMetricsPort: 8080,
 		healthCheckPort:      8081,
 	}, nil
 }
 
-// Start begins the metrics orchestration process
-func (mo *MetricsOrchestrator) Start(ctx context.Context) error {
-	log.Printf("🚀 Starting Metrics Orchestrator...")
+// Start begins comprehensive metrics orchestration
+func (umo *UpdatedMetricsOrchestrator) Start(ctx context.Context) error {
+	log.Printf("🚀 Starting Updated Metrics Orchestrator with Official Collectors...")
 
 	// Initial discovery and configuration
-	if err := mo.updateMetricsConfiguration(ctx); err != nil {
+	if err := umo.updateMetricsConfiguration(ctx); err != nil {
 		return fmt.Errorf("failed initial metrics configuration: %w", err)
 	}
 
 	// Start container metrics collector
 	go func() {
-		if err := mo.containerCollector.Start(ctx, mo.lastTopology); err != nil && err != context.Canceled {
+		if err := umo.containerCollector.Start(ctx, umo.lastTopology); err != nil && err != context.Canceled {
 			log.Printf("❌ Container metrics collector error: %v", err)
 		}
 	}()
 
 	// Start health check collector
 	go func() {
-		if err := mo.healthCollector.Start(ctx, mo.lastTopology); err != nil && err != context.Canceled {
+		if err := umo.healthCollector.Start(ctx, umo.lastTopology); err != nil && err != context.Canceled {
 			log.Printf("❌ Health check collector error: %v", err)
 		}
 	}()
@@ -102,72 +86,80 @@ func (mo *MetricsOrchestrator) Start(ctx context.Context) error {
 	for {
 		select {
 		case <-ctx.Done():
-			log.Printf("🛑 Stopping Metrics Orchestrator...")
-			if err := mo.containerCollector.Close(); err != nil {
-				log.Printf("⚠️  Failed to update metrics configuration: %v", err)
+			log.Printf("🛑 Stopping Updated Metrics Orchestrator...")
+
+			// Stop all collectors gracefully
+			if err := umo.containerCollector.Close(); err != nil {
+				log.Printf("⚠️ Failed to stop container collector: %v", err)
 			}
+
+			umo.collectorManager.Stop()
+
 			return ctx.Err()
 		case <-ticker.C:
-			if err := mo.updateMetricsConfiguration(ctx); err != nil {
-				log.Printf("⚠️  Failed to update metrics configuration: %v", err)
+			if err := umo.updateMetricsConfiguration(ctx); err != nil {
+				log.Printf("⚠️ Failed to update metrics configuration: %v", err)
 			}
 		}
 	}
 }
 
-// updateMetricsConfiguration discovers topology and updates metrics configuration
-func (mo *MetricsOrchestrator) updateMetricsConfiguration(ctx context.Context) error {
+// updateMetricsConfiguration discovers topology and updates all metrics configurations
+func (umo *UpdatedMetricsOrchestrator) updateMetricsConfiguration(ctx context.Context) error {
 	// Discover current topology
-	topology, err := mo.discoveryService.DiscoverTopology(ctx)
+	topology, err := umo.discoveryService.DiscoverTopology(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to discover topology: %w", err)
 	}
 
 	// Check if topology has changed
-	if mo.hasTopologyChanged(topology) {
-		log.Printf("📊 Topology change detected, updating metrics configuration...")
+	if umo.hasTopologyChanged(topology) {
+		log.Printf("📊 Topology change detected, updating comprehensive metrics configuration...")
 
 		// Clear existing registry
-		mo.registry.Targets = make(map[string]*MetricTarget)
+		umo.registry.Targets = make(map[string]*MetricTarget)
 
-		// Register metrics from discovered components
-		mo.registerOfficialEndpoints(topology)
-		mo.registerContainerMetrics(topology)
-		mo.registerHealthChecks(topology)
+		// Update official collectors
+		if err := umo.collectorManager.UpdateTopology(ctx, topology); err != nil {
+			log.Printf("⚠️ Failed to update official collectors: %v", err)
+		}
+
+		// Register all metric sources
+		umo.registerOfficialEndpoints()
+		umo.registerContainerMetrics(topology)
+		umo.registerHealthChecks(topology)
 
 		// Generate and apply Prometheus configuration
-		if err := mo.generatePrometheusConfig(); err != nil {
+		if err := umo.generatePrometheusConfig(); err != nil {
 			return fmt.Errorf("failed to generate Prometheus config: %w", err)
 		}
 
-		// Update container collector with new topology
-		mo.containerCollector.UpdateTopology(topology)
+		// Update legacy collectors with new topology
+		umo.containerCollector.UpdateTopology(topology)
+		umo.healthCollector.UpdateTopology(topology)
 
-		// Update health collector with new topology
-		mo.healthCollector.UpdateTopology(topology)
+		umo.lastTopology = topology
 
-		mo.lastTopology = topology
-
-		// Log summary
-		mo.logMetricsSummary()
+		// Log comprehensive summary
+		umo.logComprehensiveMetricsSummary()
 	}
 
 	return nil
 }
 
 // hasTopologyChanged checks if the topology has changed since last update
-func (mo *MetricsOrchestrator) hasTopologyChanged(current *discovery.NetworkTopology) bool {
-	if mo.lastTopology == nil {
+func (umo *UpdatedMetricsOrchestrator) hasTopologyChanged(current *discovery.NetworkTopology) bool {
+	if umo.lastTopology == nil {
 		return true
 	}
 
 	// Simple comparison - check if component count or running status changed
-	if len(current.Components) != len(mo.lastTopology.Components) {
+	if len(current.Components) != len(umo.lastTopology.Components) {
 		return true
 	}
 
 	for name, component := range current.Components {
-		if lastComponent, exists := mo.lastTopology.Components[name]; !exists {
+		if lastComponent, exists := umo.lastTopology.Components[name]; !exists {
 			return true
 		} else if component.IsRunning != lastComponent.IsRunning {
 			return true
@@ -177,50 +169,19 @@ func (mo *MetricsOrchestrator) hasTopologyChanged(current *discovery.NetworkTopo
 	return false
 }
 
-// registerOfficialEndpoints registers components with official metrics endpoints
-func (mo *MetricsOrchestrator) registerOfficialEndpoints(topology *discovery.NetworkTopology) {
-	// Components with official metrics endpoints
-	officialEndpoints := map[string]bool{
-		"amf":  true, // 5G
-		"smf":  true, // 4G/5G
-		"pcf":  true, // 5G
-		"upf":  true, // 4G/5G
-		"pcrf": true, // 4G
-		"mme":  true, // 4G
+// registerOfficialEndpoints registers targets from the collector manager
+func (umo *UpdatedMetricsOrchestrator) registerOfficialEndpoints() {
+	targets := umo.collectorManager.GetMetricsTargets()
+
+	for _, target := range targets {
+		umo.registry.Targets[target.JobName] = &target
 	}
 
-	for name, component := range topology.Components {
-		if !component.IsRunning {
-			continue
-		}
-
-		// Check if component has official metrics endpoint
-		componentType := strings.ToLower(name)
-		for endpoint := range officialEndpoints {
-			if strings.Contains(componentType, endpoint) {
-				target := &MetricTarget{
-					JobName:     fmt.Sprintf("%s-official", name),
-					Target:      fmt.Sprintf("%s:9091", component.IP),
-					Source:      SOURCE_OFFICIAL_ENDPOINT,
-					ScrapeePath: "/metrics",
-					Interval:    "5s",
-					ComponentID: name,
-					Labels: map[string]string{
-						"component":      name,
-						"component_type": component.Type,
-						"source":         string(SOURCE_OFFICIAL_ENDPOINT),
-						"deployment":     string(topology.Type),
-					},
-				}
-				mo.registry.Targets[target.JobName] = target
-				break
-			}
-		}
-	}
+	log.Printf("📋 Registered %d official endpoint targets", len(targets))
 }
 
 // registerContainerMetrics registers container-level metrics for all components
-func (mo *MetricsOrchestrator) registerContainerMetrics(topology *discovery.NetworkTopology) {
+func (umo *UpdatedMetricsOrchestrator) registerContainerMetrics(topology *discovery.NetworkTopology) {
 	for name, component := range topology.Components {
 		if !component.IsRunning {
 			continue
@@ -228,7 +189,7 @@ func (mo *MetricsOrchestrator) registerContainerMetrics(topology *discovery.Netw
 
 		target := &MetricTarget{
 			JobName:     fmt.Sprintf("%s-container", name),
-			Target:      fmt.Sprintf("host.docker.internal:%d", mo.containerMetricsPort),
+			Target:      fmt.Sprintf("host.docker.internal:%d", umo.containerMetricsPort),
 			Source:      SOURCE_CONTAINER_STATS,
 			ScrapeePath: "/container/metrics",
 			Interval:    "10s",
@@ -241,12 +202,12 @@ func (mo *MetricsOrchestrator) registerContainerMetrics(topology *discovery.Netw
 				"container_id":   component.Name,
 			},
 		}
-		mo.registry.Targets[target.JobName] = target
+		umo.registry.Targets[target.JobName] = target
 	}
 }
 
 // registerHealthChecks registers health check metrics for all components
-func (mo *MetricsOrchestrator) registerHealthChecks(topology *discovery.NetworkTopology) {
+func (umo *UpdatedMetricsOrchestrator) registerHealthChecks(topology *discovery.NetworkTopology) {
 	for name, component := range topology.Components {
 		if !component.IsRunning {
 			continue
@@ -254,7 +215,7 @@ func (mo *MetricsOrchestrator) registerHealthChecks(topology *discovery.NetworkT
 
 		target := &MetricTarget{
 			JobName:     fmt.Sprintf("%s-health", name),
-			Target:      fmt.Sprintf("host.docker.internal:%d", mo.healthCheckPort),
+			Target:      fmt.Sprintf("host.docker.internal:%d", umo.healthCheckPort),
 			Source:      SOURCE_HEALTH_CHECK,
 			ScrapeePath: "/health/metrics",
 			Interval:    "15s",
@@ -266,81 +227,221 @@ func (mo *MetricsOrchestrator) registerHealthChecks(topology *discovery.NetworkT
 				"deployment":     string(topology.Type),
 			},
 		}
-		mo.registry.Targets[target.JobName] = target
+		umo.registry.Targets[target.JobName] = target
 	}
 }
 
-// generatePrometheusConfig generates a new Prometheus configuration file
-func (mo *MetricsOrchestrator) generatePrometheusConfig() error {
-	configContent := mo.buildPrometheusConfigContent()
+// generatePrometheusConfig generates a comprehensive Prometheus configuration file
+func (umo *UpdatedMetricsOrchestrator) generatePrometheusConfig() error {
+	configContent := umo.buildPrometheusConfigContent()
 
-	if err := os.WriteFile(mo.configPath, []byte(configContent), 0644); err != nil {
+	if err := os.WriteFile(umo.configPath, []byte(configContent), 0644); err != nil {
 		return fmt.Errorf("failed to write Prometheus config: %w", err)
 	}
 
-	log.Printf("📝 Generated new Prometheus configuration with %d targets", len(mo.registry.Targets))
+	log.Printf("📄 Generated Prometheus configuration with %d targets", len(umo.registry.Targets))
 	return nil
 }
 
-// buildPrometheusConfigContent builds the Prometheus configuration content
-func (mo *MetricsOrchestrator) buildPrometheusConfigContent() string {
-	var builder strings.Builder
+// buildPrometheusConfigContent creates the Prometheus configuration content
+func (umo *UpdatedMetricsOrchestrator) buildPrometheusConfigContent() string {
+	var config strings.Builder
 
 	// Global configuration
-	builder.WriteString("global:\n")
-	builder.WriteString("  scrape_interval: 5s\n")
-	builder.WriteString("  external_labels:\n")
-	builder.WriteString("    monitor: 'open5gs-om-module'\n\n")
+	config.WriteString("global:\n")
+	config.WriteString("  scrape_interval: 5s\n")
+	config.WriteString("  evaluation_interval: 5s\n")
+	config.WriteString("  external_labels:\n")
+	config.WriteString("    monitor: 'om-module-comprehensive'\n")
+	if umo.lastTopology != nil {
+		config.WriteString(fmt.Sprintf("    deployment_type: '%s'\n", umo.lastTopology.Type))
+	}
+	config.WriteString("\n")
 
-	builder.WriteString("scrape_configs:\n")
+	// Rule files
+	config.WriteString("rule_files:\n")
+	config.WriteString("  - 'rules/*.yml'\n")
+	config.WriteString("\n")
 
-	// Add each registered target
-	for _, target := range mo.registry.Targets {
-		builder.WriteString(fmt.Sprintf("  - job_name: '%s'\n", target.JobName))
-		builder.WriteString(fmt.Sprintf("    scrape_interval: %s\n", target.Interval))
-		builder.WriteString(fmt.Sprintf("    metrics_path: '%s'\n", target.ScrapeePath))
-		builder.WriteString("    static_configs:\n")
-		builder.WriteString(fmt.Sprintf("      - targets: ['%s']\n", target.Target))
+	// Scrape configurations
+	config.WriteString("scrape_configs:\n")
 
-		if len(target.Labels) > 0 {
-			builder.WriteString("        labels:\n")
+	// Group targets by source type for better organization
+	officialTargets := make([]*MetricTarget, 0)
+	containerTargets := make([]*MetricTarget, 0)
+	healthTargets := make([]*MetricTarget, 0)
+
+	for _, target := range umo.registry.Targets {
+		switch target.Source {
+		case SOURCE_OFFICIAL_ENDPOINT:
+			officialTargets = append(officialTargets, target)
+		case SOURCE_CONTAINER_STATS:
+			containerTargets = append(containerTargets, target)
+		case SOURCE_HEALTH_CHECK:
+			healthTargets = append(healthTargets, target)
+		}
+	}
+
+	// Official endpoints section
+	if len(officialTargets) > 0 {
+		config.WriteString("  # Official Network Function Endpoints\n")
+		for _, target := range officialTargets {
+			config.WriteString(fmt.Sprintf("  - job_name: '%s'\n", target.JobName))
+			config.WriteString(fmt.Sprintf("    scrape_interval: %s\n", target.Interval))
+			config.WriteString(fmt.Sprintf("    metrics_path: '%s'\n", target.ScrapeePath))
+			config.WriteString("    static_configs:\n")
+			config.WriteString(fmt.Sprintf("      - targets: ['%s']\n", target.Target))
+			config.WriteString("        labels:\n")
 			for key, value := range target.Labels {
-				builder.WriteString(fmt.Sprintf("          %s: '%s'\n", key, value))
+				config.WriteString(fmt.Sprintf("          %s: '%s'\n", key, value))
 			}
-		}
-		builder.WriteString("\n")
-	}
-
-	return builder.String()
-}
-
-// logMetricsSummary logs a summary of the current metrics configuration
-func (mo *MetricsOrchestrator) logMetricsSummary() {
-	summary := make(map[MetricSource]int)
-
-	for _, target := range mo.registry.Targets {
-		summary[target.Source]++
-	}
-
-	log.Printf("📊 Metrics Summary:")
-	for source, count := range summary {
-		log.Printf("   %s: %d targets", source, count)
-	}
-	log.Printf("   Total: %d targets", len(mo.registry.Targets))
-}
-
-// GetRegistry returns the current metrics registry
-func (mo *MetricsOrchestrator) GetRegistry() *MetricsRegistry {
-	return mo.registry
-}
-
-// GetTargetsBySource returns targets filtered by source type
-func (mo *MetricsOrchestrator) GetTargetsBySource(source MetricSource) []*MetricTarget {
-	var targets []*MetricTarget
-	for _, target := range mo.registry.Targets {
-		if target.Source == source {
-			targets = append(targets, target)
+			config.WriteString("\n")
 		}
 	}
+
+	// Container metrics section
+	if len(containerTargets) > 0 {
+		config.WriteString("  # Container Resource Metrics\n")
+		for _, target := range containerTargets {
+			config.WriteString(fmt.Sprintf("  - job_name: '%s'\n", target.JobName))
+			config.WriteString(fmt.Sprintf("    scrape_interval: %s\n", target.Interval))
+			config.WriteString(fmt.Sprintf("    metrics_path: '%s'\n", target.ScrapeePath))
+			config.WriteString("    static_configs:\n")
+			config.WriteString(fmt.Sprintf("      - targets: ['%s']\n", target.Target))
+			config.WriteString("        labels:\n")
+			for key, value := range target.Labels {
+				config.WriteString(fmt.Sprintf("          %s: '%s'\n", key, value))
+			}
+			config.WriteString("\n")
+		}
+	}
+
+	// Health check section
+	if len(healthTargets) > 0 {
+		config.WriteString("  # Component Health Checks\n")
+		for _, target := range healthTargets {
+			config.WriteString(fmt.Sprintf("  - job_name: '%s'\n", target.JobName))
+			config.WriteString(fmt.Sprintf("    scrape_interval: %s\n", target.Interval))
+			config.WriteString(fmt.Sprintf("    metrics_path: '%s'\n", target.ScrapeePath))
+			config.WriteString("    static_configs:\n")
+			config.WriteString(fmt.Sprintf("      - targets: ['%s']\n", target.Target))
+			config.WriteString("        labels:\n")
+			for key, value := range target.Labels {
+				config.WriteString(fmt.Sprintf("          %s: '%s'\n", key, value))
+			}
+			config.WriteString("\n")
+		}
+	}
+
+	return config.String()
+}
+
+// logComprehensiveMetricsSummary logs a detailed summary of all metrics sources
+func (umo *UpdatedMetricsOrchestrator) logComprehensiveMetricsSummary() {
+	log.Printf("📊 =================================")
+	log.Printf("📊 COMPREHENSIVE METRICS SUMMARY")
+	log.Printf("📊 =================================")
+
+	if umo.lastTopology != nil {
+		log.Printf("📊 Deployment Type: %s", umo.lastTopology.Type)
+		log.Printf("📊 Total Components: %d", len(umo.lastTopology.Components))
+	}
+
+	// Count targets by source
+	officialCount := 0
+	containerCount := 0
+	healthCount := 0
+
+	for _, target := range umo.registry.Targets {
+		switch target.Source {
+		case SOURCE_OFFICIAL_ENDPOINT:
+			officialCount++
+		case SOURCE_CONTAINER_STATS:
+			containerCount++
+		case SOURCE_HEALTH_CHECK:
+			healthCount++
+		}
+	}
+
+	log.Printf("📊 Official Endpoints: %d collectors", officialCount)
+	log.Printf("📊 Container Metrics: %d targets", containerCount)
+	log.Printf("📊 Health Checks: %d targets", healthCount)
+	log.Printf("📊 Total Targets: %d", len(umo.registry.Targets))
+
+	// Show collector details
+	collectorInfo := umo.collectorManager.GetCollectorInfo()
+	if len(collectorInfo) > 0 {
+		log.Printf("📊 Running Official Collectors:")
+		for componentName, info := range collectorInfo {
+			log.Printf("📊   - %s (%s) on port %d", componentName, info.NFType, info.Port)
+		}
+	}
+
+	// Validation
+	issues := umo.collectorManager.ValidateConfiguration()
+	if len(issues) > 0 {
+		log.Printf("⚠️  Configuration Issues:")
+		for _, issue := range issues {
+			log.Printf("⚠️    - %s", issue)
+		}
+	} else {
+		log.Printf("✅ Configuration validation passed")
+	}
+
+	log.Printf("📊 =================================")
+}
+
+// GetMetricsRegistry returns the current metrics registry
+func (umo *UpdatedMetricsOrchestrator) GetMetricsRegistry() *MetricsRegistry {
+	return umo.registry
+}
+
+// GetCollectorInfo returns information about all collectors
+func (umo *UpdatedMetricsOrchestrator) GetCollectorInfo() map[string]any {
+	info := map[string]any{
+		"orchestrator":  "Updated Metrics Orchestrator v2.0",
+		"last_update":   time.Now().Unix(),
+		"total_targets": len(umo.registry.Targets),
+		"collectors": map[string]any{
+			"official": umo.collectorManager.GetCollectorInfo(),
+			"container": map[string]any{
+				"port":     umo.containerMetricsPort,
+				"endpoint": fmt.Sprintf("http://localhost:%d/container/metrics", umo.containerMetricsPort),
+				"status":   "running",
+			},
+			"health": map[string]any{
+				"port":     umo.healthCheckPort,
+				"endpoint": fmt.Sprintf("http://localhost:%d/health/metrics", umo.healthCheckPort),
+				"status":   "running",
+			},
+		},
+		"educational": umo.collectorManager.GetEducationalInfo(),
+	}
+
+	if umo.lastTopology != nil {
+		info["topology"] = map[string]any{
+			"type":       string(umo.lastTopology.Type),
+			"components": len(umo.lastTopology.Components),
+		}
+	}
+
+	return info
+}
+
+// GetPrometheusTargets returns formatted Prometheus targets for external use
+func (umo *UpdatedMetricsOrchestrator) GetPrometheusTargets() []map[string]any {
+	var targets []map[string]any
+
+	for _, target := range umo.registry.Targets {
+		targets = append(targets, map[string]any{
+			"job_name":    target.JobName,
+			"target":      target.Target,
+			"scrape_path": target.ScrapeePath,
+			"interval":    target.Interval,
+			"source":      string(target.Source),
+			"labels":      target.Labels,
+		})
+	}
+
 	return targets
 }
