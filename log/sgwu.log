@@ -232,3 +232,8 @@ Open5GS daemon v2.7.5-24-g8e286b6
 09/07 17:01:42.593: [app] INFO: SGW-U initialize...done (../src/sgwu/app.c:31)
 09/07 17:01:42.638: [sgwu] INFO: PFCP associated [172.22.0.5]:8805 (../src/sgwu/pfcp-sm.c:163)
 09/07 17:01:45.094: [sgwu] WARNING: PFCP[RSP] has already been associated [172.22.0.5]:8805 (../src/sgwu/pfcp-sm.c:254)
+09/07 21:46:45.985: [sgwu] INFO: UE F-SEID[UP:0xf1b CP:0xe79] (../src/sgwu/context.c:170)
+09/07 21:46:45.986: [sgwu] INFO: [Added] Number of SGWU-Sessions is now 1 (../src/sgwu/context.c:175)
+09/07 21:46:46.011: [gtp] INFO: gtp_connect() [172.22.0.8]:2152 (../lib/gtp/path.c:60)
+09/07 21:46:46.297: [gtp] INFO: gtp_connect() [172.22.0.22]:2152 (../lib/gtp/path.c:60)
+09/07 21:49:40.589: [sgwu] INFO: [Removed] Number of SGWU-sessions is now 0 (../src/sgwu/context.c:201)

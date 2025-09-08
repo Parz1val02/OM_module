@@ -124,3 +124,5 @@ Open5GS daemon v2.7.5-24-g8e286b6
 09/07 17:01:52.419: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
 09/07 17:01:52.421: [app] INFO: HSS initialize...done (../src/hss/app-init.c:31)
 09/07 17:01:52.424: [diam] INFO: CONNECTED TO 'mme.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#15): (../lib/diameter/common/logger.c:81)
+09/07 21:50:22.154: [diam] ERROR: pid:PSM/mme.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'mme.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)

@@ -1,0 +1,184 @@
+# HELP gx_rx_unknown Received Gx unknown messages
+# TYPE gx_rx_unknown counter
+gx_rx_unknown 0
+
+# HELP gx_rx_ccr Received Gx CCR messages
+# TYPE gx_rx_ccr counter
+gx_rx_ccr 0
+
+# HELP gx_rx_ccr_error Received Gx CCR messages failed
+# TYPE gx_rx_ccr_error counter
+gx_rx_ccr_error 0
+
+# HELP gx_rx_raa Received Gx RAA messages
+# TYPE gx_rx_raa counter
+gx_rx_raa 0
+
+# HELP gx_tx_cca Received Gx RAA messages failed
+# TYPE gx_tx_cca counter
+gx_tx_cca 0
+
+# HELP gx_tx_rar Transmitted Gx RAR messages
+# TYPE gx_tx_rar counter
+gx_tx_rar 0
+
+# HELP gx_tx_rar_error Failed to transmit Gx RAR messages
+# TYPE gx_tx_rar_error counter
+gx_tx_rar_error 0
+
+# HELP rx_rx_unknown Received Rx unknown messages
+# TYPE rx_rx_unknown counter
+rx_rx_unknown 0
+
+# HELP rx_rx_aar Received Rx AAR messages
+# TYPE rx_rx_aar counter
+rx_rx_aar 0
+
+# HELP rx_rx_aar_error Received Rx AAR messages failed
+# TYPE rx_rx_aar_error counter
+rx_rx_aar_error 0
+
+# HELP rx_rx_asa Received Rx ASA messages
+# TYPE rx_rx_asa counter
+rx_rx_asa 0
+
+# HELP rx_rx_asa_error Received Rx ASA messages failed
+# TYPE rx_rx_asa_error counter
+rx_rx_asa_error 0
+
+# HELP rx_rx_str_error Received Rx STR messages failed
+# TYPE rx_rx_str_error counter
+rx_rx_str_error 0
+
+# HELP rx_tx_aaa Transmitted Rx AAA messages
+# TYPE rx_tx_aaa counter
+rx_tx_aaa 0
+
+# HELP rx_tx_sar Transmitted Rx SAR messages
+# TYPE rx_tx_sar counter
+rx_tx_sar 0
+
+# HELP rx_tx_sta Transmitted Rx STA messages
+# TYPE rx_tx_sta counter
+rx_tx_sta 0
+
+# HELP process_max_fds Maximum number of open file descriptors.
+# TYPE process_max_fds gauge
+process_max_fds 1048576
+
+# HELP process_virtual_memory_max_bytes Maximum amount of virtual memory available in bytes.
+# TYPE process_virtual_memory_max_bytes gauge
+process_virtual_memory_max_bytes -1
+
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE process_cpu_seconds_total gauge
+process_cpu_seconds_total 1
+
+# HELP process_virtual_memory_bytes Virtual memory size in bytes.
+# TYPE process_virtual_memory_bytes gauge
+process_virtual_memory_bytes 3095277568
+
+# HELP process_resident_memory_bytes Resident memory size in bytes.
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 33067008
+
+# HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
+# TYPE process_start_time_seconds gauge
+process_start_time_seconds 1953820
+
+# HELP process_open_fds Number of open file descriptors.
+# TYPE process_open_fds gauge
+process_open_fds 16
+
+# HELP gx_rx_unknown Received Gx unknown messages
+# TYPE gx_rx_unknown counter
+gx_rx_unknown 0
+
+# HELP gx_rx_ccr Received Gx CCR messages
+# TYPE gx_rx_ccr counter
+gx_rx_ccr 1
+
+# HELP gx_rx_ccr_error Received Gx CCR messages failed
+# TYPE gx_rx_ccr_error counter
+gx_rx_ccr_error 0
+
+# HELP gx_rx_raa Received Gx RAA messages
+# TYPE gx_rx_raa counter
+gx_rx_raa 0
+
+# HELP gx_tx_cca Received Gx RAA messages failed
+# TYPE gx_tx_cca counter
+gx_tx_cca 1
+
+# HELP gx_tx_rar Transmitted Gx RAR messages
+# TYPE gx_tx_rar counter
+gx_tx_rar 0
+
+# HELP gx_tx_rar_error Failed to transmit Gx RAR messages
+# TYPE gx_tx_rar_error counter
+gx_tx_rar_error 0
+
+# HELP rx_rx_unknown Received Rx unknown messages
+# TYPE rx_rx_unknown counter
+rx_rx_unknown 0
+
+# HELP rx_rx_aar Received Rx AAR messages
+# TYPE rx_rx_aar counter
+rx_rx_aar 0
+
+# HELP rx_rx_aar_error Received Rx AAR messages failed
+# TYPE rx_rx_aar_error counter
+rx_rx_aar_error 0
+
+# HELP rx_rx_asa Received Rx ASA messages
+# TYPE rx_rx_asa counter
+rx_rx_asa 0
+
+# HELP rx_rx_asa_error Received Rx ASA messages failed
+# TYPE rx_rx_asa_error counter
+rx_rx_asa_error 0
+
+# HELP rx_rx_str_error Received Rx STR messages failed
+# TYPE rx_rx_str_error counter
+rx_rx_str_error 0
+
+# HELP rx_tx_aaa Transmitted Rx AAA messages
+# TYPE rx_tx_aaa counter
+rx_tx_aaa 0
+
+# HELP rx_tx_sar Transmitted Rx SAR messages
+# TYPE rx_tx_sar counter
+rx_tx_sar 0
+
+# HELP rx_tx_sta Transmitted Rx STA messages
+# TYPE rx_tx_sta counter
+rx_tx_sta 0
+
+# HELP process_max_fds Maximum number of open file descriptors.
+# TYPE process_max_fds gauge
+process_max_fds 1048576
+
+# HELP process_virtual_memory_max_bytes Maximum amount of virtual memory available in bytes.
+# TYPE process_virtual_memory_max_bytes gauge
+process_virtual_memory_max_bytes -1
+
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE process_cpu_seconds_total gauge
+process_cpu_seconds_total 1
+
+# HELP process_virtual_memory_bytes Virtual memory size in bytes.
+# TYPE process_virtual_memory_bytes gauge
+process_virtual_memory_bytes 3095277568
+
+# HELP process_resident_memory_bytes Resident memory size in bytes.
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 33107968
+
+# HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
+# TYPE process_start_time_seconds gauge
+process_start_time_seconds 1953820
+
+# HELP process_open_fds Number of open file descriptors.
+# TYPE process_open_fds gauge
+process_open_fds 16
+

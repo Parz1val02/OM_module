@@ -483,3 +483,8 @@ Open5GS daemon v2.7.5-24-g8e286b6
 09/07 17:01:42.638: [app] INFO: SGW-C initialize...done (../src/sgwc/app.c:31)
 09/07 17:01:42.638: [sgwc] INFO: PFCP associated [172.22.0.6]:8805 (../src/sgwc/pfcp-sm.c:167)
 09/07 17:01:45.094: [sgwc] WARNING: PFCP[REQ] has already been associated [172.22.0.6]:8805 (../src/sgwc/pfcp-sm.c:259)
+09/07 21:46:45.982: [sgwc] INFO: [Added] Number of SGWC-UEs is now 1 (../src/sgwc/context.c:239)
+09/07 21:46:45.983: [sgwc] INFO: [Added] Number of SGWC-Sessions is now 1 (../src/sgwc/context.c:924)
+09/07 21:46:45.983: [sgwc] INFO: UE IMSI[001011234567895] APN[internet] (../src/sgwc/s11-handler.c:268)
+09/07 21:46:45.987: [gtp] INFO: gtp_connect() [172.22.0.7]:2123 (../lib/gtp/path.c:60)
+09/07 21:49:40.590: [sgwc] INFO: [Removed] Number of SGWC-Sessions is now 0 (../src/sgwc/context.c:930)

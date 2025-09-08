@@ -244,3 +244,31 @@ Open5GS daemon v2.7.5-24-g8e286b6
 09/07 17:01:42.828: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
 09/07 17:01:42.828: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
 09/07 17:01:45.094: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+09/07 21:46:46.006: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:209)
+09/07 21:46:46.009: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+09/07 21:46:46.009: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+09/07 21:46:46.009: [upf] INFO: UE F-SEID[UP:0xe15 CP:0x5ea] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:495)
+09/07 21:46:46.009: [upf] INFO: UE F-SEID[UP:0xe15 CP:0x5ea] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:495)
+09/07 21:46:46.171: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:622)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 5b9a5a27 dc3d21c8 ff020000 00000000   [.Z'.=!.........
+0020: 00000000 00000002 8500c96f 00000000   ...........o....
+09/07 21:49:40.583: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:253)
+Open5GS daemon v2.7.5-24-g8e286b6
+
+09/07 21:51:08.828: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+09/07 21:51:08.828: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+09/07 21:51:08.905: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:300)
+09/07 21:51:08.905: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+09/07 21:51:08.912: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+09/07 21:51:08.912: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+09/07 21:51:08.951: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+09/07 21:51:11.408: [upf] WARNING: PFCP[RSP] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:262)
+09/07 21:52:31.853: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:209)
+09/07 21:52:31.855: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+09/07 21:52:31.855: [upf] INFO: UE F-SEID[UP:0x3e5 CP:0x31] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:495)
+09/07 21:52:32.018: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:622)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 2cf23ced de2322f9 ff020000 00000000   ,.<..#".........
+0020: 00000000 00000002 8500123b 00000000   ...........;....
+09/07 21:52:32.021: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)

@@ -1,3 +1,0 @@
-2025-09-06T06:35:43.116627 [UE     ] [I] Using binary /usr/local/bin/srsue with arguments: 
-2025-09-06T06:35:43.238091 [UE     ] [I] Built in Release mode using commit ec29b0c1f on branch HEAD.
-2025-09-06T06:36:10.756013 [MAC    ] [W] [ 1291] proc_time: detected long duration=1035ms
