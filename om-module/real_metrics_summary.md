@@ -1,5 +1,5 @@
 # O&M Module - Real Open5GS Metrics Summary
-Generated: 2025-09-08 01:13:56
+Generated: 2025-09-08 01:16:46
 Deployment Type: 5G
 Total Components: 15
 
@@ -9,13 +9,6 @@ This O&M module now fetches REAL metrics from actual Open5GS components.
 No simulation - 100% live telecommunications data!
 
 ### Supported Network Functions with Real Metrics
-
-- **upf** (172.22.0.8)
-  - Open5GS Endpoint: http://172.22.0.8:9091/metrics
-  - O&M Module Endpoint: http://localhost:9094/metrics  
-  - Health Check: http://localhost:9094/health
-  - Educational Dashboard: http://localhost:9094/dashboard
-  - Raw Data Debug: http://localhost:9094/debug/raw
 
 - **pcf** (172.22.0.27)
   - Open5GS Endpoint: http://172.22.0.27:9091/metrics
@@ -38,10 +31,17 @@ No simulation - 100% live telecommunications data!
   - Educational Dashboard: http://localhost:9091/dashboard
   - Raw Data Debug: http://localhost:9091/debug/raw
 
+- **upf** (172.22.0.8)
+  - Open5GS Endpoint: http://172.22.0.8:9091/metrics
+  - O&M Module Endpoint: http://localhost:9094/metrics  
+  - Health Check: http://localhost:9094/health
+  - Educational Dashboard: http://localhost:9094/dashboard
+  - Raw Data Debug: http://localhost:9094/debug/raw
+
 ### Quick Start Commands
 
 1. **Start Real Metrics Collection:**
-   ./om-module real-metrics
+   ./om-module orchestrator
 
 2. **Test Real Metrics:**
    curl http://localhost:9091/metrics  # AMF real metrics

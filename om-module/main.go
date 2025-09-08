@@ -101,19 +101,54 @@ func displayRealMetricsStatus(orchestrator *metrics.RealCollectorOrchestrator) {
 
 		for componentName, info := range collectors {
 			if collectorInfo, ok := info.(map[string]any); ok {
-				nfType := collectorInfo["nf_type"].(string)
-				componentIP := collectorInfo["component_ip"].(string)
-				collectorPort := collectorInfo["collector_port"]
-				fetchURL := collectorInfo["fetch_url"].(string)
-				isHealthy := collectorInfo["status"].(bool)
+				// nf_type
+				nfType, ok := collectorInfo["nf_type"].(string)
+				if !ok {
+					log.Printf("⚠️  Missing or invalid nf_type for collector %s", componentName)
+					nfType = "unknown"
+				}
 
+				// component_ip
+				componentIP, ok := collectorInfo["component_ip"].(string)
+				if !ok {
+					log.Printf("⚠️  Missing or invalid component_ip for collector %s", componentName)
+					componentIP = "unknown"
+				}
+
+				// fetch_url
+				fetchURL, ok := collectorInfo["fetch_url"].(string)
+				if !ok {
+					log.Printf("⚠️  Missing or invalid fetch_url for collector %s", componentName)
+					fetchURL = ""
+				}
+
+				// collector_port (can be int, float64, or string)
+				var collectorPort any = "N/A"
+				if port, exists := collectorInfo["collector_port"]; exists {
+					collectorPort = port
+				} else {
+					log.Printf("⚠️  Missing collector_port for collector %s", componentName)
+				}
+
+				// status
+				isHealthy := false
+				if healthy, ok := collectorInfo["status"].(bool); ok {
+					isHealthy = healthy
+				} else {
+					log.Printf("⚠️  Missing or invalid status for collector %s", componentName)
+				}
+
+				// Health indicator
 				healthIcon := "🟢"
 				if !isHealthy {
 					healthIcon = "🔴"
 				}
 
+				// Print collector info
 				fmt.Printf("%s %s (%s) %s\n", healthIcon, componentName, strings.ToUpper(nfType), componentIP)
-				fmt.Printf("   📡 Fetching from: %s\n", fetchURL)
+				if fetchURL != "" {
+					fmt.Printf("   📡 Fetching from: %s\n", fetchURL)
+				}
 				fmt.Printf("   📊 Exposing at:   http://localhost:%v/metrics\n", collectorPort)
 				fmt.Printf("   🏥 Health check:  http://localhost:%v/health\n", collectorPort)
 				fmt.Printf("   📚 Dashboard:     http://localhost:%v/dashboard\n", collectorPort)

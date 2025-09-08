@@ -259,14 +259,14 @@
       "type": "5G-Control-Plane",
       "ip": "172.22.0.7",
       "ports": [
-        "5868/tcp",
-        "7777/tcp",
         "8805/udp",
         "9091/tcp",
         "2123/udp",
         "3868/sctp",
         "3868/tcp",
-        "5868/sctp"
+        "5868/sctp",
+        "5868/tcp",
+        "7777/tcp"
       ],
       "status": "Up 3 hours",
       "image": "docker_open5gs",
@@ -298,10 +298,10 @@
       "type": "5G-Radio-Access-Network",
       "ip": "172.22.0.37",
       "ports": [
-        "2152/udp",
         "38412/sctp",
         "2000/tcp",
-        "2001/tcp"
+        "2001/tcp",
+        "2152/udp"
       ],
       "status": "Up 3 hours",
       "image": "docker_srsran",
@@ -333,8 +333,8 @@
       "type": "User-Equipment",
       "ip": "172.22.0.34",
       "ports": [
-        "2000/tcp",
-        "2001/tcp"
+        "2001/tcp",
+        "2000/tcp"
       ],
       "status": "Up 3 hours",
       "image": "docker_srslte",
@@ -585,5 +585,5 @@
     "UPF_TUNTAP_MODE": "tun",
     "WEBUI_IP": "172.22.0.26"
   },
-  "timestamp": 1757312036
+  "timestamp": 1757312206
 }
