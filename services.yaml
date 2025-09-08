@@ -10,6 +10,7 @@ services:
       - ./om-module:/mnt/om-module
       - /var/run/docker.sock:/var/run/docker.sock  # For container discovery
       - prometheus-configs:/etc/prometheus/configs  # Shared config volume
+      - grafana-dashboards:/etc/grafana/provisioning/dashboards  # Shared config volume
       - ./.env:/root/.env:ro  
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -31,7 +32,7 @@ services:
       start_period: 10s
 
   # Updated Prometheus Service
-  metrics:
+  prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
     env_file:
@@ -76,7 +77,8 @@ services:
       - .env
     volumes:
       - grafana-data:/var/lib/grafana
-      - ./grafana/provisioning/:/etc/grafana/provisioning/
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - grafana-dashboards:/etc/grafana/provisioning/dashboards:ro  # Shared config volume
       - ./grafana:/mnt/grafana
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -97,7 +99,7 @@ services:
       default:
         ipv4_address: ${GRAFANA_IP}
     depends_on:
-      - metrics
+      - prometheus
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
@@ -120,3 +122,5 @@ volumes:
     name: prometheus_data
   prometheus-configs:
     name: prometheus_configs
+  grafana-dashboards:
+    name: grafana_dashboards

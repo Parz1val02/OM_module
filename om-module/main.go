@@ -14,6 +14,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/Parz1val02/OM_module/dashboards"
 	"github.com/Parz1val02/OM_module/discovery"
 	"github.com/Parz1val02/OM_module/metrics"
 )
@@ -142,6 +143,13 @@ func runRealMetricsOrchestrator(envFile string) {
 		log.Printf("⚠️  Warning: Some collectors may not be fully ready: %v", err)
 	}
 
+	// NEW: Generate Grafana dashboards
+	if err := dashboards.GenerateGrafanaDashboards(orchestrator, topology, inDocker); err != nil {
+		log.Printf("⚠️ Failed to generate Grafana dashboards: %v", err)
+	} else {
+		log.Printf("✅ Generated Grafana dashboards successfully")
+	}
+
 	// Display live status
 	displayRealMetricsStatus(orchestrator)
 
@@ -174,7 +182,7 @@ func runRealMetricsOrchestrator(envFile string) {
 
 // Generate Docker-aware Prometheus configuration
 func generateDockerPrometheusConfig(orchestrator *metrics.RealCollectorOrchestrator, topology *discovery.NetworkTopology, inDocker bool) error {
-	configPath := "prometheus_real_open5gs.yml"
+	configPath := "../prometheus/configs/prometheus.yml"
 	if inDocker {
 		configPath = "/etc/prometheus/configs/prometheus.yml"
 	}

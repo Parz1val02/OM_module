@@ -136,3 +136,13 @@ Open5GS daemon v2.7.5-24-g8e286b6
 09/08 03:52:21.340: [diam] INFO: CONNECTED TO 'mme.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
 09/08 03:57:46.211: [diam] ERROR: pid:PSM/mme.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'mme.epc.mnc001.mcc001.3gppnetwork.org'
  ((null):0)
+Open5GS daemon v2.7.5-24-g8e286b6
+
+09/08 12:19:40.048: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/hss.yaml' (../lib/app/ogs-init.c:144)
+09/08 12:19:40.048: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/hss.log' (../lib/app/ogs-init.c:147)
+09/08 12:19:40.052: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+09/08 12:19:40.114: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+09/08 12:19:40.116: [app] INFO: HSS initialize...done (../src/hss/app-init.c:31)
+09/08 12:19:40.120: [diam] INFO: CONNECTED TO 'mme.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#15): (../lib/diameter/common/logger.c:81)
+09/08 12:24:26.228: [diam] ERROR: pid:PSM/mme.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'mme.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)

@@ -16,11 +16,6 @@ docker tag ghcr.io/herlesupreeth/docker_srslte:master docker_srslte
 docker pull ghcr.io/herlesupreeth/docker_srsran:master
 docker tag ghcr.io/herlesupreeth/docker_srsran:master docker_srsran
 ```
-For metrics components:
-```
-docker pull ghcr.io/herlesupreeth/docker_metrics:master
-docker tag ghcr.io/herlesupreeth/docker_metrics:master docker_metrics
-```
 
 ## Deployments
 
@@ -40,7 +35,7 @@ docker compose -f srsue_5g_zmq.yaml up -d && docker container attach srsue_5g_zm
 
 ### O&M services
 #### Grafana and Prometheus deployment
-docker compose -f services.yaml up -d
+docker compose -f services.yaml up --build -d && docker container attach om-module
 
 > Officially supported metrics endpoints in open5gs
 >- amf (5g)
