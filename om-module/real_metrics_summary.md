@@ -1,5 +1,5 @@
 # O&M Module - Real Open5GS Metrics Summary
-Generated: 2025-09-08 01:16:46
+Generated: 2025-09-08 01:33:31
 Deployment Type: 5G
 Total Components: 15
 
@@ -10,13 +10,6 @@ No simulation - 100% live telecommunications data!
 
 ### Supported Network Functions with Real Metrics
 
-- **pcf** (172.22.0.27)
-  - Open5GS Endpoint: http://172.22.0.27:9091/metrics
-  - O&M Module Endpoint: http://localhost:9093/metrics  
-  - Health Check: http://localhost:9093/health
-  - Educational Dashboard: http://localhost:9093/dashboard
-  - Raw Data Debug: http://localhost:9093/debug/raw
-
 - **smf** (172.22.0.7)
   - Open5GS Endpoint: http://172.22.0.7:9091/metrics
   - O&M Module Endpoint: http://localhost:9092/metrics  
@@ -24,19 +17,26 @@ No simulation - 100% live telecommunications data!
   - Educational Dashboard: http://localhost:9092/dashboard
   - Raw Data Debug: http://localhost:9092/debug/raw
 
-- **amf** (172.22.0.10)
-  - Open5GS Endpoint: http://172.22.0.10:9091/metrics
-  - O&M Module Endpoint: http://localhost:9091/metrics  
-  - Health Check: http://localhost:9091/health
-  - Educational Dashboard: http://localhost:9091/dashboard
-  - Raw Data Debug: http://localhost:9091/debug/raw
-
 - **upf** (172.22.0.8)
   - Open5GS Endpoint: http://172.22.0.8:9091/metrics
   - O&M Module Endpoint: http://localhost:9094/metrics  
   - Health Check: http://localhost:9094/health
   - Educational Dashboard: http://localhost:9094/dashboard
   - Raw Data Debug: http://localhost:9094/debug/raw
+
+- **pcf** (172.22.0.27)
+  - Open5GS Endpoint: http://172.22.0.27:9091/metrics
+  - O&M Module Endpoint: http://localhost:9093/metrics  
+  - Health Check: http://localhost:9093/health
+  - Educational Dashboard: http://localhost:9093/dashboard
+  - Raw Data Debug: http://localhost:9093/debug/raw
+
+- **amf** (172.22.0.10)
+  - Open5GS Endpoint: http://172.22.0.10:9091/metrics
+  - O&M Module Endpoint: http://localhost:9091/metrics  
+  - Health Check: http://localhost:9091/health
+  - Educational Dashboard: http://localhost:9091/dashboard
+  - Raw Data Debug: http://localhost:9091/debug/raw
 
 ### Quick Start Commands
 

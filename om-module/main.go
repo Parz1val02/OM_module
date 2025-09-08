@@ -15,6 +15,8 @@ import (
 	"github.com/Parz1val02/OM_module/metrics"
 )
 
+var debugMode bool
+
 func main() {
 	log.Printf("🚀 Starting O&M Module with Real Open5GS Metrics Collection")
 
@@ -26,7 +28,12 @@ func main() {
 		mode = os.Args[1]
 	}
 	if len(os.Args) > 2 {
-		envFile = os.Args[2]
+		if os.Args[2] == "--debug" {
+			debugMode = true
+			log.Printf("🐞 Debug mode enabled")
+		} else {
+			envFile = os.Args[2]
+		}
 	}
 
 	switch mode {
@@ -93,68 +100,63 @@ func displayRealMetricsStatus(orchestrator *metrics.RealCollectorOrchestrator) {
 	endpoints := orchestrator.GetMetricsEndpoints()
 	status := orchestrator.GetStatus()
 
+	// 🔍 Optional debug dump
+	if debugMode {
+		if jsonBytes, err := json.MarshalIndent(status, "", "  "); err == nil {
+			if err := os.WriteFile("status_debug.json", jsonBytes, 0644); err != nil {
+				log.Printf("⚠️  Failed to write status_debug.json: %v", err)
+			} else {
+				log.Printf("🐞 Debug: status exported to status_debug.json")
+			}
+		} else {
+			log.Printf("⚠️  Failed to marshal status for debug: %v", err)
+		}
+	}
+
 	fmt.Printf("\n🎯 Real Open5GS Metrics Collection Status\n")
 	fmt.Printf("==========================================\n")
 
-	if collectors, ok := status["collectors"].(map[string]any); ok {
-		fmt.Printf("📊 Active Collectors: %d\n\n", len(collectors))
+	// 🔑 Drill down into nested collectors
+	if collectorsRoot, ok := status["collectors"].(map[string]any); ok {
+		if collectors, ok := collectorsRoot["collectors"].(map[string]any); ok {
+			fmt.Printf("📊 Active Collectors: %d\n\n", len(collectors))
 
-		for componentName, info := range collectors {
-			if collectorInfo, ok := info.(map[string]any); ok {
-				// nf_type
-				nfType, ok := collectorInfo["nf_type"].(string)
-				if !ok {
-					log.Printf("⚠️  Missing or invalid nf_type for collector %s", componentName)
-					nfType = "unknown"
-				}
+			for componentName, info := range collectors {
+				if collectorInfo, ok := info.(map[string]any); ok {
+					// Safe field extraction with defaults
+					nfType, _ := collectorInfo["nf_type"].(string)
+					componentIP, _ := collectorInfo["component_ip"].(string)
+					fetchURL, _ := collectorInfo["fetch_url"].(string)
 
-				// component_ip
-				componentIP, ok := collectorInfo["component_ip"].(string)
-				if !ok {
-					log.Printf("⚠️  Missing or invalid component_ip for collector %s", componentName)
-					componentIP = "unknown"
-				}
+					collectorPort := "N/A"
+					if port, ok := collectorInfo["collector_port"]; ok {
+						collectorPort = fmt.Sprintf("%v", port)
+					}
 
-				// fetch_url
-				fetchURL, ok := collectorInfo["fetch_url"].(string)
-				if !ok {
-					log.Printf("⚠️  Missing or invalid fetch_url for collector %s", componentName)
-					fetchURL = ""
-				}
+					isHealthy := false
+					if healthy, ok := collectorInfo["status"].(bool); ok {
+						isHealthy = healthy
+					}
 
-				// collector_port (can be int, float64, or string)
-				var collectorPort any = "N/A"
-				if port, exists := collectorInfo["collector_port"]; exists {
-					collectorPort = port
-				} else {
-					log.Printf("⚠️  Missing collector_port for collector %s", componentName)
-				}
+					healthIcon := "🟢"
+					if !isHealthy {
+						healthIcon = "🔴"
+					}
 
-				// status
-				isHealthy := false
-				if healthy, ok := collectorInfo["status"].(bool); ok {
-					isHealthy = healthy
-				} else {
-					log.Printf("⚠️  Missing or invalid status for collector %s", componentName)
+					// Print collector info
+					fmt.Printf("%s %s (%s) %s\n", healthIcon, componentName, strings.ToUpper(nfType), componentIP)
+					if fetchURL != "" {
+						fmt.Printf("   📡 Fetching from: %s\n", fetchURL)
+					}
+					fmt.Printf("   📊 Exposing at:   http://localhost:%s/metrics\n", collectorPort)
+					fmt.Printf("   🏥 Health check:  http://localhost:%s/health\n", collectorPort)
+					fmt.Printf("   📚 Dashboard:     http://localhost:%s/dashboard\n", collectorPort)
+					fmt.Printf("   🔍 Raw data:      http://localhost:%s/debug/raw\n", collectorPort)
+					fmt.Printf("\n")
 				}
-
-				// Health indicator
-				healthIcon := "🟢"
-				if !isHealthy {
-					healthIcon = "🔴"
-				}
-
-				// Print collector info
-				fmt.Printf("%s %s (%s) %s\n", healthIcon, componentName, strings.ToUpper(nfType), componentIP)
-				if fetchURL != "" {
-					fmt.Printf("   📡 Fetching from: %s\n", fetchURL)
-				}
-				fmt.Printf("   📊 Exposing at:   http://localhost:%v/metrics\n", collectorPort)
-				fmt.Printf("   🏥 Health check:  http://localhost:%v/health\n", collectorPort)
-				fmt.Printf("   📚 Dashboard:     http://localhost:%v/dashboard\n", collectorPort)
-				fmt.Printf("   🔍 Raw data:      http://localhost:%v/debug/raw\n", collectorPort)
-				fmt.Printf("\n")
 			}
+		} else {
+			log.Printf("⚠️ No nested collectors found inside status[\"collectors\"]")
 		}
 	}
 
