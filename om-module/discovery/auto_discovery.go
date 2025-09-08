@@ -42,6 +42,10 @@ type NetworkTopology struct {
 	Timestamp   int64                `json:"timestamp"`
 }
 
+func (n NetworkTopology) FormattedTimestamp() string {
+	return time.Unix(n.Timestamp, 0).Format("2006-01-02 15:04:05")
+}
+
 // AutoDiscoveryService handles automatic discovery of network components
 type AutoDiscoveryService struct {
 	dockerClient *client.Client

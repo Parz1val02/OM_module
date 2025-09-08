@@ -819,3 +819,6 @@ Open5GS daemon v2.7.5-24-g8e286b6
 09/07 21:52:31.856: [gtp] INFO: gtp_connect() [172.22.0.8]:2152 (../lib/gtp/path.c:60)
 09/07 21:52:31.863: [sbi] INFO: [ab6f0792-8c5e-41f0-a546-a1cc792abae7] Setup NF Instance [type:AMF] (../lib/sbi/path.c:307)
 09/07 21:52:32.022: [sbi] INFO: [ab27b842-8c5e-41f0-abd8-f53a7369d12d] Setup NF Instance [type:UDM] (../lib/sbi/path.c:307)
+09/07 22:21:41.331: [smf] INFO: Removed Session: UE IMSI:[imsi-001011234567895] DNN:[internet:1] IPv4:[192.168.100.2] IPv6:[] (../src/smf/context.c:1693)
+09/07 22:21:41.333: [smf] INFO: [Removed] Number of SMF-Sessions is now 0 (../src/smf/context.c:3198)
+09/07 22:21:41.334: [smf] INFO: [Removed] Number of SMF-UEs is now 0 (../src/smf/context.c:1094)

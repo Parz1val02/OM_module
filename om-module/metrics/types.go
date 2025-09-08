@@ -4,9 +4,9 @@ package metrics
 type MetricSource string
 
 const (
-	SOURCE_OFFICIAL_ENDPOINT MetricSource = "official_endpoint"
-	SOURCE_CONTAINER_STATS   MetricSource = "container_stats"
-	SOURCE_HEALTH_CHECK      MetricSource = "health_check"
+	SOURCE_REAL_OPEN5GS    MetricSource = "real_open5gs"
+	SOURCE_CONTAINER_STATS MetricSource = "container_stats"
+	SOURCE_HEALTH_CHECK    MetricSource = "health_check"
 )
 
 // MetricTarget represents a target for Prometheus scraping
