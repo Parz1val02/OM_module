@@ -1,39 +1,96 @@
 services:
-  metrics:
-    build: ./metrics
-    image: docker_metrics
-    container_name: metrics
+  # O&M Module Service
+  om-module:
+    build: ./om-module
+    image: docker_om_module
+    container_name: om-module
     env_file:
       - .env
     volumes:
-      - ./metrics:/mnt/metrics
+      - ./om-module:/mnt/om-module
+      - /var/run/docker.sock:/var/run/docker.sock  # For container discovery
+      - prometheus-configs:/etc/prometheus/configs  # Shared config volume
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "9091-9096:9091-9096/tcp"  # Real Open5GS collectors
+      - "8080-8081:8080-8081/tcp"  # Infrastructure collectors
+    networks:
+      default:
+        ipv4_address: ${OM_MODULE_IP}
+    environment:
+      - PROMETHEUS_CONFIG_PATH=/etc/prometheus/configs
+      - DOCKER_NETWORK=docker_open5gs_default
+    depends_on:
+      - mongo
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Updated Prometheus Service
+  metrics:
+    build: ./metrics
+    image: docker_metrics
+    container_name: prometheus
+    env_file:
+      - .env
+    volumes:
+      - prometheus-configs:/etc/prometheus/configs:ro  # Read generated configs
+      - prometheus-data:/prometheus
+      - ./prometheus:/etc/prometheus  # Additional prometheus configs
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    command:
+      - '--config.file=/etc/prometheus/configs/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+      - '--web.route-prefix=/'
+      - '--web.external-url=http://localhost:9090'
     expose:
       - "9090/tcp"
     ports:
       - "9090:9090/tcp"
     networks:
       default:
-          ipv4_address: ${METRICS_IP}
+        ipv4_address: ${METRICS_IP}
+    depends_on:
+      - om-module
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Updated Grafana Service
   grafana:
     image: grafana/grafana:11.3.0
     container_name: grafana
     env_file:
       - .env
     volumes:
-      - grafana_data:/var/lib/grafana
-      - ./grafana/:/etc/grafana/provisioning/
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
       - ./grafana:/mnt/grafana
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
-      #- GF_INSTALL_PLUGINS=${GRAFANA_INSTALL_PLUGINS}
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
       - GF_PATHS_DATA=/var/lib/grafana
       - METRICS_IP=${METRICS_IP}
+      - OM_MODULE_IP=${OM_MODULE_IP}
+      - GF_FEATURE_TOGGLES_ENABLE=publicDashboards
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
     expose:
       - "3000/tcp"
     ports:
@@ -41,6 +98,15 @@ services:
     networks:
       default:
         ipv4_address: ${GRAFANA_IP}
+    depends_on:
+      - metrics
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
 networks:
   default:
@@ -50,5 +116,9 @@ networks:
         - subnet: ${TEST_NETWORK}
 
 volumes:
-  grafana_data:
-        name: grafana_data
+  grafana-data:
+    name: grafana_data
+  prometheus-data:
+    name: prometheus_data
+  prometheus-configs:
+    name: prometheus_configs

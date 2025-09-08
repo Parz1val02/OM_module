@@ -874,3 +874,5 @@ Open5GS daemon v2.7.5-24-g8e286b6
 09/08 03:52:10.600: [smf] INFO: PFCP associated [172.22.0.8]:8805 (../src/smf/pfcp-sm.c:188)
 09/08 03:52:12.740: [smf] WARNING: PFCP[RSP] has already been associated [172.22.0.8]:8805 (../src/smf/pfcp-sm.c:292)
 09/08 03:52:21.679: [diam] INFO: CONNECTED TO 'pcrf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#8): (../lib/diameter/common/logger.c:81)
+09/08 03:57:46.214: [diam] ERROR: pid:PSM/pcrf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'pcrf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)

@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"syscall"
@@ -24,6 +26,12 @@ func main() {
 	// Parse command line arguments
 	mode := "discovery"
 	envFile := "../.env"
+
+	// Detect if running in Docker and adjust env file path
+	if isRunningInDocker() {
+		envFile = ".env"
+		log.Printf("🐳 Running in Docker environment")
+	}
 
 	if len(os.Args) > 1 {
 		mode = os.Args[1]
@@ -49,10 +57,24 @@ func main() {
 	}
 }
 
+// Detect if running in Docker environment
+func isRunningInDocker() bool {
+	if _, err := os.Stat("/.dockerenv"); err == nil {
+		return true
+	}
+	return false
+}
+
 // Real-time metrics orchestrator mode - Live monitoring and collection
 func runRealMetricsOrchestrator(envFile string) {
 	printBanner()
 	printOrchestratorModeDescription()
+
+	// Detect environment
+	inDocker := isRunningInDocker()
+	if inDocker {
+		log.Printf("🐳 Docker environment detected - using Docker networking")
+	}
 
 	// Create discovery service
 	discoveryService, err := discovery.NewAutoDiscoveryService(envFile)
@@ -84,7 +106,7 @@ func runRealMetricsOrchestrator(envFile string) {
 		log.Fatalf("❌ Failed to start real metrics orchestrator: %v", err)
 	}
 
-	// NOW we can start container and health collectors with the variables
+	// Start infrastructure collectors
 	log.Printf("🔄 Starting infrastructure collectors...")
 
 	// Start container metrics collector
@@ -109,6 +131,11 @@ func runRealMetricsOrchestrator(envFile string) {
 	}()
 	log.Printf("🟢 Started health check collector on :8081")
 
+	// Generate Docker-aware Prometheus configuration
+	if err := generateDockerPrometheusConfig(orchestrator, topology, inDocker); err != nil {
+		log.Printf("⚠️ Failed to generate Prometheus config: %v", err)
+	}
+
 	// Wait for collectors to be healthy
 	log.Printf("⏳ Performing health checks on all collectors...")
 	if err := orchestrator.WaitForHealthy(30 * time.Second); err != nil {
@@ -124,6 +151,9 @@ func runRealMetricsOrchestrator(envFile string) {
 
 	log.Printf("🌟 Orchestrator mode is now LIVE! All metrics are being collected in real-time.")
 	log.Printf("📊 Access Prometheus metrics at the endpoints shown above")
+	if inDocker {
+		log.Printf("🐳 Docker mode: Prometheus config written to shared volume")
+	}
 	log.Printf("⚡ Press Ctrl+C to stop the orchestrator...")
 
 	// Wait for shutdown signal
@@ -140,6 +170,166 @@ func runRealMetricsOrchestrator(envFile string) {
 	time.Sleep(2 * time.Second)
 
 	log.Printf("✅ Real-time metrics orchestrator stopped cleanly")
+}
+
+// Generate Docker-aware Prometheus configuration
+func generateDockerPrometheusConfig(orchestrator *metrics.RealCollectorOrchestrator, topology *discovery.NetworkTopology, inDocker bool) error {
+	configPath := "prometheus_real_open5gs.yml"
+	if inDocker {
+		configPath = "/etc/prometheus/configs/prometheus.yml"
+	}
+
+	// Ensure directory exists
+	if err := os.MkdirAll(filepath.Dir(configPath), 0755); err != nil && inDocker {
+		return fmt.Errorf("failed to create config directory: %w", err)
+	}
+
+	var config strings.Builder
+
+	// Global configuration
+	config.WriteString("global:\n")
+	config.WriteString("  scrape_interval: 5s\n")
+	config.WriteString("  evaluation_interval: 5s\n")
+	config.WriteString("  external_labels:\n")
+	if inDocker {
+		config.WriteString("    monitor: 'om-module-docker'\n")
+	} else {
+		config.WriteString("    monitor: 'om-module-standalone'\n")
+	}
+	if topology != nil {
+		config.WriteString(fmt.Sprintf("    deployment_type: '%s'\n", topology.Type))
+	}
+	config.WriteString("\n")
+
+	// Rule files
+	config.WriteString("rule_files:\n")
+	config.WriteString("  - 'rules/*.yml'\n")
+	config.WriteString("\n")
+
+	// Scrape configurations
+	config.WriteString("scrape_configs:\n")
+
+	// Real Open5GS metrics
+	endpoints := orchestrator.GetMetricsEndpoints()
+	if len(endpoints) > 0 {
+		config.WriteString("  # Real Open5GS Network Function Endpoints\n")
+		for componentName, endpoint := range endpoints {
+			// Extract port from endpoint (e.g., http://localhost:9091/metrics -> 9091)
+			port := extractPortFromEndpoint(endpoint)
+
+			// Use Docker service name or localhost based on environment
+			target := fmt.Sprintf("localhost:%s", port)
+			if inDocker {
+				target = fmt.Sprintf("om-module:%s", port)
+			}
+
+			config.WriteString(fmt.Sprintf("  - job_name: '%s-real'\n", componentName))
+			config.WriteString("    scrape_interval: 5s\n")
+			config.WriteString("    metrics_path: '/metrics'\n")
+			config.WriteString("    static_configs:\n")
+			config.WriteString(fmt.Sprintf("      - targets: ['%s']\n", target))
+			config.WriteString("        labels:\n")
+			config.WriteString(fmt.Sprintf("          component: '%s'\n", componentName))
+			config.WriteString(fmt.Sprintf("          source: 'real_open5gs'\n"))
+			if topology != nil {
+				config.WriteString(fmt.Sprintf("          deployment: '%s'\n", topology.Type))
+			}
+			config.WriteString("\n")
+		}
+	}
+
+	// Container metrics
+	containerTarget := "localhost:8080"
+	if inDocker {
+		containerTarget = "om-module:8080"
+	}
+
+	config.WriteString("  # Container Resource Metrics\n")
+	config.WriteString("  - job_name: 'container-metrics'\n")
+	config.WriteString("    scrape_interval: 10s\n")
+	config.WriteString("    metrics_path: '/container/metrics'\n")
+	config.WriteString("    static_configs:\n")
+	config.WriteString(fmt.Sprintf("      - targets: ['%s']\n", containerTarget))
+	config.WriteString("        labels:\n")
+	config.WriteString("          source: 'container_stats'\n")
+	if topology != nil {
+		config.WriteString(fmt.Sprintf("          deployment: '%s'\n", topology.Type))
+	}
+	config.WriteString("\n")
+
+	// Health check metrics
+	healthTarget := "localhost:8081"
+	if inDocker {
+		healthTarget = "om-module:8081"
+	}
+
+	config.WriteString("  # Component Health Checks\n")
+	config.WriteString("  - job_name: 'health-checks'\n")
+	config.WriteString("    scrape_interval: 15s\n")
+	config.WriteString("    metrics_path: '/health/metrics'\n")
+	config.WriteString("    static_configs:\n")
+	config.WriteString(fmt.Sprintf("      - targets: ['%s']\n", healthTarget))
+	config.WriteString("        labels:\n")
+	config.WriteString("          source: 'health_check'\n")
+	if topology != nil {
+		config.WriteString(fmt.Sprintf("          deployment: '%s'\n", topology.Type))
+	}
+	config.WriteString("\n")
+
+	// Write configuration
+	if err := os.WriteFile(configPath, []byte(config.String()), 0644); err != nil {
+		return fmt.Errorf("failed to write Prometheus config: %w", err)
+	}
+
+	log.Printf("📄 Generated Prometheus configuration: %s", configPath)
+
+	// Reload Prometheus if running in Docker
+	if inDocker {
+		go reloadPrometheus()
+	}
+
+	return nil
+}
+
+// Extract port number from endpoint URL
+func extractPortFromEndpoint(endpoint string) string {
+	// Parse URL like "http://localhost:9091/metrics" -> "9091"
+	parts := strings.Split(endpoint, ":")
+	if len(parts) >= 3 {
+		portPart := parts[2]
+		return strings.Split(portPart, "/")[0]
+	}
+	return "9091" // default
+}
+
+// Reload Prometheus configuration
+func reloadPrometheus() {
+	time.Sleep(5 * time.Second) // Give Prometheus time to start and config to be written
+
+	// Try to reload Prometheus configuration via Docker network
+	metricsIP := os.Getenv("METRICS_IP")
+	if metricsIP == "" {
+		metricsIP = "prometheus" // Use Docker service name as fallback
+	}
+
+	reloadURL := fmt.Sprintf("http://%s:9090/-/reload", metricsIP)
+	log.Printf("🔄 Attempting to reload Prometheus config at: %s", reloadURL)
+
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Post(reloadURL, "", nil)
+	if err != nil {
+		log.Printf("⚠️ Failed to reload Prometheus config: %v", err)
+		return
+	}
+	defer func() {
+		err = resp.Body.Close()
+	}()
+
+	if resp.StatusCode == 200 {
+		log.Printf("✅ Prometheus configuration reloaded successfully")
+	} else {
+		log.Printf("⚠️ Prometheus reload returned status: %d", resp.StatusCode)
+	}
 }
 
 // Discovery mode - Static analysis and configuration generation
@@ -186,7 +376,11 @@ func runDiscoveryMode(envFile string) {
 
 	log.Printf("🎯 Discovery mode completed successfully!")
 	log.Printf("📁 All configuration files are ready for use with Prometheus/Grafana")
-	log.Printf("🚀 To start live monitoring, run: ./om-module orchestrator")
+	if isRunningInDocker() {
+		log.Printf("🐳 To start live monitoring: docker-compose restart om-module")
+	} else {
+		log.Printf("🚀 To start live monitoring, run: ./om-module orchestrator")
+	}
 }
 
 // Print clear description of what orchestrator mode does
@@ -209,6 +403,12 @@ func printOrchestratorModeDescription() {
 	fmt.Printf("   • Prometheus can scrape all endpoints immediately\n")
 	fmt.Printf("   • Grafana dashboards show live data\n")
 	fmt.Printf("   • Perfect for lab demonstrations and learning\n\n")
+	if isRunningInDocker() {
+		fmt.Printf("🐳 Docker Mode:\n")
+		fmt.Printf("   • Automatic Prometheus configuration\n")
+		fmt.Printf("   • Docker network integration\n")
+		fmt.Printf("   • Shared volume configuration\n\n")
+	}
 	fmt.Printf("⚠️  Note: Requires running Open5GS containers with metrics enabled\n")
 	fmt.Printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n")
 }
@@ -326,10 +526,19 @@ func displayRealMetricsStatus(orchestrator *metrics.RealCollectorOrchestrator) {
 					if fetchURL != "" {
 						fmt.Printf("   📡 Fetching from: %s\n", fetchURL)
 					}
-					fmt.Printf("   📊 Exposing at:   http://localhost:%s/metrics\n", collectorPort)
-					fmt.Printf("   🏥 Health check:  http://localhost:%s/health\n", collectorPort)
-					fmt.Printf("   📚 Dashboard:     http://localhost:%s/dashboard\n", collectorPort)
-					fmt.Printf("   🔍 Raw data:      http://localhost:%s/debug/raw\n", collectorPort)
+
+					// Show appropriate endpoint based on environment
+					endpoint := fmt.Sprintf("http://localhost:%s", collectorPort)
+					if isRunningInDocker() {
+						fmt.Printf("   📊 Docker endpoint: http://om-module:%s/metrics\n", collectorPort)
+						fmt.Printf("   📊 External access:  %s/metrics\n", endpoint)
+					} else {
+						fmt.Printf("   📊 Exposing at:   %s/metrics\n", endpoint)
+					}
+
+					fmt.Printf("   🏥 Health check:  %s/health\n", endpoint)
+					fmt.Printf("   📚 Dashboard:     %s/dashboard\n", endpoint)
+					fmt.Printf("   🔍 Raw data:      %s/debug/raw\n", endpoint)
 					fmt.Printf("\n")
 				}
 			}
@@ -339,12 +548,16 @@ func displayRealMetricsStatus(orchestrator *metrics.RealCollectorOrchestrator) {
 	}
 
 	fmt.Printf("📊 Infrastructure Metrics:\n")
+	baseURL := "http://localhost"
+	if isRunningInDocker() {
+		fmt.Printf("   ├─ Docker endpoints: http://om-module:8080 & http://om-module:8081\n")
+	}
 	fmt.Printf("   ├─ Container Stats  🟢 Active:\n")
-	fmt.Printf("   │  ├─ All containers: http://localhost:8080/container/metrics\n")
-	fmt.Printf("   │  └─ Collector health: http://localhost:8080/health\n")
+	fmt.Printf("   │  ├─ All containers: %s:8080/container/metrics\n", baseURL)
+	fmt.Printf("   │  └─ Collector health: %s:8080/health\n", baseURL)
 	fmt.Printf("   ├─ Health Checks    🟢 Active:\n")
-	fmt.Printf("   │  ├─ All components: http://localhost:8081/health/metrics\n")
-	fmt.Printf("   │  └─ Collector health: http://localhost:8081/health\n")
+	fmt.Printf("   │  ├─ All components: %s:8081/health/metrics\n", baseURL)
+	fmt.Printf("   │  └─ Collector health: %s:8081/health\n", baseURL)
 	fmt.Printf("   └─ System Resources 🟢 Active → Collected every 10s\n\n")
 
 	fmt.Printf("🔧 Quick Tests:\n")
@@ -353,8 +566,14 @@ func displayRealMetricsStatus(orchestrator *metrics.RealCollectorOrchestrator) {
 		fmt.Printf("   curl %s  # %s real metrics\n", endpoint, strings.ToUpper(componentName))
 	}
 	// Infrastructure endpoints
-	fmt.Printf("   curl http://localhost:8080/container/metrics  # Container resources\n")
-	fmt.Printf("   curl http://localhost:8081/health/metrics     # Component health\n")
+	fmt.Printf("   curl %s:8080/container/metrics  # Container resources\n", baseURL)
+	fmt.Printf("   curl %s:8081/health/metrics     # Component health\n", baseURL)
+
+	if isRunningInDocker() {
+		fmt.Printf("\n🐳 Docker Integration:\n")
+		fmt.Printf("   • Prometheus config: /etc/prometheus/configs/prometheus.yml\n")
+		fmt.Printf("   • Auto-reload: Configuration updated automatically\n")
+	}
 	fmt.Printf("\n")
 
 	fmt.Printf("═══════════════════════════════════════════════════════════════\n")
@@ -589,14 +808,26 @@ This O&M module fetches metrics from Open5GS components and re-exposes them with
 func printRealMetricsNextSteps() {
 	fmt.Printf("\n🚀 Next Steps for Real Open5GS Metrics\n")
 	fmt.Printf("=====================================\n")
-	fmt.Printf("1. 🎬 **Start real metrics collection:**\n")
-	fmt.Printf("   ./om-module orchestrator\n\n")
-	fmt.Printf("2. 🔍 **Test individual endpoints:**\n")
-	fmt.Printf("   curl http://localhost:9091/metrics  # AMF real metrics\n")
-	fmt.Printf("   curl http://localhost:9092/metrics  # SMF real metrics\n")
-	fmt.Printf("   curl http://localhost:9091/debug/raw  # Raw Open5GS AMF\n\n")
-	fmt.Printf("3. 📊 **Configure Prometheus:**\n")
-	fmt.Printf("   prometheus --config.file=prometheus_real_open5gs.yml\n\n")
+
+	if isRunningInDocker() {
+		fmt.Printf("🐳 Docker Environment Detected:\n")
+		fmt.Printf("1. **Start complete stack:**\n")
+		fmt.Printf("   docker-compose -f services.yaml up\n\n")
+		fmt.Printf("2. **Access Prometheus:**\n")
+		fmt.Printf("   http://localhost:9090/targets\n\n")
+		fmt.Printf("3. **Access Grafana:**\n")
+		fmt.Printf("   http://localhost:3000 (admin/admin)\n\n")
+	} else {
+		fmt.Printf("1. 🎬 **Start real metrics collection:**\n")
+		fmt.Printf("   ./om-module orchestrator\n\n")
+		fmt.Printf("2. 🔍 **Test individual endpoints:**\n")
+		fmt.Printf("   curl http://localhost:9091/metrics  # AMF real metrics\n")
+		fmt.Printf("   curl http://localhost:9092/metrics  # SMF real metrics\n")
+		fmt.Printf("   curl http://localhost:9091/debug/raw  # Raw Open5GS AMF\n\n")
+		fmt.Printf("3. 📊 **Configure Prometheus:**\n")
+		fmt.Printf("   prometheus --config.file=prometheus_real_open5gs.yml\n\n")
+	}
+
 	fmt.Printf("4. 🏥 **Monitor health:**\n")
 	fmt.Printf("   curl http://localhost:9091/health\n\n")
 	fmt.Printf("5. 📚 **Educational dashboards:**\n")
@@ -629,13 +860,20 @@ func printUsage() {
 	fmt.Printf("   Creates additional debug files for troubleshooting\n\n")
 
 	fmt.Printf("📁 ENV FILE:\n")
-	fmt.Printf("   Default: ../env (Docker Compose environment)\n")
-	fmt.Printf("   Custom: Specify path to your .env file\n\n")
+	if isRunningInDocker() {
+		fmt.Printf("   Docker mode: .env (container environment)\n")
+	} else {
+		fmt.Printf("   Default: ../env (Docker Compose environment)\n")
+		fmt.Printf("   Custom: Specify path to your .env file\n")
+	}
+	fmt.Printf("\n")
 
 	fmt.Printf("💡 EXAMPLES:\n")
 	fmt.Printf("   %s discovery                    # Analyze topology\n", os.Args[0])
 	fmt.Printf("   %s orchestrator                 # Start live monitoring\n", os.Args[0])
-	fmt.Printf("   %s discovery /path/to/.env      # Custom env file\n", os.Args[0])
+	if !isRunningInDocker() {
+		fmt.Printf("   %s discovery /path/to/.env      # Custom env file\n", os.Args[0])
+	}
 	fmt.Printf("   %s orchestrator --debug         # Debug mode\n", os.Args[0])
 	fmt.Printf("═══════════════════════════════════════════════════════════════\n")
 }
@@ -648,6 +886,9 @@ func printBanner() {
 	fmt.Printf("║                    📡 4G/5G Network O&M Module v2.0                           ║\n")
 	fmt.Printf("║                   Real-Time Monitoring & Educational Platform                 ║\n")
 	fmt.Printf("║                    🎓 Industry-Grade Observability for Labs                   ║\n")
+	if isRunningInDocker() {
+		fmt.Printf("║                          🐳 Docker Integration Mode                           ║\n")
+	}
 	fmt.Printf("╚═══════════════════════════════════════════════════════════════════════════════╝\n")
 	fmt.Printf("\n")
 }
