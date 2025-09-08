@@ -10,7 +10,7 @@
         "7777/tcp",
         "9091/tcp"
       ],
-      "status": "Up 4 hours",
+      "status": "Up 6 hours",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "ed416d8061d924e3f06b357ef7df1953d41131a65178324e4875170271c3f451",
@@ -42,7 +42,7 @@
       "ports": [
         "7777/tcp"
       ],
-      "status": "Up 4 hours",
+      "status": "Up 6 hours",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "698e941fbf0afb0b88020f1160e5e269899d0e6f0b16c0e91571c437302701ef",
@@ -74,7 +74,7 @@
       "ports": [
         "7777/tcp"
       ],
-      "status": "Up 4 hours",
+      "status": "Up 6 hours",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "3b5980e350fac2c8f1cd418edbecece8cd5374ab92e3e159ef182c65fe8d9eee",
@@ -107,7 +107,7 @@
         "27017/udp",
         "27017/tcp"
       ],
-      "status": "Up 4 hours",
+      "status": "Up 6 hours",
       "image": "mongo:6.0",
       "labels": {
         "com.docker.compose.config-hash": "a9a457af1bb689ff02d0820ad85eecf4b3c8816bc7e1a09370ac1be3616eb40a",
@@ -132,7 +132,7 @@
       "ports": [
         "7777/tcp"
       ],
-      "status": "Up 4 hours",
+      "status": "Up 6 hours",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "14e8f2a70ea2bb9633618b9b7540a03a98bf5a721e0e134fd9f35ea4de772700",
@@ -164,7 +164,7 @@
       "ports": [
         "7777/tcp"
       ],
-      "status": "Up 4 hours",
+      "status": "Up 6 hours",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "ed8f08fc09f2052089a0c68ad85b716de11330ed165680933bd0e9d157fa399f",
@@ -197,7 +197,7 @@
         "7777/tcp",
         "9091/tcp"
       ],
-      "status": "Up 4 hours",
+      "status": "Up 6 hours",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "5f694cb6fc722e33212b7ab6c4fe40a41e266d71ed91df8fd888b224ccda80e2",
@@ -229,7 +229,7 @@
       "ports": [
         "7777/tcp"
       ],
-      "status": "Up 4 hours",
+      "status": "Up 6 hours",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "3f3e49f64c30c6e5b23458ab746287b1fdd39c3f6605e6a3daaabe3e6be51e11",
@@ -259,16 +259,16 @@
       "type": "5G-Control-Plane",
       "ip": "172.22.0.7",
       "ports": [
+        "3868/sctp",
         "3868/tcp",
         "5868/sctp",
         "5868/tcp",
         "7777/tcp",
         "8805/udp",
         "9091/tcp",
-        "2123/udp",
-        "3868/sctp"
+        "2123/udp"
       ],
-      "status": "Up 4 hours",
+      "status": "Up 6 hours",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "ed9d0926d843b7c45f0acd8bd17ad4056d248699b45c4560be0dc2406bd77724",
@@ -298,12 +298,12 @@
       "type": "5G-Radio-Access-Network",
       "ip": "172.22.0.37",
       "ports": [
-        "2000/tcp",
         "2001/tcp",
         "2152/udp",
-        "38412/sctp"
+        "38412/sctp",
+        "2000/tcp"
       ],
-      "status": "Up 4 hours",
+      "status": "Up 6 hours",
       "image": "docker_srsran",
       "labels": {
         "com.docker.compose.config-hash": "ba46b0384b4d09d1ecaa3a2f4dd91e2c6b99119cb7fe37dd973d797a7ee20607",
@@ -336,7 +336,7 @@
         "2000/tcp",
         "2001/tcp"
       ],
-      "status": "Up 4 hours",
+      "status": "Up 6 hours",
       "image": "docker_srslte",
       "labels": {
         "com.docker.compose.config-hash": "6ddbedc92614ce8c21bfd91b079550bb793090527a0024a2d32834618c9519de",
@@ -369,7 +369,7 @@
       "ports": [
         "7777/tcp"
       ],
-      "status": "Up 4 hours",
+      "status": "Up 6 hours",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "04afa713beac80fd855e9ae0a91e989981af672d4665e3a3b25e56a8b2a7028b",
@@ -401,7 +401,7 @@
       "ports": [
         "7777/tcp"
       ],
-      "status": "Up 4 hours",
+      "status": "Up 6 hours",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "cb81f348e79e8d1df8ae009510858b77c76f99bdc930099c8a7bbda638fba212",
@@ -431,11 +431,11 @@
       "type": "5G-User-Plane",
       "ip": "172.22.0.8",
       "ports": [
+        "9091/tcp",
         "2152/udp",
-        "8805/udp",
-        "9091/tcp"
+        "8805/udp"
       ],
-      "status": "Up 4 hours",
+      "status": "Up 6 hours",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "02262702d7561751d5d484d60f3cefc139ee472efb4d71449dc899560a63589c",
@@ -468,7 +468,7 @@
         "9999:9999/tcp",
         "9999:9999/tcp"
       ],
-      "status": "Up 4 hours",
+      "status": "Up 6 hours",
       "image": "docker_open5gs",
       "labels": {
         "com.docker.compose.config-hash": "f5537bc24739054ab152f7b79becabce14e4cbe4c9a641415a5350dc0307a2cd",
@@ -585,5 +585,5 @@
     "UPF_TUNTAP_MODE": "tun",
     "WEBUI_IP": "172.22.0.26"
   },
-  "timestamp": 1757313211
+  "timestamp": 1757320289
 }

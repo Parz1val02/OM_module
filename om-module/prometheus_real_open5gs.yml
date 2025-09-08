@@ -5,17 +5,43 @@ global:
     monitor: 'om-module-real-open5gs'
 
 scrape_configs:
+  - job_name: 'upf-real'
+    scrape_interval: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: [localhost:9094]
+        labels:
+          deployment: '5G'
+          source: 'real_open5gs'
+          component: 'upf'
+          component_type: 'upf'
+          nf_type: 'upf'
+          component_ip: '172.22.0.8'
+
   - job_name: 'amf-real'
     scrape_interval: 5s
     metrics_path: '/metrics'
     static_configs:
       - targets: [localhost:9091]
         labels:
-          source: 'real_open5gs'
           component: 'amf'
           component_type: 'amf'
           nf_type: 'amf'
           component_ip: '172.22.0.10'
+          deployment: '5G'
+          source: 'real_open5gs'
+
+  - job_name: 'pcf-real'
+    scrape_interval: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: [localhost:9093]
+        labels:
+          source: 'real_open5gs'
+          component: 'pcf'
+          component_type: 'pcf'
+          nf_type: 'pcf'
+          component_ip: '172.22.0.27'
           deployment: '5G'
 
   - job_name: 'smf-real'
@@ -30,30 +56,4 @@ scrape_configs:
           nf_type: 'smf'
           component_ip: '172.22.0.7'
           deployment: '5G'
-
-  - job_name: 'upf-real'
-    scrape_interval: 5s
-    metrics_path: '/metrics'
-    static_configs:
-      - targets: [localhost:9094]
-        labels:
-          component: 'upf'
-          component_type: 'upf'
-          nf_type: 'upf'
-          component_ip: '172.22.0.8'
-          deployment: '5G'
-          source: 'real_open5gs'
-
-  - job_name: 'pcf-real'
-    scrape_interval: 5s
-    metrics_path: '/metrics'
-    static_configs:
-      - targets: [localhost:9093]
-        labels:
-          component_type: 'pcf'
-          nf_type: 'pcf'
-          component_ip: '172.22.0.27'
-          deployment: '5G'
-          source: 'real_open5gs'
-          component: 'pcf'
 

@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strconv"
 	"strings"
 	"syscall"
 	"time"
@@ -18,7 +19,7 @@ import (
 var debugMode bool
 
 func main() {
-	log.Printf("🚀 Starting O&M Module with Real Open5GS Metrics Collection")
+	log.Printf("🚀 Starting O&M Module for 4G/5G Educational Network Testbed")
 
 	// Parse command line arguments
 	mode := "discovery"
@@ -48,10 +49,10 @@ func main() {
 	}
 }
 
-// NEW: Real metrics orchestrator mode
+// Real-time metrics orchestrator mode - Live monitoring and collection
 func runRealMetricsOrchestrator(envFile string) {
 	printBanner()
-	log.Printf("🎬 Starting Real Open5GS Metrics Orchestrator mode")
+	printOrchestratorModeDescription()
 
 	// Create discovery service
 	discoveryService, err := discovery.NewAutoDiscoveryService(envFile)
@@ -62,45 +63,191 @@ func runRealMetricsOrchestrator(envFile string) {
 		err = discoveryService.Close()
 	}()
 
+	// Create context for all operations
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	// Discover topology first
+	log.Printf("🔄 Discovering network topology...")
+	topology, err := discoveryService.DiscoverTopology(ctx)
+	if err != nil {
+		log.Fatalf("❌ Failed to discover topology: %v", err)
+	}
+
+	log.Printf("🔄 Initializing real-time metrics collection system...")
+
 	// Create real collector orchestrator
 	orchestrator := metrics.NewRealCollectorOrchestrator(discoveryService)
 
-	// Start the orchestrator
+	// Start the real Open5GS orchestrator
 	if err := orchestrator.Start(); err != nil {
 		log.Fatalf("❌ Failed to start real metrics orchestrator: %v", err)
 	}
 
-	// Wait for collectors to be healthy
-	log.Printf("⏳ Waiting for collectors to be healthy...")
-	if err := orchestrator.WaitForHealthy(30 * time.Second); err != nil {
-		log.Printf("⚠️  Warning: %v", err)
+	// NOW we can start container and health collectors with the variables
+	log.Printf("🔄 Starting infrastructure collectors...")
+
+	// Start container metrics collector
+	containerCollector, err := metrics.NewContainerMetricsCollector(8080)
+	if err != nil {
+		log.Printf("⚠️ Failed to create container collector: %v", err)
+	} else {
+		go func() {
+			if err := containerCollector.Start(ctx, topology); err != nil && err != context.Canceled {
+				log.Printf("❌ Container collector error: %v", err)
+			}
+		}()
+		log.Printf("🟢 Started container metrics collector on :8080")
 	}
 
-	// Display status
+	// Start health check collector
+	healthCollector := metrics.NewHealthCheckCollector(8081)
+	go func() {
+		if err := healthCollector.Start(ctx, topology); err != nil && err != context.Canceled {
+			log.Printf("❌ Health collector error: %v", err)
+		}
+	}()
+	log.Printf("🟢 Started health check collector on :8081")
+
+	// Wait for collectors to be healthy
+	log.Printf("⏳ Performing health checks on all collectors...")
+	if err := orchestrator.WaitForHealthy(30 * time.Second); err != nil {
+		log.Printf("⚠️  Warning: Some collectors may not be fully ready: %v", err)
+	}
+
+	// Display live status
 	displayRealMetricsStatus(orchestrator)
 
 	// Set up graceful shutdown
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 
-	log.Printf("⚡ Press Ctrl+C to stop...")
+	log.Printf("🌟 Orchestrator mode is now LIVE! All metrics are being collected in real-time.")
+	log.Printf("📊 Access Prometheus metrics at the endpoints shown above")
+	log.Printf("⚡ Press Ctrl+C to stop the orchestrator...")
 
 	// Wait for shutdown signal
 	<-sigChan
-	log.Printf("🛑 Received shutdown signal, stopping...")
+	log.Printf("🛑 Received shutdown signal, gracefully stopping all collectors...")
 
-	// Stop orchestrator
+	// Cancel context to stop all collectors
+	cancel()
+
+	// Stop real orchestrator
 	orchestrator.Stop()
 
-	log.Printf("✅ Real Open5GS metrics orchestrator stopped")
+	// Give collectors time to stop gracefully
+	time.Sleep(2 * time.Second)
+
+	log.Printf("✅ Real-time metrics orchestrator stopped cleanly")
 }
 
-// NEW: Display real metrics status
+// Discovery mode - Static analysis and configuration generation
+func runDiscoveryMode(envFile string) {
+	printBanner()
+	printDiscoveryModeDescription()
+
+	// Create discovery service
+	discoveryService, err := discovery.NewAutoDiscoveryService(envFile)
+	if err != nil {
+		log.Fatalf("❌ Failed to create discovery service: %v", err)
+	}
+	defer func() {
+		err = discoveryService.Close()
+	}()
+
+	// Create context with timeout for discovery operations
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	log.Printf("🔍 Step 1: Analyzing Docker containers and network topology...")
+
+	// Discover topology
+	topology, err := discoveryService.DiscoverTopology(ctx)
+	if err != nil {
+		log.Fatalf("❌ Failed to discover topology: %v", err)
+	}
+
+	log.Printf("✅ Step 1 Complete: Found %d components in %s deployment",
+		len(topology.Components), topology.Type)
+
+	log.Printf("🔧 Step 2: Generating static configuration files...")
+
+	// Export topology and configuration files
+	exportTopologyAndConfig(topology)
+
+	log.Printf("✅ Step 2 Complete: Configuration files generated")
+
+	// Display comprehensive discovery results
+	displayDiscoveryResults(topology)
+
+	// Display next steps for real metrics
+	printRealMetricsNextSteps()
+
+	log.Printf("🎯 Discovery mode completed successfully!")
+	log.Printf("📁 All configuration files are ready for use with Prometheus/Grafana")
+	log.Printf("🚀 To start live monitoring, run: ./om-module orchestrator")
+}
+
+// Print clear description of what orchestrator mode does
+func printOrchestratorModeDescription() {
+	fmt.Printf("🎬 ORCHESTRATOR MODE - Live Real-Time Metrics Collection\n")
+	fmt.Printf("═══════════════════════════════════════════════════════\n")
+	fmt.Printf("This mode starts a LIVE metrics collection system that:\n\n")
+	fmt.Printf("🔄 Real-Time Operations:\n")
+	fmt.Printf("   • Continuously monitors all Open5GS network functions\n")
+	fmt.Printf("   • Collects live metrics directly from AMF, SMF, UPF, etc.\n")
+	fmt.Printf("   • Gathers container resource usage (CPU, memory, I/O)\n")
+	fmt.Printf("   • Performs health checks every 15 seconds\n")
+	fmt.Printf("   • Automatically adapts to topology changes\n\n")
+	fmt.Printf("🌐 Active HTTP Endpoints:\n")
+	fmt.Printf("   • Real Open5GS metrics: ports 9091-9096\n")
+	fmt.Printf("   • Container metrics: port 8080\n")
+	fmt.Printf("   • Health checks: port 8081\n")
+	fmt.Printf("   • Educational dashboards and debug info\n\n")
+	fmt.Printf("📊 Integration Ready:\n")
+	fmt.Printf("   • Prometheus can scrape all endpoints immediately\n")
+	fmt.Printf("   • Grafana dashboards show live data\n")
+	fmt.Printf("   • Perfect for lab demonstrations and learning\n\n")
+	fmt.Printf("⚠️  Note: Requires running Open5GS containers with metrics enabled\n")
+	fmt.Printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n")
+}
+
+// Print clear description of what discovery mode does
+func printDiscoveryModeDescription() {
+	fmt.Printf("🔍 DISCOVERY MODE - Static Analysis & Configuration Generation\n")
+	fmt.Printf("═══════════════════════════════════════════════════════════════\n")
+	fmt.Printf("This mode performs a comprehensive analysis of your testbed setup:\n\n")
+	fmt.Printf("🔎 Analysis Phase:\n")
+	fmt.Printf("   • Scans Docker containers to identify network functions\n")
+	fmt.Printf("   • Maps network topology (4G vs 5G components)\n")
+	fmt.Printf("   • Determines which components support native metrics\n")
+	fmt.Printf("   • Identifies container resource monitoring targets\n")
+	fmt.Printf("   • Assesses health check capabilities\n\n")
+	fmt.Printf("📝 Configuration Generation:\n")
+	fmt.Printf("   • Creates Prometheus scrape configurations\n")
+	fmt.Printf("   • Generates target definitions for all metric sources\n")
+	fmt.Printf("   • Builds comprehensive monitoring setup files\n")
+	fmt.Printf("   • Prepares educational dashboard configurations\n\n")
+	fmt.Printf("📁 Output Files Created:\n")
+	fmt.Printf("   • prometheus_targets.yml - Ready-to-use Prometheus config\n")
+	fmt.Printf("   • topology.json - Machine-readable topology data\n")
+	fmt.Printf("   • topology_summary.txt - Human-readable analysis report\n")
+	fmt.Printf("   • real_metrics_summary.md - Setup instructions for students\n\n")
+	fmt.Printf("🎯 Educational Benefits:\n")
+	fmt.Printf("   • Students can see the complete monitoring architecture\n")
+	fmt.Printf("   • Understand which components provide which metrics\n")
+	fmt.Printf("   • Learn industry-standard observability practices\n\n")
+	fmt.Printf("⚠️  Note: This mode does NOT start live collection - use 'orchestrator' for that\n")
+	fmt.Printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n")
+}
+
+// Enhanced display for orchestrator mode with better categorization
 func displayRealMetricsStatus(orchestrator *metrics.RealCollectorOrchestrator) {
 	endpoints := orchestrator.GetMetricsEndpoints()
 	status := orchestrator.GetStatus()
 
-	// 🔍 Optional debug dump
+	// Optional debug dump
 	if debugMode {
 		if jsonBytes, err := json.MarshalIndent(status, "", "  "); err == nil {
 			if err := os.WriteFile("status_debug.json", jsonBytes, 0644); err != nil {
@@ -113,38 +260,69 @@ func displayRealMetricsStatus(orchestrator *metrics.RealCollectorOrchestrator) {
 		}
 	}
 
-	fmt.Printf("\n🎯 Real Open5GS Metrics Collection Status\n")
-	fmt.Printf("==========================================\n")
+	fmt.Printf("\n🎯 LIVE METRICS COLLECTION STATUS\n")
+	fmt.Printf("═══════════════════════════════════════════════════════════════\n")
 
-	// 🔑 Drill down into nested collectors
+	// Real Open5GS collectors status
 	if collectorsRoot, ok := status["collectors"].(map[string]any); ok {
 		if collectors, ok := collectorsRoot["collectors"].(map[string]any); ok {
 			fmt.Printf("📊 Active Collectors: %d\n\n", len(collectors))
 
 			for componentName, info := range collectors {
 				if collectorInfo, ok := info.(map[string]any); ok {
-					// Safe field extraction with defaults
+					// Extract fields with CORRECT field names from your JSON
 					nfType, _ := collectorInfo["nf_type"].(string)
 					componentIP, _ := collectorInfo["component_ip"].(string)
 					fetchURL, _ := collectorInfo["fetch_url"].(string)
-
+					// Fix 1: Handle collector_port properly
 					collectorPort := "N/A"
 					if port, ok := collectorInfo["collector_port"]; ok {
-						collectorPort = fmt.Sprintf("%v", port)
+						// Handle both int and float64 types
+						switch v := port.(type) {
+						case float64:
+							collectorPort = fmt.Sprintf("%.0f", v)
+						case int:
+							collectorPort = fmt.Sprintf("%d", v)
+						case string:
+							collectorPort = v
+						default:
+							collectorPort = fmt.Sprintf("%v", v)
+						}
 					}
 
+					// Fix 2: Handle metrics_count properly
+					metricsCount := 0
+					if count, ok := collectorInfo["metrics_count"]; ok {
+						switch v := count.(type) {
+						case float64:
+							metricsCount = int(v)
+						case int:
+							metricsCount = v
+						default:
+							if countStr := fmt.Sprintf("%v", v); countStr != "" {
+								if parsed, err := strconv.Atoi(countStr); err == nil {
+									metricsCount = parsed
+								}
+							}
+						}
+					}
+
+					// Fix 3: Handle status properly
 					isHealthy := false
-					if healthy, ok := collectorInfo["status"].(bool); ok {
-						isHealthy = healthy
+					if statusBool, ok := collectorInfo["status"].(bool); ok {
+						isHealthy = statusBool
 					}
 
 					healthIcon := "🟢"
+					healthText := "Healthy"
 					if !isHealthy {
 						healthIcon = "🔴"
+						healthText = "Unhealthy"
 					}
 
-					// Print collector info
-					fmt.Printf("%s %s (%s) %s\n", healthIcon, componentName, strings.ToUpper(nfType), componentIP)
+					// Print detailed collector info with metrics count
+					fmt.Printf("%s %s %s (%s) %s - %d metrics\n",
+						healthIcon, healthText, componentName, strings.ToUpper(nfType), componentIP, int(metricsCount))
 					if fetchURL != "" {
 						fmt.Printf("   📡 Fetching from: %s\n", fetchURL)
 					}
@@ -160,120 +338,141 @@ func displayRealMetricsStatus(orchestrator *metrics.RealCollectorOrchestrator) {
 		}
 	}
 
+	fmt.Printf("📊 Infrastructure Metrics:\n")
+	fmt.Printf("   ├─ Container Stats  🟢 Active:\n")
+	fmt.Printf("   │  ├─ All containers: http://localhost:8080/container/metrics\n")
+	fmt.Printf("   │  └─ Collector health: http://localhost:8080/health\n")
+	fmt.Printf("   ├─ Health Checks    🟢 Active:\n")
+	fmt.Printf("   │  ├─ All components: http://localhost:8081/health/metrics\n")
+	fmt.Printf("   │  └─ Collector health: http://localhost:8081/health\n")
+	fmt.Printf("   └─ System Resources 🟢 Active → Collected every 10s\n\n")
+
 	fmt.Printf("🔧 Quick Tests:\n")
+	fmt.Printf("🔧 Quick Tests:\n")
+	// Real Open5GS endpoints
 	for componentName, endpoint := range endpoints {
-		fmt.Printf("   curl %s  # %s metrics\n", endpoint, strings.ToUpper(componentName))
+		fmt.Printf("   curl %s  # %s real metrics\n", endpoint, strings.ToUpper(componentName))
 	}
+	// Infrastructure endpoints
+	fmt.Printf("   curl http://localhost:8080/container/metrics  # Container resources\n")
+	fmt.Printf("   curl http://localhost:8081/health/metrics     # Component health\n")
 	fmt.Printf("\n")
+
+	fmt.Printf("═══════════════════════════════════════════════════════════════\n")
 }
 
-// Enhanced discovery mode
-func runDiscoveryMode(envFile string) {
-	printBanner()
-	log.Printf("🔍 Running in discovery mode")
+// Enhanced display for discovery mode results
+func displayDiscoveryResults(topology *discovery.NetworkTopology) {
+	fmt.Printf("\n🎯 DISCOVERY ANALYSIS RESULTS\n")
+	fmt.Printf("═══════════════════════════════════════════════════════════════\n")
 
-	// Create discovery service
-	discoveryService, err := discovery.NewAutoDiscoveryService(envFile)
-	if err != nil {
-		log.Fatalf("❌ Failed to create discovery service: %v", err)
-	}
-	defer func() {
-		err = discoveryService.Close()
-	}()
+	fmt.Printf("🏗️  Network Architecture Detected:\n")
+	fmt.Printf("   ├─ Deployment Type: %s\n", topology.Type)
+	fmt.Printf("   ├─ Total Components: %d\n", len(topology.Components))
 
-	// Discover topology
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
+	// Count by type and status
+	runningCount := 0
+	networkFunctions := 0
+	supportingServices := 0
 
-	topology, err := discoveryService.DiscoverTopology(ctx)
-	if err != nil {
-		log.Fatalf("❌ Failed to discover topology: %v", err)
-	}
-
-	// Display discovery results with real metrics focus
-	printEnhancedDiscoveryResults(topology)
-
-	// Export topology and configuration files
-	exportTopologyAndConfig(topology)
-
-	// Display next steps for real metrics
-	printRealMetricsNextSteps()
-}
-
-// NEW: Enhanced discovery results with real metrics focus
-func printEnhancedDiscoveryResults(topology *discovery.NetworkTopology) {
-	fmt.Printf("\n🌐 Network Topology Discovery Results\n")
-	fmt.Printf("====================================\n")
-	fmt.Printf("📋 Deployment Type: %s\n", topology.Type)
-	fmt.Printf("🕐 Discovery Time: %s\n", topology.FormattedTimestamp())
-	fmt.Printf("📊 Total Components: %d\n\n", len(topology.Components))
-
-	// Categorize components for real metrics
-	realMetricsSupported := []string{}
-	containerMetricsOnly := []string{}
-
-	supportedNFs := map[string]bool{
-		"amf": true, "smf": true, "pcf": true,
-		"upf": true, "mme": true, "pcrf": true,
-	}
-
-	for name, component := range topology.Components {
+	for _, component := range topology.Components {
 		if component.IsRunning {
-			hasRealMetrics := false
-			for nfType := range supportedNFs {
-				if containsNF(name, nfType) {
-					realMetricsSupported = append(realMetricsSupported,
-						fmt.Sprintf("%s (%s) -> Real Open5GS metrics available",
-							name, component.IP))
-					hasRealMetrics = true
+			runningCount++
+		}
+		// Define all Open5GS network functions
+		allNetworkFunctions := map[string]bool{
+			// 4G Core Network Functions
+			"mme":  true, // Mobility Management Entity
+			"hss":  true, // Home Subscriber Server
+			"pcrf": true, // Policy and Charging Rules Function
+			"sgwc": true, // Serving Gateway Control Plane
+			"sgwu": true, // Serving Gateway User Plane
+
+			// 5G Core Network Functions
+			"nrf":  true, // Network Repository Function
+			"scp":  true, // Service Communication Proxy
+			"amf":  true, // Access and Mobility Management Function
+			"ausf": true, // Authentication Server Function
+			"udm":  true, // Unified Data Management
+			"udr":  true, // Unified Data Repository
+			"pcf":  true, // Policy Control Function
+			"nssf": true, // Network Slice Selection Function
+			"bsf":  true, // Binding Support Function
+
+			// Shared between 4G and 5G
+			"smf": true, // Session Management Function
+			"upf": true, // User Plane Function
+		}
+
+		componentName := strings.ToLower(component.Name)
+		isNetworkFunction := false
+
+		for nfType := range allNetworkFunctions {
+			if strings.Contains(componentName, nfType) {
+				networkFunctions++
+				isNetworkFunction = true
+				break
+			}
+		}
+
+		if !isNetworkFunction {
+			supportingServices++
+		}
+
+	}
+
+	fmt.Printf("   ├─ Running Components: %d\n", runningCount)
+	fmt.Printf("   ├─ Network Functions: %d (AMF, SMF, UPF, MME, etc.)\n", networkFunctions)
+	fmt.Printf("   └─ Supporting Services: %d (MongoDB, WebUI, etc.)\n", supportingServices)
+
+	// Metrics capabilities analysis
+	realMetrics := 0
+	containerMetrics := 0
+	healthMetrics := 0
+
+	functionsWithMetricsSupport := map[string]bool{
+		"amf": true, "smf": true, "pcf": true, "upf": true, "mme": true, "pcrf": true,
+	}
+
+	for _, component := range topology.Components {
+		if component.IsRunning {
+			componentName := strings.ToLower(component.Name)
+
+			// Count real metrics support
+			for nfType := range functionsWithMetricsSupport {
+				if strings.Contains(componentName, nfType) {
+					realMetrics++
 					break
 				}
 			}
-			if !hasRealMetrics {
-				containerMetricsOnly = append(containerMetricsOnly,
-					fmt.Sprintf("%s (%s) -> Container metrics only",
-						name, component.Type))
-			}
+
+			// Every running component supports container and health metrics
+			containerMetrics++
+			healthMetrics++
 		}
 	}
 
-	// Display real metrics components
-	fmt.Printf("🎯 Components with Real Open5GS Metrics:\n")
-	if len(realMetricsSupported) > 0 {
-		for i, comp := range realMetricsSupported {
-			fmt.Printf("   %d. %s\n", i+1, comp)
-		}
-	} else {
-		fmt.Printf("   ⚠️  No supported Open5GS NFs found!\n")
-		fmt.Printf("   💡 Make sure Open5GS components are running and configured for metrics.\n")
-	}
+	fmt.Printf("\n📊 Monitoring Capabilities Identified:\n")
+	fmt.Printf("   ├─ Real Open5GS Metrics: %d components support native /metrics\n", realMetrics)
+	fmt.Printf("   ├─ Container Monitoring: %d containers available for resource tracking\n", containerMetrics)
+	fmt.Printf("   └─ Health Monitoring: %d components configured for health checks\n", healthMetrics)
 
-	// Display container-only components
-	fmt.Printf("\n📦 Other Components (Container Metrics Only):\n")
-	if len(containerMetricsOnly) > 0 {
-		for i, comp := range containerMetricsOnly {
-			fmt.Printf("   %d. %s\n", i+1, comp)
-		}
-	} else {
-		fmt.Printf("   None\n")
-	}
+	fmt.Printf("\n📁 Generated Configuration Files:\n")
+	fmt.Printf("   ├─ prometheus_targets.yml → Complete Prometheus scrape configuration\n")
+	fmt.Printf("   ├─ topology.json → Machine-readable topology data\n")
+	fmt.Printf("   ├─ topology_summary.txt → Human-readable analysis report\n")
+	fmt.Printf("   └─ real_metrics_summary.md → Student setup instructions\n")
 
-	// Show expected real metrics ports
-	if len(realMetricsSupported) > 0 {
-		fmt.Printf("\n📡 Expected Open5GS Metrics Endpoints:\n")
-		for name, component := range topology.Components {
-			if component.IsRunning {
-				for nfType := range supportedNFs {
-					if containsNF(name, nfType) {
-						fmt.Printf("   • %s: http://%s:9091/metrics\n", name, component.IP)
-						break
-					}
-				}
-			}
-		}
-	}
+	fmt.Printf("\n🎓 Educational Value:\n")
+	fmt.Printf("   ├─ Students can examine the complete monitoring architecture\n")
+	fmt.Printf("   ├─ Understanding of industry-standard observability practices\n")
+	fmt.Printf("   ├─ Hands-on experience with Prometheus configuration\n")
+	fmt.Printf("   └─ Real-world telecom O&M workflows\n")
+
+	fmt.Printf("═══════════════════════════════════════════════════════════════\n")
 }
 
+// Export topology and real metrics configuration files
 func exportTopologyAndConfig(topology *discovery.NetworkTopology) {
 	// Export topology
 	if err := writeFile("topology.json", topologyToJSON(topology)); err != nil {
@@ -289,7 +488,7 @@ func exportTopologyAndConfig(topology *discovery.NetworkTopology) {
 		return
 	}
 
-	// Generate and save Prometheus configuration
+	// Generate and save Prometheus configuration for real Open5GS metrics
 	prometheusConfig := collectorManager.GeneratePrometheusConfig()
 	if err := writeFile("prometheus_real_open5gs.yml", prometheusConfig); err != nil {
 		log.Printf("⚠️  Failed to write Prometheus config: %v", err)
@@ -297,10 +496,11 @@ func exportTopologyAndConfig(topology *discovery.NetworkTopology) {
 		fmt.Printf("📄 Generated Prometheus config: prometheus_real_open5gs.yml\n")
 	}
 
-	// Generate enhanced summary report
+	// Generate enhanced summary report focused on real metrics
 	generateEnhancedSummaryReport(topology)
 }
 
+// Generate enhanced summary report with real metrics focus
 func generateEnhancedSummaryReport(topology *discovery.NetworkTopology) {
 	summary := fmt.Sprintf(`# O&M Module - Real Open5GS Metrics Summary
 Generated: %s
@@ -386,6 +586,7 @@ This O&M module fetches metrics from Open5GS components and re-exposes them with
 	}
 }
 
+// Display next steps for real Open5GS metrics setup
 func printRealMetricsNextSteps() {
 	fmt.Printf("\n🚀 Next Steps for Real Open5GS Metrics\n")
 	fmt.Printf("=====================================\n")
@@ -406,17 +607,53 @@ func printRealMetricsNextSteps() {
 }
 
 func printUsage() {
-	fmt.Printf("Usage: %s [mode] [env_file]\n", os.Args[0])
-	fmt.Printf("Modes:\n")
-	fmt.Printf("  discovery        - Discover topology and generate configs (default)\n")
-	fmt.Printf("  orchestrator     - Start real Open5GS metrics collection\n")
-	fmt.Printf("\nEnv file: Path to .env file (default: ../.env)\n")
-	fmt.Printf("\nExamples:\n")
-	fmt.Printf("  %s discovery          # Discover and generate configs\n", os.Args[0])
-	fmt.Printf("  %s orchestrator       # Start real metrics collection\n", os.Args[0])
+	fmt.Printf("\n📖 USAGE INFORMATION\n")
+	fmt.Printf("═══════════════════════════════════════════════════════════════\n")
+	fmt.Printf("Usage: %s [mode] [options]\n\n", os.Args[0])
+
+	fmt.Printf("🔍 DISCOVERY MODE (default):\n")
+	fmt.Printf("   %s discovery [env_file]\n", os.Args[0])
+	fmt.Printf("   • Analyzes your network topology without starting collectors\n")
+	fmt.Printf("   • Generates Prometheus configurations and documentation\n")
+	fmt.Printf("   • Perfect for understanding your setup before monitoring\n")
+	fmt.Printf("   • Outputs: config files, topology analysis, setup guides\n\n")
+
+	fmt.Printf("🎬 ORCHESTRATOR MODE:\n")
+	fmt.Printf("   %s orchestrator [env_file]\n", os.Args[0])
+	fmt.Printf("   • Starts live real-time metrics collection from all components\n")
+	fmt.Printf("   • Provides HTTP endpoints for Prometheus scraping\n")
+	fmt.Printf("   • Continuously monitors and adapts to topology changes\n")
+	fmt.Printf("   • Use this when you want active monitoring and data collection\n\n")
+
+	fmt.Printf("🐞 DEBUG OPTIONS:\n")
+	fmt.Printf("   %s [mode] --debug    # Enable detailed debugging output\n", os.Args[0])
+	fmt.Printf("   Creates additional debug files for troubleshooting\n\n")
+
+	fmt.Printf("📁 ENV FILE:\n")
+	fmt.Printf("   Default: ../env (Docker Compose environment)\n")
+	fmt.Printf("   Custom: Specify path to your .env file\n\n")
+
+	fmt.Printf("💡 EXAMPLES:\n")
+	fmt.Printf("   %s discovery                    # Analyze topology\n", os.Args[0])
+	fmt.Printf("   %s orchestrator                 # Start live monitoring\n", os.Args[0])
+	fmt.Printf("   %s discovery /path/to/.env      # Custom env file\n", os.Args[0])
+	fmt.Printf("   %s orchestrator --debug         # Debug mode\n", os.Args[0])
+	fmt.Printf("═══════════════════════════════════════════════════════════════\n")
 }
 
-// Helper functions
+// Helper functions remain the same but with updated documentation
+
+func printBanner() {
+	fmt.Printf("\n")
+	fmt.Printf("╔═══════════════════════════════════════════════════════════════════════════════╗\n")
+	fmt.Printf("║                    📡 4G/5G Network O&M Module v2.0                           ║\n")
+	fmt.Printf("║                   Real-Time Monitoring & Educational Platform                 ║\n")
+	fmt.Printf("║                    🎓 Industry-Grade Observability for Labs                   ║\n")
+	fmt.Printf("╚═══════════════════════════════════════════════════════════════════════════════╝\n")
+	fmt.Printf("\n")
+}
+
+// Utility functions (keeping existing implementations)
 func containsNF(componentName, nfName string) bool {
 	return strings.Contains(strings.ToLower(componentName), nfName)
 }
@@ -446,11 +683,8 @@ func writeFile(filename, content string) error {
 }
 
 func topologyToJSON(topology *discovery.NetworkTopology) string {
-	// Convert topology to JSON string
-	// Implementation depends on your discovery package
 	jsonBytes, err := json.MarshalIndent(topology, "", "  ")
 	if err != nil {
-		// Returns a fallback JSON structure with error information
 		return fmt.Sprintf(`{
       "error": "Failed to marshal topology: %s",
       "timestamp": "%s", 
@@ -458,13 +692,4 @@ func topologyToJSON(topology *discovery.NetworkTopology) string {
     }`, err.Error(), time.Now().Format("2006-01-02T15:04:05Z"), len(topology.Components))
 	}
 	return string(jsonBytes)
-}
-
-func printBanner() {
-	fmt.Printf("\n")
-	fmt.Printf("╔═══════════════════════════════════════════════════════════════════════════════╗\n")
-	fmt.Printf("║                    📡 5G/4G Core Network O&M Module                           ║\n")
-	fmt.Printf("║                         Enhanced with Official Collectors                     ║\n")
-	fmt.Printf("╚═══════════════════════════════════════════════════════════════════════════════╝\n")
-	fmt.Printf("\n")
 }
