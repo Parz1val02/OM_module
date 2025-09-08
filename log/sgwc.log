@@ -488,3 +488,12 @@ Open5GS daemon v2.7.5-24-g8e286b6
 09/07 21:46:45.983: [sgwc] INFO: UE IMSI[001011234567895] APN[internet] (../src/sgwc/s11-handler.c:268)
 09/07 21:46:45.987: [gtp] INFO: gtp_connect() [172.22.0.7]:2123 (../lib/gtp/path.c:60)
 09/07 21:49:40.590: [sgwc] INFO: [Removed] Number of SGWC-Sessions is now 0 (../src/sgwc/context.c:930)
+Open5GS daemon v2.7.5-24-g8e286b6
+
+09/08 03:52:10.377: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/sgwc.yaml' (../lib/app/ogs-init.c:144)
+09/08 03:52:10.377: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/sgwc.log' (../lib/app/ogs-init.c:147)
+09/08 03:52:10.448: [gtp] INFO: gtp_server() [172.22.0.5]:2123 (../lib/gtp/path.c:30)
+09/08 03:52:10.448: [pfcp] INFO: pfcp_server() [172.22.0.5]:8805 (../lib/pfcp/path.c:30)
+09/08 03:52:10.449: [app] INFO: SGW-C initialize...done (../src/sgwc/app.c:31)
+09/08 03:52:10.500: [sgwc] INFO: PFCP associated [172.22.0.6]:8805 (../src/sgwc/pfcp-sm.c:167)
+09/08 03:52:12.951: [sgwc] WARNING: PFCP[RSP] has already been associated [172.22.0.6]:8805 (../src/sgwc/pfcp-sm.c:265)

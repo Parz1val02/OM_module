@@ -155,4 +155,53 @@
 2025-09-08T02:52:19.579700 [zmq:rx:0:0] [I] Waiting for reading samples. Completed 0 of 11520 samples.
 2025-09-08T02:52:20.576995 [zmq:tx:0:0] [I] Waiting for request.
 2025-09-08T02:52:20.577300 [zmq:rx:0:0] [I] Waiting for data.
-2025-09-08T02:52:20.579813 [zmq:rx:0:0] [I] Waiting
+2025-09-08T02:52:20.579813 [zmq:rx:0:0] [I] Waiting for reading samples. Completed 0 of 11520 samples.
+2025-09-08T02:52:21.576995 [zmq:tx:0:0] [I] Waiting for request.
+2025-09-08T02:52:21.577299 [zmq:rx:0:0] [I] Waiting for data.
+2025-09-08T02:52:21.579888 [zmq:rx:0:0] [I] Waiting for reading samples. Completed 0 of 11520 samples.
+2025-09-08T02:52:22.576997 [zmq:tx:0:0] [I] Waiting for request.
+2025-09-08T02:52:22.577301 [zmq:rx:0:0] [I] Waiting for data.
+2025-09-08T02:52:22.579937 [zmq:rx:0:0] [I] Waiting for reading samples. Completed 0 of 11520 samples.
+2025-09-08T02:52:23.577002 [zmq:tx:0:0] [I] Waiting for request.
+2025-09-08T02:52:23.577302 [zmq:rx:0:0] [I] Waiting for data.
+2025-09-08T02:52:23.579955 [zmq:rx:0:0] [I] Waiting for reading samples. Completed 0 of 11520 samples.
+2025-09-08T02:52:24.577002 [zmq:tx:0:0] [I] Waiting for request.
+2025-09-08T02:52:24.577302 [zmq:rx:0:0] [I] Waiting for data.
+2025-09-08T02:52:24.579983 [zmq:rx:0:0] [I] Waiting for reading samples. Completed 0 of 11520 samples.
+2025-09-08T02:52:25.577003 [zmq:tx:0:0] [I] Waiting for request.
+2025-09-08T02:52:25.577303 [zmq:rx:0:0] [I] Waiting for data.
+2025-09-08T02:52:25.580138 [zmq:rx:0:0] [I] Waiting for reading samples. Completed 0 of 11520 samples.
+2025-09-08T02:52:26.577005 [zmq:tx:0:0] [I] Waiting for request.
+2025-09-08T02:52:26.577305 [zmq:rx:0:0] [I] Waiting for data.
+2025-09-08T02:52:26.580233 [zmq:rx:0:0] [I] Waiting for reading samples. Completed 0 of 11520 samples.
+2025-09-08T08:40:00.492921 [zmq:rx:0:0] [I] Waiting for data.
+2025-09-08T08:40:00.493049 [zmq:rx:0:0] [I] Waiting for reading samples. Completed 12 of 11520 samples.
+2025-09-08T08:40:00.493494 [zmq:tx:0:0] [I] Waiting for data.
+2025-09-08T08:40:01.492359 [zmq:rx:0:0] [I] Waiting for data.
+2025-09-08T08:40:01.493088 [zmq:rx:0:0] [I] Waiting for reading samples. Completed 12 of 11520 samples.
+2025-09-08T08:40:01.493761 [zmq:tx:0:0] [I] Waiting for data.
+2025-09-08T08:40:02.492473 [zmq:rx:0:0] [I] Waiting for data.
+2025-09-08T08:40:02.493148 [zmq:rx:0:0] [I] Waiting for reading samples. Completed 12 of 11520 samples.
+2025-09-08T08:40:02.493539 [zmq:tx:0:0] [I] Waiting for data.
+2025-09-08T08:40:03.492362 [zmq:rx:0:0] [I] Waiting for data.
+2025-09-08T08:40:03.493227 [zmq:rx:0:0] [I] Waiting for reading samples. Completed 12 of 11520 samples.
+2025-09-08T08:40:03.493568 [zmq:tx:0:0] [I] Waiting for data.
+2025-09-08T08:40:04.492443 [zmq:rx:0:0] [I] Waiting for data.
+2025-09-08T08:40:04.493235 [zmq:rx:0:0] [I] Waiting for reading samples. Completed 12 of 11520 samples.
+2025-09-08T08:40:04.493590 [zmq:tx:0:0] [I] Waiting for data.
+2025-09-08T08:40:05.492479 [zmq:rx:0:0] [I] Waiting for data.
+2025-09-08T08:40:05.493324 [zmq:rx:0:0] [I] Waiting for reading samples. Completed 12 of 11520 samples.
+2025-09-08T08:40:05.493558 [zmq:tx:0:0] [I] Waiting for data.
+2025-09-08T08:40:06.492360 [zmq:rx:0:0] [I] Waiting for data.
+2025-09-08T08:40:06.493405 [zmq:rx:0:0] [I] Waiting for reading samples. Completed 12 of 11520 samples.
+2025-09-08T08:40:06.493593 [zmq:tx:0:0] [I] Waiting for data.
+2025-09-08T08:40:07.492480 [zmq:rx:0:0] [I] Waiting for data.
+2025-09-08T08:40:07.493444 [zmq:rx:0:0] [I] Waiting for reading samples. Completed 12 of 11520 samples.
+2025-09-08T08:40:07.493572 [zmq:tx:0:0] [I] Waiting for data.
+2025-09-08T08:40:08.492363 [zmq:rx:0:0] [I] Waiting for data.
+2025-09-08T08:40:08.493595 [zmq:tx:0:0] [I] Waiting for data.
+2025-09-08T08:40:08.493618 [zmq:rx:0:0] [I] Waiting for reading samples. Completed 12 of 11520 samples.
+2025-09-08T08:40:09.492455 [zmq:rx:0:0] [I] Waiting for data.
+2025-09-08T08:40:09.493509 [zmq:tx:0:0] [I] Waiting for data.
+2025-09-08T08:40:09.493827 [zmq:rx:0:0] [I] Waiting for reading samples. Completed 12 of 11520 samples.
+(END)

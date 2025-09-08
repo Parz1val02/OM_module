@@ -348,7 +348,6 @@ func displayRealMetricsStatus(orchestrator *metrics.RealCollectorOrchestrator) {
 	fmt.Printf("   └─ System Resources 🟢 Active → Collected every 10s\n\n")
 
 	fmt.Printf("🔧 Quick Tests:\n")
-	fmt.Printf("🔧 Quick Tests:\n")
 	// Real Open5GS endpoints
 	for componentName, endpoint := range endpoints {
 		fmt.Printf("   curl %s  # %s real metrics\n", endpoint, strings.ToUpper(componentName))

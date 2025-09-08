@@ -70,3 +70,30 @@ Open5GS daemon v2.7.5-24-g8e286b6
  ((null):0)
 09/07 17:03:54.077: [diam] ERROR: pid:Worker#1[TCP, Sec] in fd_cnx_handshake@cnxctx.c:1729: TLS ERROR: in 'ret = gnutls_handshake(conn->cc_tls_para.session)' :	The TLS connection was non-properly terminated.
  ((null):0)
+Open5GS daemon v2.7.5-24-g8e286b6
+
+09/08 03:52:21.552: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+09/08 03:52:21.553: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+09/08 03:52:21.555: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:300)
+09/08 03:52:21.558: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+09/08 03:52:21.676: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+09/08 03:52:21.676: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+09/08 03:52:21.679: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+09/08 03:52:38.771: [diam] ERROR: pid:Worker#0[TCP] in client_worker@server.c:184: ERROR: in '(fd_cnx_receive(c, &ts, &rcv_data.buffer, &rcv_data.length))' :	Transport endpoint is not connected
+ ((null):0)
+09/08 03:52:55.204: [diam] ERROR: pid:Worker#1[TCP] in client_worker@server.c:184: ERROR: in '(fd_cnx_receive(c, &ts, &rcv_data.buffer, &rcv_data.length))' :	Transport endpoint is not connected
+ ((null):0)
+09/08 03:53:10.250: [diam] ERROR: pid:Worker#2[TCP] in client_worker@server.c:184: ERROR: in '(fd_cnx_receive(c, &ts, &rcv_data.buffer, &rcv_data.length))' :	Transport endpoint is not connected
+ ((null):0)
+09/08 03:53:26.613: [diam] ERROR: pid:Worker#3[TCP] in client_worker@server.c:184: ERROR: in '(fd_cnx_receive(c, &ts, &rcv_data.buffer, &rcv_data.length))' :	Transport endpoint is not connected
+ ((null):0)
+09/08 03:53:41.611: [diam] ERROR: pid:Worker#4[TCP] in client_worker@server.c:184: ERROR: in '(fd_cnx_receive(c, &ts, &rcv_data.buffer, &rcv_data.length))' :	Transport endpoint is not connected
+ ((null):0)
+09/08 03:53:56.613: [diam] ERROR: pid:Worker#0[TCP] in client_worker@server.c:184: ERROR: in '(fd_cnx_receive(c, &ts, &rcv_data.buffer, &rcv_data.length))' :	Transport endpoint is not connected
+ ((null):0)
+09/08 03:54:13.028: [diam] ERROR: pid:Worker#1[TCP] in client_worker@server.c:184: ERROR: in '(fd_cnx_receive(c, &ts, &rcv_data.buffer, &rcv_data.length))' :	Transport endpoint is not connected
+ ((null):0)
+09/08 03:54:28.027: [diam] ERROR: pid:Worker#2[TCP] in client_worker@server.c:184: ERROR: in '(fd_cnx_receive(c, &ts, &rcv_data.buffer, &rcv_data.length))' :	Transport endpoint is not connected
+ ((null):0)
+09/08 03:54:44.424: [diam] ERROR: pid:Worker#3[TCP] in client_worker@server.c:184: ERROR: in '(fd_cnx_receive(c, &ts, &rcv_data.buffer, &rcv_data.length))' :	Transport endpoint is not connected
+ ((null):0)
