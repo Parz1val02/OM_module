@@ -309,7 +309,7 @@ No simulation - 100%% live telecommunications data!
 ### Quick Start Commands
 
 1. **Start Real Metrics Collection:**
-   ./om-module real-metrics
+   ./om-module orchestrator
 
 2. **Test Real Metrics:**
    curl http://localhost:9091/metrics  # AMF real metrics
@@ -353,7 +353,7 @@ func printRealMetricsNextSteps() {
 	fmt.Printf("\n🚀 Next Steps for Real Open5GS Metrics\n")
 	fmt.Printf("=====================================\n")
 	fmt.Printf("1. 🎬 **Start real metrics collection:**\n")
-	fmt.Printf("   ./om-module real-metrics\n\n")
+	fmt.Printf("   ./om-module orchestrator\n\n")
 	fmt.Printf("2. 🔍 **Test individual endpoints:**\n")
 	fmt.Printf("   curl http://localhost:9091/metrics  # AMF real metrics\n")
 	fmt.Printf("   curl http://localhost:9092/metrics  # SMF real metrics\n")
@@ -364,8 +364,6 @@ func printRealMetricsNextSteps() {
 	fmt.Printf("   curl http://localhost:9091/health\n\n")
 	fmt.Printf("5. 📚 **Educational dashboards:**\n")
 	fmt.Printf("   curl http://localhost:9091/dashboard\n\n")
-	fmt.Printf("6. 🧪 **Test endpoints:**\n")
-	fmt.Printf("   ./om-module test-endpoints\n\n")
 	fmt.Printf("⚡ **All endpoints fetch live data from Open5GS components!**\n")
 	fmt.Printf("🎯 **No simulation - 100%% real telecommunications metrics!**\n")
 }
@@ -374,15 +372,11 @@ func printUsage() {
 	fmt.Printf("Usage: %s [mode] [env_file]\n", os.Args[0])
 	fmt.Printf("Modes:\n")
 	fmt.Printf("  discovery        - Discover topology and generate configs (default)\n")
-	fmt.Printf("  real-metrics     - Start real Open5GS metrics collection\n")
-	fmt.Printf("  real             - Alias for real-metrics\n")
-	fmt.Printf("  orchestrator     - Alias for real-metrics\n")
-	fmt.Printf("  test-endpoints   - Show test commands for endpoints\n")
+	fmt.Printf("  orchestrator     - Start real Open5GS metrics collection\n")
 	fmt.Printf("\nEnv file: Path to .env file (default: ../.env)\n")
 	fmt.Printf("\nExamples:\n")
 	fmt.Printf("  %s discovery          # Discover and generate configs\n", os.Args[0])
-	fmt.Printf("  %s real-metrics       # Start real metrics collection\n", os.Args[0])
-	fmt.Printf("  %s test-endpoints     # Show endpoint test commands\n", os.Args[0])
+	fmt.Printf("  %s orchestrator       # Start real metrics collection\n", os.Args[0])
 }
 
 // Helper functions
