@@ -47,7 +47,7 @@ services:
       - COMPONENT_NAME=hss
     volumes:
       - ./hss:/mnt/hss
-      - ./log:/open5gs/install/var/log/open5gs
+      - open5gs_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     depends_on:
@@ -73,7 +73,7 @@ services:
       - COMPONENT_NAME=sgwc
     volumes:
       - ./sgwc:/mnt/sgwc
-      - ./log:/open5gs/install/var/log/open5gs
+      - open5gs_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -95,7 +95,7 @@ services:
       - COMPONENT_NAME=sgwu
     volumes:
       - ./sgwu:/mnt/sgwu
-      - ./log:/open5gs/install/var/log/open5gs
+      - open5gs_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -115,7 +115,7 @@ services:
       - DEPLOY_MODE=4G
     volumes:
       - ./smf:/mnt/smf
-      - ./log:/open5gs/install/var/log/open5gs
+      - open5gs_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -142,7 +142,7 @@ services:
       - COMPONENT_NAME=upf
     volumes:
       - ./upf:/mnt/upf
-      - ./log:/open5gs/install/var/log/open5gs
+      - open5gs_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -173,7 +173,7 @@ services:
       - COMPONENT_NAME=mme
     volumes:
       - ./mme:/mnt/mme
-      - ./log:/open5gs/install/var/log/open5gs
+      - open5gs_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -199,7 +199,7 @@ services:
       - mongo
     volumes:
       - ./pcrf:/mnt/pcrf
-      - ./log:/open5gs/install/var/log/open5gs
+      - open5gs_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -222,3 +222,5 @@ networks:
 volumes:
   mongodbdata:
     name: docker_open5gs_mongodbdata
+  open5gs_logs:
+    name: docker_open5gs_logs

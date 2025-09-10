@@ -1,7 +1,7 @@
 # O&M Module - Real Open5GS Metrics Summary
-Generated: 2025-09-08 03:56:16
-Deployment Type: 4G
-Total Components: 9
+Generated: 2025-09-09 18:39:41
+Deployment Type: 5G
+Total Components: 16
 
 ## Real Open5GS Metrics Collection
 
@@ -17,19 +17,19 @@ No simulation - 100% live telecommunications data!
   - Educational Dashboard: http://localhost:9094/dashboard
   - Raw Data Debug: http://localhost:9094/debug/raw
 
-- **mme** (172.22.0.9)
-  - Open5GS Endpoint: http://172.22.0.9:9091/metrics
-  - O&M Module Endpoint: http://localhost:9095/metrics  
-  - Health Check: http://localhost:9095/health
-  - Educational Dashboard: http://localhost:9095/dashboard
-  - Raw Data Debug: http://localhost:9095/debug/raw
+- **amf** (172.22.0.10)
+  - Open5GS Endpoint: http://172.22.0.10:9091/metrics
+  - O&M Module Endpoint: http://localhost:9091/metrics  
+  - Health Check: http://localhost:9091/health
+  - Educational Dashboard: http://localhost:9091/dashboard
+  - Raw Data Debug: http://localhost:9091/debug/raw
 
-- **pcrf** (172.22.0.4)
-  - Open5GS Endpoint: http://172.22.0.4:9091/metrics
-  - O&M Module Endpoint: http://localhost:9096/metrics  
-  - Health Check: http://localhost:9096/health
-  - Educational Dashboard: http://localhost:9096/dashboard
-  - Raw Data Debug: http://localhost:9096/debug/raw
+- **pcf** (172.22.0.27)
+  - Open5GS Endpoint: http://172.22.0.27:9091/metrics
+  - O&M Module Endpoint: http://localhost:9093/metrics  
+  - Health Check: http://localhost:9093/health
+  - Educational Dashboard: http://localhost:9093/dashboard
+  - Raw Data Debug: http://localhost:9093/debug/raw
 
 - **smf** (172.22.0.7)
   - Open5GS Endpoint: http://172.22.0.7:9091/metrics
