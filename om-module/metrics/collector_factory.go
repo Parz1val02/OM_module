@@ -937,7 +937,7 @@ func (rco *RealCollectorOrchestrator) Restart() error {
 
 // writePrometheusConfig writes the Prometheus configuration to file
 func (rco *RealCollectorOrchestrator) writePrometheusConfig(config string) error {
-	filename := "prometheus_real_open5gs.yml"
+	filename := "prometheus_real_open5gs.yaml"
 
 	file, err := os.Create(filename)
 	if err != nil {

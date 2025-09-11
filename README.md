@@ -24,7 +24,7 @@ docker compose -f 4g_core_only.yaml up -d
 #### srsRAN ZMQ eNB (RF simulated)
 docker compose -f srsenb_zmq.yaml up -d && docker container attach srsenb_zmq
 #### srsRAN ZMQ 4G UE (RF simulated)
-docker compose -f srsue_zmq.yaml up -d && docker container attach srsue_zmq
+docker compose -f srsue_4g_zmq.yaml up -d && docker container attach srsue_4g_zmq
 
 ### 5G core deployment
 docker compose -f 5g_core_only.yaml up -d

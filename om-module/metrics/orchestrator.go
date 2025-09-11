@@ -300,7 +300,7 @@ func (mmo *ModernMetricsOrchestrator) buildPrometheusConfigContent() string {
 
 	// Rule files
 	config.WriteString("rule_files:\n")
-	config.WriteString("  - 'rules/*.yml'\n")
+	config.WriteString("  - 'rules/*.yaml'\n")
 	config.WriteString("\n")
 
 	// Scrape configurations

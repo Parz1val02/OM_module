@@ -1091,9 +1091,9 @@ providers:
 
 	var configPath string
 	if inDocker {
-		configPath = "/etc/grafana/provisioning/dashboards/dashboards.yml"
+		configPath = "/etc/grafana/provisioning/dashboards/dashboards.yaml"
 	} else {
-		configPath = "../grafana/provisioning/dashboards/dashboards.yml"
+		configPath = "../grafana/provisioning/dashboards/dashboards.yaml"
 	}
 
 	if err := os.WriteFile(configPath, []byte(provisioningConfig), 0644); err != nil {

@@ -1,0 +1,108 @@
+apiVersion: 1
+
+datasources:
+  - name: Loki-Educational
+    type: loki
+    access: proxy
+    url: http://${LOKI_IP:-loki}:3100
+    isDefault: false
+    editable: true
+    version: 1
+    jsonData:
+      maxLines: 1000
+      derivedFields:
+        # Extract IMSI for session correlation
+        - name: "IMSI"
+          label: "IMSI"
+          regex: "(?i)imsi[:\\s]*(\\d{15})"
+          url: "/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki-Educational%22,%7B%22expr%22:%22%7Bimsi%3D%5C%22$${__value.raw}%5C%22%7D%22%7D%5D"
+          internal: true
+        
+        # Extract Correlation ID for cross-component tracing
+        - name: "CorrelationID"
+          label: "Correlation ID"
+          regex: "correlation_id[:\\s]*([a-zA-Z0-9-_]+)"
+          url: "/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki-Educational%22,%7B%22expr%22:%22%7Bcorrelation_id%3D%5C%22$${__value.raw}%5C%22%7D%22%7D%5D"
+          internal: true
+        
+        # Extract Session ID for session flow analysis
+        - name: "SessionID"
+          label: "Session ID"
+          regex: "session[_\\s]?id[:\\s]*([a-zA-Z0-9-_]+)"
+          url: "/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki-Educational%22,%7B%22expr%22:%22%7Bsession_id%3D%5C%22$${__value.raw}%5C%22%7D%22%7D%5D"
+          internal: true
+        
+        # Extract Interface for protocol analysis
+        - name: "Interface"
+          label: "Interface"
+          regex: "\\b(N1|N2|N3|N4|N5|N6|S1-MME|S6a|S11|Gx)\\b"
+          url: "/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki-Educational%22,%7B%22expr%22:%22%7Binterface%3D%5C%22$${__value.raw}%5C%22%7D%22%7D%5D"
+          internal: true
+        
+        # Extract Procedure for educational flow analysis
+        - name: "Procedure"
+          label: "Procedure"
+          regex: "\\b(registration|attach|detach|authentication|handover|session|pdu_session)\\b"
+          url: "/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki-Educational%22,%7B%22expr%22:%22%7Bprocedure%3D%5C%22$${__value.raw}%5C%22%7D%22%7D%5D"
+          internal: true
+
+  # Enhanced Loki datasource for advanced educational queries
+  - name: Loki-Advanced
+    type: loki
+    access: proxy
+    url: http://${LOKI_IP:-loki}:3100
+    isDefault: false
+    editable: true
+    version: 1
+    jsonData:
+      maxLines: 5000
+      timeout: 60
+      # Advanced query settings for deep analysis
+      derivedFields:
+        # Protocol layer analysis for srsRAN
+        - name: "ProtocolLayer"
+          label: "Protocol Layer"
+          regex: "\\[(PHY|MAC|RLC|PDCP|RRC|GTPU|S1AP|NAS|GW)\\]"
+          url: "/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki-Advanced%22,%7B%22expr%22:%22%7Blayer%3D%5C%22$${__value.raw}%5C%22%7D%22%7D%5D"
+          internal: true
+        
+        # Error categorization for troubleshooting
+        - name: "ErrorType"
+          label: "Error Type"
+          regex: "\\b(timeout|failed|error|abort|rejected|invalid)\\b"
+          url: "/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki-Advanced%22,%7B%22expr%22:%22%7Blevel%3D%5C%22error%5C%22%7D%22%7D%5D"
+          internal: true
+        
+        # Performance metrics extraction
+        - name: "RSRP"
+          label: "RSRP Value"
+          regex: "RSRP=(-?\\d+\\.?\\d*)"
+          url: "/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki-Advanced%22,%7B%22expr%22:%22%7Bcomponent%3D%5C%22ue%5C%22%7D%20%7C%3D%20%5C%22RSRP%5C%22%22%7D%5D"
+          internal: true
+
+  # Loki datasource specifically for session flow analysis
+  - name: Loki-SessionFlow
+    type: loki
+    access: proxy
+    url: http://${LOKI_IP:-loki}:3100
+    isDefault: false
+    editable: true
+    version: 1
+    jsonData:
+      maxLines: 10000
+      timeout: 120
+      # Optimized for session and procedure flow tracking
+      derivedFields:
+        # Complete session tracking
+        - name: "SessionFlow"
+          label: "Complete Session"
+          regex: "imsi[:\\s]*(\\d{15})"
+          url: "/d/session-flow/session-flow-analysis?var-imsi=$${__value.raw}&from=now-1h&to=now"
+          internal: true
+        
+        # Network function interaction
+        - name: "NFInteraction"
+          label: "NF Interaction"
+          regex: "\\b(amf|smf|upf|pcf|nrf|ausf|udm|udr|mme|hss|pcrf)\\b"
+          url: "/explore?orgId=1&left=%5B%22now-1h%22,%22now%22,%22Loki-SessionFlow%22,%7B%22expr%22:%22%7Bcomponent%3D%5C%22$${__value.raw}%5C%22%7D%22%7D%5D"
+          internal: true
