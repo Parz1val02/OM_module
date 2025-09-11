@@ -145,13 +145,19 @@ services:
       - .env
     volumes:
       - grafana-data:/var/lib/grafana
-      - grafana-dashboards:/etc/grafana/provisioning/dashboards
+      - grafana-dashboards:/etc/grafana/provisioning/dashboards:ro
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana:/mnt/grafana
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_PATHS_DATA=/var/lib/grafana
+      - METRICS_IP=${METRICS_IP}
+      - OM_MODULE_IP=${OM_MODULE_IP}
+      - GF_FEATURE_TOGGLES_ENABLE=publicDashboards
       - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
     expose:
