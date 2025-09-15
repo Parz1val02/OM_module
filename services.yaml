@@ -40,7 +40,7 @@ services:
   loki:
     image: grafana/loki:3.0.0
     container_name: loki
-    command: -config.file=/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yml
     env_file:
       - .env
     volumes:
@@ -64,11 +64,11 @@ services:
   promtail-core:
     image: grafana/promtail:3.0.0
     container_name: promtail-core
-    command: -config.file=/etc/promtail/config.yaml
+    command: -config.file=/etc/promtail/config.yml
     env_file:
       - .env
     volumes:
-      - ./promtail/core-config.yaml:/etc/promtail/config.yaml:ro
+      - ./promtail/core/:/etc/promtail
       - open5gs_logs:/var/log/open5gs:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -84,11 +84,11 @@ services:
   promtail-ran:
     image: grafana/promtail:3.0.0
     container_name: promtail-ran
-    command: -config.file=/etc/promtail/config.yaml
+    command: -config.file=/etc/promtail/config.yml
     env_file:
       - .env
     volumes:
-      - ./promtail/ran-config.yaml:/etc/promtail/config.yaml:ro
+      - ./promtail/ran:/etc/promtail
       - ./srslte:/var/log/srslte:ro
       - ./srsran:/var/log/srsran:ro
       - /etc/timezone:/etc/timezone:ro
@@ -112,7 +112,7 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     command:
-      - --config.file=/etc/prometheus/configs/prometheus.yaml
+      - --config.file=/etc/prometheus/configs/prometheus.yml
       - --storage.tsdb.path=/prometheus
       - --web.console.libraries=/etc/prometheus/console_libraries
       - --web.console.templates=/etc/prometheus/consoles

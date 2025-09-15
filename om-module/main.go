@@ -182,9 +182,9 @@ func runRealMetricsOrchestrator(envFile string) {
 
 // Generate Docker-aware Prometheus configuration
 func generateDockerPrometheusConfig(orchestrator *metrics.RealCollectorOrchestrator, topology *discovery.NetworkTopology, inDocker bool) error {
-	configPath := "../prometheus/configs/prometheus.yaml"
+	configPath := "../prometheus/configs/prometheus.yml"
 	if inDocker {
-		configPath = "/etc/prometheus/configs/prometheus.yaml"
+		configPath = "/etc/prometheus/configs/prometheus.yml"
 	}
 
 	// Ensure directory exists
@@ -211,7 +211,7 @@ func generateDockerPrometheusConfig(orchestrator *metrics.RealCollectorOrchestra
 
 	// Rule files
 	config.WriteString("rule_files:\n")
-	config.WriteString("  - 'rules/*.yaml'\n")
+	config.WriteString("  - 'rules/*.yml'\n")
 	config.WriteString("\n")
 
 	// Scrape configurations
@@ -438,7 +438,7 @@ func printDiscoveryModeDescription() {
 	fmt.Printf("   • Builds comprehensive monitoring setup files\n")
 	fmt.Printf("   • Prepares educational dashboard configurations\n\n")
 	fmt.Printf("📁 Output Files Created:\n")
-	fmt.Printf("   • prometheus_targets.yaml - Ready-to-use Prometheus config\n")
+	fmt.Printf("   • prometheus_targets.yml - Ready-to-use Prometheus config\n")
 	fmt.Printf("   • topology.json - Machine-readable topology data\n")
 	fmt.Printf("   • topology_summary.txt - Human-readable analysis report\n")
 	fmt.Printf("   • real_metrics_summary.md - Setup instructions for students\n\n")
@@ -579,7 +579,7 @@ func displayRealMetricsStatus(orchestrator *metrics.RealCollectorOrchestrator) {
 
 	if isRunningInDocker() {
 		fmt.Printf("\n🐳 Docker Integration:\n")
-		fmt.Printf("   • Prometheus config: /etc/prometheus/configs/prometheus.yaml\n")
+		fmt.Printf("   • Prometheus config: /etc/prometheus/configs/prometheus.yml\n")
 		fmt.Printf("   • Auto-reload: Configuration updated automatically\n")
 	}
 	fmt.Printf("\n")
@@ -684,7 +684,7 @@ func displayDiscoveryResults(topology *discovery.NetworkTopology) {
 	fmt.Printf("   └─ Health Monitoring: %d components configured for health checks\n", healthMetrics)
 
 	fmt.Printf("\n📁 Generated Configuration Files:\n")
-	fmt.Printf("   ├─ prometheus_targets.yaml → Complete Prometheus scrape configuration\n")
+	fmt.Printf("   ├─ prometheus_targets.yml → Complete Prometheus scrape configuration\n")
 	fmt.Printf("   ├─ topology.json → Machine-readable topology data\n")
 	fmt.Printf("   ├─ topology_summary.txt → Human-readable analysis report\n")
 	fmt.Printf("   └─ real_metrics_summary.md → Student setup instructions\n")
@@ -716,10 +716,10 @@ func exportTopologyAndConfig(topology *discovery.NetworkTopology) {
 
 	// Generate and save Prometheus configuration for real Open5GS metrics
 	prometheusConfig := collectorManager.GeneratePrometheusConfig()
-	if err := writeFile("prometheus_real_open5gs.yaml", prometheusConfig); err != nil {
+	if err := writeFile("prometheus_real_open5gs.yml", prometheusConfig); err != nil {
 		log.Printf("⚠️  Failed to write Prometheus config: %v", err)
 	} else {
-		fmt.Printf("📄 Generated Prometheus config: prometheus_real_open5gs.yaml\n")
+		fmt.Printf("📄 Generated Prometheus config: prometheus_real_open5gs.yml\n")
 	}
 
 	// Generate enhanced summary report focused on real metrics
@@ -780,7 +780,7 @@ No simulation - 100%% live telecommunications data!
    curl http://localhost:9091/debug/raw  # Raw Open5GS AMF data
 
 3. **Configure Prometheus:**
-   prometheus --config.file=prometheus_real_open5gs.yaml
+   prometheus --config.file=prometheus_real_open5gs.yml
 
 4. **Monitor Health:**
    curl http://localhost:9091/health  # AMF health
@@ -820,7 +820,7 @@ func printRealMetricsNextSteps() {
 	if isRunningInDocker() {
 		fmt.Printf("🐳 Docker Environment Detected:\n")
 		fmt.Printf("1. **Start complete stack:**\n")
-		fmt.Printf("   docker-compose -f services.yaml up\n\n")
+		fmt.Printf("   docker-compose -f services.yml up\n\n")
 		fmt.Printf("2. **Access Prometheus:**\n")
 		fmt.Printf("   http://localhost:9090/targets\n\n")
 		fmt.Printf("3. **Access Grafana:**\n")
@@ -833,7 +833,7 @@ func printRealMetricsNextSteps() {
 		fmt.Printf("   curl http://localhost:9092/metrics  # SMF real metrics\n")
 		fmt.Printf("   curl http://localhost:9091/debug/raw  # Raw Open5GS AMF\n\n")
 		fmt.Printf("3. 📊 **Configure Prometheus:**\n")
-		fmt.Printf("   prometheus --config.file=prometheus_real_open5gs.yaml\n\n")
+		fmt.Printf("   prometheus --config.file=prometheus_real_open5gs.yml\n\n")
 	}
 
 	fmt.Printf("4. 🏥 **Monitor health:**\n")
