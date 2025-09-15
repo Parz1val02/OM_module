@@ -4,6 +4,7 @@ go 1.25.0
 
 require (
 	github.com/docker/docker v28.3.3+incompatible
+	github.com/fsnotify/fsnotify v1.7.0
 	github.com/prometheus/client_golang v1.23.2
 )
 

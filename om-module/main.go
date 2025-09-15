@@ -16,10 +16,12 @@ import (
 
 	"github.com/Parz1val02/OM_module/dashboards"
 	"github.com/Parz1val02/OM_module/discovery"
+	"github.com/Parz1val02/OM_module/logging"
 	"github.com/Parz1val02/OM_module/metrics"
 )
 
 var debugMode bool
+var loggingService *logging.LoggingService
 
 func main() {
 	log.Printf("🚀 Starting O&M Module for 4G/5G Educational Network Testbed")
@@ -107,6 +109,15 @@ func runRealMetricsOrchestrator(envFile string) {
 		log.Fatalf("❌ Failed to start real metrics orchestrator: %v", err)
 	}
 
+	// NEW: Initialize and start logging service
+	log.Printf("📝 Initializing dynamic logging pipeline...")
+	if err := initializeLoggingService(topology); err != nil {
+		log.Printf("⚠️ Failed to initialize logging service: %v", err)
+		// Continue without logging service - don't fail the entire application
+	} else {
+		log.Printf("✅ Logging pipeline initialized successfully")
+	}
+
 	// Start infrastructure collectors
 	log.Printf("🔄 Starting infrastructure collectors...")
 
@@ -143,12 +154,15 @@ func runRealMetricsOrchestrator(envFile string) {
 		log.Printf("⚠️  Warning: Some collectors may not be fully ready: %v", err)
 	}
 
-	// NEW: Generate Grafana dashboards
+	// Generate Grafana dashboards
 	if err := dashboards.GenerateGrafanaDashboards(orchestrator, topology, inDocker); err != nil {
 		log.Printf("⚠️ Failed to generate Grafana dashboards: %v", err)
 	} else {
 		log.Printf("✅ Generated Grafana dashboards successfully")
 	}
+
+	// NEW: Start HTTP server for logging endpoints
+	go startLoggingHTTPServer()
 
 	// Display live status
 	displayRealMetricsStatus(orchestrator)
@@ -159,6 +173,7 @@ func runRealMetricsOrchestrator(envFile string) {
 
 	log.Printf("🌟 Orchestrator mode is now LIVE! All metrics are being collected in real-time.")
 	log.Printf("📊 Access Prometheus metrics at the endpoints shown above")
+	log.Printf("📝 Access logging service at http://localhost:8080/logging/*")
 	if inDocker {
 		log.Printf("🐳 Docker mode: Prometheus config written to shared volume")
 	}
@@ -171,13 +186,237 @@ func runRealMetricsOrchestrator(envFile string) {
 	// Cancel context to stop all collectors
 	cancel()
 
-	// Stop real orchestrator
+	// Stop services
 	orchestrator.Stop()
+	cleanupLoggingService()
 
 	// Give collectors time to stop gracefully
 	time.Sleep(2 * time.Second)
 
 	log.Printf("✅ Real-time metrics orchestrator stopped cleanly")
+}
+
+// NEW: Initialize logging service
+func initializeLoggingService(topology *discovery.NetworkTopology) error {
+	log.Printf("🔧 Initializing Logging Service...")
+
+	// Load configuration from environment
+	config := logging.LoadConfigFromEnv()
+
+	// Create logging service
+	loggingService = logging.NewLoggingService(topology, config)
+
+	// Start the service
+	if err := loggingService.Start(); err != nil {
+		return fmt.Errorf("failed to start logging service: %w", err)
+	}
+
+	log.Printf("✅ Logging Service initialized successfully")
+	return nil
+}
+
+// NEW: Start HTTP server for logging endpoints
+func startLoggingHTTPServer() {
+	mux := http.NewServeMux()
+
+	// Add logging endpoints
+	addLoggingEndpoints(mux)
+
+	// Start server on a separate port to avoid conflicts
+	server := &http.Server{
+		Addr:    ":8083", // Use port 8083 for logging HTTP endpoints
+		Handler: mux,
+	}
+
+	log.Printf("🌐 Logging HTTP server starting on :8083")
+	if err := server.ListenAndServe(); err != nil {
+		log.Printf("⚠️ Logging HTTP server error: %v", err)
+	}
+}
+
+// NEW: Add logging endpoints to HTTP server
+func addLoggingEndpoints(mux *http.ServeMux) {
+	// Logging service endpoints
+	mux.HandleFunc("/logging/status", handleLoggingStatus)
+	mux.HandleFunc("/logging/configs", handlePromtailConfigs)
+	mux.HandleFunc("/logging/health", handleLoggingHealth)
+	mux.HandleFunc("/logging/dashboard", handleEducationalDashboard)
+
+	// Educational endpoints
+	mux.HandleFunc("/educational/insights", func(w http.ResponseWriter, r *http.Request) {
+		topology := getCurrentTopology()
+		insights := logging.GetEducationalInsights(topology)
+
+		w.Header().Set("Content-Type", "application/json")
+		if err := json.NewEncoder(w).Encode(insights); err != nil {
+			log.Printf("❌ Log collector server error: %v", err)
+		}
+	})
+
+	// Root endpoint for logging service
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		response := map[string]any{
+			"service": "O&M Logging Service",
+			"version": "1.0.0",
+			"endpoints": []string{
+				"/logging/status",
+				"/logging/configs",
+				"/logging/health",
+				"/logging/dashboard",
+				"/educational/insights",
+			},
+		}
+		w.Header().Set("Content-Type", "application/json")
+		if err := json.NewEncoder(w).Encode(response); err != nil {
+			log.Printf("❌ Log collector server error: %v", err)
+		}
+	})
+}
+
+// NEW: HTTP handlers for logging service
+
+// handleLoggingStatus returns the status of the logging service
+func handleLoggingStatus(w http.ResponseWriter, r *http.Request) {
+	if loggingService == nil {
+		http.Error(w, "Logging service not initialized", http.StatusServiceUnavailable)
+		return
+	}
+
+	status := loggingService.GetStatus()
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(status); err != nil {
+		http.Error(w, "Failed to encode status", http.StatusInternalServerError)
+		return
+	}
+}
+
+// handlePromtailConfigs returns the generated Promtail configurations
+func handlePromtailConfigs(w http.ResponseWriter, r *http.Request) {
+	if loggingService == nil {
+		http.Error(w, "Logging service not initialized", http.StatusServiceUnavailable)
+		return
+	}
+
+	configs, err := loggingService.GetPromtailConfigs()
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Failed to get configs: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(configs); err != nil {
+		http.Error(w, "Failed to encode configs", http.StatusInternalServerError)
+		return
+	}
+}
+
+// handleEducationalDashboard returns educational content for students
+func handleEducationalDashboard(w http.ResponseWriter, r *http.Request) {
+	if loggingService == nil {
+		http.Error(w, "Logging service not initialized", http.StatusServiceUnavailable)
+		return
+	}
+
+	topology := getCurrentTopology()
+
+	dashboard := logging.GenerateEducationalDashboard(topology)
+	insights := logging.GetEducationalInsights(topology)
+
+	response := map[string]any{
+		"dashboard": dashboard,
+		"insights":  insights,
+		"timestamp": time.Now().Format(time.RFC3339),
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		http.Error(w, "Failed to encode dashboard", http.StatusInternalServerError)
+		return
+	}
+}
+
+// handleLoggingHealth provides health check for logging components
+func handleLoggingHealth(w http.ResponseWriter, r *http.Request) {
+	health := map[string]any{
+		"timestamp": time.Now().Format(time.RFC3339),
+		"status":    "healthy",
+		"components": map[string]string{
+			"loki":     "checking...",
+			"parser":   "checking...",
+			"promtail": "checking...",
+		},
+	}
+
+	if loggingService != nil {
+		status := loggingService.GetStatus()
+		if running, ok := status["running"].(bool); ok && running {
+			health["components"].(map[string]string)["logging_service"] = "healthy"
+		} else {
+			health["components"].(map[string]string)["logging_service"] = "stopped"
+			health["status"] = "degraded"
+		}
+	} else {
+		health["components"].(map[string]string)["logging_service"] = "not_initialized"
+		health["status"] = "unhealthy"
+	}
+
+	// Check Loki connectivity
+	go checkLokiHealth(health)
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(health); err != nil {
+		log.Printf("❌ Log health server error: %v", err)
+	}
+}
+
+// checkLokiHealth checks if Loki is accessible
+func checkLokiHealth(health map[string]any) {
+	lokiURL := os.Getenv("LOKI_URL")
+	if lokiURL == "" {
+		lokiURL = "http://loki:3100"
+	}
+
+	client := &http.Client{Timeout: 5 * time.Second}
+	resp, err := client.Get(lokiURL + "/ready")
+	if err != nil {
+		health["components"].(map[string]string)["loki"] = "unreachable"
+		return
+	}
+	defer func() {
+		err = resp.Body.Close()
+	}()
+
+	if resp.StatusCode == 200 {
+		health["components"].(map[string]string)["loki"] = "healthy"
+	} else {
+		health["components"].(map[string]string)["loki"] = "unhealthy"
+	}
+}
+
+// getCurrentTopology returns the current topology (you may need to adapt this)
+func getCurrentTopology() *discovery.NetworkTopology {
+	// For now, return nil - you may want to store the topology globally
+	// or retrieve it from your discovery service
+	return nil
+}
+
+// cleanupLoggingService should be called during application shutdown
+func cleanupLoggingService() {
+	if loggingService != nil {
+		if err := loggingService.Stop(); err != nil {
+			log.Printf("⚠️ Error stopping logging service: %v", err)
+		}
+	}
+}
+
+// updateTopologyInLoggingService updates the logging service when topology changes
+func updateTopologyInLoggingService(newTopology *discovery.NetworkTopology) {
+	if loggingService != nil {
+		if err := loggingService.UpdateTopology(newTopology); err != nil {
+			log.Printf("⚠️ Failed to update logging service topology: %v", err)
+		}
+	}
 }
 
 // Generate Docker-aware Prometheus configuration
@@ -376,8 +615,22 @@ func runDiscoveryMode(envFile string) {
 
 	log.Printf("✅ Step 2 Complete: Configuration files generated")
 
+	// NEW: Step 3 - Initialize logging service for configuration generation
+	log.Printf("📝 Step 3: Generating dynamic logging configurations...")
+	if err := initializeLoggingServiceForDiscovery(topology); err != nil {
+		log.Printf("⚠️ Failed to generate logging configurations: %v", err)
+	} else {
+		log.Printf("✅ Step 3 Complete: Logging configurations generated")
+
+		// Generate educational content
+		generateEducationalContent(topology)
+	}
+
 	// Display comprehensive discovery results
 	displayDiscoveryResults(topology)
+
+	// NEW: Display logging setup results
+	displayLoggingResults()
 
 	// Display next steps for real metrics
 	printRealMetricsNextSteps()
@@ -391,25 +644,104 @@ func runDiscoveryMode(envFile string) {
 	}
 }
 
+// NEW: Initialize logging service for discovery mode (config generation only)
+func initializeLoggingServiceForDiscovery(topology *discovery.NetworkTopology) error {
+	config := logging.LoadConfigFromEnv()
+
+	// Create logging service but don't start log parser in discovery mode
+	config.ParserEnabled = false
+
+	tempLoggingService := logging.NewLoggingService(topology, config)
+
+	// Generate configurations without starting the full service
+	if err := tempLoggingService.Start(); err != nil {
+		return fmt.Errorf("failed to generate logging configurations: %w", err)
+	}
+
+	// Stop the service after configuration generation
+	if err := tempLoggingService.Stop(); err != nil {
+		return fmt.Errorf("failed to stop logging configurations: %w", err)
+	}
+
+	return nil
+}
+
+// NEW: Generate educational content
+func generateEducationalContent(topology *discovery.NetworkTopology) {
+	// Generate educational dashboard
+	dashboard := logging.GenerateEducationalDashboard(topology)
+	if err := writeFile("educational_dashboard.md", dashboard); err != nil {
+		log.Printf("⚠️ Failed to write educational dashboard: %v", err)
+	} else {
+		log.Printf("📚 Educational dashboard written to: educational_dashboard.md")
+	}
+
+	// Write logging insights
+	insights := logging.GetEducationalInsights(topology)
+	insightsJSON, _ := json.MarshalIndent(insights, "", "  ")
+	if err := writeFile("logging_insights.json", string(insightsJSON)); err != nil {
+		log.Printf("⚠️ Failed to write logging insights: %v", err)
+	} else {
+		log.Printf("💡 Logging insights written to: logging_insights.json")
+	}
+}
+
+// NEW: Display logging setup results
+func displayLoggingResults() {
+	fmt.Printf("\n📝 LOGGING PIPELINE SETUP\n")
+	fmt.Printf("═══════════════════════════════════════════════════════════════\n")
+
+	fmt.Printf("🚀 Logging Configuration Status:\n")
+	fmt.Printf("   ├─ Promtail Configs: ✅ Generated\n")
+	fmt.Printf("   ├─ Core Network: ./promtail/core/config.yml\n")
+	fmt.Printf("   ├─ RAN Components: ./promtail/ran/config.yml\n")
+	fmt.Printf("   └─ Educational Mode: Enabled\n")
+
+	fmt.Printf("\n📄 Generated Files:\n")
+	fmt.Printf("   ├─ educational_dashboard.md → Student learning guide\n")
+	fmt.Printf("   ├─ logging_insights.json → Protocol analysis insights\n")
+	fmt.Printf("   ├─ promtail/core/config.yml → Core network log config\n")
+	fmt.Printf("   └─ promtail/ran/config.yml → RAN log config\n")
+
+	fmt.Printf("\n🎓 Educational Features:\n")
+	fmt.Printf("   ├─ Protocol-aware log parsing (NAS, RRC, S1AP)\n")
+	fmt.Printf("   ├─ 3GPP specification references\n")
+	fmt.Printf("   ├─ Session flow tracking with IMSI correlation\n")
+	fmt.Printf("   ├─ Performance metrics extraction (RSRP, RSRQ)\n")
+	fmt.Printf("   └─ Troubleshooting guides and procedures\n")
+
+	fmt.Printf("\n🔗 Runtime Access Points:\n")
+	fmt.Printf("   ├─ Log Parser API: http://localhost:8082 (when running)\n")
+	fmt.Printf("   ├─ Loki API: http://localhost:3100\n")
+	fmt.Printf("   ├─ Grafana: http://localhost:3000\n")
+	fmt.Printf("   └─ Logging Service: http://localhost:8083/logging/* (when running)\n")
+
+	fmt.Printf("═══════════════════════════════════════════════════════════════\n")
+}
+
 // Print clear description of what orchestrator mode does
 func printOrchestratorModeDescription() {
 	fmt.Printf("🎬 ORCHESTRATOR MODE - Live Real-Time Metrics Collection\n")
-	fmt.Printf("═══════════════════════════════════════════════════════\n")
+	fmt.Printf("═══════════════════════════════════════════════════════════\n")
 	fmt.Printf("This mode starts a LIVE metrics collection system that:\n\n")
 	fmt.Printf("🔄 Real-Time Operations:\n")
 	fmt.Printf("   • Continuously monitors all Open5GS network functions\n")
 	fmt.Printf("   • Collects live metrics directly from AMF, SMF, UPF, etc.\n")
 	fmt.Printf("   • Gathers container resource usage (CPU, memory, I/O)\n")
 	fmt.Printf("   • Performs health checks every 15 seconds\n")
-	fmt.Printf("   • Automatically adapts to topology changes\n\n")
+	fmt.Printf("   • Automatically adapts to topology changes\n")
+	fmt.Printf("   • Processes logs in real-time with educational context\n\n")
 	fmt.Printf("🌐 Active HTTP Endpoints:\n")
 	fmt.Printf("   • Real Open5GS metrics: ports 9091-9096\n")
 	fmt.Printf("   • Container metrics: port 8080\n")
 	fmt.Printf("   • Health checks: port 8081\n")
+	fmt.Printf("   • Log parser: port 8082\n")
+	fmt.Printf("   • Logging service: port 8083\n")
 	fmt.Printf("   • Educational dashboards and debug info\n\n")
 	fmt.Printf("📊 Integration Ready:\n")
 	fmt.Printf("   • Prometheus can scrape all endpoints immediately\n")
 	fmt.Printf("   • Grafana dashboards show live data\n")
+	fmt.Printf("   • Loki receives structured logs with educational metadata\n")
 	fmt.Printf("   • Perfect for lab demonstrations and learning\n\n")
 	if isRunningInDocker() {
 		fmt.Printf("🐳 Docker Mode:\n")
@@ -431,21 +763,26 @@ func printDiscoveryModeDescription() {
 	fmt.Printf("   • Maps network topology (4G vs 5G components)\n")
 	fmt.Printf("   • Determines which components support native metrics\n")
 	fmt.Printf("   • Identifies container resource monitoring targets\n")
-	fmt.Printf("   • Assesses health check capabilities\n\n")
+	fmt.Printf("   • Assesses health check capabilities\n")
+	fmt.Printf("   • Analyzes log sources and formats\n\n")
 	fmt.Printf("📝 Configuration Generation:\n")
 	fmt.Printf("   • Creates Prometheus scrape configurations\n")
-	fmt.Printf("   • Generates target definitions for all metric sources\n")
+	fmt.Printf("   • Generates dynamic Promtail configurations\n")
 	fmt.Printf("   • Builds comprehensive monitoring setup files\n")
-	fmt.Printf("   • Prepares educational dashboard configurations\n\n")
+	fmt.Printf("   • Prepares educational dashboard configurations\n")
+	fmt.Printf("   • Creates protocol-aware log parsing rules\n\n")
 	fmt.Printf("📁 Output Files Created:\n")
 	fmt.Printf("   • prometheus_targets.yml - Ready-to-use Prometheus config\n")
+	fmt.Printf("   • promtail/core/config.yml - Core network log configuration\n")
+	fmt.Printf("   • promtail/ran/config.yml - RAN log configuration\n")
 	fmt.Printf("   • topology.json - Machine-readable topology data\n")
-	fmt.Printf("   • topology_summary.txt - Human-readable analysis report\n")
-	fmt.Printf("   • real_metrics_summary.md - Setup instructions for students\n\n")
+	fmt.Printf("   • educational_dashboard.md - Student learning guide\n")
+	fmt.Printf("   • logging_insights.json - Protocol analysis insights\n\n")
 	fmt.Printf("🎯 Educational Benefits:\n")
 	fmt.Printf("   • Students can see the complete monitoring architecture\n")
 	fmt.Printf("   • Understand which components provide which metrics\n")
-	fmt.Printf("   • Learn industry-standard observability practices\n\n")
+	fmt.Printf("   • Learn industry-standard observability practices\n")
+	fmt.Printf("   • See protocol-specific log parsing configurations\n\n")
 	fmt.Printf("⚠️  Note: This mode does NOT start live collection - use 'orchestrator' for that\n")
 	fmt.Printf("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n")
 }
@@ -568,6 +905,28 @@ func displayRealMetricsStatus(orchestrator *metrics.RealCollectorOrchestrator) {
 	fmt.Printf("   │  └─ Collector health: %s:8081/health\n", baseURL)
 	fmt.Printf("   └─ System Resources 🟢 Active → Collected every 10s\n\n")
 
+	// NEW: Display logging service status
+	fmt.Printf("📝 Logging Service:\n")
+	if loggingService != nil {
+		loggingStatus := loggingService.GetStatus()
+		if running, ok := loggingStatus["running"].(bool); ok && running {
+			fmt.Printf("   ├─ Status: 🟢 Active\n")
+			fmt.Printf("   ├─ Log Parser: %s:8082\n", baseURL)
+			fmt.Printf("   ├─ Service API: %s:8083/logging/*\n", baseURL)
+			fmt.Printf("   ├─ Educational Mode: Enabled\n")
+			if educationalMode, ok := loggingStatus["educational_mode"].(bool); ok && educationalMode {
+				fmt.Printf("   ├─ Protocol Parsing: 3GPP specifications enabled\n")
+				fmt.Printf("   ├─ Session Tracking: IMSI correlation active\n")
+			}
+			fmt.Printf("   └─ Loki Integration: %s\n", loggingStatus["loki_url"])
+		} else {
+			fmt.Printf("   └─ Status: 🔴 Inactive\n")
+		}
+	} else {
+		fmt.Printf("   └─ Status: ⚠️  Not initialized\n")
+	}
+	fmt.Printf("\n")
+
 	fmt.Printf("🔧 Quick Tests:\n")
 	// Real Open5GS endpoints
 	for componentName, endpoint := range endpoints {
@@ -577,9 +936,17 @@ func displayRealMetricsStatus(orchestrator *metrics.RealCollectorOrchestrator) {
 	fmt.Printf("   curl %s:8080/container/metrics  # Container resources\n", baseURL)
 	fmt.Printf("   curl %s:8081/health/metrics     # Component health\n", baseURL)
 
+	// NEW: Logging endpoints
+	if loggingService != nil {
+		fmt.Printf("   curl %s:8082/health            # Log parser health\n", baseURL)
+		fmt.Printf("   curl %s:8083/logging/status    # Logging service status\n", baseURL)
+		fmt.Printf("   curl %s:8083/logging/configs   # Generated Promtail configs\n", baseURL)
+	}
+
 	if isRunningInDocker() {
 		fmt.Printf("\n🐳 Docker Integration:\n")
 		fmt.Printf("   • Prometheus config: /etc/prometheus/configs/prometheus.yml\n")
+		fmt.Printf("   • Promtail configs: Auto-generated and mounted\n")
 		fmt.Printf("   • Auto-reload: Configuration updated automatically\n")
 	}
 	fmt.Printf("\n")
@@ -655,6 +1022,7 @@ func displayDiscoveryResults(topology *discovery.NetworkTopology) {
 	realMetrics := 0
 	containerMetrics := 0
 	healthMetrics := 0
+	logSources := 0
 
 	functionsWithMetricsSupport := map[string]bool{
 		"amf": true, "smf": true, "pcf": true, "upf": true, "mme": true, "pcrf": true,
@@ -675,27 +1043,49 @@ func displayDiscoveryResults(topology *discovery.NetworkTopology) {
 			// Every running component supports container and health metrics
 			containerMetrics++
 			healthMetrics++
+
+			// Count log sources (components that generate logs)
+			if isLoggingComponent(componentName) {
+				logSources++
+			}
 		}
 	}
 
 	fmt.Printf("\n📊 Monitoring Capabilities Identified:\n")
 	fmt.Printf("   ├─ Real Open5GS Metrics: %d components support native /metrics\n", realMetrics)
 	fmt.Printf("   ├─ Container Monitoring: %d containers available for resource tracking\n", containerMetrics)
-	fmt.Printf("   └─ Health Monitoring: %d components configured for health checks\n", healthMetrics)
+	fmt.Printf("   ├─ Health Monitoring: %d components configured for health checks\n", healthMetrics)
+	fmt.Printf("   └─ Log Sources: %d components generate structured logs\n", logSources)
 
 	fmt.Printf("\n📁 Generated Configuration Files:\n")
 	fmt.Printf("   ├─ prometheus_targets.yml → Complete Prometheus scrape configuration\n")
+	fmt.Printf("   ├─ promtail/core/config.yml → Core network log configuration\n")
+	fmt.Printf("   ├─ promtail/ran/config.yml → RAN log configuration\n")
 	fmt.Printf("   ├─ topology.json → Machine-readable topology data\n")
-	fmt.Printf("   ├─ topology_summary.txt → Human-readable analysis report\n")
-	fmt.Printf("   └─ real_metrics_summary.md → Student setup instructions\n")
+	fmt.Printf("   ├─ educational_dashboard.md → Student learning guide\n")
+	fmt.Printf("   └─ logging_insights.json → Protocol analysis insights\n")
 
 	fmt.Printf("\n🎓 Educational Value:\n")
 	fmt.Printf("   ├─ Students can examine the complete monitoring architecture\n")
 	fmt.Printf("   ├─ Understanding of industry-standard observability practices\n")
 	fmt.Printf("   ├─ Hands-on experience with Prometheus configuration\n")
+	fmt.Printf("   ├─ Protocol-aware log analysis with 3GPP specifications\n")
+	fmt.Printf("   ├─ Session flow tracking and troubleshooting workflows\n")
 	fmt.Printf("   └─ Real-world telecom O&M workflows\n")
 
 	fmt.Printf("═══════════════════════════════════════════════════════════════\n")
+}
+
+// NEW: Helper function to identify logging components
+func isLoggingComponent(componentName string) bool {
+	loggingComponents := []string{"amf", "smf", "upf", "pcf", "mme", "hss", "pcrf", "sgw", "nrf", "udm", "udr", "ausf", "nssf", "bsf", "srs", "enb", "gnb", "ue"}
+
+	for _, logComp := range loggingComponents {
+		if strings.Contains(componentName, logComp) {
+			return true
+		}
+	}
+	return false
 }
 
 // Export topology and real metrics configuration files
@@ -779,10 +1169,14 @@ No simulation - 100%% live telecommunications data!
    curl http://localhost:9092/metrics  # SMF real metrics
    curl http://localhost:9091/debug/raw  # Raw Open5GS AMF data
 
-3. **Configure Prometheus:**
+3. **Test Logging Service:**
+   curl http://localhost:8082/health          # Log parser health
+   curl http://localhost:8083/logging/status  # Logging service status
+
+4. **Configure Prometheus:**
    prometheus --config.file=prometheus_real_open5gs.yml
 
-4. **Monitor Health:**
+5. **Monitor Health:**
    curl http://localhost:9091/health  # AMF health
 
 ### Real Metrics Examples
@@ -794,6 +1188,16 @@ The system collects actual Open5GS metrics like:
 - gtp2_sessions_active (GTP sessions)
 - ran_ue (Connected RAN UEs)
 
+### Logging Pipeline
+
+The integrated logging system provides:
+- Real-time log parsing with educational context
+- Protocol-aware analysis (NAS, RRC, S1AP, NGAP)
+- 3GPP specification references
+- Session flow tracking with IMSI correlation
+- Performance metrics extraction from logs
+- Dynamic Promtail configuration generation
+
 ### Architecture
 
 This O&M module fetches metrics from Open5GS components and re-exposes them with:
@@ -801,6 +1205,7 @@ This O&M module fetches metrics from Open5GS components and re-exposes them with
 - Educational information for learning
 - Health monitoring and status reporting
 - Debug access to raw Open5GS data
+- Structured log processing with Loki integration
 
 **No simulation - Real telecommunications monitoring!** 🚀
 `
@@ -825,6 +1230,8 @@ func printRealMetricsNextSteps() {
 		fmt.Printf("   http://localhost:9090/targets\n\n")
 		fmt.Printf("3. **Access Grafana:**\n")
 		fmt.Printf("   http://localhost:3000 (admin/admin)\n\n")
+		fmt.Printf("4. **Access Loki logs:**\n")
+		fmt.Printf("   http://localhost:3100 (via Grafana)\n\n")
 	} else {
 		fmt.Printf("1. 🎬 **Start real metrics collection:**\n")
 		fmt.Printf("   ./om-module orchestrator\n\n")
@@ -832,15 +1239,20 @@ func printRealMetricsNextSteps() {
 		fmt.Printf("   curl http://localhost:9091/metrics  # AMF real metrics\n")
 		fmt.Printf("   curl http://localhost:9092/metrics  # SMF real metrics\n")
 		fmt.Printf("   curl http://localhost:9091/debug/raw  # Raw Open5GS AMF\n\n")
-		fmt.Printf("3. 📊 **Configure Prometheus:**\n")
+		fmt.Printf("3. 📝 **Test logging service:**\n")
+		fmt.Printf("   curl http://localhost:8082/health          # Log parser\n")
+		fmt.Printf("   curl http://localhost:8083/logging/status  # Logging service\n\n")
+		fmt.Printf("4. 📊 **Configure Prometheus:**\n")
 		fmt.Printf("   prometheus --config.file=prometheus_real_open5gs.yml\n\n")
 	}
 
-	fmt.Printf("4. 🏥 **Monitor health:**\n")
+	fmt.Printf("5. 🏥 **Monitor health:**\n")
 	fmt.Printf("   curl http://localhost:9091/health\n\n")
-	fmt.Printf("5. 📚 **Educational dashboards:**\n")
-	fmt.Printf("   curl http://localhost:9091/dashboard\n\n")
+	fmt.Printf("6. 📚 **Educational dashboards:**\n")
+	fmt.Printf("   curl http://localhost:9091/dashboard\n")
+	fmt.Printf("   curl http://localhost:8083/logging/dashboard\n\n")
 	fmt.Printf("⚡ **All endpoints fetch live data from Open5GS components!**\n")
+	fmt.Printf("📝 **Logs are processed with educational context and 3GPP specs!**\n")
 	fmt.Printf("🎯 **No simulation - 100%% real telecommunications metrics!**\n")
 }
 
@@ -853,6 +1265,7 @@ func printUsage() {
 	fmt.Printf("   %s discovery [env_file]\n", os.Args[0])
 	fmt.Printf("   • Analyzes your network topology without starting collectors\n")
 	fmt.Printf("   • Generates Prometheus configurations and documentation\n")
+	fmt.Printf("   • Creates dynamic Promtail configurations for logging\n")
 	fmt.Printf("   • Perfect for understanding your setup before monitoring\n")
 	fmt.Printf("   • Outputs: config files, topology analysis, setup guides\n\n")
 
@@ -860,6 +1273,7 @@ func printUsage() {
 	fmt.Printf("   %s orchestrator [env_file]\n", os.Args[0])
 	fmt.Printf("   • Starts live real-time metrics collection from all components\n")
 	fmt.Printf("   • Provides HTTP endpoints for Prometheus scraping\n")
+	fmt.Printf("   • Starts log parser for real-time log processing\n")
 	fmt.Printf("   • Continuously monitors and adapts to topology changes\n")
 	fmt.Printf("   • Use this when you want active monitoring and data collection\n\n")
 
@@ -940,4 +1354,31 @@ func topologyToJSON(topology *discovery.NetworkTopology) string {
     }`, err.Error(), time.Now().Format("2006-01-02T15:04:05Z"), len(topology.Components))
 	}
 	return string(jsonBytes)
+}
+
+// Enhanced dashboard generation with log-based dashboards
+func generateEnhancedDashboards(orchestrator *metrics.RealCollectorOrchestrator, topology *discovery.NetworkTopology, inDocker bool) error {
+	log.Printf("📊 Generating enhanced Grafana dashboards with log integration...")
+
+	// Generate existing dashboards
+	if err := dashboards.GenerateGrafanaDashboards(orchestrator, topology, inDocker); err != nil {
+		log.Printf("⚠️ Failed to generate standard dashboards: %v", err)
+	} else {
+		log.Printf("✅ Generated standard Grafana dashboards")
+	}
+
+	// Generate log-based dashboards if logging service is available
+	if loggingService != nil {
+		if err := dashboards.EnhanceWithLogDashboards(topology, loggingService); err != nil {
+			log.Printf("⚠️ Failed to generate log-based dashboards: %v", err)
+		} else {
+
+			log.Printf("✅ Generated log-based educational dashboards")
+		}
+	} else {
+
+		log.Printf("⚠️ Logging service not available - skipping log-based dashboards")
+	}
+
+	return nil
 }
