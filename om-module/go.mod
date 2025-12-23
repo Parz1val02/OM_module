@@ -1,6 +1,6 @@
 module github.com/Parz1val02/OM_module
 
-go 1.25.0
+go 1.24
 
 require (
 	github.com/docker/docker v28.3.3+incompatible
