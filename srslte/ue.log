@@ -1,6 +1,0 @@
-2025-09-09T23:34:36.641790 [UE     ] [I] Using binary /usr/local/bin/srsue with arguments: 
-2025-09-09T23:34:37.043050 [UE     ] [I] Built in Release mode using commit ec29b0c1f on branch HEAD.
-2025-09-09T23:34:41.219708 [PHY-SA ] [E] [    0] prach_cfg.freq_offset=1 is not compatible with LTE
-2025-09-09T23:37:19.144619 [RLC-NR ] [W] LCID 1 doesn't exist. Dropping PDU.
-2025-09-09T23:37:19.214880 [RLC-NR ] [W] LCID 1 doesn't exist. Dropping PDU.
-2025-09-10T01:51:31.157811 [MAC    ] [W] [ 5161] proc_time: detected long duration=10ms

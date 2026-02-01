@@ -93,8 +93,8 @@ services:
       - .env
     volumes:
       - ./promtail/ran:/etc/promtail
-      - ./srslte:/var/log/srslte:ro
-      - ./srsran:/var/log/srsran:ro
+      - ran_5g_logs:/var/log/srsran:ro
+      - ran_4g_logs:/var/log/srslte:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     networks:
@@ -210,6 +210,10 @@ volumes:
     name: docker_open5gs_grafana_dashboards
   loki-data:
     name: docker_open5gs_loki_data
+  ran_5g_logs:
+    name: ran_5g_logs
+  ran_4g_logs:
+    name: ran_4g_logs
   open5gs_logs:
     external: true
     name: docker_open5gs_logs

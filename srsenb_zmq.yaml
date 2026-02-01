@@ -7,6 +7,7 @@ services:
     privileged: true
     volumes:
       - ./srslte:/mnt/srslte
+      - ran_4g_logs:/mnt/srslte/log_4g
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     env_file:
@@ -25,3 +26,6 @@ networks:
   default:
     external: true
     name: docker_open5gs_default
+volumes:
+  ran_4g_logs:
+    name: ran_4g_logs
