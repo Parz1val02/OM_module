@@ -10,7 +10,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - prometheus-configs:/etc/prometheus/configs
       - grafana-dashboards:/etc/grafana/provisioning/dashboards
-      - ./.env:/root/.env:ro  
+      - ./.env:/root/.env:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
       - open5gs_logs:/var/log/open5gs:ro
@@ -23,11 +23,14 @@ services:
     networks:
       default:
         ipv4_address: ${OM_MODULE_IP}
+    depends_on:
+      loki:
+        condition: service_healthy
     environment:
       - PROMETHEUS_CONFIG_PATH=/etc/prometheus/configs
       - DOCKER_NETWORK=docker_open5gs_default
       - LOG_PARSER_ENABLED=true
-      - LOKI_URL=http://${LOKI_IP}:3100
+      - LOKI_URL=http://loki:3100
       - STRUCTURED_LOGGING=true
     restart: unless-stopped
     healthcheck:
@@ -78,7 +81,8 @@ services:
       default:
         ipv4_address: ${PROMTAIL_CORE_IP}
     depends_on:
-      - loki
+      loki:
+        condition: service_healthy
     restart: unless-stopped
 
   promtail-ran:
@@ -97,7 +101,8 @@ services:
       default:
         ipv4_address: ${PROMTAIL_RAN_IP}
     depends_on:
-      - loki
+      loki:
+        condition: service_healthy
     restart: unless-stopped
 
   prometheus:
@@ -128,8 +133,11 @@ services:
       default:
         ipv4_address: ${METRICS_IP}
     depends_on:
-      - om-module
-      - loki 
+      loki:
+        condition: service_healthy
+      om-module:
+        condition: service_healthy
+
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
@@ -168,10 +176,14 @@ services:
       default:
         ipv4_address: ${GRAFANA_IP}
     depends_on:
-      - prometheus
-      - loki          
-      - promtail-core 
-      - promtail-ran  
+      prometheus:
+        condition: service_healthy
+      loki:
+        condition: service_healthy
+      promtail-core:
+        condition: service_started
+      promtail-ran:
+        condition: service_started
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]

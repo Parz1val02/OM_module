@@ -1,6 +1,5 @@
 server:
   http_listen_port: 9081
-  grpc_listen_port: 0
 
 positions:
   filename: /tmp/positions-ran.yaml
@@ -9,11 +8,21 @@ clients:
   - url: http://loki:3100/loki/api/v1/push
 
 scrape_configs:
-  # This will be replaced by dynamic generation, but needed for initial startup  
-  - job_name: placeholder
+  - job_name: ran-srslte
     static_configs:
-      - targets:
-          - localhost
+      - targets: [localhost]
         labels:
-          job: placeholder
-          __path__: /dev/null
+          job: ran
+          domain: ran
+          component: srslte
+          __path__: /var/log/srslte/*.log
+
+  - job_name: ran-srsran
+    static_configs:
+      - targets: [localhost]
+        labels:
+
+          job: ran
+          domain: ran
+          component: srsran
+          __path__: /var/log/srsran/*.log

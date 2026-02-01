@@ -6,29 +6,4 @@ datasources:
     access: proxy
     url: http://prometheus:9090
     isDefault: true
-    editable: true
-    jsonData:
-      httpMethod: POST
-      manageAlerts: true
-      prometheusType: Prometheus
-      prometheusVersion: 2.40.0
-      cacheLevel: 'High'
-      disableMetricsLookup: false
-      customQueryParameters: ''
-      exemplarTraceIdDestinations: []
-    version: 1
-
-  - name: Prometheus-OM-Module
-    type: prometheus
-    access: proxy
-    url: http://om-module:9090
-    isDefault: false
-    editable: true
-    jsonData:
-      httpMethod: GET
-      manageAlerts: false
-      prometheusType: Prometheus
-      prometheusVersion: 2.40.0
-      cacheLevel: 'High'
-      disableMetricsLookup: false
-    version: 1
+    editable: false
