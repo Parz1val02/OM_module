@@ -9,7 +9,7 @@ services:
     privileged: true
     volumes:
       - ./srslte:/mnt/srslte
-      - ran_5g_logs:/mnt/srslte/log_5g
+      - ran_5g_logs:/logs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     env_file:

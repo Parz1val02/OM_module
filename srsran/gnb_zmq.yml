@@ -39,8 +39,28 @@ cell_cfg:
     prach_config_index: 1
 
 log:
-  filename: /mnt/srsran/log_5g/gnb.log                                                        # Path of the log file.
-  all_level: warning                                                                          # Logging level applied to all layers.
+  # Global
+  filename: /logs/gnb.log
+  all_level: warning
+  lib_level: warning
+  config_level: none
+  sec_level: warning
+  radio_level: error
+  phy_level: error
+  fapi_level: error
+  hal_level: error
+  ofh_level: error
+  mac_level: warning
+  rlc_level: warning
+  pdcp_level: warning
+  sdap_level: warning
+  rrc_level: info
+  ngap_level: info
+  gtpu_level: info
+  f1ap_level: warning
+  e1ap_level: warning
+  cu_level: warning
+  du_level: warning
 
 pcap:
   mac_enable: false                                                                           # Set to true to enable MAC-layer PCAPs.
