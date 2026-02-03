@@ -71,19 +71,11 @@ metrics:
   enable_verbose: false
   layers:
     enable_app_usage: true
-    enable_sched: true
-    enable_mac: true
-    enable_rlc: true
-    enable_e1ap: false
-    enable_pdcp: false
-    enable_du_low: false
-    enable_ru: false
-    enable_executor: false
   periodicity:
     app_usage_report_period: 1000
     du_report_period: 1000
     cu_cp_report_period: 1000
-
+    cu_up_report_period: 1000
 
 #pcap:
 #  mac_enable: false                                                                           # Set to true to enable MAC-layer PCAPs.
