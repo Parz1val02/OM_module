@@ -62,18 +62,41 @@ log:
   cu_level: warning
   du_level: warning
 
-pcap:
-  mac_enable: false                                                                           # Set to true to enable MAC-layer PCAPs.
-  mac_filename: /mnt/srsran/gnb_mac.pcap                                                      # Path where the MAC PCAP is stored.
-  ngap_enable: false                                                                          # Set to true to enable NGAP PCAPs.
-  ngap_filename: /mnt/srsran/gnb_ngap.pcap                                                    # Path where the NGAP PCAP is stored.
-  f1ap_enable: false                                                                          # Set to true to enable F1AP PCAPs.
-  f1ap_filename: /mnt/srsran/gnb_f1ap.pcap                                                    # Path where the F1AP PCAP is stored.
-  e1ap_enable: false                                                                          # Set to true to enable E1AP PCAPs.
-  e1ap_filename: /mnt/srsran/gnb_e1ap.pcap                                                    # Path where the E1AP PCAP is stored.
-  e2ap_enable: false                                                                          # Set to true to enable E2AP PCAPs.
-  e2ap_cu_cp_filename: /mnt/srsran/cu_cp_e2ap.pcap                                            # Path where E2AP CU-CP PCAP is stored.
-  e2ap_cu_up_filename: /mnt/srsran/cu_up_e2ap.pcap                                            # Path where E2AP CU-UP PCAP is stored.
-  e2ap_du_filename: /mnt/srsran/du_e2ap.pcap                                                  # Path where E2AP CU PCAP is stored.
-  n3_enable: false                                                                            # Set to true to enable N3 PCAPs.
-  n3_filename: /mnt/srsran/gnb_n3.pcap                                                        # Path where the N3 PCAP is stored.
+metrics:
+  autostart_stdout_metrics: false
+  enable_json: true
+  addr: CHONO_IP
+  port: CHONO_PORT
+  enable_log: false
+  enable_verbose: false
+  layers:
+    enable_app_usage: true
+    enable_sched: true
+    enable_mac: true
+    enable_rlc: true
+    enable_e1ap: false
+    enable_pdcp: false
+    enable_du_low: false
+    enable_ru: false
+    enable_executor: false
+  periodicity:
+    app_usage_report_period: 1000
+    du_report_period: 1000
+    cu_cp_report_period: 1000
+
+
+#pcap:
+#  mac_enable: false                                                                           # Set to true to enable MAC-layer PCAPs.
+#  mac_filename: /mnt/srsran/gnb_mac.pcap                                                      # Path where the MAC PCAP is stored.
+#  ngap_enable: false                                                                          # Set to true to enable NGAP PCAPs.
+#  ngap_filename: /mnt/srsran/gnb_ngap.pcap                                                    # Path where the NGAP PCAP is stored.
+#  f1ap_enable: false                                                                          # Set to true to enable F1AP PCAPs.
+#  f1ap_filename: /mnt/srsran/gnb_f1ap.pcap                                                    # Path where the F1AP PCAP is stored.
+#  e1ap_enable: false                                                                          # Set to true to enable E1AP PCAPs.
+#  e1ap_filename: /mnt/srsran/gnb_e1ap.pcap                                                    # Path where the E1AP PCAP is stored.
+#  e2ap_enable: false                                                                          # Set to true to enable E2AP PCAPs.
+#  e2ap_cu_cp_filename: /mnt/srsran/cu_cp_e2ap.pcap                                            # Path where E2AP CU-CP PCAP is stored.
+#  e2ap_cu_up_filename: /mnt/srsran/cu_up_e2ap.pcap                                            # Path where E2AP CU-UP PCAP is stored.
+#  e2ap_du_filename: /mnt/srsran/du_e2ap.pcap                                                  # Path where E2AP CU PCAP is stored.
+#  n3_enable: false                                                                            # Set to true to enable N3 PCAPs.
+#  n3_filename: /mnt/srsran/gnb_n3.pcap                                                        # Path where the N3 PCAP is stored.

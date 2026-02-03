@@ -192,6 +192,22 @@ services:
       retries: 3
       start_period: 30s
 
+  srsran-metrics-tap:
+    build: ./metrics-tap
+    image: srsran-metrics-tap
+    container_name: srsran-metrics-tap
+    env_file:
+      - .env
+    environment:
+      - CHONO_IP=${CHONO_IP}
+      - CHONO_PORT=${CHONO_PORT}
+    networks:
+      default:
+        ipv4_address: ${CHONO_IP}
+    ports:
+      - "${CHONO_PORT}:${CHONO_PORT}/udp"
+    restart: unless-stopped
+
 networks:
   default:
     name: docker_open5gs_default
