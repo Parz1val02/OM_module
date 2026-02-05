@@ -1,51 +1,53 @@
 package main
 
 import (
-	"fmt"
+	"encoding/json"
 	"log"
-	"net"
 	"os"
+	"time"
+
+	"github.com/gorilla/websocket"
 )
 
-func getenv(key, def string) string {
-	if v := os.Getenv(key); v != "" {
-		return v
-	}
-	return def
-}
-
 func main() {
-	addr := getenv("CHONO_IP", "0.0.0.0")
-	port := getenv("CHONO_PORT", "55555")
-
-	udpAddr, err := net.ResolveUDPAddr("udp", addr+":"+port)
-	if err != nil {
-		log.Fatalf("resolve addr failed: %v", err)
+	SRS_GNB_IP := os.Getenv("SRS_GNB_IP")
+	if SRS_GNB_IP == "" {
+		log.Fatal("SRS_GNB_IP not set")
 	}
 
-	conn, err := net.ListenUDP("udp", udpAddr)
+	conn, _, err := websocket.DefaultDialer.Dial("ws://"+SRS_GNB_IP+":8001", nil)
 	if err != nil {
-		log.Fatalf("listen failed: %v", err)
+		log.Fatal("dial error:", err)
 	}
 	defer func() {
 		err = conn.Close()
 	}()
 
-	log.Printf("📡 srsRAN metrics listener started on %s:%s\n", addr, port)
+	sub := map[string]string{"cmd": "metrics_subscribe"}
+	if err := conn.WriteJSON(sub); err != nil {
+		log.Fatal("subscribe error:", err)
+	}
 
-	buf := make([]byte, 1024*1024)
+	log.Println("✅ Subscribed to gNB metrics")
 
 	for {
-		n, remoteAddr, err := conn.ReadFromUDP(buf)
+		_, msg, err := conn.ReadMessage()
 		if err != nil {
-			log.Printf("read error: %v", err)
+			log.Println("connection closed:", err)
+			time.Sleep(time.Second)
+			return
+		}
+
+		var metric map[string]any
+		if err := json.Unmarshal(msg, &metric); err != nil {
 			continue
 		}
 
-		fmt.Println("--------------------------------------------------")
-		fmt.Printf("From: %s\n", remoteAddr.String())
-		fmt.Printf("Payload (%d bytes):\n", n)
-		fmt.Println(string(buf[:n]))
-		fmt.Println("--------------------------------------------------")
+		if _, ok := metric["cmd"]; ok {
+			continue
+		}
+
+		pretty, _ := json.MarshalIndent(metric, "", "  ")
+		log.Println(string(pretty))
 	}
 }

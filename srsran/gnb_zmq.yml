@@ -62,11 +62,12 @@ log:
   cu_level: warning
   du_level: warning
 
+remote_control:
+  bind_addr: 0.0.0.0
+  enabled: true
 metrics:
   autostart_stdout_metrics: false
   enable_json: true
-  addr: CHONO_IP
-  port: CHONO_PORT
   enable_log: false
   enable_verbose: false
   layers:

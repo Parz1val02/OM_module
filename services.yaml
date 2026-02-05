@@ -199,13 +199,10 @@ services:
     env_file:
       - .env
     environment:
-      - CHONO_IP=${CHONO_IP}
-      - CHONO_PORT=${CHONO_PORT}
+      - SRS_GNB_IP=${SRS_GNB_IP}
     networks:
       default:
         ipv4_address: ${CHONO_IP}
-    ports:
-      - "${CHONO_PORT}:${CHONO_PORT}/udp"
     restart: unless-stopped
 
 networks:

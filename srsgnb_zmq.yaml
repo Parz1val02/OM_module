@@ -19,6 +19,7 @@ services:
       - "2152/udp"
       - "2000/tcp"
       - "2001/tcp"
+      - "8001/tcp"
     networks:
       default:
         ipv4_address: ${SRS_GNB_IP}
