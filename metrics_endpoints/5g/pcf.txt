@@ -1,0 +1,48 @@
+# HELP fivegs_pcffunction_pa_policyamassoreq Number of AM policy association requests
+# TYPE fivegs_pcffunction_pa_policyamassoreq counter
+fivegs_pcffunction_pa_policyamassoreq{plmnid="00101",snssai="1"} 1
+
+# HELP fivegs_pcffunction_pa_policyamassosucc Number of successful AM policy associations
+# TYPE fivegs_pcffunction_pa_policyamassosucc counter
+fivegs_pcffunction_pa_policyamassosucc{plmnid="00101",snssai="1"} 1
+
+# HELP fivegs_pcffunction_pa_policysmassoreq Number of SM policy association requests
+# TYPE fivegs_pcffunction_pa_policysmassoreq counter
+fivegs_pcffunction_pa_policysmassoreq{plmnid="00101",snssai="1"} 1
+
+# HELP fivegs_pcffunction_pa_policysmassosucc Number of successful SM policy associations
+# TYPE fivegs_pcffunction_pa_policysmassosucc counter
+fivegs_pcffunction_pa_policysmassosucc{plmnid="00101",snssai="1"} 1
+
+# HELP fivegs_pcffunction_pa_sessionnbr Active Sessions
+# TYPE fivegs_pcffunction_pa_sessionnbr gauge
+fivegs_pcffunction_pa_sessionnbr{plmnid="00101",snssai="1"} 1
+
+# HELP process_max_fds Maximum number of open file descriptors.
+# TYPE process_max_fds gauge
+process_max_fds 1048576
+
+# HELP process_virtual_memory_max_bytes Maximum amount of virtual memory available in bytes.
+# TYPE process_virtual_memory_max_bytes gauge
+process_virtual_memory_max_bytes -1
+
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE process_cpu_seconds_total gauge
+process_cpu_seconds_total 0
+
+# HELP process_virtual_memory_bytes Virtual memory size in bytes.
+# TYPE process_virtual_memory_bytes gauge
+process_virtual_memory_bytes 194859008
+
+# HELP process_resident_memory_bytes Resident memory size in bytes.
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 21917696
+
+# HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
+# TYPE process_start_time_seconds gauge
+process_start_time_seconds 2111531
+
+# HELP process_open_fds Number of open file descriptors.
+# TYPE process_open_fds gauge
+process_open_fds 29
+

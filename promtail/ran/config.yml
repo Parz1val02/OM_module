@@ -1,0 +1,45 @@
+server:
+  http_listen_port: 9081
+
+positions:
+  filename: /tmp/positions-ran.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: ran-srslte
+    static_configs:
+      - targets: [localhost]
+        labels:
+          job: ran
+          domain: ran
+          rat: 4g
+          component: enb
+          __path__: /var/log/srslte/enb.log
+
+      - targets: [localhost]
+        labels:
+          job: ran
+          domain: ran
+          rat: 4g
+          component: ue_4g
+          __path__: /var/log/srslte/ue_4g.log
+
+  - job_name: ran-srsran
+    static_configs:
+      - targets: [localhost]
+        labels:
+          job: ran
+          domain: ran
+          rat: 5g
+          component: gnb
+          __path__: /var/log/srsran/gnb.log
+
+      - targets: [localhost]
+        labels:
+          job: ran
+          domain: ran
+          rat: 5g
+          component: ue_5g
+          __path__: /var/log/srsran/ue_5g.log

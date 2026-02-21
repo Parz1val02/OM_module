@@ -1,0 +1,231 @@
+services:
+  om-module:
+    build: ./om-module
+    image: docker_om_module
+    container_name: om-module
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    environment:
+      - STRUCTURED_LOGGING=true
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: ${OM_MODULE_IP}
+  #om-module:
+  #  build: ./om-module
+  #  image: docker_om_module
+  #  container_name: om-module
+  #  env_file:
+  #    - .env
+  #  volumes:
+  #    - ./om-module:/mnt/om-module
+  #    - /var/run/docker.sock:/var/run/docker.sock
+  #    - prometheus-configs:/etc/prometheus/configs
+  #    - grafana-dashboards:/etc/grafana/provisioning/dashboards
+  #    - open5gs_logs:/var/log/open5gs:ro
+  #    - ran_5g_logs:/var/log/srsran:ro
+  #    - ran_4g_logs:/var/log/srslte:ro
+  #  ports:
+  #    - "9091-9096:9091-9096/tcp"  # Open5GS collectors
+  #    - "8080-8081:8080-8081/tcp"  # Infrastructure collectors
+  #    - "8082:8082/tcp"            # Log parser
+  #    - "8084:8084/tcp"            # RAN metrics collector
+  #  networks:
+  #    default:
+  #      ipv4_address: ${OM_MODULE_IP}
+  #  depends_on:
+  #    loki:
+  #      condition: service_healthy
+  #  environment:
+  #    - PROMETHEUS_CONFIG_PATH=/etc/prometheus/configs
+  #    - DOCKER_NETWORK=docker_open5gs_default
+  #    - LOG_PARSER_ENABLED=true
+  #    - LOKI_URL=http://loki:3100
+  #    - STRUCTURED_LOGGING=true
+  #  restart: unless-stopped
+  #  healthcheck:
+  #    test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+  #    interval: 30s
+  #    timeout: 10s
+  #    retries: 3
+  #    start_period: 10s
+
+  loki:
+    image: grafana/loki:3.0.0
+    container_name: loki
+    command: -config.file=/etc/loki/local-config.yml
+    env_file:
+      - .env
+    volumes:
+      - loki-data:/loki
+      - ./loki:/etc/loki:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3100:3100"
+    networks:
+      default:
+        ipv4_address: ${LOKI_IP}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3100/ready"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  promtail-core:
+    image: grafana/promtail:3.0.0
+    container_name: promtail-core
+    command: -config.file=/etc/promtail/config.yml
+    env_file:
+      - .env
+    volumes:
+      - ./promtail/core/:/etc/promtail
+      - open5gs_logs:/var/log/open5gs:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      default:
+        ipv4_address: ${PROMTAIL_CORE_IP}
+    depends_on:
+      loki:
+        condition: service_healthy
+    restart: unless-stopped
+
+  promtail-ran:
+    image: grafana/promtail:3.0.0
+    container_name: promtail-ran
+    command: -config.file=/etc/promtail/config.yml
+    env_file:
+      - .env
+    volumes:
+      - ./promtail/ran:/etc/promtail
+      - ran_5g_logs:/var/log/srsran:ro
+      - ran_4g_logs:/var/log/srslte:ro
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      default:
+        ipv4_address: ${PROMTAIL_RAN_IP}
+    depends_on:
+      loki:
+        condition: service_healthy
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    env_file:
+      - .env
+    volumes:
+      - prometheus-configs:/etc/prometheus/configs:ro
+      - prometheus-data:/prometheus
+      - ./prometheus:/etc/prometheus
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    command:
+      - --config.file=/etc/prometheus/configs/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.console.libraries=/etc/prometheus/console_libraries
+      - --web.console.templates=/etc/prometheus/consoles
+      - --storage.tsdb.retention.time=200h
+      - --web.enable-lifecycle
+      - --web.route-prefix=/
+      - --web.external-url=http://localhost:9090
+    expose:
+      - "9090/tcp"
+    ports:
+      - "9090:9090/tcp"
+    networks:
+      default:
+        ipv4_address: ${METRICS_IP}
+    depends_on:
+      loki:
+        condition: service_healthy
+      #om-module:
+      #  condition: service_healthy
+
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  grafana:
+    image: grafana/grafana:11.3.0
+    container_name: grafana
+    env_file:
+      - .env
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - grafana-dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana:/mnt/grafana
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_PATHS_DATA=/var/lib/grafana
+      - METRICS_IP=${METRICS_IP}
+      - OM_MODULE_IP=${OM_MODULE_IP}
+      - GF_FEATURE_TOGGLES_ENABLE=publicDashboards
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+    expose:
+      - "3000/tcp"
+    ports:
+      - "3000:3000/tcp"
+    networks:
+      default:
+        ipv4_address: ${GRAFANA_IP}
+    depends_on:
+      prometheus:
+        condition: service_healthy
+      loki:
+        condition: service_healthy
+      promtail-core:
+        condition: service_started
+      promtail-ran:
+        condition: service_started
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+networks:
+  default:
+    name: docker_open5gs_default
+    ipam:
+      config:
+        - subnet: ${TEST_NETWORK}
+
+volumes:
+  prometheus-configs:
+    name: docker_open5gs_prometheus_configs
+  prometheus-data:
+    name: docker_open5gs_prometheus_data
+  grafana-data:
+    name: docker_open5gs_grafana_data
+  grafana-dashboards:
+    name: docker_open5gs_grafana_dashboards
+  loki-data:
+    name: docker_open5gs_loki_data
+  ran_5g_logs:
+    name: ran_5g_logs
+  ran_4g_logs:
+    name: ran_4g_logs
+  open5gs_logs:
+    external: true
+    name: docker_open5gs_logs
