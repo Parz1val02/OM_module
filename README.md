@@ -16,6 +16,11 @@ docker tag ghcr.io/herlesupreeth/docker_srslte:master docker_srslte
 docker pull ghcr.io/herlesupreeth/docker_srsran:master
 docker tag ghcr.io/herlesupreeth/docker_srsran:master docker_srsran
 ```
+For ueransim components:
+```
+docker pull ghcr.io/herlesupreeth/docker_ueransim:master
+docker tag ghcr.io/herlesupreeth/docker_ueransim:master docker_ueransim
+```
 
 ## Deployments
 
@@ -28,22 +33,22 @@ docker compose -f srsue_4g_zmq.yaml up -d && docker container attach srsue_zmq
 
 ### 5G core deployment
 docker compose -f 5g_core_only.yaml up -d
+
+> Option 1 with srsran
 #### srsRAN ZMQ gNB (RF simulated)
 docker compose -f srsgnb_zmq.yaml up -d && docker container attach srsgnb_zmq
 #### srsRAN ZMQ 5G UE (RF simulated)
 docker compose -f srsue_5g_zmq.yaml up -d && docker container attach srsue_5g_zmq
 
-### O&M services
-#### Grafana and Prometheus deployment
-docker compose -f services.yaml up --build -d && docker container attach om-module
+> Option 2 with ueransim
+# UERANSIM gNB (RF simulated)
+docker compose -f nr-gnb.yaml up -d && docker container attach nr_gnb
+# UERANSIM NR-UE (RF simulated)
+docker compose -f nr-ue.yaml up -d && docker container attach nr_ue
 
-> Officially supported metrics endpoints in open5gs
->- amf (5g)
->- pcf (5g)
->- smf (4g/5g)
->- upf (4g/5g)
->- pcrf (4g)
->- mme (4g)
+### O&M services
+#### Observability stack deployment
+docker compose -f services.yaml up --build -d
 
 ## Access UIs
 

@@ -78,12 +78,12 @@ metrics:
     cu_cp_report_period: 5000
     cu_up_report_period: 5000
 
-trace:
-  filename: /logs/gnb_tracing.log       # Optional TEXT. Set to a valid file path to enable tracing and write the trace to the file.
-  nof_tracing_events_after_severe: 0    # Optional UINT (0). Number of events to write prior to a severe event. Set to zero for writing all events.
-  layers:
-    du_high_enable: true               # Optional BOOLEAN (false). Enables tracing for DU-high executors.
-    phy_enable: true                   # Optional BOOLEAN (false). Enables tracing for physical layer executors.
+#trace:
+#  filename: /logs/gnb_tracing.log       # Optional TEXT. Set to a valid file path to enable tracing and write the trace to the file.
+#  nof_tracing_events_after_severe: 0    # Optional UINT (0). Number of events to write prior to a severe event. Set to zero for writing all events.
+#  layers:
+#    du_high_enable: true               # Optional BOOLEAN (false). Enables tracing for DU-high executors.
+#    phy_enable: true                   # Optional BOOLEAN (false). Enables tracing for physical layer executors.
 
 #pcap:
 #  mac_enable: false                                                                           # Set to true to enable MAC-layer PCAPs.
