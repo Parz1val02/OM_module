@@ -23,25 +23,24 @@ docker tag ghcr.io/herlesupreeth/docker_ueransim:master docker_ueransim
 
 ## Deployments
 
-### 4G core deployment
-docker compose -f 4g_core_only.yaml up -d
-#### srsRAN ZMQ eNB (RF simulated)
-docker compose -f srsenb_zmq.yaml up -d && docker container attach srsenb_zmq
-#### srsRAN ZMQ 4G UE (RF simulated)
-docker compose -f srsue_4g_zmq.yaml up -d && docker container attach srsue_zmq
-
-### 5G core deployment
-docker compose -f 5g_core_only.yaml up -d
+### 4G core and RAN deployment
+docker compose -f 4G_core.yaml up -d
+#### 4G srsRAN (eNB + UE)
+docker compose -f ran.yaml --profile ran-4g-srs up -d
+docker container attach srsenb_zmq
+docker container attach srsue_zmq
+### 5G core and RAN deployment
+docker compose -f 5G_core.yaml up -d
 > Option 1 with srsran
-#### srsRAN ZMQ gNB (RF simulated)
-docker compose -f srsgnb_zmq.yaml up -d && docker container attach srsgnb_zmq
-#### srsRAN ZMQ 5G UE (RF simulated)
-docker compose -f srsue_5g_zmq.yaml up -d && docker container attach srsue_5g_zmq
+#### 5G srsRAN (gNB + UE)
+docker compose -f ran.yaml --profile ran-5g-srs up -d
+docker container attach srsgnb_zmq
+docker container attach srsue_5g_zmq
 > Option 2 with ueransim
-#### UERANSIM gNB (RF simulated)
-docker compose -f nr-gnb.yaml up -d && docker container attach nr_gnb
-#### UERANSIM NR-UE (RF simulated)
-docker compose -f nr-ue.yaml up -d && docker container attach nr_ue
+#### 5G UERANSIM (gNB + UE)
+docker compose -f ran.yaml --profile ran-5g-ueransim up -d
+docker container attach nr_gnb
+docker container attach nr_ue
 
 ### O&M services
 #### Observability stack deployment

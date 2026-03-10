@@ -1,0 +1,162 @@
+services:
+  srsenb_zmq:
+    image: docker_srslte
+    container_name: srsenb_zmq
+    stdin_open: true
+    tty: true
+    privileged: true
+    volumes:
+      - ./srslte:/mnt/srslte
+      - ran_4g_logs:/logs
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=enb_zmq
+    expose:
+      - "36412/sctp"
+      - "2152/udp"
+      - "2000/tcp"
+      - "2001/tcp"
+    networks:
+      default:
+        ipv4_address: ${SRS_ENB_IP}
+    profiles:
+      - ran-4g-srs
+  srsue_zmq:
+    image: docker_srslte
+    container_name: srsue_zmq
+    stdin_open: true
+    tty: true
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    volumes:
+      - ./srslte:/mnt/srslte
+      - ran_4g_logs:/logs
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=ue_zmq
+    expose:
+      - "2000/tcp"
+      - "2001/tcp"
+    networks:
+      default:
+        ipv4_address: ${SRS_UE_IP}
+    profiles:
+      - ran-4g-srs
+  srsgnb_zmq:
+    image: docker_srsran
+    container_name: srsgnb_zmq
+    stdin_open: true
+    tty: true
+    privileged: true
+    volumes:
+      - ./srsran:/mnt/srsran
+      - ran_5g_logs:/logs
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=gnb_zmq
+    expose:
+      - "38412/sctp"
+      - "2152/udp"
+      - "2000/tcp"
+      - "2001/tcp"
+      - "8001/tcp"
+    networks:
+      default:
+        ipv4_address: ${SRS_GNB_IP}
+    profiles:
+      - ran-5g-srs
+  srsue_5g_zmq:
+    image: docker_srslte
+    container_name: srsue_5g_zmq
+    stdin_open: true
+    tty: true
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    volumes:
+      - ./srslte:/mnt/srslte
+      - ran_5g_logs:/logs
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=ue_5g_zmq
+    expose:
+      - "2000/tcp"
+      - "2001/tcp"
+    networks:
+      default:
+        ipv4_address: ${SRS_UE_IP}
+    profiles:
+      - ran-5g-srs
+  nr_gnb:
+    image: docker_ueransim
+    container_name: nr_gnb
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./ueransim:/mnt/ueransim
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=ueransim-gnb
+    expose:
+      - "38412/sctp"
+      - "2152/udp"
+      - "4997/udp"
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    networks:
+      default:
+        ipv4_address: ${NR_GNB_IP}
+    profiles:
+      - ran-5g-ueransim
+  nr_ue:
+    image: docker_ueransim
+    container_name: nr_ue
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./ueransim:/mnt/ueransim
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=ueransim-ue
+    expose:
+      - "4997/udp"
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    networks:
+      default:
+        ipv4_address: ${NR_UE_IP}
+    profiles:
+      - ran-5g-ueransim
+
+networks:
+  default:
+    name: docker_open5gs_default
+    external: true
+
+volumes:
+  ran_4g_logs:
+    name: ran_4g_logs
+  ran_5g_logs:
+    name: ran_5g_logs
+

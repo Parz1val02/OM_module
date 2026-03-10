@@ -28,23 +28,23 @@ scrape_configs:
     static_configs:
       - targets: ['pcrf:9091']
 
-  - job_name: 'amf ue info'
-    static_configs:
-      - targets: ['amf:9091']
-    metrics_path: /ue-info
-  - job_name: 'amf gnb info'
-    static_configs:
-      - targets: ['amf:9091']
-    metrics_path: /gnb-info
-  - job_name: 'mme ue info'
-    static_configs:
-      - targets: ['mme:9091']
-    metrics_path: /ue-info
-  - job_name: 'amf gnb info'
-    static_configs:
-      - targets: ['mme:9091']
-    metrics_path: /gnb-info
-  - job_name: 'smf pdu info'
-    static_configs:
-      - targets: ['smf:9091']
-    metrics_path: /pdu-info
+#  - job_name: 'amf ue info'
+#    static_configs:
+#      - targets: ['amf:9091']
+#    metrics_path: /ue-info
+#  - job_name: 'amf gnb info'
+#    static_configs:
+#      - targets: ['amf:9091']
+#    metrics_path: /gnb-info
+#  - job_name: 'mme ue info'
+#    static_configs:
+#      - targets: ['mme:9091']
+#    metrics_path: /ue-info
+#  - job_name: 'amf gnb info'
+#    static_configs:
+#      - targets: ['mme:9091']
+#    metrics_path: /gnb-info
+#  - job_name: 'smf pdu info'
+#    static_configs:
+#      - targets: ['smf:9091']
+#    metrics_path: /pdu-info
