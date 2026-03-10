@@ -26,21 +26,21 @@ docker tag ghcr.io/herlesupreeth/docker_ueransim:master docker_ueransim
 ### 4G core and RAN deployment
 docker compose -f 4G_core.yaml up -d
 #### 4G srsRAN (eNB + UE)
-docker compose -f ran.yaml --profile ran-4g-srs up -d
-docker container attach srsenb_zmq
-docker container attach srsue_zmq
+docker compose -f ran.yaml --profile ran-4g-srs up -d<br/>
+docker container attach srsenb_zmq<br/>
+docker container attach srsue_zmq<br/>
 ### 5G core and RAN deployment
 docker compose -f 5G_core.yaml up -d
 > Option 1 with srsran
 #### 5G srsRAN (gNB + UE)
-docker compose -f ran.yaml --profile ran-5g-srs up -d
-docker container attach srsgnb_zmq
-docker container attach srsue_5g_zmq
+docker compose -f ran.yaml --profile ran-5g-srs up -d<br/>
+docker container attach srsgnb_zmq<br/>
+docker container attach srsue_5g_zmq<br/>
 > Option 2 with ueransim
 #### 5G UERANSIM (gNB + UE)
-docker compose -f ran.yaml --profile ran-5g-ueransim up -d
-docker container attach nr_gnb
-docker container attach nr_ue
+docker compose -f ran.yaml --profile ran-5g-ueransim up -d<br/>
+docker container attach nr_gnb<br/>
+docker container attach nr_ue<br/>
 
 ### O&M services
 #### Observability stack deployment
