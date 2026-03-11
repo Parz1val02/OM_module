@@ -47,7 +47,7 @@ services:
       - COMPONENT_NAME=hss
     volumes:
       - ./hss:/mnt/hss
-      - open5gs_logs:/open5gs/install/var/log/open5gs
+      - open5gs_4g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     depends_on:
@@ -73,7 +73,7 @@ services:
       - COMPONENT_NAME=sgwc
     volumes:
       - ./sgwc:/mnt/sgwc
-      - open5gs_logs:/open5gs/install/var/log/open5gs
+      - open5gs_4g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -95,7 +95,7 @@ services:
       - COMPONENT_NAME=sgwu
     volumes:
       - ./sgwu:/mnt/sgwu
-      - open5gs_logs:/open5gs/install/var/log/open5gs
+      - open5gs_4g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -115,7 +115,7 @@ services:
       - DEPLOY_MODE=4G
     volumes:
       - ./smf:/mnt/smf
-      - open5gs_logs:/open5gs/install/var/log/open5gs
+      - open5gs_4g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -130,6 +130,10 @@ services:
     networks:
       default:
         ipv4_address: ${SMF_IP}
+    labels:
+      prometheus.scrape: "true"
+      prometheus.port: "9091"
+      prometheus.path: "/metrics"
 
   upf:
     image: docker_open5gs
@@ -142,7 +146,7 @@ services:
       - COMPONENT_NAME=upf
     volumes:
       - ./upf:/mnt/upf
-      - open5gs_logs:/open5gs/install/var/log/open5gs
+      - open5gs_4g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -157,6 +161,10 @@ services:
     networks:
       default:
         ipv4_address: ${UPF_IP}
+    labels:
+      prometheus.scrape: "true"
+      prometheus.port: "9091"
+      prometheus.path: "/metrics"
 
   mme:
     image: docker_open5gs
@@ -173,7 +181,7 @@ services:
       - COMPONENT_NAME=mme
     volumes:
       - ./mme:/mnt/mme
-      - open5gs_logs:/open5gs/install/var/log/open5gs
+      - open5gs_4g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -187,6 +195,10 @@ services:
     networks:
       default:
         ipv4_address: ${MME_IP}
+    labels:
+      prometheus.scrape: "true"
+      prometheus.port: "9091"
+      prometheus.path: "/metrics"
 
   pcrf:
     image: docker_open5gs
@@ -199,7 +211,7 @@ services:
       - mongo
     volumes:
       - ./pcrf:/mnt/pcrf
-      - open5gs_logs:/open5gs/install/var/log/open5gs
+      - open5gs_4g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -211,10 +223,17 @@ services:
     networks:
       default:
         ipv4_address: ${PCRF_IP}
+    labels:
+      prometheus.scrape: "true"
+      prometheus.port: "9091"
+      prometheus.path: "/metrics"
 
 networks:
   default:
     name: docker_open5gs_default
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: "1450"
     ipam:
       config:
         - subnet: ${TEST_NETWORK}
@@ -222,5 +241,5 @@ networks:
 volumes:
   mongodbdata:
     name: docker_open5gs_mongodbdata
-  open5gs_logs:
-    name: docker_open5gs_logs
+  open5gs_4g_logs:
+    name: open5gs_4g_logs

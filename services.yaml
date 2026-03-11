@@ -1,18 +1,18 @@
 services:
-  om-module:
-    build: ./om-module
-    image: docker_om_module
-    container_name: om-module
-    env_file:
-      - .env
-    ports:
-      - "8080:8080"
-    environment:
-      - STRUCTURED_LOGGING=true
-    restart: unless-stopped
-    networks:
-      default:
-        ipv4_address: ${OM_MODULE_IP}
+  #om-module:
+  #  build: ./om-module
+  #  image: docker_om_module
+  #  container_name: om-module
+  #  env_file:
+  #    - .env
+  #  ports:
+  #    - "8080:8080"
+  #  environment:
+  #    - STRUCTURED_LOGGING=true
+  #  restart: unless-stopped
+  #  networks:
+  #    default:
+  #      ipv4_address: ${OM_MODULE_IP}
   #om-module:
   #  build: ./om-module
   #  image: docker_om_module
@@ -84,7 +84,9 @@ services:
       - .env
     volumes:
       - ./promtail/core/:/etc/promtail
-      - open5gs_logs:/var/log/open5gs:ro
+      - promtail_positions:/tmp/promtail
+      - open5gs_5g_logs:/var/log/open5gs/5g:ro
+      - open5gs_4g_logs:/var/log/open5gs/4g:ro
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/timezone:/etc/timezone:ro
@@ -97,34 +99,37 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
-  promtail-ran:
-    image: grafana/promtail:3.0.0
-    container_name: promtail-ran
-    command: -config.file=/etc/promtail/config.yml
-    env_file:
-      - .env
-    volumes:
-      - ./promtail/ran:/etc/promtail
-      - ran_5g_logs:/var/log/srsran:ro
-      - ran_4g_logs:/var/log/srslte:ro
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    networks:
-      default:
-        ipv4_address: ${PROMTAIL_RAN_IP}
-    depends_on:
-      loki:
-        condition: service_healthy
-    restart: unless-stopped
+  #promtail-ran:
+  #  image: grafana/promtail:3.0.0
+  #  container_name: promtail-ran
+  #  command: -config.file=/etc/promtail/config.yml
+  #  env_file:
+  #    - .env
+  #  volumes:
+  #    - ./promtail/ran:/etc/promtail
+  #    - ran_5g_logs:/var/log/srsran:ro
+  #    - ran_4g_logs:/var/log/srslte:ro
+  #    - /etc/timezone:/etc/timezone:ro
+  #    - /etc/localtime:/etc/localtime:ro
+  #  networks:
+  #    default:
+  #      ipv4_address: ${PROMTAIL_RAN_IP}
+  #  depends_on:
+  #    loki:
+  #      condition: service_healthy
+  #  restart: unless-stopped
 
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
+    user: "65534:1001"
     env_file:
       - .env
     volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
       - prometheus-configs:/etc/prometheus/configs:ro
       - prometheus-data:/prometheus
+      - ./prometheus/configs/:/etc/prometheus/configs
       - ./prometheus:/etc/prometheus
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -194,8 +199,8 @@ services:
         condition: service_healthy
       promtail-core:
         condition: service_started
-      promtail-ran:
-        condition: service_started
+      #promtail-ran:
+      #  condition: service_started
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
@@ -207,6 +212,9 @@ services:
 networks:
   default:
     name: docker_open5gs_default
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: "1450"
     ipam:
       config:
         - subnet: ${TEST_NETWORK}
@@ -226,6 +234,11 @@ volumes:
     name: ran_5g_logs
   ran_4g_logs:
     name: ran_4g_logs
-  open5gs_logs:
+  open5gs_5g_logs:
     external: true
-    name: docker_open5gs_logs
+    name: open5gs_5g_logs
+  open5gs_4g_logs:
+    external: true
+    name: open5gs_4g_logs
+  promtail_positions:
+    name: promtail_positions

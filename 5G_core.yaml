@@ -47,7 +47,7 @@ services:
       - COMPONENT_NAME=nrf
     volumes:
       - ./nrf:/mnt/nrf
-      - open5gs_logs:/open5gs/install/var/log/open5gs
+      - open5gs_5g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -67,7 +67,7 @@ services:
       - COMPONENT_NAME=scp
     volumes:
       - ./scp:/mnt/scp
-      - open5gs_logs:/open5gs/install/var/log/open5gs
+      - open5gs_5g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -88,7 +88,7 @@ services:
       - COMPONENT_NAME=ausf
     volumes:
       - ./ausf:/mnt/ausf
-      - open5gs_logs:/open5gs/install/var/log/open5gs
+      - open5gs_5g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -110,7 +110,7 @@ services:
       - COMPONENT_NAME=udr
     volumes:
       - ./udr:/mnt/udr
-      - open5gs_logs:/open5gs/install/var/log/open5gs
+      - open5gs_5g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -131,7 +131,7 @@ services:
       - COMPONENT_NAME=udm
     volumes:
       - ./udm:/mnt/udm
-      - open5gs_logs:/open5gs/install/var/log/open5gs
+      - open5gs_5g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -154,7 +154,7 @@ services:
       - DEPLOY_MODE=5G
     volumes:
       - ./smf:/mnt/smf
-      - open5gs_logs:/open5gs/install/var/log/open5gs
+      - open5gs_5g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -169,6 +169,10 @@ services:
     networks:
       default:
         ipv4_address: ${SMF_IP}
+    labels:
+      prometheus.scrape: "true"
+      prometheus.port: "9091"
+      prometheus.path: "/metrics"
 
   upf:
     image: docker_open5gs
@@ -183,7 +187,7 @@ services:
       - COMPONENT_NAME=upf
     volumes:
       - ./upf:/mnt/upf
-      - open5gs_logs:/open5gs/install/var/log/open5gs
+      - open5gs_5g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -198,6 +202,10 @@ services:
     networks:
       default:
         ipv4_address: ${UPF_IP}
+    labels:
+      prometheus.scrape: "true"
+      prometheus.port: "9091"
+      prometheus.path: "/metrics"
 
   amf:
     image: docker_open5gs
@@ -216,7 +224,7 @@ services:
       - COMPONENT_NAME=amf
     volumes:
       - ./amf:/mnt/amf
-      - open5gs_logs:/open5gs/install/var/log/open5gs
+      - open5gs_5g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -226,6 +234,10 @@ services:
     networks:
       default:
         ipv4_address: ${AMF_IP}
+    labels:
+      prometheus.scrape: "true"
+      prometheus.port: "9091"
+      prometheus.path: "/metrics"
 
   pcf:
     image: docker_open5gs
@@ -240,7 +252,7 @@ services:
       - COMPONENT_NAME=pcf
     volumes:
       - ./pcf:/mnt/pcf
-      - open5gs_logs:/open5gs/install/var/log/open5gs
+      - open5gs_5g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -249,6 +261,10 @@ services:
     networks:
       default:
         ipv4_address: ${PCF_IP}
+    labels:
+      prometheus.scrape: "true"
+      prometheus.port: "9091"
+      prometheus.path: "/metrics"
 
   bsf:
     image: docker_open5gs
@@ -263,7 +279,7 @@ services:
       - COMPONENT_NAME=bsf
     volumes:
       - ./bsf:/mnt/bsf
-      - open5gs_logs:/open5gs/install/var/log/open5gs
+      - open5gs_5g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -285,7 +301,7 @@ services:
       - COMPONENT_NAME=nssf
     volumes:
       - ./nssf:/mnt/nssf
-      - open5gs_logs:/open5gs/install/var/log/open5gs
+      - open5gs_5g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     expose:
@@ -297,6 +313,9 @@ services:
 networks:
   default:
     name: docker_open5gs_default
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: "1450"
     ipam:
       config:
         - subnet: ${TEST_NETWORK}
@@ -304,5 +323,5 @@ networks:
 volumes:
   mongodbdata:
     name: docker_open5gs_mongodbdata
-  open5gs_logs:
-    name: docker_open5gs_logs
+  open5gs_5g_logs:
+    name: open5gs_5g_logs

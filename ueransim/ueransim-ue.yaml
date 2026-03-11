@@ -1,5 +1,5 @@
 # IMSI number of the UE. IMSI = [MCC|MNC|MSISDN] (In total 15 or 16 digits)
-supi: 'imsi-UE1_IMSI'
+supi: 'imsi-UE2_IMSI'
 # Mobile Country Code value of HPLMN
 mcc: 'MCC'
 # Mobile Network Code value of HPLMN (2 or 3 digits)
@@ -14,9 +14,9 @@ opType: 'OP'
 # Authentication Management Field (AMF) value
 amf: 'UE1_AMF'
 # IMEI number of the device. It is used if no SUPI is provided
-imei: 'UE1_IMEI'
+imei: 'UE2_IMEI'
 # IMEISV number of the device. It is used if no SUPI and IMEI is provided
-imeiSv: 'UE1_IMEISV'
+imeiSv: 'UE2_IMEISV'
 
 # List of gNB IP addresses for Radio Link Simulation
 gnbSearchList:

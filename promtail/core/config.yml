@@ -2,22 +2,93 @@ server:
   http_listen_port: 9080
 
 positions:
-  filename: /tmp/positions-core.yaml
+  filename: /tmp/promtail/positions-core.yaml
 
 clients:
   - url: http://loki:3100/loki/api/v1/push
+    batchwait: 1s
+    batchsize: 102400
 
 scrape_configs:
-  - job_name: open5gs-logs
+
+  # ── 5G Core NF Logs ───────────────────────────────────────────────────────
+  - job_name: open5gs-5g-logs
     static_configs:
       - targets: [localhost]
         labels:
           job: open5gs
           domain: core
-          __path__: /var/log/open5gs/*.log
-  - job_name: docker-containers
-    docker_sd_configs:
-      - host: unix:///var/run/docker.sock
-    relabel_configs:
-      - source_labels: [__meta_docker_container_name]
-        target_label: container
+          generation: "5g"
+          __path__: /var/log/open5gs/5g/*.log
+
+    pipeline_stages:
+      - regex:
+          source: filename
+          expression: '/var/log/open5gs/5g/(?P<nf>[^.]+)\.log'
+      - labels:
+          nf:                # amf, smf, upf, pcf, nrf, ausf, udm, udr, nssf, bsf, scp
+
+      - regex:
+          expression: '^(?P<timestamp>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}\.\d+)\s+\[(?P<level>\w+)\]\s+\S+:\s+(?P<message>.*)'
+      - timestamp:
+          source: timestamp
+          format: "2006/01/02 15:04:05.000"
+      - labels:
+          level:
+
+      - regex:
+          source: message
+          expression: 'imsi[:\s-]*(?P<imsi>\d{15})'
+      - labels:
+          imsi:
+
+      - regex:
+          source: message
+          expression: '(?i)\b(?P<procedure>registration|authentication|pdu.session|deregistration)\b'
+      - labels:
+          procedure:
+
+      - match:
+          selector: '{level="DEBUG"}'
+          action: drop
+
+  # ── 4G Core NF Logs ───────────────────────────────────────────────────────
+  - job_name: open5gs-4g-logs
+    static_configs:
+      - targets: [localhost]
+        labels:
+          job: open5gs
+          domain: core
+          generation: "4g"
+          __path__: /var/log/open5gs/4g/*.log
+
+    pipeline_stages:
+      - regex:
+          source: filename
+          expression: '/var/log/open5gs/4g/(?P<nf>[^.]+)\.log'
+      - labels:
+          nf:                # mme, sgwc, sgwu, smf, upf, hss, pcrf
+
+      - regex:
+          expression: '^(?P<timestamp>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}\.\d+)\s+\[(?P<level>\w+)\]\s+\S+:\s+(?P<message>.*)'
+      - timestamp:
+          source: timestamp
+          format: "2006/01/02 15:04:05.000"
+      - labels:
+          level:
+
+      - regex:
+          source: message
+          expression: 'imsi[:\s-]*(?P<imsi>\d{15})'
+      - labels:
+          imsi:
+
+      - regex:
+          source: message
+          expression: '(?i)\b(?P<procedure>attach|detach|authentication|handover|bearer|location.update)\b'
+      - labels:
+          procedure:
+
+      - match:
+          selector: '{level="DEBUG"}'
+          action: drop
