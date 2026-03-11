@@ -231,9 +231,6 @@ services:
 networks:
   default:
     name: docker_open5gs_default
-    driver: bridge
-    driver_opts:
-      com.docker.network.driver.mtu: "1450"
     ipam:
       config:
         - subnet: ${TEST_NETWORK}
