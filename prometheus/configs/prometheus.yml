@@ -15,10 +15,9 @@ scrape_configs:
         regex: "true"
         action: keep
 
-      # To add ports to scrape metrics different than 9091 use |
       # Drop any target whose private port does NOT match the prometheus.port label
       - source_labels: [__meta_docker_port_private]
-        regex: "9091"
+        regex: "9091|8080"
         action: keep
 
       # Build the scrape link using the ip assigned to the container
