@@ -24,6 +24,12 @@ services:
         ipv4_address: ${SRS_ENB_IP}
     profiles:
       - ran-4g-srs
+    labels:
+      om.domain: "ran"
+      om.nf: "enb"
+      om.generation: "4g"
+      om.project: "srslte"
+
   srsue_zmq:
     image: docker_srslte
     container_name: srsue_zmq
@@ -49,6 +55,12 @@ services:
         ipv4_address: ${SRS_UE_IP}
     profiles:
       - ran-4g-srs
+    labels:
+      om.domain: "ran"
+      om.nf: "ue"
+      om.generation: "4g"
+      om.project: "srslte"
+
   srsgnb_zmq:
     image: docker_srsran
     container_name: srsgnb_zmq
@@ -75,6 +87,12 @@ services:
         ipv4_address: ${SRS_GNB_IP}
     profiles:
       - ran-5g-srs
+    labels:
+      om.domain: "ran"
+      om.nf: "gnb"
+      om.generation: "5g"
+      om.project: "srsran"
+
   srsue_5g_zmq:
     image: docker_srslte
     container_name: srsue_5g_zmq
@@ -100,6 +118,12 @@ services:
         ipv4_address: ${SRS_UE_IP}
     profiles:
       - ran-5g-srs
+    labels:
+      om.domain: "ran"
+      om.nf: "ue"
+      om.generation: "5g"
+      om.project: "srsran"
+
   nr_gnb:
     image: docker_ueransim
     container_name: nr_gnb
@@ -125,6 +149,12 @@ services:
         ipv4_address: ${NR_GNB_IP}
     profiles:
       - ran-5g-ueransim
+    labels:
+      om.domain: "ran"
+      om.nf: "gnb"
+      om.generation: "5g"
+      om.project: "ueransim"
+
   nr_ue:
     image: docker_ueransim
     container_name: nr_ue
@@ -148,6 +178,11 @@ services:
         ipv4_address: ${NR_UE_IP}
     profiles:
       - ran-5g-ueransim
+    labels:
+      om.domain: "ran"
+      om.nf: "ue"
+      om.generation: "5g"
+      om.project: "ueransim"
 
 networks:
   default:

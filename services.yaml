@@ -51,6 +51,11 @@ services:
   #    timeout: 10s
   #    retries: 3
   #    start_period: 10s
+  #  labels:
+  #    om.domain: "observability"
+  #    om.nf: "om-module"
+  #    om.generation: "none"
+  #    om.project: "golang"
 
   loki:
     image: grafana/loki:3.0.0
@@ -75,6 +80,11 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
+    labels:
+      om.domain: "observability"
+      om.nf: "loki"
+      om.generation: "none"
+      om.project: "grafana"
 
   promtail-core:
     image: grafana/promtail:3.0.0
@@ -98,6 +108,11 @@ services:
       loki:
         condition: service_healthy
     restart: unless-stopped
+    labels:
+      om.domain: "observability"
+      om.nf: "promtail"
+      om.generation: "none"
+      om.project: "grafana"
 
   #promtail-ran:
   #  image: grafana/promtail:3.0.0
@@ -118,6 +133,11 @@ services:
   #    loki:
   #      condition: service_healthy
   #  restart: unless-stopped
+  #  labels:
+  #    om.domain: "observability"
+  #    om.nf: "promtail"
+  #    om.generation: "none"
+  #    om.project: "grafana"
 
   prometheus:
     image: prom/prometheus:latest
@@ -154,7 +174,11 @@ services:
         condition: service_healthy
       #om-module:
       #  condition: service_healthy
-
+    labels:
+      om.domain: "observability"
+      om.nf: "prometheus"
+      om.generation: "none"
+      om.project: "prometheus"
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
@@ -208,6 +232,11 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
+    labels:
+      om.domain: "observability"
+      om.nf: "grafana"
+      om.generation: "none"
+      om.project: "grafana"
 
 networks:
   default:

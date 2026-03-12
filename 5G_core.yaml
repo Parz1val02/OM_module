@@ -16,6 +16,11 @@ services:
     networks:
       default:
         ipv4_address: ${MONGO_IP}
+    labels:
+      om.domain: "infra"
+      om.nf: "mongo"
+      om.generation: "5g"
+      om.project: "open5gs"
 
   webui:
     image: docker_open5gs
@@ -37,6 +42,11 @@ services:
     networks:
       default:
         ipv4_address: ${WEBUI_IP}
+    labels:
+      om.domain: "infra"
+      om.nf: "webui"
+      om.generation: "5g"
+      om.project: "open5gs"
 
   nrf:
     image: docker_open5gs
@@ -55,6 +65,11 @@ services:
     networks:
       default:
         ipv4_address: ${NRF_IP}
+    labels:
+      om.domain: "core"
+      om.nf: "nrf"
+      om.generation: "5g"
+      om.project: "open5gs"
 
   scp:
     image: docker_open5gs
@@ -75,6 +90,11 @@ services:
     networks:
       default:
         ipv4_address: ${SCP_IP}
+    labels:
+      om.domain: "core"
+      om.nf: "scp"
+      om.generation: "5g"
+      om.project: "open5gs"
 
   ausf:
     image: docker_open5gs
@@ -96,6 +116,11 @@ services:
     networks:
       default:
         ipv4_address: ${AUSF_IP}
+    labels:
+      om.domain: "core"
+      om.nf: "ausf"
+      om.generation: "5g"
+      om.project: "open5gs"
 
   udr:
     image: docker_open5gs
@@ -118,6 +143,11 @@ services:
     networks:
       default:
         ipv4_address: ${UDR_IP}
+    labels:
+      om.domain: "core"
+      om.nf: "udr"
+      om.generation: "5g"
+      om.project: "open5gs"
 
   udm:
     image: docker_open5gs
@@ -139,6 +169,11 @@ services:
     networks:
       default:
         ipv4_address: ${UDM_IP}
+    labels:
+      om.domain: "core"
+      om.nf: "udm"
+      om.generation: "5g"
+      om.project: "open5gs"
 
   smf:
     image: docker_open5gs
@@ -173,6 +208,10 @@ services:
       prometheus.scrape: "true"
       prometheus.port: "9091"
       prometheus.path: "/metrics"
+      om.domain: "core"
+      om.nf: "smf"
+      om.generation: "5g"
+      om.project: "open5gs"
 
   upf:
     image: docker_open5gs
@@ -206,6 +245,10 @@ services:
       prometheus.scrape: "true"
       prometheus.port: "9091"
       prometheus.path: "/metrics"
+      om.domain: "core"
+      om.nf: "upf"
+      om.generation: "5g"
+      om.project: "open5gs"
 
   amf:
     image: docker_open5gs
@@ -238,6 +281,10 @@ services:
       prometheus.scrape: "true"
       prometheus.port: "9091"
       prometheus.path: "/metrics"
+      om.domain: "core"
+      om.nf: "amf"
+      om.generation: "5g"
+      om.project: "open5gs"
 
   pcf:
     image: docker_open5gs
@@ -265,6 +312,10 @@ services:
       prometheus.scrape: "true"
       prometheus.port: "9091"
       prometheus.path: "/metrics"
+      om.domain: "core"
+      om.nf: "pcf"
+      om.generation: "5g"
+      om.project: "open5gs"
 
   bsf:
     image: docker_open5gs
@@ -287,6 +338,11 @@ services:
     networks:
       default:
         ipv4_address: ${BSF_IP}
+    labels:
+      om.domain: "core"
+      om.nf: "bsf"
+      om.generation: "5g"
+      om.project: "open5gs"
 
   nssf:
     image: docker_open5gs
@@ -309,6 +365,11 @@ services:
     networks:
       default:
         ipv4_address: ${NSSF_IP}
+    labels:
+      om.domain: "core"
+      om.nf: "nssf"
+      om.generation: "5g"
+      om.project: "open5gs"
 
 networks:
   default:

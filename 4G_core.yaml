@@ -16,6 +16,11 @@ services:
     networks:
       default:
         ipv4_address: ${MONGO_IP}
+    labels:
+      om.domain: "infra"
+      om.nf: "mongo"
+      om.generation: "4g"
+      om.project: "open5gs"
 
   webui:
     image: docker_open5gs
@@ -37,6 +42,11 @@ services:
     networks:
       default:
         ipv4_address: ${WEBUI_IP}
+    labels:
+      om.domain: "infra"
+      om.nf: "webui"
+      om.generation: "4g"
+      om.project: "open5gs"
 
   hss:
     image: docker_open5gs
@@ -60,6 +70,11 @@ services:
     networks:
       default:
         ipv4_address: ${HSS_IP}
+    labels:
+      om.domain: "core"
+      om.nf: "hss"
+      om.generation: "4g"
+      om.project: "open5gs"
 
   sgwc:
     image: docker_open5gs
@@ -82,6 +97,11 @@ services:
     networks:
       default:
         ipv4_address: ${SGWC_IP}
+    labels:
+      om.domain: "core"
+      om.nf: "sgwc"
+      om.generation: "4g"
+      om.project: "open5gs"
 
   sgwu:
     image: docker_open5gs
@@ -104,6 +124,11 @@ services:
     networks:
       default:
         ipv4_address: ${SGWU_IP}
+    labels:
+      om.domain: "core"
+      om.nf: "sgwu"
+      om.generation: "4g"
+      om.project: "open5gs"
 
   smf:
     image: docker_open5gs
@@ -134,6 +159,10 @@ services:
       prometheus.scrape: "true"
       prometheus.port: "9091"
       prometheus.path: "/metrics"
+      om.domain: "core"
+      om.nf: "smf"
+      om.generation: "4g"
+      om.project: "open5gs"
 
   upf:
     image: docker_open5gs
@@ -165,6 +194,10 @@ services:
       prometheus.scrape: "true"
       prometheus.port: "9091"
       prometheus.path: "/metrics"
+      om.domain: "core"
+      om.nf: "upf"
+      om.generation: "4g"
+      om.project: "open5gs"
 
   mme:
     image: docker_open5gs
@@ -199,6 +232,10 @@ services:
       prometheus.scrape: "true"
       prometheus.port: "9091"
       prometheus.path: "/metrics"
+      om.domain: "core"
+      om.nf: "mme"
+      om.generation: "4g"
+      om.project: "open5gs"
 
   pcrf:
     image: docker_open5gs
@@ -227,6 +264,10 @@ services:
       prometheus.scrape: "true"
       prometheus.port: "9091"
       prometheus.path: "/metrics"
+      om.domain: "core"
+      om.nf: "pcrf"
+      om.generation: "4g"
+      om.project: "open5gs"
 
 networks:
   default:
