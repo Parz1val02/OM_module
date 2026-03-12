@@ -1,61 +1,33 @@
 services:
-  #om-module:
-  #  build: ./om-module
-  #  image: docker_om_module
-  #  container_name: om-module
-  #  env_file:
-  #    - .env
-  #  ports:
-  #    - "8080:8080"
-  #  environment:
-  #    - STRUCTURED_LOGGING=true
-  #  restart: unless-stopped
-  #  networks:
-  #    default:
-  #      ipv4_address: ${OM_MODULE_IP}
-  #om-module:
-  #  build: ./om-module
-  #  image: docker_om_module
-  #  container_name: om-module
-  #  env_file:
-  #    - .env
-  #  volumes:
-  #    - ./om-module:/mnt/om-module
-  #    - /var/run/docker.sock:/var/run/docker.sock
-  #    - prometheus-configs:/etc/prometheus/configs
-  #    - grafana-dashboards:/etc/grafana/provisioning/dashboards
-  #    - open5gs_logs:/var/log/open5gs:ro
-  #    - ran_5g_logs:/var/log/srsran:ro
-  #    - ran_4g_logs:/var/log/srslte:ro
-  #  ports:
-  #    - "9091-9096:9091-9096/tcp"  # Open5GS collectors
-  #    - "8080-8081:8080-8081/tcp"  # Infrastructure collectors
-  #    - "8082:8082/tcp"            # Log parser
-  #    - "8084:8084/tcp"            # RAN metrics collector
-  #  networks:
-  #    default:
-  #      ipv4_address: ${OM_MODULE_IP}
-  #  depends_on:
-  #    loki:
-  #      condition: service_healthy
-  #  environment:
-  #    - PROMETHEUS_CONFIG_PATH=/etc/prometheus/configs
-  #    - DOCKER_NETWORK=docker_open5gs_default
-  #    - LOG_PARSER_ENABLED=true
-  #    - LOKI_URL=http://loki:3100
-  #    - STRUCTURED_LOGGING=true
-  #  restart: unless-stopped
-  #  healthcheck:
-  #    test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
-  #    interval: 30s
-  #    timeout: 10s
-  #    retries: 3
-  #    start_period: 10s
-  #  labels:
-  #    om.domain: "observability"
-  #    om.nf: "om-module"
-  #    om.generation: "none"
-  #    om.project: "golang"
+  om-module:
+    build: ./om-module
+    image: docker_om_module
+    container_name: om-module
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./om-module:/mnt/om-module
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    networks:
+      default:
+        ipv4_address: ${OM_MODULE_IP}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    labels:
+      om.domain: "observability"
+      om.nf: "om-module"
+      om.generation: "none"
+      om.project: "golang"
+      prometheus.scrape: "true"
+      prometheus.port: "8080"
+      prometheus.path: "/metrics"
 
   loki:
     image: grafana/loki:3.0.0
@@ -147,9 +119,8 @@ services:
       - .env
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - prometheus-configs:/etc/prometheus/configs:ro
       - prometheus-data:/prometheus
-      - ./prometheus/configs/:/etc/prometheus/configs
+      - ./prometheus/configs:/etc/prometheus/configs
       - ./prometheus:/etc/prometheus
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -172,8 +143,8 @@ services:
     depends_on:
       loki:
         condition: service_healthy
-      #om-module:
-      #  condition: service_healthy
+      om-module:
+        condition: service_healthy
     labels:
       om.domain: "observability"
       om.nf: "prometheus"
@@ -194,8 +165,9 @@ services:
       - .env
     volumes:
       - grafana-data:/var/lib/grafana
-      - grafana-dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
       - ./grafana:/mnt/grafana
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -246,14 +218,10 @@ networks:
         - subnet: ${TEST_NETWORK}
 
 volumes:
-  prometheus-configs:
-    name: docker_open5gs_prometheus_configs
   prometheus-data:
     name: docker_open5gs_prometheus_data
   grafana-data:
     name: docker_open5gs_grafana_data
-  grafana-dashboards:
-    name: docker_open5gs_grafana_dashboards
   loki-data:
     name: docker_open5gs_loki_data
   ran_5g_logs:
