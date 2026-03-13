@@ -1,0 +1,295 @@
+{
+  "annotations": { "list": [] },
+  "description": "5G testbed high-level health — container status, UE registration, session state, data plane activity and logs",
+  "editable": true,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [
+    { "title": "5G Core Detail", "url": "/d/5g-core-detail", "type": "link", "icon": "dashboard", "targetBlank": false }
+  ],
+  "panels": [
+
+    { "collapsed": false, "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 100, "title": "Testbed Status", "type": "row" },
+
+    {
+      "id": 1, "type": "stat", "title": "Running Containers",
+      "gridPos": { "h": 4, "w": 3, "x": 0, "y": 1 },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "thresholds": { "mode": "absolute", "steps": [
+        { "color": "red", "value": null }, { "color": "yellow", "value": 15 }, { "color": "green", "value": 19 }
+      ]}}},
+      "targets": [{ "expr": "testbed_containers_running", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } }]
+    },
+
+    {
+      "id": 2, "type": "stat", "title": "Stopped Containers",
+      "gridPos": { "h": 4, "w": 3, "x": 3, "y": 1 },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "thresholds": { "mode": "absolute", "steps": [
+        { "color": "green", "value": null }, { "color": "yellow", "value": 1 }, { "color": "red", "value": 3 }
+      ]}}},
+      "targets": [{ "expr": "testbed_containers_stopped", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } }]
+    },
+
+    {
+      "id": 3, "type": "stat", "title": "Registered UEs",
+      "gridPos": { "h": 4, "w": 3, "x": 6, "y": 1 },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "thresholds": { "mode": "absolute", "steps": [
+        { "color": "red", "value": null }, { "color": "green", "value": 1 }
+      ]}}},
+      "targets": [{ "expr": "fivegs_amffunction_rm_registeredsubnbr", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } }]
+    },
+
+    {
+      "id": 4, "type": "stat", "title": "Active UEs (RAN)",
+      "gridPos": { "h": 4, "w": 3, "x": 9, "y": 1 },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "thresholds": { "mode": "absolute", "steps": [
+        { "color": "red", "value": null }, { "color": "green", "value": 1 }
+      ]}}},
+      "targets": [{ "expr": "ues_active", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } }]
+    },
+
+    {
+      "id": 5, "type": "stat", "title": "Active PDU Sessions",
+      "gridPos": { "h": 4, "w": 3, "x": 12, "y": 1 },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "thresholds": { "mode": "absolute", "steps": [
+        { "color": "red", "value": null }, { "color": "green", "value": 1 }
+      ]}}},
+      "targets": [{ "expr": "fivegs_smffunction_sm_sessionnbr", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } }]
+    },
+
+    {
+      "id": 6, "type": "stat", "title": "Active PFCP Sessions",
+      "gridPos": { "h": 4, "w": 3, "x": 15, "y": 1 },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "thresholds": { "mode": "absolute", "steps": [
+        { "color": "red", "value": null }, { "color": "green", "value": 1 }
+      ]}}},
+      "targets": [{ "expr": "pfcp_sessions_active", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } }]
+    },
+
+    {
+      "id": 7, "type": "stat", "title": "GTP Peers Active",
+      "gridPos": { "h": 4, "w": 3, "x": 18, "y": 1 },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "thresholds": { "mode": "absolute", "steps": [
+        { "color": "red", "value": null }, { "color": "green", "value": 1 }
+      ]}}},
+      "targets": [{ "expr": "gtp_peers_active", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } }]
+    },
+
+    {
+      "id": 8, "type": "stat", "title": "QoS Flows",
+      "gridPos": { "h": 4, "w": 3, "x": 21, "y": 1 },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "colorMode": "background", "graphMode": "none" },
+      "fieldConfig": { "defaults": { "thresholds": { "mode": "absolute", "steps": [
+        { "color": "red", "value": null }, { "color": "green", "value": 1 }
+      ]}}},
+      "targets": [{ "expr": "fivegs_smffunction_sm_qos_flow_nbr", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } }]
+    },
+
+    { "collapsed": false, "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 },
+      "id": 101, "title": "Registration Procedure", "type": "row" },
+
+    {
+      "id": 9, "type": "timeseries",
+      "title": "UE Registration — Request vs Success vs Fail",
+      "description": "Initial registration flow. In a healthy attach Req and Succ should track closely. A gap between them or any Fail count indicates a problem in the registration procedure.",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["last"] } },
+      "fieldConfig": {
+        "defaults": { "custom": { "lineWidth": 2, "fillOpacity": 8 } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "Fail" }, "properties": [{ "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "Success" }, "properties": [{ "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "Request" }, "properties": [{ "id": "color", "value": { "fixedColor": "blue", "mode": "fixed" } }] }
+        ]
+      },
+      "targets": [
+        { "expr": "fivegs_amffunction_rm_reginitreq", "legendFormat": "Request", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } },
+        { "expr": "fivegs_amffunction_rm_reginitsucc", "legendFormat": "Success", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } },
+        { "expr": "fivegs_amffunction_rm_reginitfail", "legendFormat": "Fail", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } }
+      ]
+    },
+
+    {
+      "id": 10, "type": "timeseries",
+      "title": "Authentication Flow",
+      "description": "AMF triggers authentication after receiving a Registration Request. Auth Req count should equal Reg Req count. Any Auth Fail or Reject indicates wrong credentials (KI/OP), SIM config mismatch, or NAS security issues.",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["last"] } },
+      "fieldConfig": {
+        "defaults": { "custom": { "lineWidth": 2, "fillOpacity": 8 } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "Auth Fail" }, "properties": [{ "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "Auth Reject" }, "properties": [{ "id": "color", "value": { "fixedColor": "orange", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "Auth Request" }, "properties": [{ "id": "color", "value": { "fixedColor": "blue", "mode": "fixed" } }] }
+        ]
+      },
+      "targets": [
+        { "expr": "fivegs_amffunction_amf_authreq", "legendFormat": "Auth Request", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } },
+        { "expr": "fivegs_amffunction_amf_authfail", "legendFormat": "Auth Fail", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } },
+        { "expr": "fivegs_amffunction_amf_authreject", "legendFormat": "Auth Reject", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } }
+      ]
+    },
+
+    { "collapsed": false, "gridPos": { "h": 1, "w": 24, "x": 0, "y": 14 },
+      "id": 102, "title": "Session Establishment & Data Plane", "type": "row" },
+
+    {
+      "id": 11, "type": "timeseries",
+      "title": "PDU Session Creation (SMF)",
+      "description": "After successful registration the UE requests a PDU session to obtain an IP address. SMF handles the request and coordinates with UPF and PCF.",
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 15 },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["last"] } },
+      "fieldConfig": {
+        "defaults": { "custom": { "lineWidth": 2, "fillOpacity": 8 } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "Success" }, "properties": [{ "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "Request" }, "properties": [{ "id": "color", "value": { "fixedColor": "blue", "mode": "fixed" } }] }
+        ]
+      },
+      "targets": [
+        { "expr": "fivegs_smffunction_sm_pdusessioncreationreq", "legendFormat": "Request", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } },
+        { "expr": "fivegs_smffunction_sm_pdusessioncreationsucc", "legendFormat": "Success", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } }
+      ]
+    },
+
+    {
+      "id": 12, "type": "timeseries",
+      "title": "N4 Session Establishment — SMF ↔ UPF",
+      "description": "SMF programs the UPF via PFCP over N4. SMF and UPF N4 Estab counters should be equal. Reports indicate active session heartbeats.",
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 15 },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["last"] } },
+      "fieldConfig": { "defaults": { "custom": { "lineWidth": 2, "fillOpacity": 8 } } },
+      "targets": [
+        { "expr": "fivegs_smffunction_sm_n4sessionestabreq", "legendFormat": "SMF N4 Estab", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } },
+        { "expr": "fivegs_upffunction_sm_n4sessionestabreq", "legendFormat": "UPF N4 Estab", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } },
+        { "expr": "fivegs_smffunction_sm_n4sessionreport", "legendFormat": "SMF N4 Reports", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } },
+        { "expr": "fivegs_upffunction_sm_n4sessionreportsucc", "legendFormat": "UPF N4 Report Succ", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } }
+      ]
+    },
+
+    {
+      "id": 13, "type": "timeseries",
+      "title": "N3 GTP Packet Rate — gNB ↔ UPF",
+      "description": "User data packets flowing over the N3 GTP tunnel between gNB and UPF. Non-zero values confirm the data plane is active and traffic is flowing.",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 15 },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["last", "max"] } },
+      "fieldConfig": {
+        "defaults": { "unit": "pps", "custom": { "lineWidth": 2, "fillOpacity": 8 } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "Uplink (gNB→UPF)" }, "properties": [{ "id": "color", "value": { "fixedColor": "blue", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "Downlink (UPF→gNB)" }, "properties": [{ "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }] }
+        ]
+      },
+      "targets": [
+        { "expr": "rate(fivegs_ep_n3_gtp_indatapktn3upf[1m])", "legendFormat": "Uplink (gNB→UPF)", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } },
+        { "expr": "rate(fivegs_ep_n3_gtp_outdatapktn3upf[1m])", "legendFormat": "Downlink (UPF→gNB)", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } }
+      ]
+    },
+
+    { "collapsed": false, "gridPos": { "h": 1, "w": 24, "x": 0, "y": 23 },
+      "id": 103, "title": "Container Resource Usage", "type": "row" },
+
+    {
+      "id": 14, "type": "bargauge",
+      "title": "CPU Usage % — Core NFs",
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 24 },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "orientation": "horizontal", "displayMode": "gradient" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "green", "value": null }, { "color": "yellow", "value": 30 }, { "color": "red", "value": 70 }
+          ]}
+        }
+      },
+      "targets": [{
+        "expr": "container_cpu_usage_percent{domain=\"core\", generation=\"5g\"}",
+        "legendFormat": "{{nf}}",
+        "instant": true,
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" }
+      }]
+    },
+
+    {
+      "id": 15, "type": "bargauge",
+      "title": "Memory Usage — Core NFs",
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 24 },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "options": { "reduceOptions": { "calcs": ["lastNotNull"] }, "orientation": "horizontal", "displayMode": "gradient" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "green", "value": null }, { "color": "yellow", "value": 100000000 }, { "color": "red", "value": 500000000 }
+          ]}
+        }
+      },
+      "targets": [{
+        "expr": "container_memory_usage_bytes{domain=\"core\", generation=\"5g\"}",
+        "legendFormat": "{{nf}}",
+        "instant": true,
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" }
+      }]
+    },
+
+    {
+      "id": 16, "type": "timeseries",
+      "title": "Network Throughput Rate — UPF & AMF",
+      "description": "UPF carries all user plane traffic. AMF carries all control plane signalling. These are the two busiest NFs in opposite planes.",
+      "gridPos": { "h": 7, "w": 24, "x": 0, "y": 31 },
+      "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+      "options": { "tooltip": { "mode": "multi" }, "legend": { "displayMode": "table", "placement": "right", "calcs": ["mean", "max"] } },
+      "fieldConfig": { "defaults": { "unit": "Bps", "custom": { "lineWidth": 2, "fillOpacity": 5 } } },
+      "targets": [
+        { "expr": "rate(container_network_rx_bytes_total{nf=\"upf\"}[1m])", "legendFormat": "UPF RX", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } },
+        { "expr": "rate(container_network_tx_bytes_total{nf=\"upf\"}[1m])", "legendFormat": "UPF TX", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } },
+        { "expr": "rate(container_network_rx_bytes_total{nf=\"amf\"}[1m])", "legendFormat": "AMF RX", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } },
+        { "expr": "rate(container_network_tx_bytes_total{nf=\"amf\"}[1m])", "legendFormat": "AMF TX", "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" } }
+      ]
+    },
+
+    { "collapsed": false, "gridPos": { "h": 1, "w": 24, "x": 0, "y": 38 },
+      "id": 104, "title": "Logs", "type": "row" },
+
+    {
+      "id": 17, "type": "logs",
+      "title": "5G Core Logs — All NFs",
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 39 },
+      "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+      "options": { "dedupStrategy": "none", "enableLogDetails": true, "showLabels": true, "showTime": true, "sortOrder": "Descending", "wrapLogMessage": false },
+      "targets": [{ "expr": "{domain=\"core\", generation=\"5g\"} |= ``", "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" } }]
+    }
+
+  ],
+  "refresh": "30s",
+  "schemaVersion": 38,
+  "tags": ["5g", "overview", "open5gs"],
+  "templating": { "list": [] },
+  "time": { "from": "now-30m", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "5G Testbed Overview",
+  "uid": "5g-overview",
+  "version": 1
+}
