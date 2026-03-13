@@ -10,4 +10,4 @@ policies:
     routes:
       - receiver: 5G Lab Alerts
         matchers:
-          - severity =~ "critical|warning"
+          - severity =~ "warning"

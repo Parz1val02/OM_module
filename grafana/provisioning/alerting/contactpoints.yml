@@ -7,7 +7,8 @@ contactPoints:
       - uid: email-receiver
         type: email
         settings:
-          addresses: ${ALERT_TO_EMAIL}
+          #addresses: ${ALERT_TO_EMAIL}
+          addresses: rodrigoedu11@gmail.com
           subject: "[5G Testbed] {{ .GroupLabels.alertname }}"
           message: |
             {{ range .Alerts }}

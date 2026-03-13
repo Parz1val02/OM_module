@@ -26,6 +26,7 @@ schema_config:
 
 limits_config:
   retention_period: 168h
+  volume_enabled: true
 
 ruler:
   storage:

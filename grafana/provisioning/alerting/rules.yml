@@ -138,3 +138,55 @@ groups:
               expression: A
               refId: C
               type: threshold
+      - uid: reg-failure-rate
+        title: High UE Registration Failure Rate
+        condition: C
+        for: 1m
+
+        labels:
+          severity: critical
+          domain: access
+          component: amf
+
+        annotations:
+          summary: "High UE registration failure rate"
+          description: >
+            More than 20% of UE registration attempts are failing over the last
+            5 minutes. Possible causes: subscriber not provisioned, wrong IMSI/Ki/OPc,
+            PLMN mismatch, authentication issues, or RAN–Core connectivity problems.
+
+        data:
+
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: PBFA97CFB590B2093
+            model:
+              expr: |
+                increase(fivegs_amffunction_rm_reginitfail[5m])
+                /
+                clamp_min(
+                  increase(fivegs_amffunction_rm_reginitfail[5m]) +
+                  increase(fivegs_amffunction_rm_reginitsucc[5m]),
+                  1
+                )
+              instant: true
+              refId: A
+
+          - refId: C
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: "__expr__"
+            model:
+              expression: A
+              type: threshold
+              refId: C
+              conditions:
+                - evaluator:
+                    type: gt
+                    params: [0.2]
+                  reducer:
+                    type: last
+                  type: query
