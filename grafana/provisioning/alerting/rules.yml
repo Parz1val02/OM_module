@@ -1,0 +1,140 @@
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: 5G Core Alerts
+    folder: 5G Testbed
+    interval: 30s
+    rules:
+      - uid: alert-reg-failure
+        title: UE Registration Failure
+        condition: C
+        for: 0s
+        labels:
+          severity: critical
+        annotations:
+          summary: "UE registration failure detected"
+          description: "One or more UE initial registration attempts have failed. Check AMF logs for rejection cause. Possible causes: wrong IMSI, PLMN mismatch, or subscriber not provisioned in Open5GS."
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 60
+              to: 0
+            datasourceUid: PBFA97CFB590B2093
+            model:
+              expr: rate(fivegs_amffunction_rm_reginitfail[1m])
+              instant: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+          - refId: C
+            relativeTimeRange:
+              from: 60
+              to: 0
+            datasourceUid: "__expr__"
+            model:
+              conditions:
+                - evaluator:
+                    params: [0]
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              refId: C
+              type: threshold
+      - uid: alert-auth-failure
+        title: UE Authentication Failure
+        condition: C
+        for: 0s
+        labels:
+          severity: critical
+        annotations:
+          summary: "UE authentication failure detected"
+          description: "AMF received an authentication failure or reject. Possible causes: wrong Ki/OPc keys in UE config, SIM credentials mismatch with UDM subscriber data, or AUSF unreachable."
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 60
+              to: 0
+            datasourceUid: PBFA97CFB590B2093
+            model:
+              expr: rate(fivegs_amffunction_amf_authfail[1m]) + rate(fivegs_amffunction_amf_authreject[1m])
+              instant: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+          - refId: C
+            relativeTimeRange:
+              from: 60
+              to: 0
+            datasourceUid: "__expr__"
+            model:
+              conditions:
+                - evaluator:
+                    params: [0]
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              refId: C
+              type: threshold
+      - uid: alert-ue-detached
+        title: UE Detached — No Registered UEs
+        condition: C
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "No UEs currently registered in the core"
+          description: "The registered UE subscriber count has dropped to zero. The UE may have detached, the RAN container stopped, or the AMF lost state. Check srsue and gNB containers."
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 60
+              to: 0
+            datasourceUid: PBFA97CFB590B2093
+            model:
+              expr: fivegs_amffunction_rm_registeredsubnbr
+              instant: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+          - refId: C
+            relativeTimeRange:
+              from: 60
+              to: 0
+            datasourceUid: "__expr__"
+            model:
+              conditions:
+                - evaluator:
+                    params: [0]
+                    type: lt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              refId: C
+              type: threshold

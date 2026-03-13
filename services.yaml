@@ -173,6 +173,7 @@ services:
       - ./grafana/dashboards:/var/lib/grafana/dashboards
       - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
       - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/provisioning/alerting:/etc/grafana/provisioning/alerting
       - ./grafana:/mnt/grafana
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -186,6 +187,16 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+      # --- SMTP / alerting ---
+      - GF_SMTP_ENABLED=true
+      - GF_SMTP_HOST=smtp.gmail.com:587
+      - GF_SMTP_USER=${GMAIL_USER}
+      - GF_SMTP_PASSWORD=${GMAIL_APP_PASSWORD}
+      - GF_SMTP_FROM_ADDRESS=${GMAIL_USER}
+      - GF_SMTP_FROM_NAME=5G Testbed Grafana
+      - GF_SMTP_STARTTLS_POLICY=MandatoryStartTLS
+      - GF_ALERTING_ENABLED=false
+      - GF_UNIFIED_ALERTING_ENABLED=true
     expose:
       - "3000/tcp"
     ports:
