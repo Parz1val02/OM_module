@@ -20,6 +20,9 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
+    depends_on:
+      loki:
+        condition: service_healthy
     labels:
       om.domain: "observability"
       om.nf: "om-module"
@@ -145,6 +148,8 @@ services:
         condition: service_healthy
       om-module:
         condition: service_healthy
+      json-exporter:
+        condition: service_started
     labels:
       om.domain: "observability"
       om.nf: "prometheus"
@@ -193,10 +198,6 @@ services:
         condition: service_healthy
       loki:
         condition: service_healthy
-      promtail-core:
-        condition: service_started
-      #promtail-ran:
-      #  condition: service_started
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
@@ -209,6 +210,28 @@ services:
       om.nf: "grafana"
       om.generation: "none"
       om.project: "grafana"
+
+  json-exporter:
+    image: quay.io/prometheuscommunity/json-exporter:latest
+    container_name: json-exporter
+    command:
+      - --config.file=/etc/json_exporter/config.yml
+    volumes:
+      - ./json_exporter/config.yml:/etc/json_exporter/config.yml
+    ports:
+      - "7979:7979"
+    networks:
+      default:
+        ipv4_address: ${JSON_EXPORTER_IP}
+    restart: unless-stopped
+    depends_on:
+      loki:
+        condition: service_healthy
+    labels:
+      om.domain: "observability"
+      om.nf: "json-exporter"
+      om.generation: "none"
+      om.project: "prometheus"
 
 networks:
   default:

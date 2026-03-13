@@ -1,0 +1,310 @@
+# json_exporter configuration for Open5GS 4G/5G core NF endpoints
+# and the OM module topology endpoint.
+#
+# Endpoints scraped:
+#   5G:
+#     amf:9091/ue-info    → UE registration and session state
+#     amf:9091/gnb-info   → gNB connectivity and load
+#     smf:9091/pdu-info   → PDU session and data plane state
+#   4G:
+#     mme:9091/ue-info    → UE registration and bearer state
+#     mme:9091/enb-info   → eNB connectivity and load
+#     smf:9091/pdu-info   → PDU session state (4G path)
+#   Common:
+#     om-module:8080/topology → testbed container health summary
+
+modules:
+
+  # ---------------------------------------------------------------------------
+  # 5G — AMF UE info
+  # curl http://amf:9091/ue-info
+  # ---------------------------------------------------------------------------
+  amf_ue:
+    metrics:
+      - name: amf_ue_count
+        type: value
+        help: Total number of registered UEs at the AMF.
+        path: "{ .pager.count }"
+
+      - name: amf_ue_cm_state
+        type: value
+        help: UE CM state (1 = connected, 0 = idle).
+        path: "{ .items[*].cm_state }"
+        labels:
+          supi: "{ .items[*].supi }"
+        valueMappings:
+          - source: connected
+            value: "1"
+          - source: idle
+            value: "0"
+
+      - name: amf_ue_pdu_sessions_count
+        type: value
+        help: Number of PDU sessions for the UE.
+        path: "{ .items[*].pdu_sessions_count }"
+        labels:
+          supi: "{ .items[*].supi }"
+
+      - name: amf_ue_allowed_slices_count
+        type: value
+        help: Number of allowed network slices for the UE.
+        path: "{ .items[*].allowed_slices_count }"
+        labels:
+          supi: "{ .items[*].supi }"
+
+      - name: amf_ue_security_valid
+        type: value
+        help: UE security context validity (1 = valid, 0 = invalid).
+        path: "{ .items[*].security.valid }"
+        labels:
+          supi: "{ .items[*].supi }"
+
+      - name: amf_ue_ambr_downlink_bps
+        type: value
+        help: Configured downlink AMBR for the UE in bits per second.
+        path: "{ .items[*].ambr.downlink }"
+        labels:
+          supi: "{ .items[*].supi }"
+
+      - name: amf_ue_ambr_uplink_bps
+        type: value
+        help: Configured uplink AMBR for the UE in bits per second.
+        path: "{ .items[*].ambr.uplink }"
+        labels:
+          supi: "{ .items[*].supi }"
+
+  # ---------------------------------------------------------------------------
+  # 5G — AMF gNB info
+  # curl http://amf:9091/gnb-info
+  # ---------------------------------------------------------------------------
+  amf_gnb:
+    metrics:
+      - name: amf_gnb_count
+        type: value
+        help: Total number of gNBs registered at the AMF.
+        path: "{ .pager.count }"
+
+      - name: amf_gnb_connected_ues
+        type: value
+        help: Number of UEs currently connected to the gNB.
+        path: "{ .items[*].num_connected_ues }"
+        labels:
+          gnb_id: "{ .items[*].gnb_id }"
+          plmn:   "{ .items[*].plmn }"
+
+      - name: amf_gnb_ng_setup_success
+        type: value
+        help: Whether the NG (N2) interface setup was successful (1 = true, 0 = false).
+        path: "{ .items[*].ng.setup_success }"
+        labels:
+          gnb_id: "{ .items[*].gnb_id }"
+        valueMappings:
+          - source: "true"
+            value: "1"
+          - source: "false"
+            value: "0"
+
+  # ---------------------------------------------------------------------------
+  # 5G — SMF PDU session info
+  # curl http://smf:9091/pdu-info
+  # ---------------------------------------------------------------------------
+  smf_pdu_5g:
+    metrics:
+      - name: smf_pdu_session_count
+        type: value
+        help: Total number of PDU sessions tracked by the SMF.
+        path: "{ .pager.count }"
+
+      - name: smf_pdu_state
+        type: value
+        help: PDU session data plane state (1 = active, 0 = inactive/unknown).
+        path: "{ .items[*].pdu[*].pdu_state }"
+        labels:
+          supi: "{ .items[*].supi }"
+          dnn:  "{ .items[*].pdu[*].dnn }"
+          psi:  "{ .items[*].pdu[*].psi }"
+        valueMappings:
+          - source: active
+            value: "1"
+          - source: inactive
+            value: "0"
+          - source: unknown
+            value: "0"
+
+      - name: smf_ue_activity
+        type: value
+        help: UE activity state as seen by the SMF (1 = active, 0 = idle/unknown).
+        path: "{ .items[*].ue_activity }"
+        labels:
+          supi: "{ .items[*].supi }"
+        valueMappings:
+          - source: active
+            value: "1"
+          - source: idle
+            value: "0"
+          - source: unknown
+            value: "0"
+
+  # ---------------------------------------------------------------------------
+  # 4G — MME UE info
+  # curl http://mme:9091/ue-info
+  # ---------------------------------------------------------------------------
+  mme_ue:
+    metrics:
+      - name: mme_ue_count
+        type: value
+        help: Total number of registered UEs at the MME.
+        path: "{ .pager.count }"
+
+      - name: mme_ue_cm_state
+        type: value
+        help: UE CM state (1 = connected, 0 = idle).
+        path: "{ .items[*].cm_state }"
+        labels:
+          supi: "{ .items[*].supi }"
+          rat:  "{ .items[*].rat }"
+        valueMappings:
+          - source: connected
+            value: "1"
+          - source: idle
+            value: "0"
+
+      - name: mme_ue_pdn_count
+        type: value
+        help: Number of PDN connections for the UE.
+        path: "{ .items[*].pdn_count }"
+        labels:
+          supi: "{ .items[*].supi }"
+
+      - name: mme_ue_ambr_downlink_bps
+        type: value
+        help: Configured downlink AMBR for the UE in bits per second.
+        path: "{ .items[*].ambr.downlink }"
+        labels:
+          supi: "{ .items[*].supi }"
+
+      - name: mme_ue_ambr_uplink_bps
+        type: value
+        help: Configured uplink AMBR for the UE in bits per second.
+        path: "{ .items[*].ambr.uplink }"
+        labels:
+          supi: "{ .items[*].supi }"
+
+      - name: mme_ue_pdn_state
+        type: value
+        help: PDN bearer state per UE and APN (1 = active, 0 = inactive/unknown).
+        path: "{ .items[*].pdn[*].pdu_state }"
+        labels:
+          supi: "{ .items[*].supi }"
+          apn:  "{ .items[*].pdn[*].apn }"
+          ebi:  "{ .items[*].pdn[*].ebi }"
+        valueMappings:
+          - source: active
+            value: "1"
+          - source: inactive
+            value: "0"
+          - source: unknown
+            value: "0"
+
+  # ---------------------------------------------------------------------------
+  # 4G — MME eNB info
+  # curl http://mme:9091/enb-info
+  # ---------------------------------------------------------------------------
+  mme_enb:
+    metrics:
+      - name: mme_enb_count
+        type: value
+        help: Total number of eNBs registered at the MME.
+        path: "{ .pager.count }"
+
+      - name: mme_enb_connected_ues
+        type: value
+        help: Number of UEs currently connected to the eNB.
+        path: "{ .items[*].num_connected_ues }"
+        labels:
+          enb_id: "{ .items[*].enb_id }"
+          plmn:   "{ .items[*].plmn }"
+
+      - name: mme_enb_s1_setup_success
+        type: value
+        help: Whether the S1 interface setup was successful (1 = true, 0 = false).
+        path: "{ .items[*].s1.setup_success }"
+        labels:
+          enb_id: "{ .items[*].enb_id }"
+        valueMappings:
+          - source: "true"
+            value: "1"
+          - source: "false"
+            value: "0"
+
+  # ---------------------------------------------------------------------------
+  # 4G — SMF PDU session info
+  # curl http://smf:9091/pdu-info  (4G response shape)
+  # ---------------------------------------------------------------------------
+  smf_pdu_4g:
+    metrics:
+      - name: smf_4g_pdu_session_count
+        type: value
+        help: Total number of 4G PDU sessions tracked by the SMF.
+        path: "{ .pager.count }"
+
+      - name: smf_4g_pdu_state
+        type: value
+        help: 4G PDN bearer state (1 = active, 0 = inactive/unknown).
+        path: "{ .items[*].pdu[*].pdu_state }"
+        labels:
+          supi: "{ .items[*].supi }"
+          apn:  "{ .items[*].pdu[*].apn }"
+          ebi:  "{ .items[*].pdu[*].ebi }"
+        valueMappings:
+          - source: active
+            value: "1"
+          - source: inactive
+            value: "0"
+          - source: unknown
+            value: "0"
+
+      - name: smf_4g_ue_activity
+        type: value
+        help: UE activity state as seen by the SMF (1 = active, 0 = idle/unknown).
+        path: "{ .items[*].ue_activity }"
+        labels:
+          supi: "{ .items[*].supi }"
+        valueMappings:
+          - source: active
+            value: "1"
+          - source: idle
+            value: "0"
+          - source: unknown
+            value: "0"
+
+  # ---------------------------------------------------------------------------
+  # OM module topology
+  # curl http://om-module:8080/topology
+  # ---------------------------------------------------------------------------
+  om_topology:
+    metrics:
+      - name: testbed_containers_total
+        type: value
+        help: Total number of containers discovered by the OM module.
+        path: "{ .total }"
+
+      - name: testbed_containers_running
+        type: value
+        help: Number of running containers in the testbed.
+        path: "{ .running }"
+
+      - name: testbed_containers_stopped
+        type: value
+        help: Number of stopped containers in the testbed.
+        path: "{ .stopped }"
+
+      - name: testbed_container_health
+        type: value
+        help: Per-container health status (1 = running, 0 = degraded, -1 = stopped).
+        path: "{ .containers[*].health_status }"
+        labels:
+          name:       "{ .containers[*].name }"
+          domain:     "{ .containers[*].domain }"
+          nf:         "{ .containers[*].nf }"
+          generation: "{ .containers[*].generation }"
