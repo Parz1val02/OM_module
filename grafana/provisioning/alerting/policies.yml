@@ -2,12 +2,18 @@ apiVersion: 1
 
 policies:
   - orgId: 1
-    receiver: 5G Lab Alerts
-    group_by: [alertname, severity]
+    receiver: Testbed Alerts
+    group_by: [alertname, generation, severity]
     group_wait: 30s
     group_interval: 5m
     repeat_interval: 1h
     routes:
-      - receiver: 5G Lab Alerts
+      - receiver: Testbed Alerts
         matchers:
-          - severity =~ "warning"
+          - generation = 5g
+          - severity =~ "critical|warning"
+
+      - receiver: Testbed Alerts
+        matchers:
+          - generation = 4g
+          - severity =~ "critical|warning"

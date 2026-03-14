@@ -2,14 +2,14 @@ apiVersion: 1
 
 contactPoints:
   - orgId: 1
-    name: 5G Lab Alerts
+    name: Testbed Alerts
     receivers:
       - uid: email-receiver
         type: email
         settings:
           #addresses: ${ALERT_TO_EMAIL}
           addresses: rodrigoedu11@gmail.com
-          subject: "[5G Testbed] {{ .GroupLabels.alertname }}"
+          subject: "[4G/5G Testbed] {{ .GroupLabels.alertname }}"
           message: |
             {{ range .Alerts }}
             Alert: {{ .Annotations.summary }}

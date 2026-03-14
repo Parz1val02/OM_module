@@ -1,108 +1,24 @@
 apiVersion: 1
 
 groups:
+
+  # ── 5G Core Alerts ─────────────────────────────────────────────────────────
   - orgId: 1
     name: 5G Core Alerts
     folder: 5G Testbed
     interval: 30s
     rules:
-      - uid: alert-reg-failure
-        title: UE Registration Failure
-        condition: C
-        for: 0s
-        labels:
-          severity: critical
-        annotations:
-          summary: "UE registration failure detected"
-          description: "One or more UE initial registration attempts have failed. Check AMF logs for rejection cause. Possible causes: wrong IMSI, PLMN mismatch, or subscriber not provisioned in Open5GS."
-        data:
-          - refId: A
-            relativeTimeRange:
-              from: 60
-              to: 0
-            datasourceUid: PBFA97CFB590B2093
-            model:
-              expr: rate(fivegs_amffunction_rm_reginitfail[1m])
-              instant: false
-              intervalMs: 1000
-              maxDataPoints: 43200
-              refId: A
-          - refId: C
-            relativeTimeRange:
-              from: 60
-              to: 0
-            datasourceUid: "__expr__"
-            model:
-              conditions:
-                - evaluator:
-                    params: [0]
-                    type: gt
-                  operator:
-                    type: and
-                  query:
-                    params: [A]
-                  reducer:
-                    type: last
-                  type: query
-              datasource:
-                type: __expr__
-                uid: __expr__
-              expression: A
-              refId: C
-              type: threshold
-      - uid: alert-auth-failure
-        title: UE Authentication Failure
-        condition: C
-        for: 0s
-        labels:
-          severity: critical
-        annotations:
-          summary: "UE authentication failure detected"
-          description: "AMF received an authentication failure or reject. Possible causes: wrong Ki/OPc keys in UE config, SIM credentials mismatch with UDM subscriber data, or AUSF unreachable."
-        data:
-          - refId: A
-            relativeTimeRange:
-              from: 60
-              to: 0
-            datasourceUid: PBFA97CFB590B2093
-            model:
-              expr: rate(fivegs_amffunction_amf_authfail[1m]) + rate(fivegs_amffunction_amf_authreject[1m])
-              instant: false
-              intervalMs: 1000
-              maxDataPoints: 43200
-              refId: A
-          - refId: C
-            relativeTimeRange:
-              from: 60
-              to: 0
-            datasourceUid: "__expr__"
-            model:
-              conditions:
-                - evaluator:
-                    params: [0]
-                    type: gt
-                  operator:
-                    type: and
-                  query:
-                    params: [A]
-                  reducer:
-                    type: last
-                  type: query
-              datasource:
-                type: __expr__
-                uid: __expr__
-              expression: A
-              refId: C
-              type: threshold
-      - uid: alert-ue-detached
-        title: UE Detached — No Registered UEs
+
+      - uid: 5g-ue-detached
+        title: "[5G] No UEs Registered"
         condition: C
         for: 30s
         labels:
           severity: warning
+          generation: 5g
         annotations:
-          summary: "No UEs currently registered in the core"
-          description: "The registered UE subscriber count has dropped to zero. The UE may have detached, the RAN container stopped, or the AMF lost state. Check srsue and gNB containers."
+          summary: "No UEs currently registered in the 5G core"
+          description: "fivegs_amffunction_rm_registeredsubnbr has dropped to zero. The UE may have detached, the srsUE container stopped, or the AMF lost state. Check ue and gNB containers."
         data:
           - refId: A
             relativeTimeRange:
@@ -111,7 +27,7 @@ groups:
             datasourceUid: PBFA97CFB590B2093
             model:
               expr: fivegs_amffunction_rm_registeredsubnbr
-              instant: false
+              instant: true
               intervalMs: 1000
               maxDataPoints: 43200
               refId: A
@@ -123,7 +39,7 @@ groups:
             model:
               conditions:
                 - evaluator:
-                    params: [0]
+                    params: [1]
                     type: lt
                   operator:
                     type: and
@@ -138,25 +54,67 @@ groups:
               expression: A
               refId: C
               type: threshold
-      - uid: reg-failure-rate
-        title: High UE Registration Failure Rate
-        condition: C
-        for: 1m
 
+      - uid: 5g-auth-failure
+        title: "[5G] UE Authentication Failure"
+        condition: C
+        for: 0s
         labels:
           severity: critical
-          domain: access
-          component: amf
-
+          generation: 5g
         annotations:
-          summary: "High UE registration failure rate"
+          summary: "5G UE authentication failure detected"
+          description: "AMF received an authentication failure or reject. Possible causes: wrong Ki/OPc keys in UE config, SIM credentials mismatch with UDM subscriber data, or AUSF unreachable."
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: PBFA97CFB590B2093
+            model:
+              expr: increase(fivegs_amffunction_amf_authfail[5m]) + increase(fivegs_amffunction_amf_authreject[5m])
+              instant: true
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+          - refId: C
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: "__expr__"
+            model:
+              conditions:
+                - evaluator:
+                    params: [0]
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              refId: C
+              type: threshold
+
+      - uid: 5g-reg-failure-rate
+        title: "[5G] High UE Registration Failure Rate"
+        condition: C
+        for: 1m
+        labels:
+          severity: critical
+          generation: 5g
+        annotations:
+          summary: "High 5G UE registration failure rate (>20%)"
           description: >
             More than 20% of UE registration attempts are failing over the last
             5 minutes. Possible causes: subscriber not provisioned, wrong IMSI/Ki/OPc,
-            PLMN mismatch, authentication issues, or RAN–Core connectivity problems.
-
+            PLMN mismatch, authentication issues, or RAN-Core connectivity problems.
         data:
-
           - refId: A
             relativeTimeRange:
               from: 300
@@ -172,21 +130,128 @@ groups:
                   1
                 )
               instant: true
+              intervalMs: 1000
+              maxDataPoints: 43200
               refId: A
-
           - refId: C
             relativeTimeRange:
               from: 300
               to: 0
             datasourceUid: "__expr__"
             model:
-              expression: A
-              type: threshold
-              refId: C
               conditions:
                 - evaluator:
-                    type: gt
                     params: [0.2]
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
                   reducer:
                     type: last
                   type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              refId: C
+              type: threshold
+
+  # ── 4G Core Alerts ─────────────────────────────────────────────────────────
+  - orgId: 1
+    name: 4G Core Alerts
+    folder: 4G Testbed
+    interval: 30s
+    rules:
+
+      - uid: 4g-ue-detached
+        title: "[4G] No UEs Attached"
+        condition: C
+        for: 30s
+        labels:
+          severity: warning
+          generation: 4g
+        annotations:
+          summary: "No UEs currently attached to the 4G EPC"
+          description: "ues_active has dropped to zero. The UE may have detached, the srsUE container stopped, or the MME lost state. Check ue and eNB containers."
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 60
+              to: 0
+            datasourceUid: PBFA97CFB590B2093
+            model:
+              expr: ues_active
+              instant: true
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+          - refId: C
+            relativeTimeRange:
+              from: 60
+              to: 0
+            datasourceUid: "__expr__"
+            model:
+              conditions:
+                - evaluator:
+                    params: [1]
+                    type: lt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              refId: C
+              type: threshold
+
+      - uid: 4g-attach-failure
+        title: "[4G] UE Attach Failure Suspected"
+        condition: C
+        for: 1m
+        labels:
+          severity: critical
+          generation: 4g
+        annotations:
+          summary: "UEs detected but no EPS sessions established"
+          description: >
+            One or more UEs are active on the radio interface but the EPC
+            has not established any sessions. Possible causes include
+            authentication failure, missing subscriber in HSS,
+            APN misconfiguration, or SGW/PGW issues.
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 120
+              to: 0
+            datasourceUid: PBFA97CFB590B2093
+            model:
+              expr: ues_active > 0 and mme_session == 0
+              instant: true
+              refId: A
+
+          - refId: C
+            relativeTimeRange:
+              from: 120
+              to: 0
+            datasourceUid: "__expr__"
+            model:
+              conditions:
+                - evaluator:
+                    params: [0.5]
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    type: last
+                  type: query
+              expression: A
+              refId: C
+              type: threshold
