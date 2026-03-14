@@ -15,18 +15,18 @@
       }
     ]
   },
-  "description": "5G testbed high-level health — container status, UE registration, session state, data plane activity and logs",
+  "description": "4G EPC testbed high-level health — container status, UE attach, bearer state, data plane and logs",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 4,
+  "id": 9,
   "links": [
     {
       "icon": "dashboard",
       "targetBlank": false,
-      "title": "5G Core Detail",
+      "title": "4G Core Detail",
       "type": "link",
-      "url": "/d/5g-core-detail"
+      "url": "/d/4g-core-detail"
     }
   ],
   "panels": [
@@ -40,7 +40,7 @@
       },
       "id": 100,
       "panels": [],
-      "title": "Testbed Status",
+      "title": "🟢 Testbed Status",
       "type": "row"
     },
     {
@@ -103,6 +103,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "testbed_containers_running",
+          "legendFormat": "Running",
           "refId": "A"
         }
       ],
@@ -169,6 +170,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "testbed_containers_stopped",
+          "legendFormat": "Stopped",
           "refId": "A"
         }
       ],
@@ -230,11 +232,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_amffunction_rm_registeredsubnbr",
+          "expr": "ues_active",
+          "legendFormat": "UEs",
           "refId": "A"
         }
       ],
-      "title": "Registered UEs",
+      "title": "Active UEs",
       "type": "stat"
     },
     {
@@ -292,11 +295,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "ues_active",
+          "expr": "mme_session",
+          "legendFormat": "Sessions",
           "refId": "A"
         }
       ],
-      "title": "Active UEs (RAN)",
+      "title": "MME Sessions",
       "type": "stat"
     },
     {
@@ -354,11 +358,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_smffunction_sm_sessionnbr",
+          "expr": "gtp1_pdpctxs_active",
+          "legendFormat": "PDP",
           "refId": "A"
         }
       ],
-      "title": "Active PDU Sessions",
+      "title": "Active PDP Contexts",
       "type": "stat"
     },
     {
@@ -416,11 +421,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "pfcp_sessions_active",
+          "expr": "bearers_active",
+          "legendFormat": "Bearers",
           "refId": "A"
         }
       ],
-      "title": "Active PFCP Sessions",
+      "title": "Active EPS Bearers",
       "type": "stat"
     },
     {
@@ -431,6 +437,8 @@
       "fieldConfig": {
         "defaults": {
           "mappings": [],
+          "max": 5,
+          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -455,11 +463,9 @@
       },
       "id": 7,
       "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "auto",
+        "minVizHeight": 75,
+        "minVizWidth": 75,
         "orientation": "auto",
-        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -467,9 +473,9 @@
           "fields": "",
           "values": false
         },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
       },
       "pluginVersion": "11.3.0",
       "targets": [
@@ -478,12 +484,13 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "gtp_peers_active",
+          "expr": "mme_enb_count",
+          "legendFormat": "eNBs",
           "refId": "A"
         }
       ],
-      "title": "GTP Peers Active",
-      "type": "stat"
+      "title": "Active eNBs",
+      "type": "gauge"
     },
     {
       "datasource": {
@@ -540,11 +547,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_smffunction_sm_qos_flow_nbr",
+          "expr": "pfcp_sessions_active",
+          "legendFormat": "PFCP",
           "refId": "A"
         }
       ],
-      "title": "QoS Flows",
+      "title": "PFCP Sessions",
       "type": "stat"
     },
     {
@@ -557,7 +565,7 @@
       },
       "id": 101,
       "panels": [],
-      "title": "Registration Procedure",
+      "title": "📋 Attach Procedure — MME",
       "type": "row"
     },
     {
@@ -565,7 +573,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Initial registration flow. In a healthy attach Req and Succ should track closely. A gap between them or any Fail count indicates a problem in the registration procedure.",
+      "description": "MME session count tracks the number of active NAS connections. mme_ue_count reflects UEs with a context in the MME. In a successful attach both should rise together.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -619,219 +627,12 @@
             ]
           }
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Fail"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Success"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Request"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 6
-      },
-      "id": 9,
-      "options": {
-        "legend": {
-          "calcs": [
-            "last"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "fivegs_amffunction_rm_reginitreq",
-          "legendFormat": "Request",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "fivegs_amffunction_rm_reginitsucc",
-          "legendFormat": "Success",
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "fivegs_amffunction_rm_reginitfail",
-          "legendFormat": "Fail",
-          "refId": "C"
-        }
-      ],
-      "title": "UE Registration — Request vs Success vs Fail",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "AMF triggers authentication after receiving a Registration Request. Auth Req count should equal Reg Req count. Any Auth Fail or Reject indicates wrong credentials (KI/OP), SIM config mismatch, or NAS security issues.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "barWidthFactor": 0.6,
-            "drawStyle": "line",
-            "fillOpacity": 8,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Auth Fail"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Auth Reject"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "orange",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Auth Request"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
         "y": 6
       },
       "id": 10,
@@ -856,8 +657,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_amffunction_amf_authreq",
-          "legendFormat": "Auth Request",
+          "expr": "mme_session",
+          "legendFormat": "MME Sessions",
           "refId": "A"
         },
         {
@@ -865,8 +666,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_amffunction_amf_authfail",
-          "legendFormat": "Auth Fail",
+          "expr": "mme_ue_count",
+          "legendFormat": "MME UE Count",
           "refId": "B"
         },
         {
@@ -874,33 +675,20 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_amffunction_amf_authreject",
-          "legendFormat": "Auth Reject",
+          "expr": "ues_active",
+          "legendFormat": "Active UEs (RAN)",
           "refId": "C"
         }
       ],
-      "title": "Authentication Flow",
+      "title": "UE Attach — MME Sessions & UE Count",
       "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 14
-      },
-      "id": 102,
-      "panels": [],
-      "title": "Session Establishment & Data Plane",
-      "type": "row"
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "After successful registration the UE requests a PDU session to obtain an IP address. SMF handles the request and coordinates with UPF and PCF.",
+      "description": "eNB connects to MME via S1-MME interface. S1 Setup Success = eNB registered. Connected UEs = UEs on that eNB with active RRC connection.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -954,44 +742,13 @@
             ]
           }
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Success"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Request"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
-        "x": 0,
-        "y": 15
+        "w": 12,
+        "x": 12,
+        "y": 6
       },
       "id": 11,
       "options": {
@@ -1015,8 +772,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_smffunction_sm_pdusessioncreationreq",
-          "legendFormat": "Request",
+          "expr": "mme_enb_count",
+          "legendFormat": "eNBs Registered",
           "refId": "A"
         },
         {
@@ -1024,20 +781,51 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_smffunction_sm_pdusessioncreationsucc",
-          "legendFormat": "Success",
+          "expr": "mme_enb_s1_setup_success",
+          "legendFormat": "S1 Setup Success",
           "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "mme_enb_connected_ues",
+          "legendFormat": "Connected UEs",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "enb_ue",
+          "legendFormat": "eNB UE (RAN)",
+          "refId": "D"
         }
       ],
-      "title": "PDU Session Creation (SMF)",
+      "title": "eNB S1 Setup & Connected UEs",
       "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "id": 102,
+      "panels": [],
+      "title": "🌐 Bearer & Data Plane — SGW/PGW/UPF",
+      "type": "row"
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "SMF programs the UPF via PFCP over N4. SMF and UPF N4 Estab counters should be equal. Reports indicate active session heartbeats.",
+      "description": "After attach the UE requests a default bearer. PDP context creation (Gn/S11) triggers bearer activation. PDP Contexts = active data sessions. Bearers = QoS tunnels carrying traffic.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1096,7 +884,7 @@
       "gridPos": {
         "h": 8,
         "w": 8,
-        "x": 8,
+        "x": 0,
         "y": 15
       },
       "id": 12,
@@ -1121,8 +909,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_smffunction_sm_n4sessionestabreq",
-          "legendFormat": "SMF N4 Estab",
+          "expr": "gtp1_pdpctxs_active",
+          "legendFormat": "Active PDP Contexts",
           "refId": "A"
         },
         {
@@ -1130,8 +918,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_upffunction_sm_n4sessionestabreq",
-          "legendFormat": "UPF N4 Estab",
+          "expr": "bearers_active",
+          "legendFormat": "Active Bearers",
           "refId": "B"
         },
         {
@@ -1139,21 +927,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_smffunction_sm_n4sessionreport",
-          "legendFormat": "SMF N4 Reports",
+          "expr": "gtp2_sessions_active",
+          "legendFormat": "GTP2 Sessions",
           "refId": "C"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "fivegs_upffunction_sm_n4sessionreportsucc",
-          "legendFormat": "UPF N4 Report Succ",
-          "refId": "D"
         }
       ],
-      "title": "N4 Session Establishment — SMF ↔ UPF",
+      "title": "PDP Context & Bearer Lifecycle",
       "type": "timeseries"
     },
     {
@@ -1161,7 +940,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "User data packets flowing over the N3 GTP tunnel between gNB and UPF. Non-zero values confirm the data plane is active and traffic is flowing.",
+      "description": "Gn/S11 carries Create/Delete PDP Context requests between MME and SGW. Create = UE requesting data connectivity. Delete = UE detach or session release.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1213,20 +992,19 @@
                 "value": 80
               }
             ]
-          },
-          "unit": "pps"
+          }
         },
         "overrides": [
           {
             "matcher": {
               "id": "byName",
-              "options": "Uplink (gNB→UPF)"
+              "options": "Delete"
             },
             "properties": [
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "blue",
+                  "fixedColor": "red",
                   "mode": "fixed"
                 }
               }
@@ -1235,7 +1013,168 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Downlink (UPF→gNB)"
+              "options": "Create"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Parse Fail"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 15
+      },
+      "id": 13,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "gn_rx_createpdpcontextreq",
+          "legendFormat": "Create",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "gn_rx_deletepdpcontextreq",
+          "legendFormat": "Delete",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "gn_rx_parse_failed",
+          "legendFormat": "Parse Fail",
+          "refId": "C"
+        }
+      ],
+      "title": "Gn Interface — MME ↔ SGW (GTPv1)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "S5/S8 carries Create/Delete Session Requests between SGW and PGW. This is the 4G equivalent of N4 in 5G. A successful attach produces one Create Session on both Gn and S5c.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Delete"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Create"
             },
             "properties": [
               {
@@ -1255,12 +1194,11 @@
         "x": 16,
         "y": 15
       },
-      "id": 13,
+      "id": 14,
       "options": {
         "legend": {
           "calcs": [
-            "last",
-            "max"
+            "last"
           ],
           "displayMode": "table",
           "placement": "bottom",
@@ -1278,8 +1216,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(fivegs_ep_n3_gtp_indatapktn3upf[1m])",
-          "legendFormat": "Uplink (gNB→UPF)",
+          "expr": "s5c_rx_createsession",
+          "legendFormat": "Create",
           "refId": "A"
         },
         {
@@ -1287,12 +1225,21 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(fivegs_ep_n3_gtp_outdatapktn3upf[1m])",
-          "legendFormat": "Downlink (UPF→gNB)",
+          "expr": "s5c_rx_deletesession",
+          "legendFormat": "Delete",
           "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "s5c_rx_parse_failed",
+          "legendFormat": "Parse Fail",
+          "refId": "C"
         }
       ],
-      "title": "N3 GTP Packet Rate — gNB ↔ UPF",
+      "title": "S5/S8 Interface — SGW ↔ PGW (GTPv2)",
       "type": "timeseries"
     },
     {
@@ -1305,7 +1252,7 @@
       },
       "id": 103,
       "panels": [],
-      "title": "Container Resource Usage",
+      "title": "🖥️ Resource Usage",
       "type": "row"
     },
     {
@@ -1315,9 +1262,8 @@
       },
       "fieldConfig": {
         "defaults": {
+          "displayName": "${__series.name}",
           "mappings": [],
-          "max": 100,
-          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1327,15 +1273,15 @@
               },
               {
                 "color": "yellow",
-                "value": 30
+                "value": 0.3
               },
               {
                 "color": "red",
-                "value": 70
+                "value": 0.8
               }
             ]
           },
-          "unit": "percent"
+          "unit": "short"
         },
         "overrides": []
       },
@@ -1343,83 +1289,6 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 24
-      },
-      "id": 14,
-      "options": {
-        "displayMode": "gradient",
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        },
-        "maxVizHeight": 300,
-        "minVizHeight": 16,
-        "minVizWidth": 8,
-        "namePlacement": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true,
-        "sizing": "auto",
-        "valueMode": "color"
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "editorMode": "code",
-          "expr": "sum(container_cpu_usage_percent{domain=\"core\", generation=\"5\"}) by (nf) / 100",
-          "instant": true,
-          "legendFormat": "{{nf}}",
-          "refId": "A"
-        }
-      ],
-      "title": "CPU Usage % — Core NFs",
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "yellow",
-                "value": 100000000
-              },
-              {
-                "color": "red",
-                "value": 500000000
-              }
-            ]
-          },
-          "unit": "bytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 12,
-        "x": 12,
         "y": 24
       },
       "id": 15,
@@ -1454,14 +1323,13 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "editorMode": "code",
-          "expr": "sum(container_memory_usage_bytes{domain=\"core\", generation=\"5g\"}) by (nf)",
+          "expr": "sum(container_cpu_usage_percent{domain=\"core\", generation=\"4g\"}) by (nf) / 100",
           "instant": true,
           "legendFormat": "{{nf}}",
           "refId": "A"
         }
       ],
-      "title": "Memory Usage — Core NFs",
+      "title": "CPU Usage — Core NFs (snapshot)",
       "type": "bargauge"
     },
     {
@@ -1469,7 +1337,84 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "UPF carries all user plane traffic. AMF carries all control plane signalling. These are the two busiest NFs in opposite planes.",
+      "fieldConfig": {
+        "defaults": {
+          "displayName": "${__series.name}",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 100000000
+              },
+              {
+                "color": "red",
+                "value": 500000000
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 24
+      },
+      "id": 16,
+      "options": {
+        "displayMode": "gradient",
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "maxVizHeight": 300,
+        "minVizHeight": 16,
+        "minVizWidth": 8,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "sizing": "auto",
+        "valueMode": "color"
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "sum(container_memory_usage_bytes{domain=\"core\", generation=\"4g\"}) by (nf)",
+          "instant": true,
+          "legendFormat": "{{nf}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Memory Usage — Core NFs (snapshot)",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "UPF carries all user plane traffic (S1-U/S5-U). MME carries S1-MME signalling.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1532,7 +1477,7 @@
         "x": 0,
         "y": 31
       },
-      "id": 16,
+      "id": 17,
       "options": {
         "legend": {
           "calcs": [
@@ -1573,8 +1518,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(container_network_rx_bytes_total{nf=\"amf\"}[1m])",
-          "legendFormat": "AMF RX",
+          "expr": "rate(container_network_rx_bytes_total{nf=\"mme\"}[1m])",
+          "legendFormat": "MME RX",
           "refId": "C"
         },
         {
@@ -1582,12 +1527,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(container_network_tx_bytes_total{nf=\"amf\"}[1m])",
-          "legendFormat": "AMF TX",
+          "expr": "rate(container_network_tx_bytes_total{nf=\"mme\"}[1m])",
+          "legendFormat": "MME TX",
           "refId": "D"
         }
       ],
-      "title": "Network Throughput Rate — UPF & AMF",
+      "title": "Network Throughput — UPF & MME",
       "type": "timeseries"
     },
     {
@@ -1600,7 +1545,7 @@
       },
       "id": 104,
       "panels": [],
-      "title": "Logs",
+      "title": "📜 Logs",
       "type": "row"
     },
     {
@@ -1613,18 +1558,18 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
+        "h": 11,
         "w": 24,
         "x": 0,
         "y": 39
       },
-      "id": 17,
+      "id": 18,
       "options": {
         "dedupStrategy": "none",
         "enableLogDetails": true,
         "prettifyLogMessage": false,
         "showCommonLabels": false,
-        "showLabels": true,
+        "showLabels": false,
         "showTime": true,
         "sortOrder": "Descending",
         "wrapLogMessage": false
@@ -1636,11 +1581,13 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "{domain=\"core\", generation=\"5g\"} |= ``",
+          "editorMode": "code",
+          "expr": "{domain=\"core\", generation=\"4g\"} |= ``",
+          "queryType": "range",
           "refId": "A"
         }
       ],
-      "title": "5G Core Logs — All NFs",
+      "title": "Core Logs (All NFs)",
       "type": "logs"
     }
   ],
@@ -1648,8 +1595,8 @@
   "refresh": "30s",
   "schemaVersion": 40,
   "tags": [
-    "5g",
-    "overview",
+    "4g",
+    "epc",
     "open5gs"
   ],
   "templating": {
@@ -1661,8 +1608,8 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "5G Testbed Overview",
-  "uid": "5g-overview",
-  "version": 3,
+  "title": "4G EPC Overview",
+  "uid": "4g-overview",
+  "version": 1,
   "weekStart": ""
 }

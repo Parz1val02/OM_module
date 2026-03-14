@@ -43,81 +43,39 @@ scrape_configs:
         target_label: container
         regex: "/(.*)"
 
-    # 5G — AMF endpoints
-  - job_name: amf_ue
-    metrics_path: /probe
-    params:
-      module: [amf_ue]
-    static_configs:
-      - targets: ["http://amf:9091/ue-info"]
-    relabel_configs:
-      - source_labels: [__address__]
-        target_label: __param_target
-
-      - target_label: __address__
-        replacement: json-exporter:7979
- 
-  - job_name: amf_gnb
-    metrics_path: /probe
-    params:
-      module: [amf_gnb]
-
-    static_configs:
-      - targets: ["http://amf:9091/gnb-info"]
-    relabel_configs:
-      - source_labels: [__address__]
-        target_label: __param_target
-      - target_label: __address__
-        replacement: json-exporter:7979
- 
-
-  # 5G — SMF endpoints
-  - job_name: smf_pdu_5g
-    metrics_path: /probe
-    params:
-      module: [smf_pdu_5g]
-    static_configs:
-      - targets: ["http://smf:9091/pdu-info"]
-    relabel_configs:
-      - source_labels: [__address__]
-        target_label: __param_target
-      - target_label: __address__
-        replacement: json-exporter:7979
-
- 
-  ## 4G — MME endpoints
-  #- job_name: mme_ue
+  ## 5G — AMF endpoints
+  #- job_name: amf_ue
   #  metrics_path: /probe
   #  params:
-  #    module: [mme_ue]
+  #    module: [amf_ue]
   #  static_configs:
-  #    - targets: ["http://mme:9091/ue-info"]
+  #    - targets: ["http://amf:9091/ue-info"]
   #  relabel_configs:
-
   #    - source_labels: [__address__]
   #      target_label: __param_target
+
   #    - target_label: __address__
   #      replacement: json-exporter:7979
  
-  #- job_name: mme_enb
-
+  #- job_name: amf_gnb
   #  metrics_path: /probe
   #  params:
-  #    module: [mme_enb]
+  #    module: [amf_gnb]
+
   #  static_configs:
-  #    - targets: ["http://mme:9091/enb-info"]
+  #    - targets: ["http://amf:9091/gnb-info"]
   #  relabel_configs:
   #    - source_labels: [__address__]
   #      target_label: __param_target
   #    - target_label: __address__
   #      replacement: json-exporter:7979
  
-  ## 4G — SMF endpoints
-  #- job_name: smf_pdu_4g
 
+  ## 5G — SMF endpoints
+  #- job_name: smf_pdu_5g
   #  metrics_path: /probe
   #  params:
-  #    module: [smf_pdu_4g]
+  #    module: [smf_pdu_5g]
   #  static_configs:
   #    - targets: ["http://smf:9091/pdu-info"]
   #  relabel_configs:
@@ -125,6 +83,48 @@ scrape_configs:
   #      target_label: __param_target
   #    - target_label: __address__
   #      replacement: json-exporter:7979
+
+ 
+  # 4G — MME endpoints
+  - job_name: mme_ue
+    metrics_path: /probe
+    params:
+      module: [mme_ue]
+    static_configs:
+      - targets: ["http://mme:9091/ue-info"]
+    relabel_configs:
+
+      - source_labels: [__address__]
+        target_label: __param_target
+      - target_label: __address__
+        replacement: json-exporter:7979
+ 
+  - job_name: mme_enb
+
+    metrics_path: /probe
+    params:
+      module: [mme_enb]
+    static_configs:
+      - targets: ["http://mme:9091/enb-info"]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - target_label: __address__
+        replacement: json-exporter:7979
+ 
+  # 4G — SMF endpoints
+  - job_name: smf_pdu_4g
+
+    metrics_path: /probe
+    params:
+      module: [smf_pdu_4g]
+    static_configs:
+      - targets: ["http://smf:9091/pdu-info"]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - target_label: __address__
+        replacement: json-exporter:7979
  
   # OM module topology
   - job_name: om_topology

@@ -15,11 +15,11 @@
       }
     ]
   },
-  "description": "5G testbed — complete view: testbed health, registration procedure, session management, data plane, policy, resource usage and logs",
+  "description": "4G EPC testbed — complete view: testbed health, attach procedure, bearer management, GTP interfaces, policy (Gx/Rx), resource usage and logs",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 6,
+  "id": 11,
   "links": [],
   "panels": [
     {
@@ -224,12 +224,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_amffunction_rm_registeredsubnbr",
+          "expr": "ues_active",
           "legendFormat": "UEs",
           "refId": "A"
         }
       ],
-      "title": "Registered UEs",
+      "title": "Active UEs",
       "type": "stat"
     },
     {
@@ -287,12 +287,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "ues_active",
-          "legendFormat": "Active UEs",
+          "expr": "mme_session",
+          "legendFormat": "Sessions",
           "refId": "A"
         }
       ],
-      "title": "Active UEs (RAN)",
+      "title": "MME Sessions",
       "type": "stat"
     },
     {
@@ -350,12 +350,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_smffunction_sm_sessionnbr",
-          "legendFormat": "Sessions",
+          "expr": "gtp1_pdpctxs_active",
+          "legendFormat": "PDP",
           "refId": "A"
         }
       ],
-      "title": "Active PDU Sessions",
+      "title": "Active PDP Contexts",
       "type": "stat"
     },
     {
@@ -413,12 +413,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "pfcp_sessions_active",
-          "legendFormat": "PFCP",
+          "expr": "bearers_active",
+          "legendFormat": "Bearers",
           "refId": "A"
         }
       ],
-      "title": "Active PFCP Sessions",
+      "title": "Active Bearers",
       "type": "stat"
     },
     {
@@ -476,12 +476,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "gnb{container=\"amf\"}",
-          "legendFormat": "gNBs",
+          "expr": "mme_enb_count",
+          "legendFormat": "eNBs",
           "refId": "A"
         }
       ],
-      "title": "Active gNBs",
+      "title": "Active eNBs",
       "type": "gauge"
     },
     {
@@ -492,8 +492,6 @@
       "fieldConfig": {
         "defaults": {
           "mappings": [],
-          "max": 10,
-          "min": 0,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -518,9 +516,11 @@
       },
       "id": 8,
       "options": {
-        "minVizHeight": 75,
-        "minVizWidth": 75,
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -528,9 +528,9 @@
           "fields": "",
           "values": false
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "sizing": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
       "pluginVersion": "11.3.0",
       "targets": [
@@ -539,13 +539,13 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_smffunction_sm_qos_flow_nbr",
-          "legendFormat": "QoS Flows",
+          "expr": "pfcp_sessions_active",
+          "legendFormat": "PFCP",
           "refId": "A"
         }
       ],
-      "title": "QoS Flows",
-      "type": "gauge"
+      "title": "PFCP Sessions",
+      "type": "stat"
     },
     {
       "collapsed": true,
@@ -562,7 +562,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "description": "Step 1 of UE attach. The UE sends a NAS Registration Request to the AMF via gNB. In a healthy attach Req and Succ track closely. Any Fail count indicates a problem in the registration procedure.",
+          "description": "mme_ue_count = UEs with NAS context. mme_session = active NAS sessions. mme_ue_pdn_count = PDN connections. All three should rise together during attach.",
           "fieldConfig": {
             "defaults": {
               "custom": {
@@ -570,53 +570,7 @@
                 "lineWidth": 2
               }
             },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Fail"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "red",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Success"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "green",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Request"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "blue",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              }
-            ]
+            "overrides": []
           },
           "gridPos": {
             "h": 8,
@@ -643,8 +597,8 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "fivegs_amffunction_rm_reginitreq",
-              "legendFormat": "Request",
+              "expr": "mme_ue_count",
+              "legendFormat": "UE Count",
               "refId": "A"
             },
             {
@@ -652,8 +606,8 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "fivegs_amffunction_rm_reginitsucc",
-              "legendFormat": "Success",
+              "expr": "mme_session",
+              "legendFormat": "Sessions",
               "refId": "B"
             },
             {
@@ -661,12 +615,12 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "fivegs_amffunction_rm_reginitfail",
-              "legendFormat": "Fail",
+              "expr": "mme_ue_pdn_count",
+              "legendFormat": "PDN Connections",
               "refId": "C"
             }
           ],
-          "title": "Initial Registration — Request vs Success vs Fail",
+          "title": "UE Context & Session State",
           "type": "timeseries"
         },
         {
@@ -674,7 +628,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "description": "AMF triggers authentication after receiving a Registration Request. Auth Req count should equal Reg Req count. Fails = wrong KI/OP or SIM config mismatch. Rejects = network decision to deny access.",
+          "description": "eNB connects to MME via S1-MME. S1 Setup Success = eNB registered. Connected UEs = UEs on that eNB with active RRC.",
           "fieldConfig": {
             "defaults": {
               "custom": {
@@ -682,53 +636,7 @@
                 "lineWidth": 2
               }
             },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Auth Fail"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "red",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Auth Reject"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "orange",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Auth Request"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "blue",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              }
-            ]
+            "overrides": []
           },
           "gridPos": {
             "h": 8,
@@ -755,8 +663,8 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "fivegs_amffunction_amf_authreq",
-              "legendFormat": "Auth Request",
+              "expr": "mme_enb_count",
+              "legendFormat": "eNBs",
               "refId": "A"
             },
             {
@@ -764,8 +672,8 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "fivegs_amffunction_amf_authfail",
-              "legendFormat": "Auth Fail",
+              "expr": "mme_enb_s1_setup_success",
+              "legendFormat": "S1 Setup Success",
               "refId": "B"
             },
             {
@@ -773,12 +681,12 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "fivegs_amffunction_amf_authreject",
-              "legendFormat": "Auth Reject",
+              "expr": "mme_enb_connected_ues",
+              "legendFormat": "Connected UEs",
               "refId": "C"
             }
           ],
-          "title": "Authentication (5G-AKA)",
+          "title": "eNB S1 Setup & Connected UEs",
           "type": "timeseries"
         },
         {
@@ -786,15 +694,47 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "description": "Mobility reg = UE moved between tracking areas. Periodic reg = UE signals it is still reachable on a timer. Normal in an idle attached UE.",
+          "description": "Aggregate Maximum Bit Rate per UE as provisioned in HSS. Verifies subscription data is applied correctly after attach.",
           "fieldConfig": {
             "defaults": {
               "custom": {
                 "fillOpacity": 8,
                 "lineWidth": 2
-              }
+              },
+              "unit": "bps"
             },
-            "overrides": []
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Downlink"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "green",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Uplink"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "blue",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              }
+            ]
           },
           "gridPos": {
             "h": 8,
@@ -821,8 +761,8 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "fivegs_amffunction_rm_regmobreq",
-              "legendFormat": "Mob Req",
+              "expr": "mme_ue_ambr_downlink_bps",
+              "legendFormat": "Downlink",
               "refId": "A"
             },
             {
@@ -830,180 +770,12 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "fivegs_amffunction_rm_regmobsucc",
-              "legendFormat": "Mob Success",
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "fivegs_amffunction_rm_regperiodreq",
-              "legendFormat": "Period Req",
-              "refId": "C"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "fivegs_amffunction_rm_regperiodsucc",
-              "legendFormat": "Period Success",
-              "refId": "D"
-            }
-          ],
-          "title": "Mobility & Periodic Registration",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "description": "AMF pages an idle UE to deliver downlink data. High paging rate with low success indicates UE is not reachable — possible RAN or UE coverage issue.",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "fillOpacity": 8,
-                "lineWidth": 2
-              }
-            },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Success"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "green",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Request"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "blue",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 8,
-            "x": 0,
-            "y": 90
-          },
-          "id": 13,
-          "options": {
-            "legend": {
-              "calcs": [
-                "last"
-              ],
-              "displayMode": "table",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "fivegs_amffunction_mm_paging5greq",
-              "legendFormat": "Request",
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "fivegs_amffunction_mm_paging5gsucc",
-              "legendFormat": "Success",
+              "expr": "mme_ue_ambr_uplink_bps",
+              "legendFormat": "Uplink",
               "refId": "B"
             }
           ],
-          "title": "Paging (MM)",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "fillOpacity": 8,
-                "lineWidth": 2
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 8,
-            "x": 8,
-            "y": 90
-          },
-          "id": 14,
-          "options": {
-            "legend": {
-              "displayMode": "list",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "amf_session",
-              "legendFormat": "AMF Sessions",
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "fivegs_amffunction_rm_registeredsubnbr",
-              "legendFormat": "Registered UEs",
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "ran_ue",
-              "legendFormat": "RAN UEs",
-              "refId": "C"
-            }
-          ],
-          "title": "AMF Sessions over Time",
+          "title": "UE AMBR — Uplink & Downlink",
           "type": "timeseries"
         },
         {
@@ -1017,11 +789,11 @@
           },
           "gridPos": {
             "h": 8,
-            "w": 8,
-            "x": 16,
-            "y": 90
+            "w": 24,
+            "x": 0,
+            "y": 40
           },
-          "id": 15,
+          "id": 13,
           "options": {
             "dedupStrategy": "none",
             "enableLogDetails": true,
@@ -1036,15 +808,15 @@
                 "type": "loki",
                 "uid": "P8E80F9AEF21F6940"
               },
-              "expr": "{nf=\"amf\"} |= ``",
+              "expr": "{nf=\"mme\"} |= ``",
               "refId": "A"
             }
           ],
-          "title": "AMF Logs",
+          "title": "MME Logs",
           "type": "logs"
         }
       ],
-      "title": "📋 Registration Procedure — AMF",
+      "title": "📋 Attach Procedure — MME",
       "type": "row"
     },
     {
@@ -1062,7 +834,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "description": "After successful registration the UE requests a PDU session to obtain an IP address. SMF coordinates with UPF and PCF to establish the session.",
+          "description": "PDP contexts = active data sessions. Bearers = QoS tunnels. GTP2 sessions = S5/S8 tunnels between SGW and PGW.",
           "fieldConfig": {
             "defaults": {
               "custom": {
@@ -1070,59 +842,7 @@
                 "lineWidth": 2
               }
             },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Success"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "green",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Request"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "blue",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Active Sessions"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "purple",
-                      "mode": "fixed"
-                    }
-                  },
-                  {
-                    "id": "custom.lineStyle",
-                    "value": {
-                      "fill": "dash"
-                    }
-                  }
-                ]
-              }
-            ]
+            "overrides": []
           },
           "gridPos": {
             "h": 8,
@@ -1149,8 +869,8 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "fivegs_smffunction_sm_pdusessioncreationreq",
-              "legendFormat": "Request",
+              "expr": "gtp1_pdpctxs_active",
+              "legendFormat": "PDP Contexts",
               "refId": "A"
             },
             {
@@ -1158,8 +878,8 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "fivegs_smffunction_sm_pdusessioncreationsucc",
-              "legendFormat": "Success",
+              "expr": "bearers_active",
+              "legendFormat": "Bearers",
               "refId": "B"
             },
             {
@@ -1167,12 +887,12 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "fivegs_smffunction_sm_sessionnbr",
-              "legendFormat": "Active Sessions",
+              "expr": "gtp2_sessions_active",
+              "legendFormat": "GTP2 Sessions",
               "refId": "C"
             }
           ],
-          "title": "PDU Session Creation",
+          "title": "PDP Context & Bearer Lifecycle",
           "type": "timeseries"
         },
         {
@@ -1180,7 +900,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "description": "SMF programs the UPF via PFCP over N4. SMF and UPF N4 Estab counters should be equal. Reports indicate active session heartbeats and usage reporting.",
+          "description": "Create = UE requesting data. Delete = detach or release. Parse Fail = malformed GTPv1 message — indicates protocol or config issue.",
           "fieldConfig": {
             "defaults": {
               "custom": {
@@ -1188,7 +908,53 @@
                 "lineWidth": 2
               }
             },
-            "overrides": []
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Parse Fail"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "red",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Create"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "green",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Delete"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "orange",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              }
+            ]
           },
           "gridPos": {
             "h": 8,
@@ -1215,8 +981,8 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "fivegs_smffunction_sm_n4sessionestabreq",
-              "legendFormat": "SMF N4 Estab",
+              "expr": "gn_rx_createpdpcontextreq",
+              "legendFormat": "Create",
               "refId": "A"
             },
             {
@@ -1224,8 +990,8 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "fivegs_upffunction_sm_n4sessionestabreq",
-              "legendFormat": "UPF N4 Estab",
+              "expr": "gn_rx_deletepdpcontextreq",
+              "legendFormat": "Delete",
               "refId": "B"
             },
             {
@@ -1233,21 +999,12 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "fivegs_smffunction_sm_n4sessionreport",
-              "legendFormat": "N4 Reports (SMF)",
+              "expr": "gn_rx_parse_failed",
+              "legendFormat": "Parse Fail",
               "refId": "C"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "fivegs_upffunction_sm_n4sessionreportsucc",
-              "legendFormat": "N4 Reports (UPF)",
-              "refId": "D"
             }
           ],
-          "title": "N4 Session Establishment — SMF ↔ UPF (PFCP)",
+          "title": "Gn Interface — MME ↔ SGW (GTPv1)",
           "type": "timeseries"
         },
         {
@@ -1255,7 +1012,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "description": "PCF creates policy associations for UE Access Management (AM) and Session Management (SM). AM Policy controls mobility behaviour. SM Policy controls session QoS and charging rules.",
+          "description": "One Create Session per UE attach confirms PGW processed the request. Delete Session on detach. Parse Fail = GTPv2 issue.",
           "fieldConfig": {
             "defaults": {
               "custom": {
@@ -1263,7 +1020,53 @@
                 "lineWidth": 2
               }
             },
-            "overrides": []
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Parse Fail"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "red",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Create"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "green",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Delete"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "orange",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              }
+            ]
           },
           "gridPos": {
             "h": 8,
@@ -1290,8 +1093,8 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "fivegs_pcffunction_pa_policyamassoreq",
-              "legendFormat": "AM Policy Req",
+              "expr": "s5c_rx_createsession",
+              "legendFormat": "Create",
               "refId": "A"
             },
             {
@@ -1299,8 +1102,8 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "fivegs_pcffunction_pa_policyamassosucc",
-              "legendFormat": "AM Policy Succ",
+              "expr": "s5c_rx_deletesession",
+              "legendFormat": "Delete",
               "refId": "B"
             },
             {
@@ -1308,199 +1111,12 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "fivegs_pcffunction_pa_policysmassoreq",
-              "legendFormat": "SM Policy Req",
+              "expr": "s5c_rx_parse_failed",
+              "legendFormat": "Parse Fail",
               "refId": "C"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "fivegs_pcffunction_pa_policysmassosucc",
-              "legendFormat": "SM Policy Succ",
-              "refId": "D"
             }
           ],
-          "title": "Policy Associations — PCF (AM & SM)",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 91
-          },
-          "id": 23,
-          "options": {
-            "dedupStrategy": "exact",
-            "enableLogDetails": true,
-            "showLabels": false,
-            "showTime": true,
-            "sortOrder": "Descending",
-            "wrapLogMessage": false
-          },
-          "targets": [
-            {
-              "datasource": {
-                "type": "loki",
-                "uid": "P8E80F9AEF21F6940"
-              },
-              "expr": "{nf=\"smf\"} |= ``",
-              "refId": "A"
-            }
-          ],
-          "title": "SMF Logs",
-          "type": "logs"
-        },
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 12,
-            "y": 91
-          },
-          "id": 24,
-          "options": {
-            "dedupStrategy": "none",
-            "enableLogDetails": true,
-            "showLabels": false,
-            "showTime": true,
-            "sortOrder": "Descending",
-            "wrapLogMessage": false
-          },
-          "targets": [
-            {
-              "datasource": {
-                "type": "loki",
-                "uid": "P8E80F9AEF21F6940"
-              },
-              "expr": "{nf=\"pcf\"} |= ``",
-              "refId": "A"
-            }
-          ],
-          "title": "PCF Logs",
-          "type": "logs"
-        }
-      ],
-      "title": "📦 Session Management — SMF & PCF",
-      "type": "row"
-    },
-    {
-      "collapsed": true,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 7
-      },
-      "id": 103,
-      "panels": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "description": "Actual user data packets traversing the N3 GTP tunnel. Uplink = UE sending data. Downlink = UE receiving data. Zero here means no active data traffic even if the session is established.",
-          "fieldConfig": {
-            "defaults": {
-              "custom": {
-                "fillOpacity": 10,
-                "lineWidth": 2
-              },
-              "unit": "pps"
-            },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Uplink (gNB→UPF)"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "blue",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Downlink (UPF→gNB)"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "green",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 12,
-            "x": 0,
-            "y": 8
-          },
-          "id": 30,
-          "options": {
-            "legend": {
-              "calcs": [
-                "mean",
-                "max"
-              ],
-              "displayMode": "table",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "rate(fivegs_ep_n3_gtp_indatapktn3upf[1m])",
-              "legendFormat": "Uplink (gNB→UPF)",
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "rate(fivegs_ep_n3_gtp_outdatapktn3upf[1m])",
-              "legendFormat": "Downlink (UPF→gNB)",
-              "refId": "B"
-            }
-          ],
-          "title": "N3 GTP Packet Rate — gNB ↔ UPF",
+          "title": "S5/S8 Interface — SGW ↔ PGW (GTPv2)",
           "type": "timeseries"
         },
         {
@@ -1508,11 +1124,10 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "description": "Container-level byte counters for the UPF. Includes N3 (gNB), N4 (SMF) and N6 (internet) interface traffic combined.",
           "fieldConfig": {
             "defaults": {
               "custom": {
-                "fillOpacity": 10,
+                "fillOpacity": 5,
                 "lineWidth": 2
               },
               "unit": "Bps"
@@ -1521,11 +1136,11 @@
           },
           "gridPos": {
             "h": 8,
-            "w": 12,
-            "x": 12,
-            "y": 8
+            "w": 24,
+            "x": 0,
+            "y": 41
           },
-          "id": 31,
+          "id": 23,
           "options": {
             "legend": {
               "calcs": [
@@ -1533,7 +1148,7 @@
                 "max"
               ],
               "displayMode": "table",
-              "placement": "bottom"
+              "placement": "right"
             },
             "tooltip": {
               "mode": "multi"
@@ -1557,27 +1172,9 @@
               "expr": "rate(container_network_tx_bytes_total{nf=\"upf\"}[1m])",
               "legendFormat": "UPF TX",
               "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "rate(container_network_rx_bytes_total{nf=\"amf\"}[1m])",
-              "legendFormat": "AMF RX",
-              "refId": "C"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "rate(container_network_tx_bytes_total{nf=\"amf\"}[1m])",
-              "legendFormat": "AMF TX",
-              "refId": "D"
             }
           ],
-          "title": "UPF Container Throughput (Bytes)",
+          "title": "UPF Container Throughput",
           "type": "timeseries"
         },
         {
@@ -1593,9 +1190,9 @@
             "h": 8,
             "w": 24,
             "x": 0,
-            "y": 92
+            "y": 49
           },
-          "id": 32,
+          "id": 24,
           "options": {
             "dedupStrategy": "none",
             "enableLogDetails": true,
@@ -1618,7 +1215,315 @@
           "type": "logs"
         }
       ],
-      "title": "🌐 User Plane — UPF & GTP",
+      "title": "🔗 Bearer & GTP Interfaces",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 7
+      },
+      "id": 103,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "description": "CCR = PGW asking PCRF for policy rules. CCA = PCRF answering. RAR = PCRF pushing rule updates. Errors on CCR or RAR indicate PCRF connectivity or config issues.",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "fillOpacity": 8,
+                "lineWidth": 2
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "CCR Error"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "red",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "RAR Error"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "orange",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 0,
+            "y": 8
+          },
+          "id": 30,
+          "options": {
+            "legend": {
+              "calcs": [
+                "last"
+              ],
+              "displayMode": "table",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "expr": "gx_rx_ccr",
+              "legendFormat": "CCR (rx)",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "expr": "gx_rx_ccr_error",
+              "legendFormat": "CCR Error",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "expr": "gx_tx_cca",
+              "legendFormat": "CCA (tx)",
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "expr": "gx_tx_rar",
+              "legendFormat": "RAR (tx)",
+              "refId": "D"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "expr": "gx_tx_rar_error",
+              "legendFormat": "RAR Error",
+              "refId": "E"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "expr": "gx_rx_raa",
+              "legendFormat": "RAA (rx)",
+              "refId": "F"
+            }
+          ],
+          "title": "Gx Interface — PGW ↔ PCRF",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "description": "Rx is used for IMS/VoLTE dedicated bearer creation. AAR = P-CSCF requesting media policy. AAA = PCRF approving. STR/STA = session termination.",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "fillOpacity": 8,
+                "lineWidth": 2
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "AAR Error"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "red",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "ASA Error"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "orange",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 12,
+            "y": 8
+          },
+          "id": 31,
+          "options": {
+            "legend": {
+              "calcs": [
+                "last"
+              ],
+              "displayMode": "table",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "expr": "rx_rx_aar",
+              "legendFormat": "AAR (rx)",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "expr": "rx_rx_aar_error",
+              "legendFormat": "AAR Error",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "expr": "rx_tx_aaa",
+              "legendFormat": "AAA (tx)",
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "expr": "rx_tx_sar",
+              "legendFormat": "SAR (tx)",
+              "refId": "D"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "expr": "rx_tx_sta",
+              "legendFormat": "STA (tx)",
+              "refId": "E"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "expr": "rx_rx_asa",
+              "legendFormat": "ASA (rx)",
+              "refId": "F"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "expr": "rx_rx_asa_error",
+              "legendFormat": "ASA Error",
+              "refId": "G"
+            }
+          ],
+          "title": "Rx Interface — PCRF ↔ P-CSCF (IMS/VoLTE)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 42
+          },
+          "id": 32,
+          "options": {
+            "dedupStrategy": "none",
+            "enableLogDetails": true,
+            "showLabels": false,
+            "showTime": true,
+            "sortOrder": "Descending",
+            "wrapLogMessage": false
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "loki",
+                "uid": "P8E80F9AEF21F6940"
+              },
+              "expr": "{nf=\"pcrf\"} |= ``",
+              "refId": "A"
+            }
+          ],
+          "title": "PCF / PCRF Logs",
+          "type": "logs"
+        }
+      ],
+      "title": "📊 Policy — PCRF (Gx & Rx)",
       "type": "row"
     },
     {
@@ -1636,62 +1541,11 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "description": "Value = number of CPU cores used. 0.5 means half a core. Calculated as (cpuDelta / systemDelta) × numCPUs.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
               "custom": {
-                "axisBorderShow": false,
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "barWidthFactor": 0.6,
-                "drawStyle": "line",
                 "fillOpacity": 5,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "insertNulls": false,
-                "lineInterpolation": "linear",
-                "lineWidth": 2,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "yellow",
-                    "value": 0.5
-                  },
-                  {
-                    "color": "red",
-                    "value": 1
-                  }
-                ]
+                "lineWidth": 2
               },
               "unit": "short"
             },
@@ -1711,27 +1565,24 @@
                 "max"
               ],
               "displayMode": "table",
-              "placement": "bottom",
-              "showLegend": true
+              "placement": "bottom"
             },
             "tooltip": {
-              "mode": "multi",
-              "sort": "none"
+              "mode": "multi"
             }
           },
-          "pluginVersion": "11.3.0",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "sum(container_cpu_usage_percent{domain=\"core\", generation=\"5g\"}) by (nf) / 100",
+              "expr": "sum(container_cpu_usage_percent{domain=\"core\", generation=\"4g\"}) by (nf) / 100",
               "legendFormat": "{{nf}}",
               "refId": "A"
             }
           ],
-          "title": "CPU Usage — Core NFs (cores used)",
+          "title": "CPU Usage — Core NFs (cores)",
           "type": "timeseries"
         },
         {
@@ -1741,55 +1592,9 @@
           },
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
               "custom": {
-                "axisBorderShow": false,
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "barWidthFactor": 0.6,
-                "drawStyle": "line",
                 "fillOpacity": 5,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "insertNulls": false,
-                "lineInterpolation": "linear",
-                "lineWidth": 2,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
+                "lineWidth": 2
               },
               "unit": "bytes"
             },
@@ -1809,22 +1614,19 @@
                 "max"
               ],
               "displayMode": "table",
-              "placement": "bottom",
-              "showLegend": true
+              "placement": "bottom"
             },
             "tooltip": {
-              "mode": "multi",
-              "sort": "none"
+              "mode": "multi"
             }
           },
-          "pluginVersion": "11.3.0",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "sum(container_memory_usage_bytes{domain=\"core\", generation=\"5g\"}) by (nf)",
+              "expr": "sum(container_memory_usage_bytes{domain=\"core\", generation=\"4g\"}) by (nf)",
               "legendFormat": "{{nf}}",
               "refId": "A"
             }
@@ -1840,13 +1642,11 @@
           "fieldConfig": {
             "defaults": {
               "displayName": "${__series.name}",
-              "mappings": [],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "yellow",
@@ -1866,41 +1666,25 @@
             "h": 8,
             "w": 12,
             "x": 0,
-            "y": 17
+            "y": 43
           },
           "id": 42,
           "options": {
             "displayMode": "gradient",
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom",
-              "showLegend": false
-            },
-            "maxVizHeight": 300,
-            "minVizHeight": 16,
-            "minVizWidth": 8,
-            "namePlacement": "auto",
             "orientation": "horizontal",
             "reduceOptions": {
               "calcs": [
                 "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showUnfilled": true,
-            "sizing": "auto",
-            "valueMode": "color"
+              ]
+            }
           },
-          "pluginVersion": "11.3.0",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "sum(container_cpu_usage_percent{domain=\"core\", generation=\"5g\"}) by (nf) / 100",
+              "expr": "sum(container_cpu_usage_percent{domain=\"core\", generation=\"4g\"}) by (nf) / 100",
               "instant": true,
               "legendFormat": "{{nf}}",
               "refId": "A"
@@ -1917,13 +1701,11 @@
           "fieldConfig": {
             "defaults": {
               "displayName": "${__series.name}",
-              "mappings": [],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "yellow",
@@ -1943,41 +1725,25 @@
             "h": 8,
             "w": 12,
             "x": 12,
-            "y": 17
+            "y": 43
           },
           "id": 43,
           "options": {
             "displayMode": "gradient",
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom",
-              "showLegend": false
-            },
-            "maxVizHeight": 300,
-            "minVizHeight": 16,
-            "minVizWidth": 8,
-            "namePlacement": "auto",
             "orientation": "horizontal",
             "reduceOptions": {
               "calcs": [
                 "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showUnfilled": true,
-            "sizing": "auto",
-            "valueMode": "color"
+              ]
+            }
           },
-          "pluginVersion": "11.3.0",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "sum(container_memory_usage_bytes{domain=\"core\", generation=\"5g\"}) by (nf)",
+              "expr": "sum(container_memory_usage_bytes{domain=\"core\", generation=\"4g\"}) by (nf)",
               "instant": true,
               "legendFormat": "{{nf}}",
               "refId": "A"
@@ -1993,55 +1759,9 @@
           },
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
               "custom": {
-                "axisBorderShow": false,
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "barWidthFactor": 0.6,
-                "drawStyle": "line",
                 "fillOpacity": 5,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "insertNulls": false,
-                "lineInterpolation": "linear",
-                "lineWidth": 2,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
+                "lineWidth": 2
               },
               "unit": "Bps"
             },
@@ -2051,7 +1771,7 @@
             "h": 8,
             "w": 24,
             "x": 0,
-            "y": 25
+            "y": 51
           },
           "id": 44,
           "options": {
@@ -2061,22 +1781,19 @@
                 "max"
               ],
               "displayMode": "table",
-              "placement": "right",
-              "showLegend": true
+              "placement": "right"
             },
             "tooltip": {
-              "mode": "multi",
-              "sort": "none"
+              "mode": "multi"
             }
           },
-          "pluginVersion": "11.3.0",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "rate(container_network_rx_bytes_total{domain=\"core\", generation=\"5g\"}[1m])",
+              "expr": "rate(container_network_rx_bytes_total{domain=\"core\", generation=\"4g\"}[1m])",
               "legendFormat": "{{nf}} RX",
               "refId": "A"
             },
@@ -2085,7 +1802,7 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "rate(container_network_tx_bytes_total{domain=\"core\", generation=\"5g\"}[1m])",
+              "expr": "rate(container_network_tx_bytes_total{domain=\"core\", generation=\"4g\"}[1m])",
               "legendFormat": "{{nf}} TX",
               "refId": "B"
             }
@@ -2120,12 +1837,12 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 13,
+        "h": 10,
         "w": 24,
         "x": 0,
         "y": 10
       },
-      "id": 55,
+      "id": 54,
       "options": {
         "dedupStrategy": "none",
         "enableLogDetails": true,
@@ -2143,11 +1860,11 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "{domain=\"core\", generation=\"5g\"} |= ``",
+          "expr": "{domain=\"core\", generation=\"4g\"} |= ``",
           "refId": "A"
         }
       ],
-      "title": "All 5G Core Logs",
+      "title": "All 4G Core Logs",
       "type": "logs"
     }
   ],
@@ -2155,9 +1872,10 @@
   "refresh": "30s",
   "schemaVersion": 40,
   "tags": [
-    "5g",
-    "open5gs",
-    "complete"
+    "4g",
+    "epc",
+    "complete",
+    "open5gs"
   ],
   "templating": {
     "list": []
@@ -2168,8 +1886,8 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "5G Core — Complete",
-  "uid": "5g-complete",
-  "version": 1,
+  "title": "4G EPC — Complete",
+  "uid": "4g-complete",
+  "version": 2,
   "weekStart": ""
 }
