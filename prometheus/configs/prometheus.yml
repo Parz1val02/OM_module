@@ -43,46 +43,46 @@ scrape_configs:
         target_label: container
         regex: "/(.*)"
 
-  ## 5G — AMF endpoints
-  #- job_name: amf_ue
-  #  metrics_path: /probe
-  #  params:
-  #    module: [amf_ue]
-  #  static_configs:
-  #    - targets: ["http://amf:9091/ue-info"]
-  #  relabel_configs:
-  #    - source_labels: [__address__]
-  #      target_label: __param_target
+  # 5G — AMF endpoints
+  - job_name: amf_ue
+    metrics_path: /probe
+    params:
+      module: [amf_ue]
+    static_configs:
+      - targets: ["http://amf:9091/ue-info"]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
 
-  #    - target_label: __address__
-  #      replacement: json-exporter:7979
+      - target_label: __address__
+        replacement: json-exporter:7979
  
-  #- job_name: amf_gnb
-  #  metrics_path: /probe
-  #  params:
-  #    module: [amf_gnb]
+  - job_name: amf_gnb
+    metrics_path: /probe
+    params:
+      module: [amf_gnb]
 
-  #  static_configs:
-  #    - targets: ["http://amf:9091/gnb-info"]
-  #  relabel_configs:
-  #    - source_labels: [__address__]
-  #      target_label: __param_target
-  #    - target_label: __address__
-  #      replacement: json-exporter:7979
+    static_configs:
+      - targets: ["http://amf:9091/gnb-info"]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - target_label: __address__
+        replacement: json-exporter:7979
  
 
-  ## 5G — SMF endpoints
-  #- job_name: smf_pdu_5g
-  #  metrics_path: /probe
-  #  params:
-  #    module: [smf_pdu_5g]
-  #  static_configs:
-  #    - targets: ["http://smf:9091/pdu-info"]
-  #  relabel_configs:
-  #    - source_labels: [__address__]
-  #      target_label: __param_target
-  #    - target_label: __address__
-  #      replacement: json-exporter:7979
+  # 5G — SMF endpoints
+  - job_name: smf_pdu_5g
+    metrics_path: /probe
+    params:
+      module: [smf_pdu_5g]
+    static_configs:
+      - targets: ["http://smf:9091/pdu-info"]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - target_label: __address__
+        replacement: json-exporter:7979
 
  
   # 4G — MME endpoints

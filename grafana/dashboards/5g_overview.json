@@ -1378,7 +1378,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum(container_cpu_usage_percent{domain=\"core\", generation=\"5\"}) by (nf) / 100",
+          "expr": "sum(container_cpu_usage_percent{domain=\"core\", generation=\"5g\"}) by (nf) / 100",
           "instant": true,
           "legendFormat": "{{nf}}",
           "refId": "A"
