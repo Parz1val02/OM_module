@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 26,
   "links": [],
   "panels": [
     {
@@ -104,7 +104,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum(container_memory_usage_bytes{domain=\"core\"}) by (nf) / 1024 / 1024",
+          "expr": "sum(container_memory_usage_bytes{domain=\"core\", generation=\"5g\"}) by (nf) / 1024 / 1024",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -292,7 +292,7 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum(container_cpu_usage_percent{domain=\"core\"}) by (nf)",
+          "expr": "sum(container_cpu_usage_percent{domain=\"core\", generation=\"5g\"}) by (nf)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -574,6 +574,6 @@
   "timezone": "browser",
   "title": "5G core",
   "uid": "cffnniv0qfu2oa",
-  "version": 15,
+  "version": 3,
   "weekStart": ""
 }

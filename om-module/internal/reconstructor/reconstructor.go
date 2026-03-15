@@ -348,7 +348,7 @@ type lokiQueryResult struct {
 }
 
 func queryLoki(ctx context.Context, cfg Config, imsi string, start, end time.Time) ([]logEvent, error) {
-	expr := fmt.Sprintf(`{domain=~"core|epc"} |= "%s"`, imsi)
+	expr := fmt.Sprintf(`{domain="core"} |= "%s"`, imsi)
 
 	params := url.Values{}
 	params.Set("query", expr)
