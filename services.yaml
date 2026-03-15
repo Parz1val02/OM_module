@@ -11,6 +11,10 @@ services:
     ports:
       - "8080:8080"
     restart: unless-stopped
+    environment:
+      - TEMPO_ENDPOINT=tempo:4318
+      - LOKI_URL=http://loki:3100
+      - TRACE_QUERY_WINDOW=10m
     networks:
       default:
         ipv4_address: ${OM_MODULE_IP}
@@ -22,6 +26,8 @@ services:
       start_period: 10s
     depends_on:
       loki:
+        condition: service_healthy
+      tempo:
         condition: service_healthy
     labels:
       om.domain: "observability"
@@ -136,6 +142,7 @@ services:
       - --web.enable-lifecycle
       - --web.route-prefix=/
       - --web.external-url=http://localhost:9090
+      - --web.enable-remote-write-receiver
     expose:
       - "9090/tcp"
     ports:
@@ -209,6 +216,8 @@ services:
         condition: service_healthy
       loki:
         condition: service_healthy
+      tempo: 
+        condition: service_healthy
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
@@ -243,6 +252,32 @@ services:
       om.nf: "json-exporter"
       om.generation: "none"
       om.project: "prometheus"
+  
+  tempo:
+    image: grafana/tempo:2.4.2
+    container_name: tempo
+    command: ["-config.file=/etc/tempo/tempo.yml"]
+    volumes:
+      - ./tempo/tempo.yml:/etc/tempo/tempo.yml
+      - tempo-data:/var/tempo
+    ports:
+      - "3200:3200"
+      - "4318:4318"
+    networks:
+      default:
+        ipv4_address: ${TEMPO_IP}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3200/ready"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    labels:
+      om.domain: "observability"
+      om.nf: "tempo"
+      om.generation: "none"
+      om.project: "grafana"
 
 networks:
   default:
@@ -258,6 +293,8 @@ volumes:
     name: docker_open5gs_grafana_data
   loki-data:
     name: docker_open5gs_loki_data
+  tempo-data:
+    name: docker_open5gs_tempo_data
   ran_5g_logs:
     name: ran_5g_logs
   ran_4g_logs:

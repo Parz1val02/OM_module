@@ -14,6 +14,8 @@ import (
 	"github.com/Parz1val02/OM_module/internal/collector"
 	dockerclient "github.com/Parz1val02/OM_module/internal/docker"
 	"github.com/Parz1val02/OM_module/internal/exporter"
+	"github.com/Parz1val02/OM_module/internal/reconstructor"
+	"github.com/Parz1val02/OM_module/internal/tracing"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -26,6 +28,30 @@ func main() {
 	log.Printf("Port            : %s", cfg.Port)
 	log.Printf("Docker socket   : %s", cfg.DockerSocket)
 	log.Printf("Compose project : %s", cfg.ComposeProject)
+	log.Printf("Tempo endpoint  : %s", cfg.TempoEndpoint)
+	log.Printf("Loki URL        : %s", cfg.LokiURL)
+	log.Printf("Trace window    : %s", cfg.TraceQueryWindow)
+
+	// --- Context with graceful shutdown ---
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	// --- Distributed tracing → Grafana Tempo ---
+	// Initialised before everything else so startup spans are captured.
+	shutdownTracing, err := tracing.Init(ctx, cfg.TempoEndpoint)
+	if err != nil {
+		// Non-fatal: warn and continue without traces if Tempo is unavailable.
+		log.Printf("⚠️  Tracing init failed (continuing without traces): %v", err)
+	} else {
+		defer func() {
+			flushCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+			if err := shutdownTracing(flushCtx); err != nil {
+				log.Printf("⚠️  Tracing shutdown error: %v", err)
+			}
+			log.Printf("✅ Tracing shut down cleanly")
+		}()
+	}
 
 	// --- Docker client ---
 	dockerClient, err := dockerclient.New(cfg.DockerSocket)
@@ -39,43 +65,28 @@ func main() {
 	}()
 	log.Printf("✅ Connected to Docker daemon")
 
-	// --- Context with graceful shutdown ---
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	defer stop()
-
 	// --- Container collector ---
-	// Discovery is driven entirely by om.* Docker labels:
-	//   om.domain     → "core" | "ran" | "infra" | "observability"
-	//   om.nf         → "amf" | "smf" | "upf" | "mme" | "gnb" | "enb" | "ue" | …
-	//   om.generation → "4g" | "5g" | "none"
-	//   om.project    → "open5gs" | "srsran" | "srslte" | "ueransim" | …
-	//
-	// Containers that carry none of these labels are silently ignored,
-	// so unrelated system containers never pollute the topology view.
 	coll := collector.New(dockerClient, cfg.ComposeProject, 15*time.Second)
-
-	// Start collector in background
 	go coll.Run(ctx)
 
 	// --- Prometheus registry ---
-	// Use a custom registry so we control exactly what is exposed.
 	reg := prometheus.NewRegistry()
-
-	// Testbed container metrics — labelled with the full om.* taxonomy:
-	//   container_cpu_usage_percent{container, project, domain, nf, generation, image, state}
-	//   container_memory_usage_bytes{…}
-	//   container_network_rx_bytes_total{…}
-	//   container_network_tx_bytes_total{…}
-	//   container_pids{…}
-	//   container_health_status{…}   → 1=running, 0=degraded, -1=stopped
 	exporter.New(coll.Snapshot(), cfg.ComposeProject, reg)
 	log.Printf("✅ Prometheus exporter registered")
 
+	// --- Trace reconstructor config ---
+	queryWindow, err := time.ParseDuration(cfg.TraceQueryWindow)
+	if err != nil {
+		queryWindow = 10 * time.Minute
+	}
+	recCfg := reconstructor.Config{
+		LokiURL:     cfg.LokiURL,
+		QueryWindow: queryWindow,
+	}
+
 	// --- HTTP server ---
 	mux := http.NewServeMux()
-
-	// Pass the same registry to the API layer so /metrics uses it
-	handlers := api.New(coll.Snapshot(), cfg.ComposeProject, reg)
+	handlers := api.New(coll.Snapshot(), cfg.ComposeProject, reg, recCfg)
 	handlers.Register(mux)
 
 	srv := &http.Server{
@@ -85,18 +96,17 @@ func main() {
 		WriteTimeout: 30 * time.Second,
 	}
 
-	// Run HTTP server in background
 	go func() {
 		log.Printf("🚀 HTTP server listening on :%s", cfg.Port)
-		log.Printf("   GET /metrics   → Prometheus scrape endpoint (infra + health metrics)")
-		log.Printf("   GET /topology  → Full testbed topology + health status (JSON)")
-		log.Printf("   GET /ping      → Liveness probe")
+		log.Printf("   GET /metrics                          → Prometheus scrape endpoint")
+		log.Printf("   GET /topology                         → Testbed topology + health (JSON)")
+		log.Printf("   GET /ping                             → Liveness probe")
+		log.Printf("   GET /traces/reconstruct?imsi=<IMSI>   → Reconstruct NF procedure trace → Tempo")
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("HTTP server error: %v", err)
 		}
 	}()
 
-	// Wait for shutdown signal
 	<-ctx.Done()
 	log.Printf("🛑 Shutdown signal received — stopping gracefully...")
 
@@ -105,6 +115,5 @@ func main() {
 	if err := srv.Shutdown(shutdownCtx); err != nil {
 		log.Printf("HTTP server shutdown error: %v", err)
 	}
-
 	log.Printf("✅ O&M Module stopped cleanly")
 }

@@ -7,6 +7,9 @@ import (
 	"time"
 
 	dockerclient "github.com/Parz1val02/OM_module/internal/docker"
+	"github.com/Parz1val02/OM_module/internal/tracing"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
 )
 
 // OMLabelDomain values for om.domain
@@ -84,7 +87,7 @@ func (s *Snapshot) set(data map[string]*ContainerData) {
 }
 
 // Collector discovers containers and collects their resource metrics
-// on a fixed interval.  It only considers containers that carry om.* labels.
+// on a fixed interval. It only considers containers that carry om.* labels.
 type Collector struct {
 	docker   *dockerclient.Client
 	project  string
@@ -92,7 +95,7 @@ type Collector struct {
 	snap     *Snapshot
 }
 
-// New creates a Collector.  project is the Docker Compose project name used
+// New creates a Collector. project is the Docker Compose project name used
 // to filter containers; interval controls how often stats are refreshed.
 func New(docker *dockerclient.Client, project string, interval time.Duration) *Collector {
 	return &Collector{
@@ -104,10 +107,9 @@ func New(docker *dockerclient.Client, project string, interval time.Duration) *C
 }
 
 // Snapshot returns the live, thread-safe snapshot reference.
-// Callers should call Snapshot().All() to get a consistent copy.
 func (c *Collector) Snapshot() *Snapshot { return c.snap }
 
-// Run starts the collection loop.  It blocks until ctx is cancelled.
+// Run starts the collection loop. It blocks until ctx is cancelled.
 func (c *Collector) Run(ctx context.Context) {
 	log.Printf("📦 Collector started (project=%q, interval=%s)", c.project, c.interval)
 	c.collect(ctx) // run immediately on startup
@@ -124,13 +126,31 @@ func (c *Collector) Run(ctx context.Context) {
 	}
 }
 
-// collect does one full discovery + stats pass.
+// collect performs one full discovery + stats pass.
+//
+// Tracing structure:
+//
+//	collector.collect_cycle          (root — one trace per 15s tick)
+//	  ├── collector.list_containers  (single Docker API call)
+//	  └── collector.get_stats        (one child span per running container)
 func (c *Collector) collect(ctx context.Context) {
+	// --- Root span: covers the entire collection cycle ---
+	ctx, cycleSpan := tracing.Tracer().Start(ctx, "collector.collect_cycle")
+	defer cycleSpan.End()
+
+	// --- List containers ---
+	ctx, listSpan := tracing.Tracer().Start(ctx, "collector.list_containers")
 	containers, err := c.docker.ListContainers(ctx, c.project)
 	if err != nil {
+		listSpan.RecordError(err)
+		listSpan.SetStatus(codes.Error, err.Error())
+		listSpan.End()
+		cycleSpan.RecordError(err)
 		log.Printf("⚠️  Collector: ListContainers error: %v", err)
 		return
 	}
+	listSpan.SetAttributes(attribute.Int("containers.discovered", len(containers)))
+	listSpan.End()
 
 	newData := make(map[string]*ContainerData, len(containers))
 
@@ -148,34 +168,66 @@ func (c *Collector) collect(ctx context.Context) {
 			Project:    ct.Labels["om.project"],
 		}
 
-		// Skip containers that have no om.* labels at all — they don't
-		// belong to the testbed taxonomy (e.g., unrelated system containers).
+		// Skip containers with no om.* labels — they don't belong to the
+		// testbed taxonomy (e.g. unrelated system containers).
 		if cd.Domain == "" && cd.NF == "" {
 			continue
 		}
 
 		// Only collect resource stats for running containers.
 		if ct.State == "running" {
+			// One child span per container stats call so slow Docker API
+			// calls are individually visible in the Tempo waterfall.
+			_, statsSpan := tracing.Tracer().Start(ctx, "collector.get_stats")
+			statsSpan.SetAttributes(
+				attribute.String("container.name", ct.Name),
+				attribute.String("container.nf", cd.NF),
+				attribute.String("container.domain", cd.Domain),
+				attribute.String("container.generation", cd.Generation),
+			)
+
 			if stats, err := c.docker.GetStats(ctx, ct.ID); err == nil {
 				cd.CPUPercent = calcCPUPercent(stats)
 				cd.MemoryUsageB = memUsage(stats)
 				cd.NetworkRxBytes, cd.NetworkTxBytes = sumNetwork(stats)
 				cd.PIDs = stats.PidsStats.Current
+
+				statsSpan.SetAttributes(
+					attribute.Float64("container.cpu_percent", cd.CPUPercent),
+					attribute.Int("container.memory_bytes", int(cd.MemoryUsageB)),
+					attribute.Int("container.pids", int(cd.PIDs)),
+				)
 			} else if ctx.Err() == nil {
+				statsSpan.RecordError(err)
+				statsSpan.SetStatus(codes.Error, err.Error())
 				log.Printf("⚠️  Collector: GetStats(%s) error: %v", ct.Name, err)
 			}
+
+			statsSpan.End()
 		}
 
 		newData[ct.Name] = cd
 	}
+
+	// Summarise the cycle on the root span.
+	running := 0
+	for _, cd := range newData {
+		if cd.State == "running" {
+			running++
+		}
+	}
+	cycleSpan.SetAttributes(
+		attribute.Int("cycle.containers_total", len(newData)),
+		attribute.Int("cycle.containers_running", running),
+	)
 
 	c.snap.set(newData)
 }
 
 // --- helper calculations -------------------------------------------------
 
-// calcCPUPercent computes the CPU usage percentage using the standard
-// Docker delta formula: ΔcpuDelta / ΔsystemDelta × numCPUs × 100.
+// calcCPUPercent computes CPU usage % using the Docker delta formula:
+// ΔcpuDelta / ΔsystemDelta × numCPUs × 100
 func calcCPUPercent(s *dockerclient.RawStats) float64 {
 	cpuDelta := float64(s.CPUStats.CPUUsage.TotalUsage) -
 		float64(s.PreCPUStats.CPUUsage.TotalUsage)

@@ -1,0 +1,46 @@
+apiVersion: 1
+
+datasources:
+  - name: Tempo
+    type: tempo
+    uid: tempo
+    access: proxy
+    url: http://tempo:3200
+    editable: false
+    jsonData:
+      httpMethod: GET
+      serviceMap:
+        datasourceUid: PBFA97CFB590B2093
+
+      tracesToLogsV2:
+        datasourceUid: P8E80F9AEF21F6940
+        spanStartTimeShift: "-1m"
+        spanEndTimeShift: "1m"
+        filterByTraceID: false
+        filterBySpanID: false
+        customQuery: true
+        query: '{nf="$${__span.tags.nf}", domain="$${__span.tags.domain}"} | = "$${__span.tags.imsi}"'
+
+      tracesToMetrics:
+        datasourceUid: PBFA97CFB590B2093
+        spanStartTimeShift: "-2m"
+        spanEndTimeShift: "2m"
+        tags:
+          - key: nf
+            value: nf
+          - key: generation
+            value: generation
+        queries:
+          - name: "Container CPU"
+            query: 'container_cpu_usage_percent{nf="$${__tags.nf}"}'
+          - name: "Container Memory"
+            query: 'container_memory_usage_bytes{nf="$${__tags.nf}"}'
+
+      nodeGraph:
+        enabled: true
+
+      search:
+        hide: false
+
+      lokiSearch:
+        datasourceUid: P8E80F9AEF21F6940
