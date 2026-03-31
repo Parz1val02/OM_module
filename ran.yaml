@@ -194,4 +194,3 @@ volumes:
     name: ran_4g_logs
   ran_5g_logs:
     name: ran_5g_logs
-
