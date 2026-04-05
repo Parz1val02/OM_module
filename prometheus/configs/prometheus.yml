@@ -1,11 +1,10 @@
 global:
   scrape_interval: 15s
   external_labels:
-    monitor: 'open5gs-monitor'
+    monitor: "open5gs-monitor"
 
 scrape_configs:
   - job_name: "docker-services"
-
     docker_sd_configs:
       - host: unix:///var/run/docker.sock
         refresh_interval: 5s
@@ -28,7 +27,11 @@ scrape_configs:
       #  target_label: __address__
 
       # Build the scrape link using the name assigned to the container
-      - source_labels: [__meta_docker_container_name, __meta_docker_container_label_prometheus_port]
+      - source_labels:
+          [
+            __meta_docker_container_name,
+            __meta_docker_container_label_prometheus_port,
+          ]
         separator: ":"
         regex: "/(.*):(.+)"
         replacement: "${1}:${2}"
@@ -53,15 +56,13 @@ scrape_configs:
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
-
       - target_label: __address__
         replacement: json-exporter:7979
- 
+
   - job_name: amf_gnb
     metrics_path: /probe
     params:
       module: [amf_gnb]
-
     static_configs:
       - targets: ["http://amf:9091/gnb-info"]
     relabel_configs:
@@ -69,7 +70,6 @@ scrape_configs:
         target_label: __param_target
       - target_label: __address__
         replacement: json-exporter:7979
- 
 
   # 5G — SMF endpoints
   - job_name: smf_pdu_5g
@@ -84,7 +84,6 @@ scrape_configs:
       - target_label: __address__
         replacement: json-exporter:7979
 
- 
   # 4G — MME endpoints
   - job_name: mme_ue
     metrics_path: /probe
@@ -93,14 +92,12 @@ scrape_configs:
     static_configs:
       - targets: ["http://mme:9091/ue-info"]
     relabel_configs:
-
       - source_labels: [__address__]
         target_label: __param_target
       - target_label: __address__
         replacement: json-exporter:7979
- 
-  - job_name: mme_enb
 
+  - job_name: mme_enb
     metrics_path: /probe
     params:
       module: [mme_enb]
@@ -111,10 +108,9 @@ scrape_configs:
         target_label: __param_target
       - target_label: __address__
         replacement: json-exporter:7979
- 
+
   # 4G — SMF endpoints
   - job_name: smf_pdu_4g
-
     metrics_path: /probe
     params:
       module: [smf_pdu_4g]
@@ -125,17 +121,24 @@ scrape_configs:
         target_label: __param_target
       - target_label: __address__
         replacement: json-exporter:7979
- 
+
   # OM module topology
   - job_name: om_topology
     metrics_path: /probe
-
     params:
       module: [om_topology]
     static_configs:
-      - targets: ["http://om-module:8080/topology"]
+      - targets: ["http://172.22.0.1:8080/topology"]
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
       - target_label: __address__
         replacement: json-exporter:7979
+
+  - job_name: "om-module-host"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["172.22.0.1:8080"]
+    relabel_configs:
+      - target_label: container
+        replacement: om-module

@@ -8,16 +8,31 @@ services:
       - ./om-module:/mnt/om-module
     env_file:
       - .env
-    ports:
-      - "8080:8080"
     restart: unless-stopped
     environment:
       - TEMPO_ENDPOINT=tempo:4318
       - LOKI_URL=http://loki:3100
       - TRACE_QUERY_WINDOW=10m
-    networks:
-      default:
-        ipv4_address: ${OM_MODULE_IP}
+      # Set to "false" to disable the capture pipeline without rebuilding
+      - CAPTURE_ENABLED=true
+      # Bridge interface to capture on.
+      # "auto" = dynamic discovery via Docker network inspection (recommended).
+      # Set to explicit name (e.g. "br-c91787205592") to bypass discovery.
+      - CAPTURE_INTERFACE=auto
+      # How long the correlator waits before flushing an in-flight procedure
+      # as timed out and triggering the log-based reconstructor as fallback.
+      - PROCEDURE_TIMEOUT=30s
+      - MCC=${MCC}
+      - MNC=${MNC}
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    network_mode: host
+    extra_hosts:
+      - "loki:${LOKI_IP}"
+      - "tempo:${TEMPO_IP}"
+      - "prometheus:${METRICS_IP}"
+      - "grafana:${GRAFANA_IP}"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/ping"]
       interval: 30s
@@ -34,9 +49,9 @@ services:
       om.nf: "om-module"
       om.generation: "none"
       om.project: "golang"
-      prometheus.scrape: "true"
-      prometheus.port: "8080"
-      prometheus.path: "/metrics"
+      prometheus.scrape: "false"
+      #prometheus.port: "8080"
+      #prometheus.path: "/metrics"
 
   loki:
     image: grafana/loki:3.0.0
@@ -209,7 +224,7 @@ services:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
       - GF_USERS_ALLOW_SIGN_UP=false
-      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource,yesoreyeram-infinity-datasource
       # --- SMTP / alerting ---
       - GF_SMTP_ENABLED=true
       - GF_SMTP_HOST=smtp.gmail.com:587
@@ -309,6 +324,9 @@ networks:
     ipam:
       config:
         - subnet: ${TEST_NETWORK}
+  host:
+    name: host
+    external: true
 
 volumes:
   prometheus-data:

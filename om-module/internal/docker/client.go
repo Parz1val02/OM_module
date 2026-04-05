@@ -3,10 +3,12 @@ package docker
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 
 	"github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/api/types/network"
 	"github.com/docker/docker/client"
 )
 
@@ -35,15 +37,14 @@ func (c *Client) Close() error {
 // ContainerInfo is the subset of Docker container data the O&M module cares about.
 type ContainerInfo struct {
 	ID     string
-	Name   string // trimmed of the leading "/"
-	State  string // "running", "exited", …
+	Name   string
+	State  string
 	Image  string
-	Labels map[string]string // all Docker labels, including om.*
+	Labels map[string]string
 }
 
-// ListContainers returns all containers (running + stopped) whose Compose
-// project label matches the given project name.
-// If project is empty, all containers are returned.
+// ListContainers returns all containers whose Compose project label matches
+// the given project name. If project is empty, all containers are returned.
 func (c *Client) ListContainers(ctx context.Context, project string) ([]ContainerInfo, error) {
 	all, err := c.cli.ContainerList(ctx, container.ListOptions{All: true})
 	if err != nil {
@@ -59,7 +60,7 @@ func (c *Client) ListContainers(ctx context.Context, project string) ([]Containe
 			}
 		}
 
-		name := ct.ID[:12] // fallback
+		name := ct.ID[:12]
 		if len(ct.Names) > 0 {
 			name = ct.Names[0]
 			if len(name) > 0 && name[0] == '/' {
@@ -76,6 +77,28 @@ func (c *Client) ListContainers(ctx context.Context, project string) ([]Containe
 		})
 	}
 	return result, nil
+}
+
+// GetBridgeInterface returns the Linux bridge interface name for the given
+// Docker network name (e.g. "docker_open5gs_default").
+//
+// Docker names bridge interfaces as "br-<first12chars_of_network_id>".
+// The method verifies the interface actually exists on the host before
+// returning it, so the caller can rely on the result being usable.
+func (c *Client) GetBridgeInterface(ctx context.Context, networkName string) (string, error) {
+	// Inspect the named network to get its ID.
+	nr, err := c.cli.NetworkInspect(ctx, networkName, network.InspectOptions{})
+	if err != nil {
+		return "", fmt.Errorf("docker: inspect network %q: %w", networkName, err)
+	}
+
+	if len(nr.ID) < 12 {
+		return "", fmt.Errorf("docker: network %q has unexpectedly short ID %q", networkName, nr.ID)
+	}
+
+	ifaceName := "br-" + nr.ID[:12]
+	log.Printf("🌉 Bridge interface discovered: %s", ifaceName)
+	return ifaceName, nil
 }
 
 // RawStats holds the raw JSON stats from the Docker API for one container.

@@ -2,11 +2,16 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
+	"io"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
+	"github.com/Parz1val02/OM_module/internal/capture"
 	"github.com/Parz1val02/OM_module/internal/collector"
+	"github.com/Parz1val02/OM_module/internal/correlator"
 	"github.com/Parz1val02/OM_module/internal/reconstructor"
 	"github.com/Parz1val02/OM_module/internal/tracing"
 	"github.com/prometheus/client_golang/prometheus"
@@ -17,15 +22,34 @@ import (
 
 // Handlers bundles the HTTP handler dependencies.
 type Handlers struct {
-	snap    *collector.Snapshot
-	project string
-	reg     *prometheus.Registry
-	recCfg  reconstructor.Config
+	snap       *collector.Snapshot
+	project    string
+	reg        *prometheus.Registry
+	recCfg     reconstructor.Config
+	capManager *capture.Manager
+	corr       *correlator.Correlator
+	lokiURL    string
 }
 
 // New creates a Handlers instance.
-func New(snap *collector.Snapshot, project string, reg *prometheus.Registry, recCfg reconstructor.Config) *Handlers {
-	return &Handlers{snap: snap, project: project, reg: reg, recCfg: recCfg}
+func New(
+	snap *collector.Snapshot,
+	project string,
+	reg *prometheus.Registry,
+	recCfg reconstructor.Config,
+	capManager *capture.Manager,
+	corr *correlator.Correlator,
+	lokiURL string,
+) *Handlers {
+	return &Handlers{
+		snap:       snap,
+		project:    project,
+		reg:        reg,
+		recCfg:     recCfg,
+		capManager: capManager,
+		corr:       corr,
+		lokiURL:    lokiURL,
+	}
 }
 
 // Register wires all routes onto mux.
@@ -34,6 +58,8 @@ func (h *Handlers) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/topology", h.handleTopology)
 	mux.HandleFunc("/ping", h.handlePing)
 	mux.HandleFunc("/traces/reconstruct", h.handleReconstruct)
+	mux.HandleFunc("/traces/search", h.handleTraceSearch)
+	mux.HandleFunc("/capture/status", h.handleCaptureStatus)
 }
 
 // --- /ping ---------------------------------------------------------------
@@ -116,19 +142,6 @@ func (h *Handlers) handleTopology(w http.ResponseWriter, r *http.Request) {
 }
 
 // --- /traces/reconstruct -------------------------------------------------
-//
-// Reconstructs a synthetic distributed trace from Loki logs for a given IMSI.
-//
-// Query parameters:
-//   imsi       (required) - 15-digit IMSI, e.g. "001011234567895"
-//   generation (optional) - "4g" or "5g" (default: auto-detect)
-//   window     (optional) - how far back to look, e.g. "15m"
-//
-// Example:
-//   GET /traces/reconstruct?imsi=001011234567895&generation=5g
-//
-// Returns JSON with trace_id, procedure name, span count and event list.
-// The trace is simultaneously exported to Grafana Tempo.
 
 func (h *Handlers) handleReconstruct(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracing.Tracer().Start(r.Context(), "http.GET /traces/reconstruct")
@@ -175,4 +188,203 @@ func (h *Handlers) handleReconstruct(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).Encode(result)
+}
+
+// --- /traces/search ------------------------------------------------------
+//
+// Queries Tempo for recent traces matching optional filters.
+// Used by the Grafana table panel for live trace display.
+//
+// Query parameters:
+//   generation  (optional) "4g" | "5g" — filter by generation tag
+//   imsi        (optional) — filter by imsi span attribute
+//   limit       (optional) default 20
+//   since       (optional) duration string default "10m"
+
+type traceSearchResult struct {
+	TraceID    string            `json:"trace_id"`
+	RootName   string            `json:"root_name"`
+	StartTime  string            `json:"start_time"`
+	DurationMs int64             `json:"duration_ms"`
+	Tags       map[string]string `json:"tags"`
+}
+
+type traceSearchResponse struct {
+	Traces []traceSearchResult `json:"traces"`
+	Total  int                 `json:"total"`
+}
+
+func (h *Handlers) handleTraceSearch(w http.ResponseWriter, r *http.Request) {
+	ctx, span := tracing.Tracer().Start(r.Context(), "http.GET /traces/search")
+	defer span.End()
+
+	generation := strings.TrimSpace(r.URL.Query().Get("generation"))
+	imsi := strings.TrimPrefix(strings.TrimSpace(r.URL.Query().Get("imsi")), "imsi-")
+	limitStr := r.URL.Query().Get("limit")
+	sinceStr := r.URL.Query().Get("since")
+
+	limit := 20
+	if limitStr != "" {
+		if n, err := strconv.Atoi(limitStr); err == nil && n > 0 {
+			limit = n
+		}
+	}
+
+	since := 10 * time.Minute
+	if sinceStr != "" {
+		if d, err := time.ParseDuration(sinceStr); err == nil {
+			since = d
+		}
+	}
+
+	// Build Tempo search URL.
+	// Tempo 2.x search API: GET /api/search?tags=<key=value>&start=<unix>&end=<unix>&limit=<n>
+	tempoURL := h.buildTempoSearchURL(generation, imsi, since, limit)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, tempoURL, nil)
+	if err != nil {
+		http.Error(w, `{"error":"failed to build tempo request"}`, http.StatusInternalServerError)
+		return
+	}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		http.Error(w, fmt.Sprintf(`{"error":"tempo unreachable: %v"}`, err), http.StatusBadGateway)
+		return
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		http.Error(w, `{"error":"failed to read tempo response"}`, http.StatusInternalServerError)
+		return
+	}
+
+	// Tempo returns {"traces":[...]} — parse and reformat for the dashboard.
+	var tempoResp struct {
+		Traces []struct {
+			TraceID            string `json:"traceID"`
+			RootServiceName    string `json:"rootServiceName"`
+			RootTraceName      string `json:"rootTraceName"`
+			StartTimeUnixNano  string `json:"startTimeUnixNano"`
+			DurationMs         int64  `json:"durationMs"`
+			SpanSets           []struct {
+				Spans []struct {
+					Attributes []struct {
+						Key   string `json:"key"`
+						Value struct {
+							StringValue string `json:"stringValue"`
+						} `json:"value"`
+					} `json:"attributes"`
+				} `json:"spans"`
+			} `json:"spanSets"`
+		} `json:"traces"`
+	}
+
+	if err := json.Unmarshal(body, &tempoResp); err != nil {
+		// Tempo returned something unexpected — pass through raw.
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write(body)
+		return
+	}
+
+	results := make([]traceSearchResult, 0, len(tempoResp.Traces))
+	for _, t := range tempoResp.Traces {
+		tags := make(map[string]string)
+		// Extract span attributes from the first span of the first spanset.
+		if len(t.SpanSets) > 0 && len(t.SpanSets[0].Spans) > 0 {
+			for _, attr := range t.SpanSets[0].Spans[0].Attributes {
+				tags[attr.Key] = attr.Value.StringValue
+			}
+		}
+
+		// Parse start time.
+		startNs, _ := strconv.ParseInt(t.StartTimeUnixNano, 10, 64)
+		startTime := time.Unix(0, startNs).UTC().Format(time.RFC3339)
+
+		results = append(results, traceSearchResult{
+			TraceID:    t.TraceID,
+			RootName:   t.RootTraceName,
+			StartTime:  startTime,
+			DurationMs: t.DurationMs,
+			Tags:       tags,
+		})
+	}
+
+	span.SetAttributes(attribute.Int("traces.found", len(results)))
+
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(traceSearchResponse{
+		Traces: results,
+		Total:  len(results),
+	})
+}
+
+// buildTempoSearchURL constructs the Tempo search API URL with tag filters.
+// Tempo is reachable at http://tempo:3200 (from within the Docker network).
+func (h *Handlers) buildTempoSearchURL(generation, imsi string, since time.Duration, limit int) string {
+	now := time.Now()
+	start := now.Add(-since)
+
+	var tags []string
+	if generation != "" {
+		tags = append(tags, fmt.Sprintf("generation=%s", generation))
+	}
+	if imsi != "" {
+		tags = append(tags, fmt.Sprintf("imsi=%s", imsi))
+	}
+	// Always filter to capture-sourced traces for this endpoint.
+	tags = append(tags, "source=capture")
+
+	base := "http://tempo:3200/api/search"
+	params := fmt.Sprintf("?start=%d&end=%d&limit=%d",
+		start.Unix(), now.Unix(), limit)
+
+	if len(tags) > 0 {
+		params += "&tags=" + strings.Join(tags, "%20")
+	}
+
+	return base + params
+}
+
+// --- /capture/status -----------------------------------------------------
+
+type captureStatusResponse struct {
+	Running       bool    `json:"running"`
+	Interface     string  `json:"interface"`
+	Generation    string  `json:"generation"`
+	PacketsTotal  uint64  `json:"packets_total"`
+	Packets4G     uint64  `json:"packets_4g"`
+	Packets5G     uint64  `json:"packets_5g"`
+	RestartCount  uint64  `json:"restart_count"`
+	UptimeSeconds float64 `json:"uptime_seconds"`
+	ActiveProcs   int     `json:"active_procedures"`
+}
+
+func (h *Handlers) handleCaptureStatus(w http.ResponseWriter, r *http.Request) {
+	_, span := tracing.Tracer().Start(r.Context(), "http.GET /capture/status")
+	defer span.End()
+
+	var resp captureStatusResponse
+
+	if h.capManager != nil {
+		s := h.capManager.Status()
+		resp = captureStatusResponse{
+			Running:       s.Running,
+			Interface:     s.Interface,
+			Generation:    s.Generation,
+			PacketsTotal:  s.PacketsTotal,
+			Packets4G:     s.Packets4G,
+			Packets5G:     s.Packets5G,
+			RestartCount:  s.RestartCount,
+			UptimeSeconds: s.UptimeSeconds,
+		}
+	}
+
+	if h.corr != nil {
+		resp.ActiveProcs = h.corr.ActiveProcedureCount()
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(resp)
 }

@@ -113,9 +113,7 @@
       "id": 1,
       "options": {
         "legend": {
-          "calcs": [
-            "last"
-          ],
+          "calcs": ["last"],
           "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
@@ -228,9 +226,7 @@
       "id": 2,
       "options": {
         "legend": {
-          "calcs": [
-            "last"
-          ],
+          "calcs": ["last"],
           "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
@@ -375,10 +371,7 @@
       "id": 3,
       "options": {
         "legend": {
-          "calcs": [
-            "last",
-            "max"
-          ],
+          "calcs": ["last", "max"],
           "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
@@ -495,9 +488,7 @@
       "id": 4,
       "options": {
         "legend": {
-          "calcs": [
-            "last"
-          ],
+          "calcs": ["last"],
           "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
@@ -610,9 +601,7 @@
       "id": 5,
       "options": {
         "legend": {
-          "calcs": [
-            "last"
-          ],
+          "calcs": ["last"],
           "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
@@ -769,9 +758,7 @@
       "id": 6,
       "options": {
         "legend": {
-          "calcs": [
-            "last"
-          ],
+          "calcs": ["last"],
           "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
@@ -942,9 +929,7 @@
       "id": 7,
       "options": {
         "legend": {
-          "calcs": [
-            "last"
-          ],
+          "calcs": ["last"],
           "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
@@ -1106,10 +1091,7 @@
       "id": 8,
       "options": {
         "legend": {
-          "calcs": [
-            "mean",
-            "max"
-          ],
+          "calcs": ["mean", "max"],
           "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
@@ -1204,10 +1186,7 @@
       "id": 9,
       "options": {
         "legend": {
-          "calcs": [
-            "mean",
-            "max"
-          ],
+          "calcs": ["mean", "max"],
           "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
@@ -1409,12 +1388,7 @@
   "preload": false,
   "refresh": "30s",
   "schemaVersion": 40,
-  "tags": [
-    "4g",
-    "epc",
-    "detail",
-    "open5gs"
-  ],
+  "tags": ["4g", "epc", "detail", "open5gs"],
   "templating": {
     "list": []
   },

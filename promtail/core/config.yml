@@ -10,7 +10,6 @@ clients:
     batchsize: 102400
 
 scrape_configs:
-
   # ── 5G Core NF Logs ───────────────────────────────────────────────────────
   - job_name: open5gs-5g-logs
     static_configs:
@@ -26,7 +25,7 @@ scrape_configs:
           source: filename
           expression: '/var/log/open5gs/5g/(?P<nf>[^.]+)\.log'
       - labels:
-          nf:                # amf, smf, upf, pcf, nrf, ausf, udm, udr, nssf, bsf, scp
+          nf: # amf, smf, upf, pcf, nrf, ausf, udm, udr, nssf, bsf, scp
 
       - regex:
           expression: '^(?P<timestamp>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}\.\d+)\s+\[(?P<level>\w+)\]\s+\S+:\s+(?P<message>.*)'
@@ -67,7 +66,7 @@ scrape_configs:
           source: filename
           expression: '/var/log/open5gs/4g/(?P<nf>[^.]+)\.log'
       - labels:
-          nf:                # mme, sgwc, sgwu, smf, upf, hss, pcrf
+          nf: # mme, sgwc, sgwu, smf, upf, hss, pcrf
 
       - regex:
           expression: '^(?P<timestamp>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}\.\d+)\s+\[(?P<level>\w+)\]\s+\S+:\s+(?P<message>.*)'

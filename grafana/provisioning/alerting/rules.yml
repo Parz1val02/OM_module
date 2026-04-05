@@ -1,14 +1,12 @@
 apiVersion: 1
 
 groups:
-
   # ── 5G Core Alerts ─────────────────────────────────────────────────────────
   - orgId: 1
     name: 5G Core Alerts
     folder: 5G Testbed
     interval: 30s
     rules:
-
       - uid: 5g-ue-detached
         title: "[5G] No UEs Registered"
         condition: C
@@ -163,7 +161,6 @@ groups:
     folder: 4G Testbed
     interval: 30s
     rules:
-
       - uid: 4g-ue-detached
         title: "[4G] No UEs Attached"
         condition: C

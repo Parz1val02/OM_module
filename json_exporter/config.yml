@@ -2,7 +2,6 @@
 # and the OM module topology endpoint.
 
 modules:
-
   # ---------------------------------------------------------------------------
   # 5G — AMF UE info  (curl http://amf:9091/ue-info)
   # ---------------------------------------------------------------------------
@@ -57,7 +56,7 @@ modules:
         path: "{ .items[*].num_connected_ues }"
         labels:
           gnb_id: "{ .items[*].gnb_id }"
-          plmn:   "{ .items[*].plmn }"
+          plmn: "{ .items[*].plmn }"
 
   # ---------------------------------------------------------------------------
   # 5G — SMF PDU session info  (curl http://smf:9091/pdu-info)
@@ -116,7 +115,7 @@ modules:
         path: "{ .items[*].num_connected_ues }"
         labels:
           enb_id: "{ .items[*].enb_id }"
-          plmn:   "{ .items[*].plmn }"
+          plmn: "{ .items[*].plmn }"
 
   # ---------------------------------------------------------------------------
   # 4G — SMF PDU session info  (curl http://smf:9091/pdu-info)
