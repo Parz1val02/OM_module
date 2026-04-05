@@ -9,12 +9,16 @@ import (
 	"time"
 
 	"github.com/Parz1val02/OM_module/internal/capture"
+	"github.com/Parz1val02/OM_module/internal/collector"
+	dockerclient "github.com/Parz1val02/OM_module/internal/docker"
 	"github.com/Parz1val02/OM_module/internal/reconstructor"
 	"github.com/Parz1val02/OM_module/internal/tracing"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	oteltrace "go.opentelemetry.io/otel/trace"
 )
+
+const networkName = "docker_open5gs_default"
 
 // Correlator consumes packets from the capture manager, maintains
 // per-UE procedure state machines, and emits distributed traces to Tempo
@@ -24,12 +28,12 @@ type Correlator struct {
 	mnc     string
 	timeout time.Duration
 	recCfg  reconstructor.Config
+	docker  *dockerclient.Client
+	snap    *collector.Snapshot
 
 	mu         sync.Mutex
-	procedures map[string]*Procedure // key → *Procedure
-	// keyAlias maps temporary keys (ENB-ID, RAN-ID) to stable IMSI keys
-	// after the IMSI becomes known.
-	keyAlias map[string]string
+	procedures map[string]*Procedure
+	keyAlias   map[string]string
 }
 
 // New creates a Correlator.
@@ -37,12 +41,16 @@ type Correlator struct {
 //   - mcc, mnc: used to reconstruct 5G IMSI from SUCI MSIN
 //   - timeout:  how long to wait before flushing an incomplete procedure as timeout
 //   - recCfg:   reconstructor config used for automatic fallback on timeout
-func New(mcc, mnc string, timeout time.Duration, recCfg reconstructor.Config) *Correlator {
+//   - docker:   Docker client for IP→NF name resolution
+//   - snap:     collector snapshot for container name→NF label resolution
+func New(mcc, mnc string, timeout time.Duration, recCfg reconstructor.Config, docker *dockerclient.Client, snap *collector.Snapshot) *Correlator {
 	return &Correlator{
 		mcc:        mcc,
 		mnc:        mnc,
 		timeout:    timeout,
 		recCfg:     recCfg,
+		docker:     docker,
+		snap:       snap,
 		procedures: make(map[string]*Procedure),
 		keyAlias:   make(map[string]string),
 	}
@@ -243,12 +251,40 @@ func (c *Correlator) triggerReconstructor(ctx context.Context, proc *Procedure) 
 	log.Printf("✅ Reconstructor fallback succeeded (imsi=%s traceID=%s)", proc.IMSI, result.TraceID)
 }
 
+// buildIPToNFMap constructs a map of IP → om.nf label by joining:
+//   - Docker network inspect (IP → container name)
+//   - Collector snapshot (container name → om.nf label)
+func (c *Correlator) buildIPToNFMap(ctx context.Context) map[string]string {
+	ipToName, err := c.docker.GetNetworkContainerIPs(ctx, networkName)
+	if err != nil {
+		log.Printf("⚠️  IP→NF resolution: network inspect failed: %v", err)
+		return map[string]string{}
+	}
+
+	nameToNF := c.snap.NameToNFMap()
+
+	result := make(map[string]string, len(ipToName))
+	for ip, name := range ipToName {
+		if nf, ok := nameToNF[name]; ok {
+			result[ip] = nf
+		} else {
+			// Fallback: use container name directly
+			result[ip] = name
+		}
+	}
+
+	return result
+}
+
 // emitTrace builds and exports an OpenTelemetry trace from a completed or
 // timed-out procedure. Each SpanRecord becomes a child span under a root span.
 func (c *Correlator) emitTrace(ctx context.Context, proc *Procedure, result ProcedureResult) {
 	if len(proc.Spans) == 0 {
 		return
 	}
+
+	// Build IP→NF map once per trace emit.
+	ipToNF := c.buildIPToNFMap(ctx)
 
 	tracer := tracing.Tracer()
 	traceStart := proc.StartTime
@@ -263,6 +299,8 @@ func (c *Correlator) emitTrace(ctx context.Context, proc *Procedure, result Proc
 		attribute.String("procedure", proc.ProcedureType),
 		attribute.String("result", string(result)),
 		attribute.String("source", "capture"),
+		attribute.String("mcc", c.mcc),
+		attribute.String("mnc", c.mnc),
 		attribute.Int("span_count", len(proc.Spans)),
 	}
 
@@ -271,21 +309,69 @@ func (c *Correlator) emitTrace(ctx context.Context, proc *Procedure, result Proc
 		oteltrace.WithAttributes(rootAttrs...),
 	)
 
+	// Determine the core-side IP for message direction detection.
+	// For 5G: AMF is the core NF on the NGAP interface.
+	// For 4G: MME is the core NF on the S1AP interface.
+	// We detect it as the IP whose NF label is "amf" or "mme".
+	coreIP := ""
+	for ip, nf := range ipToNF {
+		if nf == "amf" || nf == "mme" {
+			coreIP = ip
+			break
+		}
+	}
+
 	for _, sr := range proc.Spans {
 		end := sr.EndTime
 		if end.IsZero() || !end.After(sr.StartTime) {
 			end = sr.StartTime.Add(time.Millisecond)
 		}
 
+		// Resolve NF names from IPs.
+		srcNF := ipToNF[sr.SrcIP]
+		if srcNF == "" {
+			srcNF = sr.SrcIP
+		}
+		dstNF := ipToNF[sr.DstIP]
+		if dstNF == "" {
+			dstNF = sr.DstIP
+		}
+
+		// Extract structured attributes from span name.
+		protocol := extractProtocol(sr.Name)
+		ngapProc := extractNGAPProcedure(sr.Name)
+		nasMsg := extractNASMessage(sr.Name)
+		direction := messageDirection(sr.SrcIP, coreIP)
+
+		childAttrs := []attribute.KeyValue{
+			attribute.String("imsi", proc.IMSI),
+			attribute.String("generation", proc.Generation),
+			attribute.String("source", "capture"),
+			attribute.String("mcc", c.mcc),
+			attribute.String("mnc", c.mnc),
+			// IP addresses
+			attribute.String("src_ip", sr.SrcIP),
+			attribute.String("dst_ip", sr.DstIP),
+			// NF names resolved from IPs
+			attribute.String("src_nf", srcNF),
+			attribute.String("dst_nf", dstNF),
+			// Protocol and procedure
+			attribute.String("protocol", protocol),
+			attribute.String("procedure", ngapProc),
+			attribute.String("message_direction", direction),
+			// Phase 2 placeholders — empty for NGAP/S1AP spans
+			attribute.String("teid", ""),
+			attribute.String("seid", ""),
+		}
+
+		// Only add nas_message if present — avoids empty attribute noise.
+		if nasMsg != "" {
+			childAttrs = append(childAttrs, attribute.String("nas_message", nasMsg))
+		}
+
 		_, childSpan := tracer.Start(rootCtx, sr.Name,
 			oteltrace.WithTimestamp(sr.StartTime),
-			oteltrace.WithAttributes(
-				attribute.String("imsi", proc.IMSI),
-				attribute.String("generation", proc.Generation),
-				attribute.String("source", "capture"),
-				attribute.String("src_ip", sr.SrcIP),
-				attribute.String("dst_ip", sr.DstIP),
-			),
+			oteltrace.WithAttributes(childAttrs...),
 		)
 
 		if result == ResultTimeout {

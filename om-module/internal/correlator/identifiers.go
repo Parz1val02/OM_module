@@ -9,14 +9,14 @@ import (
 
 // S1AP procedure codes (4G)
 const (
-	S1APProcS1Setup                  = 17
-	S1APProcInitialUEMessage         = 12
-	S1APProcDownlinkNASTransport     = 11
-	S1APProcUplinkNASTransport       = 13
-	S1APProcInitialContextSetup      = 9
-	S1APProcUECapabilityInfoInd      = 22
-	S1APProcUEContextRelease         = 18
-	S1APProcUEContextReleaseRequest  = 23
+	S1APProcS1Setup                 = 17
+	S1APProcInitialUEMessage        = 12
+	S1APProcDownlinkNASTransport    = 11
+	S1APProcUplinkNASTransport      = 13
+	S1APProcInitialContextSetup     = 9
+	S1APProcUECapabilityInfoInd     = 22
+	S1APProcUEContextRelease        = 18
+	S1APProcUEContextReleaseRequest = 23
 )
 
 // NGAP procedure codes (5G)
@@ -32,16 +32,16 @@ const (
 
 // NAS-EPS EMM message types (4G) — from nas-eps_nas-eps_nas_msg_emm_type
 const (
-	NASEMMAttachRequest       = "0x41"
-	NASEMMAttachAccept        = "0x42"
-	NASEMMAttachComplete      = "0x43"
-	NASEMMIdentityRequest     = "0x55"
-	NASEMMIdentityResponse    = "0x56"
-	NASEMMAuthRequest         = "0x52"
-	NASEMMAuthResponse        = "0x53"
-	NASEMMSecModeCommand      = "0x5d"
-	NASEMMSecModeComplete     = "0x5e"
-	NASEMMInformation         = "0x61"
+	NASEMMAttachRequest    = "0x41"
+	NASEMMAttachAccept     = "0x42"
+	NASEMMAttachComplete   = "0x43"
+	NASEMMIdentityRequest  = "0x55"
+	NASEMMIdentityResponse = "0x56"
+	NASEMMAuthRequest      = "0x52"
+	NASEMMAuthResponse     = "0x53"
+	NASEMMSecModeCommand   = "0x5d"
+	NASEMMSecModeComplete  = "0x5e"
+	NASEMMInformation      = "0x61"
 )
 
 // NAS-5GS MM message types (5G) — from nas-5gs_nas-5gs_mm_message_type
@@ -189,4 +189,56 @@ func nasMMName(msgType string) string {
 		return n
 	}
 	return ""
+}
+
+// --- Span attribute extraction helpers --------------------------------------
+// These are used by emitTrace to enrich child span attributes.
+
+// extractProtocol returns the protocol name from a span name.
+// Span names follow the pattern "PROTOCOL:Procedure / NAS:Message" or
+// "PROTOCOL:Procedure" for Phase 2+ protocols like "GTPv2:CreateSessionRequest".
+func extractProtocol(spanName string) string {
+	if idx := strings.Index(spanName, ":"); idx >= 0 {
+		return spanName[:idx]
+	}
+	return ""
+}
+
+// extractNGAPProcedure returns the NGAP/S1AP procedure name from a span name.
+// e.g. "NGAP:InitialUEMessage / NAS:Registration Request" → "InitialUEMessage"
+// e.g. "S1AP:DownlinkNASTransport / NAS:Attach Accept" → "DownlinkNASTransport"
+func extractNGAPProcedure(spanName string) string {
+	// Format: "PROTOCOL:ProcedureName / NAS:Message" or "PROTOCOL:ProcedureName"
+	after := spanName
+	if idx := strings.Index(spanName, ":"); idx >= 0 {
+		after = spanName[idx+1:]
+	}
+	// Strip everything from " /" onward
+	if idx := strings.Index(after, " /"); idx >= 0 {
+		after = after[:idx]
+	}
+	return strings.TrimSpace(after)
+}
+
+// extractNASMessage returns the NAS message name from a span name.
+// e.g. "NGAP:InitialUEMessage / NAS:Registration Request" → "Registration Request"
+// Returns "" if no NAS message is present in the span name.
+func extractNASMessage(spanName string) string {
+	const nasPrefix = "/ NAS:"
+	idx := strings.Index(spanName, nasPrefix)
+	if idx < 0 {
+		return ""
+	}
+	return strings.TrimSpace(spanName[idx+len(nasPrefix):])
+}
+
+// messageDirection returns "request" or "response" based on the src IP
+// relative to the known AMF/MME IP. For uplink messages (UE→core) the
+// src is the gNB/eNB. For downlink (core→UE) the src is the AMF/MME.
+// amfIP is the IP of the core-side NF (AMF for 5G, MME for 4G).
+func messageDirection(srcIP, amfIP string) string {
+	if srcIP == amfIP {
+		return "response"
+	}
+	return "request"
 }

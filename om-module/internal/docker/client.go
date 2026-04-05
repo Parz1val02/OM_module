@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"strings"
 
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/network"
@@ -99,6 +100,29 @@ func (c *Client) GetBridgeInterface(ctx context.Context, networkName string) (st
 	ifaceName := "br-" + nr.ID[:12]
 	log.Printf("🌉 Bridge interface discovered: %s", ifaceName)
 	return ifaceName, nil
+}
+
+// GetNetworkContainerIPs returns a map of IP address → container name for all
+// containers attached to the given Docker network. The CIDR suffix is stripped
+// from the IP (e.g. "172.22.0.10/24" becomes "172.22.0.10").
+func (c *Client) GetNetworkContainerIPs(ctx context.Context, networkName string) (map[string]string, error) {
+	nr, err := c.cli.NetworkInspect(ctx, networkName, network.InspectOptions{})
+	if err != nil {
+		return nil, fmt.Errorf("docker: inspect network %q: %w", networkName, err)
+	}
+
+	result := make(map[string]string, len(nr.Containers))
+	for _, ct := range nr.Containers {
+		ip := ct.IPv4Address
+		// Strip CIDR suffix if present
+		if idx := strings.Index(ip, "/"); idx >= 0 {
+			ip = ip[:idx]
+		}
+		if ip != "" {
+			result[ip] = ct.Name
+		}
+	}
+	return result, nil
 }
 
 // RawStats holds the raw JSON stats from the Docker API for one container.

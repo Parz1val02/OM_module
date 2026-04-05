@@ -99,7 +99,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "/^running$/",
           "values": false
         },
@@ -166,7 +168,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "/^interface$/",
           "values": false
         },
@@ -233,7 +237,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "/^packets_5g$/",
           "values": false
         },
@@ -308,7 +314,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "/^active_procedures$/",
           "values": false
         },
@@ -383,7 +391,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "/^restart_count$/",
           "values": false
         },
@@ -446,19 +456,13 @@
             },
             "filterable": true
           },
-          "links": [
-            {
-              "title": "Open waterfall in Tempo",
-              "url": "/explore?left=%7B%22datasource%22%3A%22tempo%22%2C%22queries%22%3A%5B%7B%22query%22%3A%22${__data.fields.trace_id}%22%2C%22queryType%22%3A%22traceql%22%2C%22refId%22%3A%22A%22%7D%5D%7D&orgId=1",
-              "targetBlank": false
-            }
-          ]
+          "links": []
         },
         "overrides": [
           {
             "matcher": {
               "id": "byName",
-              "options": "trace_id"
+              "options": "traceID"
             },
             "properties": [
               {
@@ -468,13 +472,115 @@
               {
                 "id": "custom.width",
                 "value": 260
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Open in Tempo",
+                    "url": "/explore?left={\"datasource\":\"tempo\",\"queries\":[{\"query\":\"${__value.raw}\",\"queryType\":\"traceql\",\"refId\":\"A\",\"datasource\":{\"type\":\"tempo\",\"uid\":\"tempo\"}}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}&orgId=1",
+                    "targetBlank": false
+                  }
+                ]
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "root_name"
+              "options": "spanID"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Span ID"
+              },
+              {
+                "id": "custom.width",
+                "value": 160
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Name"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 380
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Duration"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "ms"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "src_nf"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Source NF"
+              },
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dst_nf"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Dest NF"
+              },
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "protocol"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Protocol"
+              },
+              {
+                "id": "custom.width",
+                "value": 80
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "procedure"
             },
             "properties": [
               {
@@ -483,19 +589,19 @@
               },
               {
                 "id": "custom.width",
-                "value": 280
+                "value": 200
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "start_time"
+              "options": "nas_message"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Time"
+                "value": "NAS Message"
               },
               {
                 "id": "custom.width",
@@ -506,20 +612,152 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "duration_ms"
+              "options": "message_direction"
             },
             "properties": [
               {
                 "id": "displayName",
-                "value": "Duration (ms)"
-              },
-              {
-                "id": "unit",
-                "value": "ms"
+                "value": "Direction"
               },
               {
                 "id": "custom.width",
-                "value": 120
+                "value": 90
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "imsi"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "IMSI"
+              },
+              {
+                "id": "custom.width",
+                "value": 160
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "teid"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "seid"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "src_ip"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dst_ip"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "source"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "mcc"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "mnc"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "generation"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "span_count"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "result"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
               }
             ]
           }
@@ -533,14 +771,21 @@
       },
       "id": 11,
       "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "prettifyLogMessage": false,
-        "showCommonLabels": false,
-        "showLabels": false,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Start time"
+          }
+        ],
+        "collapseAll": true
       },
       "pluginVersion": "11.3.0",
       "targets": [
@@ -551,14 +796,14 @@
           },
           "queryType": "traceql",
           "refId": "A",
-          "query": "{span.generation=\"5g\" && span.source=\"capture\"}",
+          "query": "{span.generation=\"5g\" && span.source=\"capture\"} | select(span.src_nf, span.dst_nf, span.protocol, span.procedure, span.nas_message, span.message_direction, span.imsi)",
           "limit": 20,
           "tableType": "traces",
-          "spss": 3
+          "spss": 20
         }
       ],
       "title": "Recent 5G Traces \u2014 click row to open waterfall",
-      "type": "traces"
+      "type": "table"
     },
     {
       "collapsed": false,
@@ -620,7 +865,13 @@
   "preload": false,
   "refresh": "5s",
   "schemaVersion": 40,
-  "tags": ["5g", "traces", "capture", "ngap", "nr"],
+  "tags": [
+    "5g",
+    "traces",
+    "capture",
+    "ngap",
+    "nr"
+  ],
   "templating": {
     "list": [
       {

@@ -45,8 +45,8 @@ type Packet struct {
 // The format alternates: an index line ({"index":{...}}) then a data line
 // ({"timestamp":...,"layers":{...}}). We only care about data lines.
 type ekPacket struct {
-	Timestamp	json.RawMessage            `json:"timestamp"` // milliseconds since epoch
-	Layers		map[string]json.RawMessage `json:"layers"`
+	Timestamp json.RawMessage            `json:"timestamp"` // milliseconds since epoch
+	Layers    map[string]json.RawMessage `json:"layers"`
 }
 
 // tsharkProcess wraps a running tshark subprocess and its stdout pipe.
@@ -212,8 +212,6 @@ func parseEKLine(line string) (*Packet, error) {
 		parseS1AP(s1apRaw, pkt)
 	}
 
-	log.Printf("🔬 parsed packet gen=%s proc4g=%d proc5g=%d nasType=%s",
-    pkt.Generation, pkt.S1APProcedureCode, pkt.NGAPProcedureCode, pkt.NASMMType)
 	return pkt, nil
 }
 
@@ -251,27 +249,31 @@ func parseNGAPObject(raw json.RawMessage, pkt *Packet) {
 
 	// NAS-5GS is nested inside the ngap object under the key "nas-5gs".
 	if nasRaw, ok := obj["nas-5gs"]; ok {
-    var nas map[string]interface{}
-    nasBytes, _ := json.Marshal(nasRaw)
-    if err := json.Unmarshal(nasBytes, &nas); err == nil {
-        pkt.NASMMType = strField(nas, "nas-5gs_nas_5gs_mm_message_type")
-        pkt.SUCIMsin = strField(nas, "nas-5gs_nas_5gs_mm_suci_msin")
-        log.Printf("🔬 NAS extracted: mmType=%s suci=%s nasKeys=%v",
-            pkt.NASMMType, pkt.SUCIMsin, func() []string {
-                keys := make([]string, 0, len(nas))
-                for k := range nas { keys = append(keys, k) }
-                return keys
-            }())
-    } else {
-        log.Printf("🔬 NAS unmarshal error: %v", err)
-    }
-} else {
-    log.Printf("🔬 no nas-5gs key in ngap obj, keys present: %v", func() []string {
-        keys := make([]string, 0, len(obj))
-        for k := range obj { keys = append(keys, k) }
-        return keys
-    }())
-}
+		var nas map[string]interface{}
+		nasBytes, _ := json.Marshal(nasRaw)
+		if err := json.Unmarshal(nasBytes, &nas); err == nil {
+			pkt.NASMMType = strField(nas, "nas-5gs_nas_5gs_mm_message_type")
+			pkt.SUCIMsin = strField(nas, "nas-5gs_nas_5gs_mm_suci_msin")
+			log.Printf("🔬 NAS extracted: mmType=%s suci=%s nasKeys=%v",
+				pkt.NASMMType, pkt.SUCIMsin, func() []string {
+					keys := make([]string, 0, len(nas))
+					for k := range nas {
+						keys = append(keys, k)
+					}
+					return keys
+				}())
+		} else {
+			log.Printf("🔬 NAS unmarshal error: %v", err)
+		}
+	} else {
+		log.Printf("🔬 no nas-5gs key in ngap obj, keys present: %v", func() []string {
+			keys := make([]string, 0, len(obj))
+			for k := range obj {
+				keys = append(keys, k)
+			}
+			return keys
+		}())
+	}
 }
 
 // parseS1AP extracts S1AP and nested NAS-EPS fields.
@@ -316,36 +318,37 @@ func parseS1APObject(raw json.RawMessage, pkt *Packet) {
 
 // strField extracts a string value from a map, returning "" if absent or wrong type.
 func strField(m map[string]interface{}, key string) string {
-    v, ok := m[key]
-    if !ok {
-        return ""
-    }
-    if v == nil {
-        return ""
-    }
-    switch s := v.(type) {
-    case string:
-        return s
-    case float64:
-        return fmt.Sprintf("%g", s)
-    case bool:
-        return fmt.Sprintf("%v", s)
-    case json.Number:
-        return s.String()
-    case []interface{}:
-        if len(s) > 0 {
-            if str, ok := s[0].(string); ok {
-                return str
-            }
-            return fmt.Sprintf("%v", s[0])
-        }
-        return ""
-    case map[string]interface{}:
-        return ""
-    default:
-        return fmt.Sprintf("%v", v)
-    }
+	v, ok := m[key]
+	if !ok {
+		return ""
+	}
+	if v == nil {
+		return ""
+	}
+	switch s := v.(type) {
+	case string:
+		return s
+	case float64:
+		return fmt.Sprintf("%g", s)
+	case bool:
+		return fmt.Sprintf("%v", s)
+	case json.Number:
+		return s.String()
+	case []interface{}:
+		if len(s) > 0 {
+			if str, ok := s[0].(string); ok {
+				return str
+			}
+			return fmt.Sprintf("%v", s[0])
+		}
+		return ""
+	case map[string]interface{}:
+		return ""
+	default:
+		return fmt.Sprintf("%v", v)
+	}
 }
+
 // intField extracts an integer value from a map. JSON numbers unmarshal as
 // float64 by default with interface{}, so we handle that explicitly.
 func intField(m map[string]interface{}, key string) int {

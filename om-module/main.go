@@ -107,7 +107,7 @@ func main() {
 			cfg.CaptureInterface,
 		)
 
-		corr = correlator.New(cfg.MCC, cfg.MNC, procTimeout, recCfg)
+		corr = correlator.New(cfg.MCC, cfg.MNC, procTimeout, recCfg, dockerClient, coll.Snapshot())
 
 		// Start capture manager — self-retries until generation detected.
 		go capManager.Run(ctx)
