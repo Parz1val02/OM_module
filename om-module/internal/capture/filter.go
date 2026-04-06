@@ -6,40 +6,42 @@ const (
 	Generation5G = "5g"
 )
 
-// filters holds the tshark capture and display filter pair for a generation.
+// filters holds a pair of tshark filter sets.
+// Two separate tshark processes run in parallel because combining SCTP and
+// UDP in a single BPF filter is unreliable across kernel/container versions.
 type filters struct {
-	// BPF is a kernel-level capture filter passed via -f flag.
-	// Only packets matching this filter are copied from the kernel to userspace.
-	BPF string
+	// SCTP process: captures S1AP (4G) or NGAP (5G)
+	SCTPBPF     string
+	SCTPDisplay string
 
-	// Display is a tshark dissector-level filter passed via -Y flag.
-	// Only packets successfully dissected as this protocol emit JSON output.
-	Display string
+	// UDP process: captures GTPv2-C and/or PFCP
+	UDPBPF     string
+	UDPDisplay string
 }
 
-// filtersFor returns the appropriate tshark filter pair for the given generation.
-// Only Phase 1 protocols (NGAP for 5G, S1AP for 4G) are included.
-// Phase 2 (GTPv2-C, PFCP) will be added here when the correlator supports them.
+// filtersFor returns the filter pair for the given generation.
 func filtersFor(generation string) filters {
 	switch generation {
 	case Generation5G:
 		return filters{
-			// NGAP runs over SCTP port 38412 between gNB and AMF.
-			BPF:     "sctp port 38412",
-			Display: "ngap",
+			SCTPBPF:     "sctp port 38412",
+			SCTPDisplay: "ngap",
+			UDPBPF:      "udp port 8805",
+			UDPDisplay:  "pfcp",
 		}
 	case Generation4G:
 		return filters{
-			// S1AP runs over SCTP port 36412 between eNB and MME.
-			BPF:     "sctp port 36412",
-			Display: "s1ap",
+			SCTPBPF:     "sctp port 36412",
+			SCTPDisplay: "s1ap",
+			UDPBPF:      "udp port 2123 or udp port 8805",
+			UDPDisplay:  "gtpv2 or pfcp",
 		}
 	default:
-		// Fallback: capture both so the manager can log what it sees
-		// while waiting for generation detection to settle.
 		return filters{
-			BPF:     "sctp port 38412 or sctp port 36412",
-			Display: "ngap or s1ap",
+			SCTPBPF:     "sctp port 38412 or sctp port 36412",
+			SCTPDisplay: "ngap or s1ap",
+			UDPBPF:      "udp port 2123 or udp port 8805",
+			UDPDisplay:  "gtpv2 or pfcp",
 		}
 	}
 }

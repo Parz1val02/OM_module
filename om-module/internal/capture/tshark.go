@@ -21,6 +21,10 @@ type Packet struct {
 	// Generation is "4g" or "5g" based on which protocol layer is present.
 	Generation string
 
+	// Protocol identifies the protocol of this packet:
+	// "s1ap", "ngap", "gtpv2", "pfcp"
+	Protocol string
+
 	// SrcIP and DstIP from the IP layer.
 	SrcIP string
 	DstIP string
@@ -39,13 +43,34 @@ type Packet struct {
 	AMFUENGAPId       string // AMF-UE-NGAP-ID, present from DownlinkNASTransport onward
 	NASMMType         string // hex string e.g. "0x41" for Registration Request
 	SUCIMsin          string // MSIN portion of SUCI, only in Registration Request
+
+	// --- GTPv2-C fields (4G only, UDP 2123) ---
+	GTPv2MessageType int    // 32=CreateSessionReq, 33=CreateSessionResp, 34=ModifyBearerReq, 35=ModifyBearerResp
+	GTPv2Seq         string // hex sequence number e.g. "0x000001" — correlation key
+	GTPv2TEID        string // tunnel endpoint ID, "0x00000000" on first request
+	GTPv2IMSI        string // only in Create Session Request
+	GTPv2APN         string // APN/DNN e.g. "internet"
+	GTPv2Cause       string // "16" = Request Accepted
+	GTPv2UEIP        string // UE IP address, assigned in Create Session Response
+	GTPv2EBI         string // EPS Bearer ID
+
+	// --- PFCP fields (4G and 5G, UDP 8805) ---
+	PFCPMessageType int    // 50=EstReq, 51=EstResp, 52=ModReq, 53=ModResp, 54=DelReq, 55=DelResp
+	PFCPSeqNo       int    // sequence number — correlation key before SEID known
+	PFCPSEID        string // session endpoint ID (may be array on establishment)
+	PFCPIMSI        string // only in Session Establishment Request
+	PFCPUEIP        string // UE IP address
+	PFCPDNN         string // data network name e.g. "internet"
+	PFCPCause       string // "1" = success
 }
 
 // ekPacket is the raw EK JSON structure emitted by tshark -T ek.
 // The format alternates: an index line ({"index":{...}}) then a data line
 // ({"timestamp":...,"layers":{...}}). We only care about data lines.
+// Timestamp is json.RawMessage because tshark version determines whether
+// it is emitted as an integer or a quoted string.
 type ekPacket struct {
-	Timestamp json.RawMessage            `json:"timestamp"` // milliseconds since epoch
+	Timestamp json.RawMessage            `json:"timestamp"`
 	Layers    map[string]json.RawMessage `json:"layers"`
 }
 
@@ -57,13 +82,10 @@ type tsharkProcess struct {
 	errc   chan error
 }
 
-// startTshark launches tshark on the given interface with the given filters
-// and returns a channel of parsed Packet values. The subprocess runs until
-// the provided context is cancelled or the process exits.
-//
-// The returned error channel receives at most one value — the exit error
-// (nil if the process was killed cleanly by context cancellation).
-func startTshark(ctx context.Context, iface string, f filters) (<-chan Packet, <-chan error) {
+// startTshark launches tshark on the given interface with explicit BPF capture
+// filter and display filter, returning a channel of parsed Packet values.
+// The returned error channel receives at most one value on exit.
+func startTshark(ctx context.Context, iface, bpf, display string) (<-chan Packet, <-chan error) {
 	out := make(chan Packet, 256)
 	errc := make(chan error, 1)
 
@@ -71,8 +93,8 @@ func startTshark(ctx context.Context, iface string, f filters) (<-chan Packet, <
 
 	args := []string{
 		"-i", iface,
-		"-f", f.BPF,
-		"-Y", f.Display,
+		"-f", bpf,
+		"-Y", display,
 		"-T", "ek",
 		"-l", // flush after each packet
 		"-n", // disable name resolution
@@ -98,7 +120,7 @@ func startTshark(ctx context.Context, iface string, f filters) (<-chan Packet, <
 	}
 
 	log.Printf("🦈 tshark started (pid=%d iface=%s bpf=%q display=%q)",
-		cmd.Process.Pid, iface, f.BPF, f.Display)
+		cmd.Process.Pid, iface, bpf, display)
 
 	go func() {
 		defer cancel()
@@ -129,8 +151,10 @@ func startTshark(ctx context.Context, iface string, f filters) (<-chan Packet, <
 				continue
 			}
 
-			// Drop packets we could not identify as either generation.
-			if pkt.Generation == "" {
+			// Drop packets we could not identify at all.
+			// PFCP packets have no generation set here — the correlator
+			// determines generation from IP addresses. Allow them through.
+			if pkt.Generation == "" && pkt.Protocol == "" {
 				continue
 			}
 
@@ -173,16 +197,15 @@ func parseEKLine(line string) (*Packet, error) {
 
 	// Timestamp: EK provides milliseconds; convert to time.Time with ms precision.
 	// Frame time from the layers gives nanosecond precision — prefer that.
-	// Timestamp may be a string or integer depending on tshark version.
 	var tsMillis int64
 	if err := json.Unmarshal(raw.Timestamp, &tsMillis); err != nil {
-		// Try as quoted string
 		var tsStr string
 		if err2 := json.Unmarshal(raw.Timestamp, &tsStr); err2 == nil {
 			fmt.Sscanf(tsStr, "%d", &tsMillis)
 		}
 	}
 	pkt.Timestamp = time.UnixMilli(tsMillis).UTC()
+
 	if frameRaw, ok := raw.Layers["frame"]; ok {
 		var frame map[string]interface{}
 		if err := json.Unmarshal(frameRaw, &frame); err == nil {
@@ -203,13 +226,24 @@ func parseEKLine(line string) (*Packet, error) {
 		}
 	}
 
-	// Determine generation from which protocol layer is present.
+	// Determine protocol and generation from which layer is present.
+	// Priority: ngap > s1ap > gtpv2 > pfcp
 	if ngapRaw, ok := raw.Layers["ngap"]; ok {
 		pkt.Generation = Generation5G
+		pkt.Protocol = "ngap"
 		parseNGAP(ngapRaw, pkt)
 	} else if s1apRaw, ok := raw.Layers["s1ap"]; ok {
 		pkt.Generation = Generation4G
+		pkt.Protocol = "s1ap"
 		parseS1AP(s1apRaw, pkt)
+	} else if gtpv2Raw, ok := raw.Layers["gtpv2"]; ok {
+		pkt.Generation = Generation4G
+		pkt.Protocol = "gtpv2"
+		parseGTPv2(gtpv2Raw, pkt)
+	} else if pfcpRaw, ok := raw.Layers["pfcp"]; ok {
+		pkt.Protocol = "pfcp"
+		// PFCP generation determined later by correlator based on IP
+		parseGTPv2OrPFCP_PFCP(pfcpRaw, pkt)
 	}
 
 	return pkt, nil
@@ -252,27 +286,9 @@ func parseNGAPObject(raw json.RawMessage, pkt *Packet) {
 		var nas map[string]interface{}
 		nasBytes, _ := json.Marshal(nasRaw)
 		if err := json.Unmarshal(nasBytes, &nas); err == nil {
-			pkt.NASMMType = strField(nas, "nas-5gs_nas_5gs_mm_message_type")
-			pkt.SUCIMsin = strField(nas, "nas-5gs_nas_5gs_mm_suci_msin")
-			log.Printf("🔬 NAS extracted: mmType=%s suci=%s nasKeys=%v",
-				pkt.NASMMType, pkt.SUCIMsin, func() []string {
-					keys := make([]string, 0, len(nas))
-					for k := range nas {
-						keys = append(keys, k)
-					}
-					return keys
-				}())
-		} else {
-			log.Printf("🔬 NAS unmarshal error: %v", err)
+			pkt.NASMMType = strField(nas, "nas-5gs_nas-5gs_mm_message_type")
+			pkt.SUCIMsin = strField(nas, "nas-5gs_nas-5gs_mm_suci_msin")
 		}
-	} else {
-		log.Printf("🔬 no nas-5gs key in ngap obj, keys present: %v", func() []string {
-			keys := make([]string, 0, len(obj))
-			for k := range obj {
-				keys = append(keys, k)
-			}
-			return keys
-		}())
 	}
 }
 
@@ -307,8 +323,8 @@ func parseS1APObject(raw json.RawMessage, pkt *Packet) {
 		var nas map[string]interface{}
 		nasBytes, _ := json.Marshal(nasRaw)
 		if err := json.Unmarshal(nasBytes, &nas); err == nil {
-			pkt.NASEMMType = strField(nas, "nas-eps_nas_eps_nas_msg_emm_type")
-			pkt.NASESMType = strField(nas, "nas-eps_nas_eps_nas_msg_esm_type")
+			pkt.NASEMMType = strField(nas, "nas-eps_nas-eps_nas_msg_emm_type")
+			pkt.NASESMType = strField(nas, "nas-eps_nas-eps_nas_msg_esm_type")
 			pkt.IMSI = strField(nas, "e212_e212_imsi")
 		}
 	}
@@ -317,6 +333,7 @@ func parseS1APObject(raw json.RawMessage, pkt *Packet) {
 // --- helpers ----------------------------------------------------------------
 
 // strField extracts a string value from a map, returning "" if absent or wrong type.
+// Handles arrays by returning the first element (tshark sometimes wraps values in arrays).
 func strField(m map[string]interface{}, key string) string {
 	v, ok := m[key]
 	if !ok {
@@ -335,6 +352,7 @@ func strField(m map[string]interface{}, key string) string {
 	case json.Number:
 		return s.String()
 	case []interface{}:
+		// tshark sometimes wraps single values in an array — take the first element
 		if len(s) > 0 {
 			if str, ok := s[0].(string); ok {
 				return str
@@ -368,4 +386,63 @@ func intField(m map[string]interface{}, key string) int {
 	default:
 		return 0
 	}
+}
+
+// --- GTPv2-C parser ---------------------------------------------------------
+
+// parseGTPv2 extracts GTPv2-C fields from the gtpv2 layer.
+func parseGTPv2(raw json.RawMessage, pkt *Packet) {
+	var obj map[string]interface{}
+	if err := json.Unmarshal(raw, &obj); err != nil {
+		return
+	}
+
+	pkt.GTPv2MessageType = intField(obj, "gtpv2_gtpv2_message_type")
+	pkt.GTPv2Seq = strField(obj, "gtpv2_gtpv2_seq")
+	pkt.GTPv2TEID = strField(obj, "gtpv2_gtpv2_teid")
+	pkt.GTPv2APN = strField(obj, "gtpv2_gtpv2_apn")
+	pkt.GTPv2EBI = strField(obj, "gtpv2_gtpv2_ebi")
+	pkt.GTPv2UEIP = strField(obj, "gtpv2_gtpv2_pdn_addr_and_prefix_ipv4")
+
+	// Cause may be a scalar or array — strField handles arrays
+	pkt.GTPv2Cause = strField(obj, "gtpv2_gtpv2_cause")
+
+	// IMSI is nested under e212 fields at the gtpv2 layer level
+	pkt.GTPv2IMSI = strField(obj, "e212_e212_imsi")
+}
+
+// --- PFCP parser ------------------------------------------------------------
+
+// parseGTPv2OrPFCP_PFCP extracts PFCP fields from the pfcp layer.
+// Named with the longer prefix to avoid collision — called parseGTPv2OrPFCP_PFCP
+// because PFCP generation (4g/5g) is determined by the correlator from IP.
+func parseGTPv2OrPFCP_PFCP(raw json.RawMessage, pkt *Packet) {
+	var obj map[string]interface{}
+	if err := json.Unmarshal(raw, &obj); err != nil {
+		return
+	}
+
+	pkt.PFCPMessageType = intField(obj, "pfcp_pfcp_msg_type")
+	pkt.PFCPSeqNo = intField(obj, "pfcp_pfcp_seqno")
+	pkt.PFCPDNN = strField(obj, "pfcp_pfcp_apn_dnn")
+	pkt.PFCPUEIP = strField(obj, "pfcp_pfcp_ue_ip_addr_ipv4")
+	pkt.PFCPCause = strField(obj, "pfcp_pfcp_cause")
+	pkt.PFCPIMSI = strField(obj, "e212_e212_imsi")
+
+	// SEID can be a scalar (on modification/deletion) or an array of two
+	// values on session establishment (local SEID and remote SEID).
+	// We store the first non-zero SEID value.
+	seid := strField(obj, "pfcp_pfcp_seid")
+	if seid == "" || seid == "0x0000000000000000" {
+		// Try array form
+		if arr, ok := obj["pfcp_pfcp_seid"].([]interface{}); ok {
+			for _, s := range arr {
+				if str, ok := s.(string); ok && str != "0x0000000000000000" {
+					seid = str
+					break
+				}
+			}
+		}
+	}
+	pkt.PFCPSEID = seid
 }

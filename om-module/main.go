@@ -13,9 +13,9 @@ import (
 	"github.com/Parz1val02/OM_module/config"
 	"github.com/Parz1val02/OM_module/internal/capture"
 	"github.com/Parz1val02/OM_module/internal/collector"
-	"github.com/Parz1val02/OM_module/internal/correlator"
 	dockerclient "github.com/Parz1val02/OM_module/internal/docker"
 	"github.com/Parz1val02/OM_module/internal/exporter"
+	"github.com/Parz1val02/OM_module/internal/pipeline"
 	"github.com/Parz1val02/OM_module/internal/reconstructor"
 	"github.com/Parz1val02/OM_module/internal/tracing"
 	"github.com/prometheus/client_golang/prometheus"
@@ -88,15 +88,15 @@ func main() {
 		QueryWindow: queryWindow,
 	}
 
-	// --- Procedure timeout ---
+	// --- Procedure timeout (kept for reconstructor config only) ---
 	procTimeout, err := time.ParseDuration(cfg.ProcedureTimeout)
 	if err != nil {
 		procTimeout = 30 * time.Second
 	}
+	_ = procTimeout // no longer used by pipeline
 
-	// --- Capture manager and correlator (optional) ---
+	// --- Capture manager and pipeline (optional) ---
 	var capManager *capture.Manager
-	var corr *correlator.Correlator
 
 	if cfg.CaptureEnabled {
 		capManager = capture.NewManager(
@@ -107,27 +107,23 @@ func main() {
 			cfg.CaptureInterface,
 		)
 
-		corr = correlator.New(cfg.MCC, cfg.MNC, procTimeout, recCfg, dockerClient, coll.Snapshot())
+		pipe := pipeline.New(cfg.MCC, cfg.MNC, dockerClient, coll.Snapshot())
 
 		// Start capture manager — self-retries until generation detected.
 		go capManager.Run(ctx)
 
-		// Start correlator — reads from capture manager's packet channel.
-		// We run this in a loop so if the capture manager restarts and closes
-		// its channel, the correlator loop restarts too.
+		// Start pipeline — reads from capture manager and emits one span per packet.
 		go func() {
 			for {
-				corr.Run(ctx, capManager.Packets())
+				pipe.Run(ctx, capManager.Packets())
 				if ctx.Err() != nil {
 					return
 				}
-				// Brief pause before re-attaching to allow manager restart.
 				time.Sleep(time.Second)
 			}
 		}()
 
-		log.Printf("✅ Capture pipeline started (interface=%s timeout=%s)",
-			cfg.CaptureInterface, cfg.ProcedureTimeout)
+		log.Printf("✅ Capture pipeline started (interface=%s)", cfg.CaptureInterface)
 	} else {
 		log.Printf("⚠️  Capture pipeline disabled (CAPTURE_ENABLED=false)")
 	}
@@ -140,7 +136,7 @@ func main() {
 		reg,
 		recCfg,
 		capManager,
-		corr,
+		nil, // correlator removed — pipeline handles spans directly
 		cfg.LokiURL,
 	)
 	handlers.Register(mux)

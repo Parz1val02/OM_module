@@ -11,7 +11,6 @@ import (
 
 	"github.com/Parz1val02/OM_module/internal/capture"
 	"github.com/Parz1val02/OM_module/internal/collector"
-	"github.com/Parz1val02/OM_module/internal/correlator"
 	"github.com/Parz1val02/OM_module/internal/reconstructor"
 	"github.com/Parz1val02/OM_module/internal/tracing"
 	"github.com/prometheus/client_golang/prometheus"
@@ -27,7 +26,6 @@ type Handlers struct {
 	reg        *prometheus.Registry
 	recCfg     reconstructor.Config
 	capManager *capture.Manager
-	corr       *correlator.Correlator
 	lokiURL    string
 }
 
@@ -38,7 +36,7 @@ func New(
 	reg *prometheus.Registry,
 	recCfg reconstructor.Config,
 	capManager *capture.Manager,
-	corr *correlator.Correlator,
+	_ interface{}, // correlator removed — kept for call-site compatibility
 	lokiURL string,
 ) *Handlers {
 	return &Handlers{
@@ -47,7 +45,6 @@ func New(
 		reg:        reg,
 		recCfg:     recCfg,
 		capManager: capManager,
-		corr:       corr,
 		lokiURL:    lokiURL,
 	}
 }
@@ -192,14 +189,13 @@ func (h *Handlers) handleReconstruct(w http.ResponseWriter, r *http.Request) {
 
 // --- /traces/search ------------------------------------------------------
 //
-// Queries Tempo for recent traces matching optional filters.
-// Used by the Grafana table panel for live trace display.
+// Queries Tempo for recent captured packets matching optional filters.
 //
 // Query parameters:
-//   generation  (optional) "4g" | "5g" — filter by generation tag
-//   imsi        (optional) — filter by imsi span attribute
+//   generation  (optional) "4g" | "5g"
+//   imsi        (optional) subscriber identity
 //   limit       (optional) default 20
-//   since       (optional) duration string default "10m"
+//   since       (optional) duration string, default "10m"
 
 type traceSearchResult struct {
 	TraceID    string            `json:"trace_id"`
@@ -237,9 +233,20 @@ func (h *Handlers) handleTraceSearch(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Build Tempo search URL.
-	// Tempo 2.x search API: GET /api/search?tags=<key=value>&start=<unix>&end=<unix>&limit=<n>
-	tempoURL := h.buildTempoSearchURL(generation, imsi, since, limit)
+	now := time.Now()
+	start := now.Add(-since)
+
+	var tags []string
+	if generation != "" {
+		tags = append(tags, fmt.Sprintf("generation=%s", generation))
+	}
+	if imsi != "" {
+		tags = append(tags, fmt.Sprintf("imsi=%s", imsi))
+	}
+	tags = append(tags, "source=capture")
+
+	tempoURL := fmt.Sprintf("http://tempo:3200/api/search?start=%d&end=%d&limit=%d&tags=%s",
+		start.Unix(), now.Unix(), limit, strings.Join(tags, "%20"))
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, tempoURL, nil)
 	if err != nil {
@@ -260,15 +267,13 @@ func (h *Handlers) handleTraceSearch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Tempo returns {"traces":[...]} — parse and reformat for the dashboard.
 	var tempoResp struct {
 		Traces []struct {
-			TraceID            string `json:"traceID"`
-			RootServiceName    string `json:"rootServiceName"`
-			RootTraceName      string `json:"rootTraceName"`
-			StartTimeUnixNano  string `json:"startTimeUnixNano"`
-			DurationMs         int64  `json:"durationMs"`
-			SpanSets           []struct {
+			TraceID           string `json:"traceID"`
+			RootTraceName     string `json:"rootTraceName"`
+			StartTimeUnixNano string `json:"startTimeUnixNano"`
+			DurationMs        int64  `json:"durationMs"`
+			SpanSets          []struct {
 				Spans []struct {
 					Attributes []struct {
 						Key   string `json:"key"`
@@ -282,7 +287,6 @@ func (h *Handlers) handleTraceSearch(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := json.Unmarshal(body, &tempoResp); err != nil {
-		// Tempo returned something unexpected — pass through raw.
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write(body)
 		return
@@ -291,21 +295,16 @@ func (h *Handlers) handleTraceSearch(w http.ResponseWriter, r *http.Request) {
 	results := make([]traceSearchResult, 0, len(tempoResp.Traces))
 	for _, t := range tempoResp.Traces {
 		tags := make(map[string]string)
-		// Extract span attributes from the first span of the first spanset.
 		if len(t.SpanSets) > 0 && len(t.SpanSets[0].Spans) > 0 {
 			for _, attr := range t.SpanSets[0].Spans[0].Attributes {
 				tags[attr.Key] = attr.Value.StringValue
 			}
 		}
-
-		// Parse start time.
 		startNs, _ := strconv.ParseInt(t.StartTimeUnixNano, 10, 64)
-		startTime := time.Unix(0, startNs).UTC().Format(time.RFC3339)
-
 		results = append(results, traceSearchResult{
 			TraceID:    t.TraceID,
 			RootName:   t.RootTraceName,
-			StartTime:  startTime,
+			StartTime:  time.Unix(0, startNs).UTC().Format(time.RFC3339),
 			DurationMs: t.DurationMs,
 			Tags:       tags,
 		})
@@ -318,33 +317,6 @@ func (h *Handlers) handleTraceSearch(w http.ResponseWriter, r *http.Request) {
 		Traces: results,
 		Total:  len(results),
 	})
-}
-
-// buildTempoSearchURL constructs the Tempo search API URL with tag filters.
-// Tempo is reachable at http://tempo:3200 (from within the Docker network).
-func (h *Handlers) buildTempoSearchURL(generation, imsi string, since time.Duration, limit int) string {
-	now := time.Now()
-	start := now.Add(-since)
-
-	var tags []string
-	if generation != "" {
-		tags = append(tags, fmt.Sprintf("generation=%s", generation))
-	}
-	if imsi != "" {
-		tags = append(tags, fmt.Sprintf("imsi=%s", imsi))
-	}
-	// Always filter to capture-sourced traces for this endpoint.
-	tags = append(tags, "source=capture")
-
-	base := "http://tempo:3200/api/search"
-	params := fmt.Sprintf("?start=%d&end=%d&limit=%d",
-		start.Unix(), now.Unix(), limit)
-
-	if len(tags) > 0 {
-		params += "&tags=" + strings.Join(tags, "%20")
-	}
-
-	return base + params
 }
 
 // --- /capture/status -----------------------------------------------------
@@ -379,10 +351,6 @@ func (h *Handlers) handleCaptureStatus(w http.ResponseWriter, r *http.Request) {
 			RestartCount:  s.RestartCount,
 			UptimeSeconds: s.UptimeSeconds,
 		}
-	}
-
-	if h.corr != nil {
-		resp.ActiveProcs = h.corr.ActiveProcedureCount()
 	}
 
 	w.Header().Set("Content-Type", "application/json")

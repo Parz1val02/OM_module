@@ -446,7 +446,7 @@
         "type": "tempo",
         "uid": "tempo"
       },
-      "description": "Live table of completed traces from packet capture. Click any row to open the full per-message waterfall in Tempo. Use the IMSI Filter variable above to narrow to a specific subscriber.",
+      "description": "Each row is one captured packet. Filter by IMSI or protocol to focus. Click Trace ID to open span details in Tempo.",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -471,7 +471,7 @@
               },
               {
                 "id": "custom.width",
-                "value": 260
+                "value": 240
               },
               {
                 "id": "links",
@@ -488,44 +488,12 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "spanID"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Span ID"
-              },
-              {
-                "id": "custom.width",
-                "value": 160
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
               "options": "Name"
             },
             "properties": [
               {
                 "id": "custom.width",
-                "value": 380
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Duration"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "ms"
-              },
-              {
-                "id": "custom.width",
-                "value": 100
+                "value": 340
               }
             ]
           },
@@ -541,7 +509,7 @@
               },
               {
                 "id": "custom.width",
-                "value": 120
+                "value": 110
               }
             ]
           },
@@ -557,7 +525,7 @@
               },
               {
                 "id": "custom.width",
-                "value": 120
+                "value": 110
               }
             ]
           },
@@ -605,23 +573,7 @@
               },
               {
                 "id": "custom.width",
-                "value": 180
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "message_direction"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Direction"
-              },
-              {
-                "id": "custom.width",
-                "value": 90
+                "value": 170
               }
             ]
           },
@@ -637,55 +589,39 @@
               },
               {
                 "id": "custom.width",
-                "value": 160
+                "value": 150
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "teid"
+              "options": "message_direction"
             },
             "properties": [
               {
-                "id": "custom.hidden",
-                "value": true
+                "id": "displayName",
+                "value": "Direction"
+              },
+              {
+                "id": "custom.width",
+                "value": 85
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "seid"
+              "options": "Duration"
             },
             "properties": [
               {
-                "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "src_ip"
-            },
-            "properties": [
+                "id": "unit",
+                "value": "ms"
+              },
               {
-                "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "dst_ip"
-            },
-            "properties": [
-              {
-                "id": "custom.hidden",
-                "value": true
+                "id": "custom.width",
+                "value": 80
               }
             ]
           },
@@ -693,6 +629,18 @@
             "matcher": {
               "id": "byName",
               "options": "source"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "generation"
             },
             "properties": [
               {
@@ -717,42 +665,6 @@
             "matcher": {
               "id": "byName",
               "options": "mnc"
-            },
-            "properties": [
-              {
-                "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "generation"
-            },
-            "properties": [
-              {
-                "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "span_count"
-            },
-            "properties": [
-              {
-                "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "result"
             },
             "properties": [
               {
@@ -796,13 +708,13 @@
           },
           "queryType": "traceql",
           "refId": "A",
-          "query": "{span.generation=\"4g\" && span.source=\"capture\"} | select(span.src_nf, span.dst_nf, span.protocol, span.procedure, span.nas_message, span.message_direction, span.imsi)",
-          "limit": 20,
+          "query": "{span.source=\"capture\"} | select(span.src_nf, span.dst_nf, span.protocol, span.procedure, span.nas_message, span.imsi, span.generation, span.message_direction)",
+          "limit": 50,
           "tableType": "traces",
-          "spss": 20
+          "spss": 1
         }
       ],
-      "title": "Recent 4G Traces \u2014 click row to open waterfall",
+      "title": "Recent 4G Packets \u2014 click Trace ID to inspect",
       "type": "table"
     },
     {

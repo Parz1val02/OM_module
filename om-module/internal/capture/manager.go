@@ -29,15 +29,15 @@ const (
 // Status holds a point-in-time view of the capture manager state.
 // It is returned by the Status() method and exposed via the API.
 type Status struct {
-	Running        bool
-	Interface      string
-	Generation     string
-	PacketsTotal   uint64
-	Packets4G      uint64
-	Packets5G      uint64
-	RestartCount   uint64
-	UptimeSeconds  float64
-	ActiveProcs    int
+	Running       bool
+	Interface     string
+	Generation    string
+	PacketsTotal  uint64
+	Packets4G     uint64
+	Packets5G     uint64
+	RestartCount  uint64
+	UptimeSeconds float64
+	ActiveProcs   int
 }
 
 // Manager owns the tshark subprocess and feeds parsed packets to the correlator.
@@ -57,13 +57,13 @@ type Manager struct {
 	out chan Packet
 
 	// internal state (atomic where accessed from multiple goroutines)
-	iface        string
-	generation   string
-	restarts     atomic.Uint64
-	packets4g    atomic.Uint64
-	packets5g    atomic.Uint64
-	startTime    time.Time
-	mu           sync.RWMutex // protects iface and generation
+	iface      string
+	generation string
+	restarts   atomic.Uint64
+	packets4g  atomic.Uint64
+	packets5g  atomic.Uint64
+	startTime  time.Time
+	mu         sync.RWMutex // protects iface and generation
 }
 
 // NewManager creates a Manager. mcc and mnc are used to reconstruct full IMSI
@@ -196,48 +196,88 @@ func (m *Manager) discoverInterface(ctx context.Context) (string, error) {
 	return m.docker.GetBridgeInterface(ctx, networkName)
 }
 
-// runWithRestart runs the tshark subprocess and restarts it on failure
-// using exponential backoff. Returns when ctx is cancelled.
+// runWithRestart runs two tshark subprocesses (SCTP and UDP) and restarts
+// both on failure using exponential backoff. Returns when ctx is cancelled.
 func (m *Manager) runWithRestart(ctx context.Context, iface, gen string) {
 	backoff := restartBackoffInitial
 
 	for {
 		f := filtersFor(gen)
-		pkts, errc := startTshark(ctx, iface, f)
 
-		// Forward packets to the manager's output channel,
-		// counting by generation.
+		// Launch SCTP subprocess (S1AP / NGAP)
+		sctpPkts, sctpErrc := startTshark(ctx, iface, f.SCTPBPF, f.SCTPDisplay)
+
+		// Launch UDP subprocess (GTPv2 / PFCP)
+		udpPkts, udpErrc := startTshark(ctx, iface, f.UDPBPF, f.UDPDisplay)
+
+		// Merge both packet channels into the manager output channel
 		done := make(chan struct{})
 		go func() {
 			defer close(done)
-			for pkt := range pkts {
-				switch pkt.Generation {
-				case Generation4G:
-					m.packets4g.Add(1)
-				case Generation5G:
-					m.packets5g.Add(1)
-				}
+			for {
 				select {
-				case m.out <- pkt:
+				case pkt, ok := <-sctpPkts:
+					if !ok {
+						sctpPkts = nil
+					} else {
+						switch pkt.Generation {
+						case Generation4G:
+							m.packets4g.Add(1)
+						case Generation5G:
+							m.packets5g.Add(1)
+						}
+						select {
+						case m.out <- pkt:
+						case <-ctx.Done():
+							return
+						}
+					}
+				case pkt, ok := <-udpPkts:
+					if !ok {
+						udpPkts = nil
+					} else {
+						switch pkt.Generation {
+						case Generation4G:
+							m.packets4g.Add(1)
+						case Generation5G:
+							m.packets5g.Add(1)
+						}
+						select {
+						case m.out <- pkt:
+						case <-ctx.Done():
+							return
+						}
+					}
 				case <-ctx.Done():
+					return
+				}
+				if sctpPkts == nil && udpPkts == nil {
 					return
 				}
 			}
 		}()
 
-		// Wait for the subprocess to exit.
-		err := <-errc
-		<-done // drain forwarder
+		// Wait for either subprocess to exit
+		var exitErr error
+		select {
+		case err := <-sctpErrc:
+			if ctx.Err() == nil {
+				exitErr = err
+			}
+		case err := <-udpErrc:
+			if ctx.Err() == nil {
+				exitErr = err
+			}
+		}
+		<-done
 
 		if ctx.Err() != nil {
-			// Context was cancelled — clean shutdown.
 			return
 		}
 
-		// Unexpected exit.
 		m.restarts.Add(1)
 		log.Printf("⚠️  tshark exited unexpectedly (restart #%d): %v — retrying in %s",
-			m.restarts.Load(), err, backoff)
+			m.restarts.Load(), exitErr, backoff)
 
 		select {
 		case <-time.After(backoff):
@@ -245,7 +285,6 @@ func (m *Manager) runWithRestart(ctx context.Context, iface, gen string) {
 			return
 		}
 
-		// Exponential backoff, capped at max.
 		backoff *= 2
 		if backoff > restartBackoffMax {
 			backoff = restartBackoffMax
