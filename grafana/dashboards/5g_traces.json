@@ -38,6 +38,9 @@
   ],
   "panels": [
     {
+      "id": 29,
+      "title": "\ud83d\udcca Protocol Metrics \u2014 5G",
+      "type": "row",
       "collapsed": false,
       "gridPos": {
         "h": 1,
@@ -45,173 +48,200 @@
         "x": 0,
         "y": 0
       },
-      "id": 1,
-      "panels": [],
-      "title": "\ud83d\udce1 Capture Pipeline Status",
-      "type": "row"
+      "panels": []
     },
     {
+      "id": 30,
+      "title": "NGAP Packets",
+      "type": "stat",
       "datasource": {
-        "uid": "infinity"
-      },
-      "description": "Whether the live tshark capture process is running on the Docker bridge interface. If stopped, check om-module logs \u2014 it will auto-restart.",
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [
-            {
-              "options": {
-                "false": {
-                  "color": "red",
-                  "index": 0,
-                  "text": "Stopped"
-                },
-                "true": {
-                  "color": "green",
-                  "index": 1,
-                  "text": "Running"
-                }
-              },
-              "type": "value"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 0,
-        "y": 1
-      },
-      "id": 2,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "/^running$/",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "infinity"
-          },
-          "refId": "A",
-          "type": "json",
-          "source": "url",
-          "format": "table",
-          "url": "http://172.22.0.1:8080/capture/status",
-          "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "root_selector": "",
-          "columns": [
-            {
-              "selector": "running",
-              "text": "running",
-              "type": "boolean"
-            }
-          ],
-          "filters": []
-        }
-      ],
-      "title": "Capture",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "uid": "infinity"
-      },
-      "description": "Bridge interface the capture is running on.",
-      "fieldConfig": {
-        "defaults": {
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "blue",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
       },
       "gridPos": {
         "h": 4,
         "w": 4,
-        "x": 3,
+        "x": 0,
         "y": 1
       },
-      "id": 3,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "green"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
       "options": {
-        "colorMode": "none",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
-          ],
-          "fields": "/^interface$/",
-          "values": false
+          ]
         },
-        "textMode": "auto"
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "background",
+        "graphMode": "none"
       },
-      "pluginVersion": "11.3.0",
       "targets": [
         {
           "datasource": {
-            "uid": "infinity"
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
           },
+          "expr": "sum(om_capture_packets_total{generation=\"5g\",protocol=\"NGAP\"}) or vector(0)",
+          "legendFormat": "",
           "refId": "A",
-          "type": "json",
-          "source": "url",
-          "format": "table",
-          "url": "http://172.22.0.1:8080/capture/status",
-          "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "root_selector": "",
-          "columns": [
-            {
-              "selector": "interface",
-              "text": "interface",
-              "type": "string"
-            }
-          ],
-          "filters": []
+          "instant": true
         }
-      ],
-      "title": "Interface",
-      "type": "stat"
+      ]
     },
     {
+      "id": 31,
+      "title": "PFCP Packets",
+      "type": "stat",
       "datasource": {
-        "uid": "infinity"
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
       },
-      "description": "Total NGAP packets processed by the capture pipeline since om-module started.",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 6,
+        "y": 1
+      },
       "fieldConfig": {
         "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "purple"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "background",
+        "graphMode": "none"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "sum(om_capture_packets_total{generation=\"5g\",protocol=\"PFCP\"}) or vector(0)",
+          "legendFormat": "",
+          "refId": "A",
+          "instant": true
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "title": "SBI Requests",
+      "type": "stat",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 1
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "orange"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "background",
+        "graphMode": "none"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "sum(om_capture_sbi_requests_total) or vector(0)",
+          "legendFormat": "",
+          "refId": "A",
+          "instant": true
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "title": "Total Packets",
+      "type": "stat",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 18,
+        "y": 1
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "blue"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -224,229 +254,212 @@
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 7,
-        "y": 1
-      },
-      "id": 4,
       "options": {
-        "colorMode": "none",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
-          ],
-          "fields": "/^packets_5g$/",
-          "values": false
+          ]
         },
-        "textMode": "auto"
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "background",
+        "graphMode": "none"
       },
-      "pluginVersion": "11.3.0",
       "targets": [
         {
           "datasource": {
-            "uid": "infinity"
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
           },
+          "expr": "sum(om_capture_packets_total{generation=\"5g\"}) or vector(0)",
+          "legendFormat": "",
           "refId": "A",
-          "type": "json",
-          "source": "url",
-          "format": "table",
-          "url": "http://172.22.0.1:8080/capture/status",
-          "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "root_selector": "",
-          "columns": [
-            {
-              "selector": "packets_5g",
-              "text": "packets_5g",
-              "type": "number"
-            }
-          ],
-          "filters": []
+          "instant": true
         }
-      ],
-      "title": "NGAP Packets",
-      "type": "stat"
+      ]
     },
     {
+      "id": 35,
+      "title": "5G Packets by Protocol",
+      "type": "bargauge",
       "datasource": {
-        "uid": "infinity"
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
       },
-      "description": "Number of UE registration procedures currently in progress.",
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 5
+      },
       "fieldConfig": {
         "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "yellow",
-                "value": 1
-              },
-              {
-                "color": "orange",
-                "value": 5
               }
             ]
           }
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 10,
-        "y": 1
-      },
-      "id": 5,
       "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
+        "orientation": "horizontal",
+        "displayMode": "gradient",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^active_procedures$/",
-          "values": false
+          "fields": "",
+          "values": true
         },
-        "textMode": "auto"
+        "showUnfilled": true,
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "text": {}
       },
-      "pluginVersion": "11.3.0",
       "targets": [
         {
           "datasource": {
-            "uid": "infinity"
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
           },
+          "expr": "sum by (protocol) (om_capture_packets_total{generation=\"5g\"})",
+          "legendFormat": "{{protocol}}",
           "refId": "A",
-          "type": "json",
-          "source": "url",
-          "format": "table",
-          "url": "http://172.22.0.1:8080/capture/status",
-          "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "root_selector": "",
-          "columns": [
-            {
-              "selector": "active_procedures",
-              "text": "active_procedures",
-              "type": "number"
-            }
-          ],
-          "filters": []
+          "instant": true
         }
-      ],
-      "title": "In-Flight Procedures",
-      "type": "stat"
+      ]
     },
     {
+      "id": 36,
+      "title": "5G SBI Requests by Service",
+      "type": "bargauge",
       "datasource": {
-        "uid": "infinity"
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
       },
-      "description": "How many times tshark has crashed and auto-restarted.",
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 5
+      },
       "fieldConfig": {
         "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "yellow",
-                "value": 1
-              },
-              {
-                "color": "red",
-                "value": 4
               }
             ]
           }
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 13,
-        "y": 1
-      },
-      "id": 6,
       "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
+        "orientation": "horizontal",
+        "displayMode": "gradient",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^restart_count$/",
-          "values": false
+          "fields": "",
+          "values": true
         },
-        "textMode": "auto"
+        "showUnfilled": true,
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "text": {}
       },
-      "pluginVersion": "11.3.0",
       "targets": [
         {
           "datasource": {
-            "uid": "infinity"
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
           },
+          "expr": "sum by (service) (om_capture_sbi_requests_total)",
+          "legendFormat": "{{service}}",
           "refId": "A",
-          "type": "json",
-          "source": "url",
-          "format": "table",
-          "url": "http://172.22.0.1:8080/capture/status",
-          "url_options": {
-            "method": "GET",
-            "data": ""
-          },
-          "root_selector": "",
-          "columns": [
-            {
-              "selector": "restart_count",
-              "text": "restart_count",
-              "type": "number"
-            }
-          ],
-          "filters": []
+          "instant": true
         }
-      ],
-      "title": "tshark Restarts",
-      "type": "stat"
+      ]
     },
     {
+      "id": 10,
+      "title": "\ud83d\udd0d Live Traces \u2014 5G NR UE Registration",
+      "type": "row",
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 5
+        "y": 15
       },
-      "id": 10,
-      "panels": [],
-      "title": "\ud83d\udd0d Live Traces \u2014 5G NR UE Registration",
-      "type": "row"
+      "panels": []
     },
     {
+      "id": 11,
+      "title": "Recent 5G Packets \u2014 click Trace ID to inspect",
+      "type": "table",
       "datasource": {
         "type": "tempo",
         "uid": "tempo"
       },
-      "description": "Each row is one captured packet. Filter by IMSI or protocol to focus. Click Trace ID to open span details in Tempo.",
+      "gridPos": {
+        "h": 14,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Start time"
+          }
+        ],
+        "collapseAll": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "tempo",
+            "uid": "tempo"
+          },
+          "queryType": "traceql",
+          "refId": "A",
+          "query": "{span.source=\"capture\"} | select(span.src_nf, span.dst_nf, span.protocol, span.procedure, span.nas_message, span.imsi, span.generation, span.message_direction)",
+          "limit": 50,
+          "tableType": "traces",
+          "spss": 1
+        }
+      ],
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -674,61 +687,20 @@
             ]
           }
         ]
-      },
-      "gridPos": {
-        "h": 20,
-        "w": 24,
-        "x": 0,
-        "y": 6
-      },
-      "id": 11,
-      "options": {
-        "footer": {
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true,
-        "sortBy": [
-          {
-            "desc": true,
-            "displayName": "Start time"
-          }
-        ],
-        "collapseAll": true
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "tempo",
-            "uid": "tempo"
-          },
-          "queryType": "traceql",
-          "refId": "A",
-          "query": "{span.source=\"capture\"} | select(span.src_nf, span.dst_nf, span.protocol, span.procedure, span.nas_message, span.imsi, span.generation, span.message_direction)",
-          "limit": 50,
-          "tableType": "traces",
-          "spss": 1
-        }
-      ],
-      "title": "Recent 5G Packets \u2014 click Trace ID to inspect",
-      "type": "table"
+      }
     },
     {
+      "id": 20,
+      "title": "\ud83d\udccb Procedure Logs",
+      "type": "row",
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 20
+        "y": 31
       },
-      "id": 20,
-      "panels": [],
-      "title": "\ud83d\udccb Procedure Logs",
-      "type": "row"
+      "panels": []
     },
     {
       "datasource": {
@@ -741,10 +713,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 12,
+        "h": 8,
         "w": 24,
         "x": 0,
-        "y": 21
+        "y": 32
       },
       "id": 21,
       "options": {
@@ -765,12 +737,12 @@
             "uid": "P8E80F9AEF21F6940"
           },
           "editorMode": "code",
-          "expr": "{domain=\"core\", generation=\"5g\"} |= `${imsi_filter}`",
+          "expr": "{domain=\"core\", generation=\"5g\"}",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "title": "5G Core Logs (filtered by IMSI)",
+      "title": "5G Core Logs",
       "type": "logs"
     }
   ],
@@ -785,23 +757,7 @@
     "nr"
   ],
   "templating": {
-    "list": [
-      {
-        "current": {
-          "selected": false,
-          "text": "",
-          "value": ""
-        },
-        "description": "Filter traces and logs to a specific 15-digit IMSI. Leave empty to show all recent traces.",
-        "hide": 0,
-        "label": "IMSI Filter",
-        "name": "imsi_filter",
-        "options": [],
-        "query": "",
-        "skipUrlSync": false,
-        "type": "textbox"
-      }
-    ]
+    "list": []
   },
   "time": {
     "from": "now-3h",

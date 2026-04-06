@@ -107,7 +107,8 @@ func main() {
 			cfg.CaptureInterface,
 		)
 
-		pipe := pipeline.New(cfg.MCC, cfg.MNC, dockerClient, coll.Snapshot())
+		pipeMetrics := pipeline.NewMetrics(reg)
+		pipe := pipeline.New(cfg.MCC, cfg.MNC, dockerClient, coll.Snapshot(), pipeMetrics)
 
 		// Start capture manager — self-retries until generation detected.
 		go capManager.Run(ctx)

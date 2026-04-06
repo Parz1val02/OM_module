@@ -20,19 +20,21 @@ const networkName = "docker_open5gs_default"
 
 // Pipeline reads packets from the capture manager and emits one span per packet.
 type Pipeline struct {
-	mcc    string
-	mnc    string
-	docker *dockerclient.Client
-	snap   *collector.Snapshot
+	mcc     string
+	mnc     string
+	docker  *dockerclient.Client
+	snap    *collector.Snapshot
+	metrics *Metrics
 }
 
-// New creates a Pipeline.
-func New(mcc, mnc string, docker *dockerclient.Client, snap *collector.Snapshot) *Pipeline {
+// New creates a Pipeline. metrics may be nil if Prometheus is not enabled.
+func New(mcc, mnc string, docker *dockerclient.Client, snap *collector.Snapshot, metrics *Metrics) *Pipeline {
 	return &Pipeline{
-		mcc:    mcc,
-		mnc:    mnc,
-		docker: docker,
-		snap:   snap,
+		mcc:     mcc,
+		mnc:     mnc,
+		docker:  docker,
+		snap:    snap,
+		metrics: metrics,
 	}
 }
 
@@ -92,6 +94,22 @@ func (p *Pipeline) emitSpan(ctx context.Context, pkt capture.Packet, ipToNF map[
 	generation := pkt.Generation
 	if generation == "" {
 		generation = resolveGeneration(pkt.SrcIP, pkt.DstIP, ipToNF)
+	}
+
+	// Record Prometheus metrics
+	if p.metrics != nil {
+		protocol := strings.ToUpper(pkt.Protocol)
+		p.metrics.PacketsTotal.WithLabelValues(protocol, generation, srcNF, dstNF).Inc()
+
+		if pkt.Protocol == "sbi" && pkt.SBIMethod != "" {
+			p.metrics.PacketsByService.WithLabelValues(
+				pkt.SBIService, pkt.SBIMethod, srcNF, dstNF,
+			).Inc()
+		}
+
+		if isErrorCause(pkt) {
+			p.metrics.ErrorsTotal.WithLabelValues(protocol, generation, srcNF, dstNF).Inc()
+		}
 	}
 
 	// Collect IMSI from whichever protocol field has it
