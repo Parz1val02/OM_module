@@ -118,8 +118,10 @@ func (c *Client) GetNetworkContainerIPs(ctx context.Context, networkName string)
 		if idx := strings.Index(ip, "/"); idx >= 0 {
 			ip = ip[:idx]
 		}
+		// Strip leading slash from container name (Docker API quirk)
+		name := strings.TrimPrefix(ct.Name, "/")
 		if ip != "" {
-			result[ip] = ct.Name
+			result[ip] = name
 		}
 	}
 	return result, nil

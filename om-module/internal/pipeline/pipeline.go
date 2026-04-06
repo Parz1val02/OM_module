@@ -413,10 +413,25 @@ func (p *Pipeline) buildIPToNFMap(ctx context.Context) map[string]string {
 		return map[string]string{}
 	}
 	nameToNF := p.snap.NameToNFMap()
+
+	// RAN container name → friendly label
+	ranNames := map[string]string{
+		// srsRAN
+		"srsenb_zmq":   "enb",
+		"srsgnb_zmq":   "gnb",
+		"srsue_zmq":    "ue",
+		"srsue_5g_zmq": "ue",
+		// UERANSIM
+		"nr-gnb": "gnb",
+		"nr-ue":  "ue",
+	}
+
 	result := make(map[string]string, len(ipToName))
 	for ip, name := range ipToName {
 		if nf, ok := nameToNF[name]; ok {
 			result[ip] = nf
+		} else if ran, ok := ranNames[name]; ok {
+			result[ip] = ran
 		} else {
 			result[ip] = name
 		}
@@ -500,22 +515,41 @@ func nasMM5GName(msgType string) string {
 
 // resolveGeneration infers 4g or 5g from the NF names involved in a packet.
 // Used for PFCP packets which have no generation set by the parser.
-// 4G PFCP: SGW-C/SGW-U/PGW-C/PGW-U
-// 5G PFCP: SMF/UPF
+// 4G PFCP: sgwc/sgwu (Sxa) and smf/upf acting as pgwc/pgwu (Sxb)
+// 5G PFCP: smf/upf (N4)
+// Note: smf and upf appear in both — we disambiguate by checking if sgwc/sgwu
+// are also present in the ipToNF map (meaning 4G core is running).
 func resolveGeneration(srcIP, dstIP string, ipToNF map[string]string) string {
-	nf5g := map[string]bool{"smf": true, "upf": true, "amf": true, "ausf": true, "udm": true}
-	nf4g := map[string]bool{"mme": true, "sgw": true, "pgw": true, "hss": true, "pcrf": true}
+	srcNF := ipToNF[srcIP]
+	dstNF := ipToNF[dstIP]
 
-	for _, ip := range []string{srcIP, dstIP} {
-		nf := ipToNF[ip]
-		if nf5g[nf] {
-			return "5g"
-		}
+	nf4g := map[string]bool{
+		"mme": true, "sgwc": true, "sgwu": true,
+		"pgwc": true, "pgwu": true, "hss": true, "pcrf": true,
+	}
+	nf5g := map[string]bool{
+		"amf": true, "ausf": true, "udm": true, "udr": true,
+		"pcf": true, "nrf": true, "nssf": true, "scp": true, "bsf": true,
+	}
+
+	for _, nf := range []string{srcNF, dstNF} {
 		if nf4g[nf] {
 			return "4g"
 		}
+		if nf5g[nf] {
+			return "5g"
+		}
 	}
-	return ""
+
+	// smf and upf exist in both generations — check if any 4G-specific NF
+	// is present in the overall IP map to determine which core is running
+	for _, nf := range ipToNF {
+		if nf == "sgwc" || nf == "sgwu" || nf == "mme" {
+			return "4g"
+		}
+	}
+
+	return "5g" // default to 5g if only smf/upf visible
 }
 
 func nasEMMName(msgType string) string {
