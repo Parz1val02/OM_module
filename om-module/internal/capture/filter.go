@@ -31,15 +31,15 @@ func filtersFor(generation string) filters {
 		}
 	case Generation4G:
 		return filters{
-			SCTPBPF:     "sctp port 36412",
-			SCTPDisplay: "s1ap",
+			SCTPBPF:     "sctp port 36412 or sctp port 3868 or sctp port 3873 or sctp port 5868",
+			SCTPDisplay: "s1ap or diameter",
 			UDPBPF:      "udp port 2123 or udp port 8805",
 			UDPDisplay:  "gtpv2 or pfcp",
 		}
 	default:
 		return filters{
-			SCTPBPF:     "sctp port 38412 or sctp port 36412",
-			SCTPDisplay: "ngap or s1ap",
+			SCTPBPF:     "sctp port 38412 or sctp port 36412 or sctp port 3868 or sctp port 3873 or sctp port 5868",
+			SCTPDisplay: "ngap or s1ap or diameter",
 			UDPBPF:      "udp port 2123 or udp port 8805",
 			UDPDisplay:  "gtpv2 or pfcp",
 		}

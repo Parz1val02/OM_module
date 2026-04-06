@@ -155,14 +155,16 @@ func (p *Pipeline) emitSpan(ctx context.Context, pkt capture.Packet, ipToNF map[
 
 // --- Helpers ----------------------------------------------------------------
 
-// isHeartbeat returns true for PFCP heartbeats and GTPv2 echo messages
-// which add noise with no educational value.
+// isHeartbeat returns true for PFCP heartbeats, GTPv2 echo, and Diameter
+// Device-Watchdog messages which add noise with no educational value.
 func isHeartbeat(pkt capture.Packet) bool {
 	switch pkt.Protocol {
 	case "pfcp":
 		return pkt.PFCPMessageType == 1 || pkt.PFCPMessageType == 2
 	case "gtpv2":
 		return pkt.GTPv2MessageType == 1 || pkt.GTPv2MessageType == 2
+	case "diameter":
+		return pkt.DiameterCmdCode == 280 // Device-Watchdog
 	}
 	return false
 }
@@ -178,6 +180,8 @@ func spanName(pkt capture.Packet) string {
 		return gtpv2SpanName(pkt)
 	case "pfcp":
 		return pfcpSpanName(pkt)
+	case "diameter":
+		return diameterSpanName(pkt)
 	}
 	return ""
 }
@@ -246,12 +250,13 @@ func packetIMSI(pkt capture.Packet) string {
 	case "s1ap":
 		return pkt.IMSI
 	case "ngap":
-		// 5G IMSI reconstructed from SUCI MSIN upstream — stored in IMSI field
 		return pkt.IMSI
 	case "gtpv2":
 		return pkt.GTPv2IMSI
 	case "pfcp":
 		return pkt.PFCPIMSI
+	case "diameter":
+		return pkt.DiameterIMSI
 	}
 	return ""
 }
@@ -275,15 +280,24 @@ func protocolAttrs(pkt capture.Packet) (procedure, nasMsg, teid, seid, apn, caus
 		seid = pkt.PFCPSEID
 		apn = pkt.PFCPDNN
 		cause = pkt.PFCPCause
+	case "diameter":
+		procedure = diameterSpanName(pkt)
+		cause = pkt.DiameterResultCode
 	}
 	return
 }
 
-// messageDirection returns "request" or "response" based on whether the
-// source IP is a core NF (AMF/MME/SMF) or a RAN node (gNB/eNB).
+// messageDirection returns "request" or "response" based on protocol.
+// For NGAP/S1AP/GTPv2/PFCP: based on whether src is a core NF.
+// For Diameter: directly from the R flag in the Diameter header.
 func messageDirection(pkt capture.Packet, ipToNF map[string]string) string {
+	if pkt.Protocol == "diameter" {
+		if pkt.DiameterIsRequest {
+			return "request"
+		}
+		return "response"
+	}
 	srcNF := ipToNF[pkt.SrcIP]
-	// Core NFs that initiate downlink messages
 	coreNFs := map[string]bool{
 		"amf": true, "mme": true, "smf": true,
 		"pgw": true, "sgw": true, "upf": true,
@@ -294,6 +308,31 @@ func messageDirection(pkt capture.Packet, ipToNF map[string]string) string {
 	return "request"
 }
 
+// diameterSpanName builds the span name for a Diameter packet.
+func diameterSpanName(pkt capture.Packet) string {
+	names := map[int]string{
+		257: "Capabilities-Exchange",
+		258: "Re-Auth",
+		272: "Credit-Control", // Gx: PGW↔PCRF
+		274: "Abort-Session",
+		275: "Session-Termination",
+		282: "Disconnect-Peer",
+		316: "Update-Location",            // S6a: MME↔HSS
+		318: "Authentication-Information", // S6a: MME↔HSS
+		321: "Insert-Subscriber-Data",
+		322: "Delete-Subscriber-Data",
+		323: "Purge-UE",
+	}
+	direction := "Response"
+	if pkt.DiameterIsRequest {
+		direction = "Request"
+	}
+	if n, ok := names[pkt.DiameterCmdCode]; ok {
+		return fmt.Sprintf("Diameter:%s%s", n, direction)
+	}
+	return fmt.Sprintf("Diameter:cmd_%d%s", pkt.DiameterCmdCode, direction)
+}
+
 // isErrorCause returns true if the packet carries a failure cause code.
 func isErrorCause(pkt capture.Packet) bool {
 	switch pkt.Protocol {
@@ -301,6 +340,8 @@ func isErrorCause(pkt capture.Packet) bool {
 		return pkt.GTPv2Cause != "" && pkt.GTPv2Cause != "16"
 	case "pfcp":
 		return pkt.PFCPCause != "" && pkt.PFCPCause != "1"
+	case "diameter":
+		return pkt.DiameterResultCode != "" && pkt.DiameterResultCode != "2001"
 	}
 	return false
 }
@@ -381,10 +422,16 @@ func nasMM5GName(msgType string) string {
 		"0x42": "Registration Accept",
 		"0x43": "Registration Complete",
 		"0x44": "Registration Reject",
+		"0x45": "Deregistration Request",
+		"0x46": "Deregistration Accept",
 		"0x56": "Authentication Request",
 		"0x57": "Authentication Response",
+		"0x58": "Authentication Reject",
+		"0x5a": "Authentication Failure",
+		"0x5c": "Identity Request",
 		"0x5d": "Security Mode Command",
 		"0x5e": "Security Mode Complete",
+		"0x5f": "Security Mode Reject",
 	}
 	if n, ok := names[strings.ToLower(msgType)]; ok {
 		return n
@@ -417,12 +464,19 @@ func nasEMMName(msgType string) string {
 		"0x41": "Attach Request",
 		"0x42": "Attach Accept",
 		"0x43": "Attach Complete",
+		"0x44": "Attach Reject",
+		"0x45": "Detach Request",
+		"0x46": "Detach Accept",
+		"0x50": "Tracking Area Update Request",
+		"0x51": "Tracking Area Update Accept",
 		"0x52": "Authentication Request",
 		"0x53": "Authentication Response",
+		"0x54": "Authentication Reject",
 		"0x55": "Identity Request",
 		"0x56": "Identity Response",
 		"0x5d": "Security Mode Command",
 		"0x5e": "Security Mode Complete",
+		"0x5f": "Security Mode Reject",
 		"0x61": "EMM Information",
 	}
 	if n, ok := names[strings.ToLower(msgType)]; ok {

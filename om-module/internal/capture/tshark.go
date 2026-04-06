@@ -62,6 +62,14 @@ type Packet struct {
 	PFCPUEIP        string // UE IP address
 	PFCPDNN         string // data network name e.g. "internet"
 	PFCPCause       string // "1" = success
+
+	// --- Diameter fields (4G only, TCP 3868/3873/5868) ---
+	DiameterCmdCode    int    // 318=AIR, 316=ULR, 272=CCR, 275=STR, 280=DWR
+	DiameterIsRequest  bool   // true if R flag set in Diameter flags
+	DiameterIMSI       string // from e212_e212_imsi or Subscription-Id-Data
+	DiameterSessionID  string // Diameter Session-Id AVP
+	DiameterResultCode string // "2001" = DIAMETER_SUCCESS
+	DiameterOriginHost string // origin NF hostname e.g. "mme.epc..."
 }
 
 // ekPacket is the raw EK JSON structure emitted by tshark -T ek.
@@ -227,7 +235,7 @@ func parseEKLine(line string) (*Packet, error) {
 	}
 
 	// Determine protocol and generation from which layer is present.
-	// Priority: ngap > s1ap > gtpv2 > pfcp
+	// Priority: ngap > s1ap > gtpv2 > pfcp > diameter
 	if ngapRaw, ok := raw.Layers["ngap"]; ok {
 		pkt.Generation = Generation5G
 		pkt.Protocol = "ngap"
@@ -242,8 +250,11 @@ func parseEKLine(line string) (*Packet, error) {
 		parseGTPv2(gtpv2Raw, pkt)
 	} else if pfcpRaw, ok := raw.Layers["pfcp"]; ok {
 		pkt.Protocol = "pfcp"
-		// PFCP generation determined later by correlator based on IP
 		parseGTPv2OrPFCP_PFCP(pfcpRaw, pkt)
+	} else if diameterRaw, ok := raw.Layers["diameter"]; ok {
+		pkt.Generation = Generation4G
+		pkt.Protocol = "diameter"
+		parseDiameter(diameterRaw, pkt)
 	}
 
 	return pkt, nil
@@ -411,7 +422,49 @@ func parseGTPv2(raw json.RawMessage, pkt *Packet) {
 	pkt.GTPv2IMSI = strField(obj, "e212_e212_imsi")
 }
 
-// --- PFCP parser ------------------------------------------------------------
+// --- Diameter parser --------------------------------------------------------
+
+// parseDiameter extracts Diameter fields from the diameter layer.
+func parseDiameter(raw json.RawMessage, pkt *Packet) {
+	// Diameter may appear as array (multiple messages per TCP segment)
+	var arr []json.RawMessage
+	if err := json.Unmarshal(raw, &arr); err == nil && len(arr) > 0 {
+		parseDiameterObject(arr[0], pkt)
+		return
+	}
+	parseDiameterObject(raw, pkt)
+}
+
+func parseDiameterObject(raw json.RawMessage, pkt *Packet) {
+	var obj map[string]interface{}
+	if err := json.Unmarshal(raw, &obj); err != nil {
+		return
+	}
+
+	pkt.DiameterCmdCode = intField(obj, "diameter_diameter_cmd_code")
+	pkt.DiameterSessionID = strField(obj, "diameter_diameter_Session-Id")
+	pkt.DiameterResultCode = strField(obj, "diameter_diameter_Result-Code")
+	pkt.DiameterOriginHost = strField(obj, "diameter_diameter_Origin-Host")
+
+	// Determine request vs response from flags byte (bit 7 = R flag)
+	flags := strField(obj, "diameter_diameter_flags")
+	if flags != "" {
+		var flagVal int64
+		if len(flags) > 2 && flags[:2] == "0x" {
+			fmt.Sscanf(flags[2:], "%x", &flagVal)
+		} else {
+			fmt.Sscanf(flags, "%d", &flagVal)
+		}
+		pkt.DiameterIsRequest = flagVal&0x80 != 0
+	}
+
+	// IMSI from e212 field (present in AIR, ULR, CCR requests)
+	pkt.DiameterIMSI = strField(obj, "e212_e212_imsi")
+	if pkt.DiameterIMSI == "" {
+		// Fallback: Subscription-Id-Data AVP
+		pkt.DiameterIMSI = strField(obj, "diameter_diameter_Subscription-Id-Data")
+	}
+}
 
 // parseGTPv2OrPFCP_PFCP extracts PFCP fields from the pfcp layer.
 // Named with the longer prefix to avoid collision — called parseGTPv2OrPFCP_PFCP
