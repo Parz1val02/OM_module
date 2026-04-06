@@ -134,6 +134,14 @@ func (p *Pipeline) emitSpan(ctx context.Context, pkt capture.Packet, ipToNF map[
 	if cause != "" {
 		attrs = append(attrs, attribute.String("cause", cause))
 	}
+	if pkt.Protocol == "sbi" {
+		if pkt.SBIPath != "" {
+			attrs = append(attrs, attribute.String("sbi_path", pkt.SBIPath))
+		}
+		if pkt.SBIUserAgent != "" {
+			attrs = append(attrs, attribute.String("sbi_nf", pkt.SBIUserAgent))
+		}
+	}
 
 	// Duration: single packets have no inherent duration.
 	// We give each span 1ms so Tempo renders it visibly in the waterfall.
@@ -155,8 +163,8 @@ func (p *Pipeline) emitSpan(ctx context.Context, pkt capture.Packet, ipToNF map[
 
 // --- Helpers ----------------------------------------------------------------
 
-// isHeartbeat returns true for PFCP heartbeats, GTPv2 echo, and Diameter
-// Device-Watchdog messages which add noise with no educational value.
+// isHeartbeat returns true for PFCP heartbeats, GTPv2 echo, Diameter
+// Device-Watchdog, and SBI NRF heartbeat PATCH messages which add noise.
 func isHeartbeat(pkt capture.Packet) bool {
 	switch pkt.Protocol {
 	case "pfcp":
@@ -165,6 +173,11 @@ func isHeartbeat(pkt capture.Packet) bool {
 		return pkt.GTPv2MessageType == 1 || pkt.GTPv2MessageType == 2
 	case "diameter":
 		return pkt.DiameterCmdCode == 280 // Device-Watchdog
+	case "sbi":
+		// NRF heartbeat: PATCH /nnrf-nfm/v1/nf-instances/{id}
+		return pkt.SBIMethod == "PATCH" &&
+			strings.Contains(pkt.SBIPath, "/nnrf-nfm/") &&
+			strings.Contains(pkt.SBIPath, "/nf-instances/")
 	}
 	return false
 }
@@ -182,6 +195,8 @@ func spanName(pkt capture.Packet) string {
 		return pfcpSpanName(pkt)
 	case "diameter":
 		return diameterSpanName(pkt)
+	case "sbi":
+		return sbiSpanName(pkt)
 	}
 	return ""
 }
@@ -257,6 +272,8 @@ func packetIMSI(pkt capture.Packet) string {
 		return pkt.PFCPIMSI
 	case "diameter":
 		return pkt.DiameterIMSI
+	case "sbi":
+		return pkt.SBIIMSI
 	}
 	return ""
 }
@@ -283,6 +300,9 @@ func protocolAttrs(pkt capture.Packet) (procedure, nasMsg, teid, seid, apn, caus
 	case "diameter":
 		procedure = diameterSpanName(pkt)
 		cause = pkt.DiameterResultCode
+	case "sbi":
+		procedure = pkt.SBIService
+		cause = pkt.SBIStatus
 	}
 	return
 }
@@ -333,7 +353,22 @@ func diameterSpanName(pkt capture.Packet) string {
 	return fmt.Sprintf("Diameter:cmd_%d%s", pkt.DiameterCmdCode, direction)
 }
 
-// isErrorCause returns true if the packet carries a failure cause code.
+// sbiSpanName builds the span name for a 5G SBI HTTP/2 packet.
+// Format: SBI:METHOD /service e.g. "SBI:POST nausf-auth"
+// For responses: "SBI:200 nausf-auth"
+func sbiSpanName(pkt capture.Packet) string {
+	service := pkt.SBIService
+	if service == "" {
+		service = "unknown"
+	}
+	if pkt.SBIMethod != "" {
+		return fmt.Sprintf("SBI:%s %s", pkt.SBIMethod, service)
+	}
+	if pkt.SBIStatus != "" {
+		return fmt.Sprintf("SBI:%s %s", pkt.SBIStatus, service)
+	}
+	return fmt.Sprintf("SBI:%s", service)
+}
 func isErrorCause(pkt capture.Packet) bool {
 	switch pkt.Protocol {
 	case "gtpv2":
@@ -342,6 +377,12 @@ func isErrorCause(pkt capture.Packet) bool {
 		return pkt.PFCPCause != "" && pkt.PFCPCause != "1"
 	case "diameter":
 		return pkt.DiameterResultCode != "" && pkt.DiameterResultCode != "2001"
+	case "sbi":
+		if pkt.SBIStatus != "" {
+			var code int
+			fmt.Sscanf(pkt.SBIStatus, "%d", &code)
+			return code >= 400
+		}
 	}
 	return false
 }

@@ -70,6 +70,14 @@ type Packet struct {
 	DiameterSessionID  string // Diameter Session-Id AVP
 	DiameterResultCode string // "2001" = DIAMETER_SUCCESS
 	DiameterOriginHost string // origin NF hostname e.g. "mme.epc..."
+
+	// --- SBI HTTP/2 fields (5G only, TCP 7777) ---
+	SBIMethod    string // HTTP method: GET, POST, PUT, PATCH, DELETE
+	SBIPath      string // full API path e.g. /nausf-auth/v1/ue-authentications
+	SBIStatus    string // HTTP status code on responses e.g. "200"
+	SBIService   string // service name extracted from path e.g. "nausf-auth"
+	SBIUserAgent string // NF name from user-agent header e.g. "AMF"
+	SBIIMSI      string // IMSI extracted from path if present
 }
 
 // ekPacket is the raw EK JSON structure emitted by tshark -T ek.
@@ -106,6 +114,8 @@ func startTshark(ctx context.Context, iface, bpf, display string) (<-chan Packet
 		"-T", "ek",
 		"-l", // flush after each packet
 		"-n", // disable name resolution
+		// Decode TCP port 7777 as HTTP/2 (Open5GS SBI uses h2c without upgrade)
+		"-d", "tcp.port==7777,http2",
 	}
 
 	cmd := exec.CommandContext(procCtx, "tshark", args...)
@@ -235,7 +245,7 @@ func parseEKLine(line string) (*Packet, error) {
 	}
 
 	// Determine protocol and generation from which layer is present.
-	// Priority: ngap > s1ap > gtpv2 > pfcp > diameter
+	// Priority: ngap > s1ap > gtpv2 > pfcp > diameter > http2
 	if ngapRaw, ok := raw.Layers["ngap"]; ok {
 		pkt.Generation = Generation5G
 		pkt.Protocol = "ngap"
@@ -255,6 +265,10 @@ func parseEKLine(line string) (*Packet, error) {
 		pkt.Generation = Generation4G
 		pkt.Protocol = "diameter"
 		parseDiameter(diameterRaw, pkt)
+	} else if http2Raw, ok := raw.Layers["http2"]; ok {
+		pkt.Generation = Generation5G
+		pkt.Protocol = "sbi"
+		parseSBI(http2Raw, pkt)
 	}
 
 	return pkt, nil
@@ -498,4 +512,79 @@ func parseGTPv2OrPFCP_PFCP(raw json.RawMessage, pkt *Packet) {
 		}
 	}
 	pkt.PFCPSEID = seid
+}
+
+// --- SBI HTTP/2 parser ------------------------------------------------------
+
+// parseSBI extracts 5G SBI fields from the http2 layer.
+// Open5GS uses HTTP/2 with prior knowledge (h2c) on TCP port 7777.
+// tshark must be invoked with -d tcp.port==7777,http2 to dissect it.
+func parseSBI(raw json.RawMessage, pkt *Packet) {
+	var obj map[string]interface{}
+
+	// http2 layer may be an array when multiple frames share a TCP segment
+	var arr []json.RawMessage
+	if err := json.Unmarshal(raw, &arr); err == nil {
+		// Find the first frame that has a method or status (HEADERS frame)
+		for _, elem := range arr {
+			var o map[string]interface{}
+			if err := json.Unmarshal(elem, &o); err != nil {
+				continue
+			}
+			if strField(o, "http2_http2_headers_method") != "" ||
+				strField(o, "http2_http2_headers_status") != "" {
+				obj = o
+				break
+			}
+		}
+		if obj == nil {
+			return
+		}
+	} else {
+		if err := json.Unmarshal(raw, &obj); err != nil {
+			return
+		}
+	}
+
+	pkt.SBIMethod = strField(obj, "http2_http2_headers_method")
+	pkt.SBIPath = strField(obj, "http2_http2_headers_path")
+	pkt.SBIStatus = strField(obj, "http2_http2_headers_status")
+	pkt.SBIUserAgent = strField(obj, "http2_http2_headers_user_agent")
+
+	// Skip packets with no method and no status — these are DATA frames
+	// or SETTINGS/PING frames with no signalling value
+	if pkt.SBIMethod == "" && pkt.SBIStatus == "" {
+		pkt.Protocol = "" // will be dropped by the packet filter
+		return
+	}
+
+	// Only process request frames (those with a method).
+	// Response frames have no path so the service is unknown — they add noise.
+	if pkt.SBIMethod == "" {
+		pkt.Protocol = "" // drop response-only frames
+		return
+	}
+
+	// Extract service name from path e.g. /nausf-auth/v1/... → nausf-auth
+	if pkt.SBIPath != "" {
+		parts := strings.SplitN(strings.TrimPrefix(pkt.SBIPath, "/"), "/", 3)
+		if len(parts) >= 1 {
+			pkt.SBIService = parts[0]
+		}
+	}
+
+	// Extract IMSI from path if present e.g. /nudm-sdm/v2/imsi-001011234567895/...
+	if idx := strings.Index(pkt.SBIPath, "imsi-"); idx >= 0 {
+		rest := pkt.SBIPath[idx+5:]
+		// IMSI ends at next / or end of string
+		end := strings.IndexByte(rest, '/')
+		if end < 0 {
+			end = len(rest)
+		}
+		// Strip query string if present
+		if q := strings.IndexByte(rest[:end], '?'); q >= 0 {
+			end = q
+		}
+		pkt.SBIIMSI = rest[:end]
+	}
 }
