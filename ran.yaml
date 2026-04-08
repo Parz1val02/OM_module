@@ -7,7 +7,6 @@ services:
     privileged: true
     volumes:
       - ./srslte:/mnt/srslte
-      - ran_4g_logs:/logs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     env_file:
@@ -40,7 +39,6 @@ services:
     privileged: true
     volumes:
       - ./srslte:/mnt/srslte
-      - ran_4g_logs:/logs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     env_file:
@@ -69,7 +67,6 @@ services:
     privileged: true
     volumes:
       - ./srsran:/mnt/srsran
-      - ran_5g_logs:/logs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     env_file:
@@ -103,7 +100,6 @@ services:
     privileged: true
     volumes:
       - ./srslte:/mnt/srslte
-      - ran_5g_logs:/logs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     env_file:
@@ -188,9 +184,3 @@ networks:
   default:
     name: docker_open5gs_default
     external: true
-
-volumes:
-  ran_4g_logs:
-    name: ran_4g_logs
-  ran_5g_logs:
-    name: ran_5g_logs
