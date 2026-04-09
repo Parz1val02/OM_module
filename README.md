@@ -3,12 +3,12 @@ RF simulated 4G/5G ran and core based on the docker_open5gs project: https://git
 
 ## Get Pre-built Docker images
 Pull base open5gs image:
-```
+```bash
 docker pull ghcr.io/herlesupreeth/docker_open5gs:master
 docker tag ghcr.io/herlesupreeth/docker_open5gs:master docker_open5gs
 ```
 For srsRAN components:
-```
+```bash
 docker pull ghcr.io/herlesupreeth/docker_srslte:master
 docker tag ghcr.io/herlesupreeth/docker_srslte:master docker_srslte
 
@@ -16,7 +16,7 @@ docker pull ghcr.io/herlesupreeth/docker_srsran:master
 docker tag ghcr.io/herlesupreeth/docker_srsran:master docker_srsran
 ```
 For ueransim components:
-```
+```bash
 docker pull ghcr.io/herlesupreeth/docker_ueransim:master
 docker tag ghcr.io/herlesupreeth/docker_ueransim:master docker_ueransim
 ```
@@ -46,9 +46,29 @@ docker container attach nr_ue<br/>
 #### Observability stack deployment
 docker compose -f services.yaml up --build -d
 
+### Traffic Generation
+Before generating traffic, verify the TUN interface exists and has an IP:
+> 4G srsLTE and 5G srsRAN
+```bash
+docker exec srsue_zmq ip addr show tun_srsue
+docker exec srsue_5g_zmq ip addr show tun_srsue
+```
+> UERANSIM
+```bash
+docker exec nr_ue ip addr show uesimtun0
+```
+Verify connectivity to the UPF gateway:
+```bash
+docker exec <ue_container> ping -I <interface> -c 3 192.168.100.1
+```
+Continuous traffic:
+```bash
+docker exec <ue_container> ping -I <interface> -i 0.2 -s 1400 8.8.8.8
+```
+
 ## Access UIs
 ### Provisioning of UE information in open5gs ui as follows:
-Open (http://<DOCKER_HOST_IP>:9999) in a web browser, where <DOCKER_HOST_IP> is the IP of the machine/VM running the open5gs containers. Login with following credentials
+Open (http://localhost:9999) in a web browser. Login with following credentials
 ```
 Username : admin
 Password : 1423
@@ -61,10 +81,16 @@ OP=11111111111111111111111111111111
 ```
 ### Access Grafana and Prometheus
 #### Grafana
-Open (http://<DOCKER_HOST_IP>:3000) in a web browser, where <DOCKER_HOST_IP> is the IP of the machine/VM running the open5gs containers. Login with following credentials
+Open (http://localhost:3000) in a web browser. Login with following credentials
 ```
 Username : open5gs
 Password : open5gs
 ```
 #### Prometheus
-Open (http://<DOCKER_HOST_IP>:9090) in a web browser, where <DOCKER_HOST_IP> is the IP of the machine/VM running the open5gs containers.
+Open (http://localhost:9090) in a web browser
+
+#### Loki
+Available as a datasource in Grafana. Direct API at http://localhost:3100.
+
+#### Tempo
+Available as a datasource in Grafana. Direct API at http://localhost:3200.
