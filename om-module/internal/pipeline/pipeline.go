@@ -264,12 +264,16 @@ func gtpv2SpanName(pkt capture.Packet) string {
 // pfcpSpanName builds the span name for a PFCP packet.
 func pfcpSpanName(pkt capture.Packet) string {
 	names := map[int]string{
+		1:  "HeartbeatRequest",
+		2:  "HeartbeatResponse",
 		50: "SessionEstablishmentRequest",
 		51: "SessionEstablishmentResponse",
 		52: "SessionModificationRequest",
 		53: "SessionModificationResponse",
 		54: "SessionDeletionRequest",
 		55: "SessionDeletionResponse",
+		56: "SessionReportRequest",
+		57: "SessionReportResponse",
 	}
 	if n, ok := names[pkt.PFCPMessageType]; ok {
 		return fmt.Sprintf("PFCP:%s", n)
@@ -422,8 +426,8 @@ func (p *Pipeline) buildIPToNFMap(ctx context.Context) map[string]string {
 		"srsue_zmq":    "ue",
 		"srsue_5g_zmq": "ue",
 		// UERANSIM
-		"nr-gnb": "gnb",
-		"nr-ue":  "ue",
+		"nr_gnb": "gnb",
+		"nr_ue":  "ue",
 	}
 
 	result := make(map[string]string, len(ipToName))
@@ -449,6 +453,7 @@ func ngapProcedureName(code int) string {
 		15: "InitialUEMessage",
 		20: "NGReset",
 		21: "NGSetup",
+		24: "UEContextModification",
 		25: "PathSwitchRequest",
 		29: "PDUSessionResourceSetup",
 		38: "PDUSessionResourceRelease",
