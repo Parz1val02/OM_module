@@ -1,22 +1,22 @@
 # IMSI number of the UE. IMSI = [MCC|MNC|MSISDN] (In total 15 or 16 digits)
-supi: 'imsi-UE2_IMSI'
+supi: "imsi-UE2_IMSI"
 # Mobile Country Code value of HPLMN
-mcc: 'MCC'
+mcc: "MCC"
 # Mobile Network Code value of HPLMN (2 or 3 digits)
-mnc: 'MNC'
+mnc: "MNC"
 
 # Permanent subscription key
-key: 'UE1_KI'
+key: "UE1_KI"
 # Operator code (OP or OPC) of the UE
-op: 'UE1_OP'
+op: "UE1_OP"
 # This value specifies the OP type and it can be either 'OP' or 'OPC'
-opType: 'OP'
+opType: "OP"
 # Authentication Management Field (AMF) value
-amf: 'UE1_AMF'
+amf: "UE1_AMF"
 # IMEI number of the device. It is used if no SUPI is provided
-imei: 'UE2_IMEI'
+imei: "UE2_IMEI"
 # IMEISV number of the device. It is used if no SUPI and IMEI is provided
-imeiSv: 'UE2_IMEISV'
+imeiSv: "UE2_IMEISV"
 
 # List of gNB IP addresses for Radio Link Simulation
 gnbSearchList:
@@ -38,8 +38,8 @@ uacAcc:
 
 # Initial PDU sessions to be established
 sessions:
-  - type: 'IPv4'
-    apn: 'internet'
+  - type: "IPv4"
+    apn: "internet"
     slice:
       sst: 1
 
@@ -65,5 +65,5 @@ ciphering:
 
 # Integrity protection maximum data rate for user plane
 integrityMaxRate:
-  uplink: 'full'
-  downlink: 'full'
+  uplink: "full"
+  downlink: "full"
