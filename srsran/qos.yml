@@ -1,7 +1,7 @@
 # Quality of Service (QoS) example configurations for 5QI 1, 2, 5, 7 and 9
-# Based on 5QI characteristics in TS 23.501 table 5.7.4-1 
+# Based on 5QI characteristics in TS 23.501 table 5.7.4-1
 
-# This is a supplementary configuration to modify the RLC and PDCP radio bearers on 
+# This is a supplementary configuration to modify the RLC and PDCP radio bearers on
 # a per 5QI basis.
 
 # The default values are picked to try to acheive the QoS requirements defined in
@@ -11,8 +11,7 @@ qos:
   #
   # Guaranteed Bitrate 5QIs
   #
-  -
-    # 5QI=1 e.g. Conversational Voice
+  - # 5QI=1 e.g. Conversational Voice
     # PDB=100ms PER=10^-2
     five_qi: 1
     pdcp:
@@ -38,8 +37,7 @@ qos:
         rx:
           sn: 12
           t-reassembly: 50
-  -
-    # 5QI=2 e.g. conversational video
+  - # 5QI=2 e.g. conversational video
     # PDB=150ms PER=10^-3
     five_qi: 2
     pdcp:
@@ -65,10 +63,9 @@ qos:
         rx:
           sn: 12
           t-reassembly: 50
-  -
-    # 5QI=3 e.g. real time gaming
+  - # 5QI=3 e.g. real time gaming
     # PDB=50ms PER=10^-3
-    five_qi: 3 
+    five_qi: 3
     pdcp:
       tx:
         sn: 18
@@ -92,8 +89,7 @@ qos:
         rx:
           sn: 12
           t-reassembly: 35
-  -
-    # 5QI = 4 e.g. non-conversational video 
+  - # 5QI = 4 e.g. non-conversational video
     # PDB = 300ms PER = 10^-6
     five_qi: 4
     pdcp:
@@ -124,8 +120,7 @@ qos:
           sn: 18
           t-reassembly: 80
           t-status-prohibit: 10
-  -
-    # 5QI = 65 e.g. Mission Critical user plane Push To Talk 
+  - # 5QI = 65 e.g. Mission Critical user plane Push To Talk
     # PDB = 75ms PER = 10^-2
     five_qi: 65
     pdcp:
@@ -151,8 +146,7 @@ qos:
         rx:
           sn: 12
           t-reassembly: 50
-  -
-    # 5QI = 66 e.g. Non-Mission-Critical user plane Push To Talk voice 
+  - # 5QI = 66 e.g. Non-Mission-Critical user plane Push To Talk voice
     # PDB = 100ms PER = 10^-2
     five_qi: 66
     pdcp:
@@ -178,8 +172,7 @@ qos:
         rx:
           sn: 12
           t-reassembly: 50
-  -
-    # 5QI = 67 e.g. Mission Critical Video user plane 
+  - # 5QI = 67 e.g. Mission Critical Video user plane
     # PDB = 100ms PER = 10^-3
     five_qi: 67
     pdcp:
@@ -208,8 +201,7 @@ qos:
   #
   # Non-Guaranteed Bitrate 5QIs
   #
-  -
-    # 5QI = 5 e.g IMS signaling 
+  - # 5QI = 5 e.g IMS signaling
     # PDB = 100ms PER = 10^-6
     five_qi: 5
     pdcp:
@@ -240,8 +232,7 @@ qos:
           sn: 18
           t-reassembly: 80
           t-status-prohibit: 10
-  -
-    # 5QI = 6 e.g Video (Buffered Streaming)
+  - # 5QI = 6 e.g Video (Buffered Streaming)
     # PDB = 300ms PER = 10^-6
     five_qi: 6
     pdcp:
@@ -272,8 +263,7 @@ qos:
           sn: 18
           t-reassembly: 80
           t-status-prohibit: 10
-  -
-    # 5QI = 7 e.g Voice,Video (Live Streaming)
+  - # 5QI = 7 e.g Voice,Video (Live Streaming)
     # PDB = 100ms PER = 10^-3
     five_qi: 7
     pdcp:
@@ -299,8 +289,7 @@ qos:
         rx:
           sn: 12
           t-reassembly: 100
-  -
-    # 5QI = 8 e.g Video (Buffered Streaming)
+  - # 5QI = 8 e.g Video (Buffered Streaming)
     # PDB = 300ms PER = 10^-6
     five_qi: 8
     pdcp:
@@ -331,8 +320,7 @@ qos:
           sn: 18
           t-reassembly: 80
           t-status-prohibit: 10
-  -
-    # 5QI = 9 e.g Video (Buffered Streaming)
+  - # 5QI = 9 e.g Video (Buffered Streaming)
     # PDB = 300ms PER = 10^-6
     five_qi: 9
     pdcp:
@@ -363,8 +351,7 @@ qos:
           sn: 18
           t-reassembly: 20
           t-status-prohibit: 10
-  -
-    # 5QI = 10 e.g Video (Buffered Streaming)
+  - # 5QI = 10 e.g Video (Buffered Streaming)
     # PDB = 1100ms PER = 10^-6
     five_qi: 10
     pdcp:
@@ -395,8 +382,7 @@ qos:
           sn: 18
           t-reassembly: 20
           t-status-prohibit: 10
-  -
-    # 5QI = 69 e.g Mission Critical delay sensitive signalling
+  - # 5QI = 69 e.g Mission Critical delay sensitive signalling
     # PDB = 60ms PER = 10^-6
     five_qi: 69
     pdcp:
@@ -427,8 +413,7 @@ qos:
           sn: 18
           t-reassembly: 20
           t-status-prohibit: 10
-  -
-    # 5QI = 70 e.g Mission Critical Data
+  - # 5QI = 70 e.g Mission Critical Data
     # PDB = 200ms PER = 10^-6
     five_qi: 70
     pdcp:
@@ -462,8 +447,7 @@ qos:
   #
   # Delay-critical Guaranteed Bitrate 5QIs
   #
-  -
-    # 5QI = 82 e.g Discrete Automation
+  - # 5QI = 82 e.g Discrete Automation
     # PDB = 10ms PER = 10^-4
     five_qi: 82
     pdcp:
@@ -489,8 +473,7 @@ qos:
         rx:
           sn: 12
           t-reassembly: 10
-  -
-    # 5QI = 83 e.g Discrete Automation
+  - # 5QI = 83 e.g Discrete Automation
     # PDB = 10ms PER = 10^-4
     five_qi: 83
     pdcp:
@@ -516,8 +499,7 @@ qos:
         rx:
           sn: 12
           t-reassembly: 10
-  -
-    # 5QI = 84 e.g Intelligent transport systems
+  - # 5QI = 84 e.g Intelligent transport systems
     # PDB = 30ms PER = 10^-5
     five_qi: 84
     pdcp:
@@ -543,8 +525,7 @@ qos:
         rx:
           sn: 12
           t-reassembly: 10
-  -
-    # 5QI = 85 e.g Electricity Distribution-high voltage
+  - # 5QI = 85 e.g Electricity Distribution-high voltage
     # PDB = 5ms PER = 10^-5
     five_qi: 85
     pdcp:
@@ -570,8 +551,7 @@ qos:
         rx:
           sn: 12
           t-reassembly: 10
-  -
-    # 5QI = 86 e.g V2X messages
+  - # 5QI = 86 e.g V2X messages
     # PDB = 5ms PER = 10^-4
     five_qi: 86
     pdcp:
@@ -597,8 +577,7 @@ qos:
         rx:
           sn: 12
           t-reassembly: 10
-  -
-    # 5QI = 87 e.g Interactive Service-Motion tracking data
+  - # 5QI = 87 e.g Interactive Service-Motion tracking data
     # PDB = 5ms PER = 10^-3
     five_qi: 87
     pdcp:
@@ -624,8 +603,7 @@ qos:
         rx:
           sn: 12
           t-reassembly: 10
-  -
-    # 5QI = 88 e.g Interactive Service-Motion tracking data 
+  - # 5QI = 88 e.g Interactive Service-Motion tracking data
     # PDB = 10ms PER = 10^-3
     five_qi: 88
     pdcp:
@@ -651,8 +629,7 @@ qos:
         rx:
           sn: 12
           t-reassembly: 10
-  -
-    # 5QI = 89 e.g Visual content for cloud/edge/split rendering
+  - # 5QI = 89 e.g Visual content for cloud/edge/split rendering
     # PDB = 15ms PER = 10^-4
     five_qi: 89
     pdcp:
@@ -678,8 +655,7 @@ qos:
         rx:
           sn: 12
           t-reassembly: 10
-  -
-    # 5QI = 90 e.g Visual content for cloud/edge/split rendering
+  - # 5QI = 90 e.g Visual content for cloud/edge/split rendering
     # PDB = 20ms PER = 10^-4
     five_qi: 90
     pdcp:
