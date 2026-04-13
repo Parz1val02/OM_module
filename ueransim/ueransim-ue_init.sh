@@ -29,16 +29,33 @@
 export IP_ADDR=$(awk 'END{print $1}' /etc/hosts)
 
 cp /mnt/ueransim/${COMPONENT_NAME}.yaml /UERANSIM/config/${COMPONENT_NAME}.yaml
+
 sed -i 's|MNC|'$MNC'|g' /UERANSIM/config/${COMPONENT_NAME}.yaml
 sed -i 's|MCC|'$MCC'|g' /UERANSIM/config/${COMPONENT_NAME}.yaml
 
+# UE credentials
 sed -i 's|UE1_KI|'$UE1_KI'|g' /UERANSIM/config/${COMPONENT_NAME}.yaml
 sed -i 's|UE1_OP|'$UE1_OP'|g' /UERANSIM/config/${COMPONENT_NAME}.yaml
 sed -i 's|UE1_AMF|'$UE1_AMF'|g' /UERANSIM/config/${COMPONENT_NAME}.yaml
-sed -i 's|UE2_IMEISV|'$UE2_IMEISV'|g' /UERANSIM/config/${COMPONENT_NAME}.yaml
-sed -i 's|UE2_IMEI|'$UE2_IMEI'|g' /UERANSIM/config/${COMPONENT_NAME}.yaml
+
+# UE2 (gNB1 SST=1 - existente)
 sed -i 's|UE2_IMSI|'$UE2_IMSI'|g' /UERANSIM/config/${COMPONENT_NAME}.yaml
+sed -i 's|UE2_IMEI|'$UE2_IMEI'|g' /UERANSIM/config/${COMPONENT_NAME}.yaml
+sed -i 's|UE2_IMEISV|'$UE2_IMEISV'|g' /UERANSIM/config/${COMPONENT_NAME}.yaml
+
+# UE3 (gNB2 SST=1)
+sed -i 's|UE3_IMSI|'$UE3_IMSI'|g' /UERANSIM/config/${COMPONENT_NAME}.yaml
+sed -i 's|UE3_IMEI|'$UE3_IMEI'|g' /UERANSIM/config/${COMPONENT_NAME}.yaml
+sed -i 's|UE3_IMEISV|'$UE3_IMEISV'|g' /UERANSIM/config/${COMPONENT_NAME}.yaml
+
+# UE4 (gNB2 SST=2)
+sed -i 's|UE4_IMSI|'$UE4_IMSI'|g' /UERANSIM/config/${COMPONENT_NAME}.yaml
+sed -i 's|UE4_IMEI|'$UE4_IMEI'|g' /UERANSIM/config/${COMPONENT_NAME}.yaml
+sed -i 's|UE4_IMEISV|'$UE4_IMEISV'|g' /UERANSIM/config/${COMPONENT_NAME}.yaml
+
+# gNB IPs
 sed -i 's|NR_GNB_IP|'$NR_GNB_IP'|g' /UERANSIM/config/${COMPONENT_NAME}.yaml
+sed -i 's|NR_GNB2_IP|'$NR_GNB2_IP'|g' /UERANSIM/config/${COMPONENT_NAME}.yaml
 
 ./nr-ue -c ../config/${COMPONENT_NAME}.yaml &
 exec bash $@
