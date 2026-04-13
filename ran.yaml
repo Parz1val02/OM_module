@@ -1,4 +1,5 @@
 services:
+  # ─── E1 + E3 — srsRAN 4G ───
   srsenb_zmq:
     image: docker_srslte
     container_name: srsenb_zmq
@@ -59,6 +60,7 @@ services:
       om.generation: "4g"
       om.project: "srslte"
 
+  # ─── E3 — srsRAN 5G ───
   srsgnb_zmq:
     image: docker_srsran
     container_name: srsgnb_zmq
@@ -120,6 +122,68 @@ services:
       om.generation: "5g"
       om.project: "srsran"
 
+  # ─── E2 — Multi-eNB con UEs mixtos (4G srsRAN) ───
+  srsenb_zmq2:
+    image: docker_srslte
+    container_name: srsenb_zmq2
+    stdin_open: true
+    tty: true
+    privileged: true
+    volumes:
+      - ./srslte:/mnt/srslte
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=enb_zmq2
+    expose:
+      - "36412/sctp"
+      - "2152/udp"
+      - "2002/tcp"
+      - "2003/tcp"
+    networks:
+      default:
+        ipv4_address: ${SRS_ENB2_IP}
+    profiles:
+      - ran-4g-e2
+    labels:
+      om.domain: "ran"
+      om.nf: "enb"
+      om.generation: "4g"
+      om.project: "srslte"
+
+  srsue_zmq_bad_ki:
+    image: docker_srslte
+    container_name: srsue_zmq_bad_ki
+    stdin_open: true
+    tty: true
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    volumes:
+      - ./srslte:/mnt/srslte
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=ue_zmq_bad_ki
+    expose:
+      - "2002/tcp"
+      - "2003/tcp"
+    networks:
+      default:
+        ipv4_address: ${SRS_UE_BAD_KI_IP}
+    profiles:
+      - ran-4g-e2
+    labels:
+      om.domain: "ran"
+      om.nf: "ue"
+      om.generation: "4g"
+      om.project: "srslte"
+
+  # ─── E4 — UERANSIM base (5G) ───
   nr_gnb:
     image: docker_ueransim
     container_name: nr_gnb
@@ -174,6 +238,212 @@ services:
         ipv4_address: ${NR_UE_IP}
     profiles:
       - ran-5g-ueransim
+    labels:
+      om.domain: "ran"
+      om.nf: "ue"
+      om.generation: "5g"
+      om.project: "ueransim"
+
+  # ─── E4 — Multi-gNB con slicing y UEs mixtos (5G UERANSIM) ───
+  nr_gnb2:
+    image: docker_ueransim
+    container_name: nr_gnb2
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./ueransim:/mnt/ueransim
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=ueransim-gnb2
+    expose:
+      - "38412/sctp"
+      - "2152/udp"
+      - "4997/udp"
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    networks:
+      default:
+        ipv4_address: ${NR_GNB2_IP}
+    profiles:
+      - ran-5g-e4
+    labels:
+      om.domain: "ran"
+      om.nf: "gnb"
+      om.generation: "5g"
+      om.project: "ueransim"
+
+  nr_ue2:
+    image: docker_ueransim
+    container_name: nr_ue2
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./ueransim:/mnt/ueransim
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=ueransim-ue2
+    expose:
+      - "4997/udp"
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    networks:
+      default:
+        ipv4_address: ${NR_UE2_IP}
+    profiles:
+      - ran-5g-e4
+    labels:
+      om.domain: "ran"
+      om.nf: "ue"
+      om.generation: "5g"
+      om.project: "ueransim"
+
+  nr_ue3:
+    image: docker_ueransim
+    container_name: nr_ue3
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./ueransim:/mnt/ueransim
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=ueransim-ue3
+    expose:
+      - "4997/udp"
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    networks:
+      default:
+        ipv4_address: ${NR_UE3_IP}
+    profiles:
+      - ran-5g-e4
+    labels:
+      om.domain: "ran"
+      om.nf: "ue"
+      om.generation: "5g"
+      om.project: "ueransim"
+
+  nr_ue_bad_supi:
+    image: docker_ueransim
+    container_name: nr_ue_bad_supi
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./ueransim:/mnt/ueransim
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=ueransim-ue-bad-supi
+    expose:
+      - "4997/udp"
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    networks:
+      default:
+        ipv4_address: ${NR_UE_BAD_SUPI_IP}
+    profiles:
+      - ran-5g-e4
+    labels:
+      om.domain: "ran"
+      om.nf: "ue"
+      om.generation: "5g"
+      om.project: "ueransim"
+
+  nr_ue_bad_ki:
+    image: docker_ueransim
+    container_name: nr_ue_bad_ki
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./ueransim:/mnt/ueransim
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=ueransim-ue-bad-ki
+    expose:
+      - "4997/udp"
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    networks:
+      default:
+        ipv4_address: ${NR_UE_BAD_KI_IP}
+    profiles:
+      - ran-5g-e4
+    labels:
+      om.domain: "ran"
+      om.nf: "ue"
+      om.generation: "5g"
+      om.project: "ueransim"
+
+  nr_ue_bad_dnn:
+    image: docker_ueransim
+    container_name: nr_ue_bad_dnn
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./ueransim:/mnt/ueransim
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=ueransim-ue-bad-dnn
+    expose:
+      - "4997/udp"
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    networks:
+      default:
+        ipv4_address: ${NR_UE_BAD_DNN_IP}
+    profiles:
+      - ran-5g-e4
+    labels:
+      om.domain: "ran"
+      om.nf: "ue"
+      om.generation: "5g"
+      om.project: "ueransim"
+
+  nr_ue_bad_sst:
+    image: docker_ueransim
+    container_name: nr_ue_bad_sst
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./ueransim:/mnt/ueransim
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=ueransim-ue-bad-sst
+    expose:
+      - "4997/udp"
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    networks:
+      default:
+        ipv4_address: ${NR_UE_BAD_SST_IP}
+    profiles:
+      - ran-5g-e4
     labels:
       om.domain: "ran"
       om.nf: "ue"

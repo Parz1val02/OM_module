@@ -58,6 +58,7 @@ sed -i 's|MCC|'$MCC'|g' /etc/srsran/enb.conf
 sed -i 's|SRS_ENB_IP|'$SRS_ENB_IP'|g' /etc/srsran/enb.conf
 sed -i 's|SRS_ENB2_IP|'$SRS_ENB2_IP'|g' /etc/srsran/enb.conf
 sed -i 's|SRS_UE_IP|'$SRS_UE_IP'|g' /etc/srsran/enb.conf
+sed -i 's|SRS_UE_BAD_KI_IP|'$SRS_UE_BAD_KI_IP'|g' /etc/srsran/enb.conf
 
 # UE substitutions
 sed -i 's|UE1_KI|'$UE1_KI'|g' /etc/srsran/ue.conf
@@ -68,8 +69,6 @@ sed -i 's|SRS_ENB_IP|'$SRS_ENB_IP'|g' /etc/srsran/ue.conf
 sed -i 's|SRS_ENB2_IP|'$SRS_ENB2_IP'|g' /etc/srsran/ue.conf
 sed -i 's|SRS_GNB_IP|'$SRS_GNB_IP'|g' /etc/srsran/ue.conf
 sed -i 's|SRS_UE_BAD_KI_IP|'$SRS_UE_BAD_KI_IP'|g' /etc/srsran/ue.conf
-sed -i 's|SRS_UE_BAD_IMSI_IP|'$SRS_UE_BAD_IMSI_IP'|g' /etc/srsran/ue.conf
-sed -i 's|SRS_UE_BAD_APN_IP|'$SRS_UE_BAD_APN_IP'|g' /etc/srsran/ue.conf
 
 # rr substitutions
 sed -i 's|TAC|'$TAC'|g' /etc/srsran/rr.conf
