@@ -183,6 +183,126 @@ services:
       om.generation: "4g"
       om.project: "srslte"
 
+  srsenb_zmq3:
+    image: docker_srslte
+    container_name: srsenb_zmq3
+    stdin_open: true
+    tty: true
+    privileged: true
+    volumes:
+      - ./srslte:/mnt/srslte
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=enb_zmq3
+    expose:
+      - "36412/sctp"
+      - "2152/udp"
+      - "2004/tcp"
+      - "2005/tcp"
+    networks:
+      default:
+        ipv4_address: ${SRS_ENB3_IP}
+    profiles:
+      - ran-4g-e2
+    labels:
+      om.domain: "ran"
+      om.nf: "enb"
+      om.generation: "4g"
+      om.project: "srslte"
+
+  srsue_zmq_bad_imsi:
+    image: docker_srslte
+    container_name: srsue_zmq_bad_imsi
+    stdin_open: true
+    tty: true
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    volumes:
+      - ./srslte:/mnt/srslte
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=ue_zmq_bad_imsi
+    expose:
+      - "2004/tcp"
+      - "2005/tcp"
+    networks:
+      default:
+        ipv4_address: ${SRS_UE_BAD_IMSI_IP}
+    profiles:
+      - ran-4g-e2
+    labels:
+      om.domain: "ran"
+      om.nf: "ue"
+      om.generation: "4g"
+      om.project: "srslte"
+
+  srsenb_zmq4:
+    image: docker_srslte
+    container_name: srsenb_zmq4
+    stdin_open: true
+    tty: true
+    privileged: true
+    volumes:
+      - ./srslte:/mnt/srslte
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=enb_zmq4
+    expose:
+      - "36412/sctp"
+      - "2152/udp"
+      - "2006/tcp"
+      - "2007/tcp"
+    networks:
+      default:
+        ipv4_address: ${SRS_ENB4_IP}
+    profiles:
+      - ran-4g-e2
+    labels:
+      om.domain: "ran"
+      om.nf: "enb"
+      om.generation: "4g"
+      om.project: "srslte"
+
+  srsue_zmq_bad_apn:
+    image: docker_srslte
+    container_name: srsue_zmq_bad_apn
+    stdin_open: true
+    tty: true
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    volumes:
+      - ./srslte:/mnt/srslte
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=ue_zmq_bad_apn
+    expose:
+      - "2006/tcp"
+      - "2007/tcp"
+    networks:
+      default:
+        ipv4_address: ${SRS_UE_BAD_APN_IP}
+    profiles:
+      - ran-4g-e2
+    labels:
+      om.domain: "ran"
+      om.nf: "ue"
+      om.generation: "4g"
+      om.project: "srslte"
+
   # ─── E4 — UERANSIM base (5G) ───
   nr_gnb:
     image: docker_ueransim

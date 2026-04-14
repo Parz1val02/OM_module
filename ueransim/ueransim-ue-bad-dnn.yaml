@@ -11,6 +11,18 @@ imeiSv: "4370816125816164"
 gnbSearchList:
   - NR_GNB_IP
 
+uacAic:
+  mps: false
+  mcs: false
+
+uacAcc:
+  normalClass: 0
+  class11: false
+  class12: false
+  class13: false
+  class14: false
+  class15: false
+
 sessions:
   - type: "IPv4"
     apn: "invalid_dnn"

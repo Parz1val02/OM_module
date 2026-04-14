@@ -1,7 +1,7 @@
-supi: "imsi-001011234567905"
+supi: "imsi-001011234567906"
 mcc: "MCC"
 mnc: "MNC"
-key: "8baf473f2f8fd09487cccbd7097c6862"
+key: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
 op: "11111111111111111111111111111111"
 opType: "OP"
 amf: "8000"
@@ -10,6 +10,18 @@ imeiSv: "4370816125816161"
 
 gnbSearchList:
   - NR_GNB_IP
+
+uacAic:
+  mps: false
+  mcs: false
+
+uacAcc:
+  normalClass: 0
+  class11: false
+  class12: false
+  class13: false
+  class14: false
+  class15: false
 
 sessions:
   - type: "IPv4"

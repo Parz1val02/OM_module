@@ -94,6 +94,9 @@ db.subscribers.insertOne(make5GSubscriber('001011234567896', '4370816125816152',
 // ─── E2 — UE invalido Ki incorrecto (credenciales correctas en DB, Ki malo en .conf) ───
 db.subscribers.insertOne(make4GSubscriber('001011234567902', '4370816125816154'));
 
+// ─── E2 — UE invalido APN incorrecto (credenciales correctas en DB, APN malo en .conf) ───
+db.subscribers.insertOne(make4GSubscriber('001011234567903', '4370816125816155'));
+
 // ─── E4 — UE valido gNB2 SST=1 ───
 db.subscribers.insertOne(make5GSubscriber('001011234567898', '4370816125816157', 1));
 
@@ -109,6 +112,7 @@ db.subscribers.insertOne(make5GSubscriber('001011234567908', '4370816125816162',
 // ─── E4 — UE invalido SST=3 inexistente (credenciales correctas en DB, SST=3 en .yaml) ───
 db.subscribers.insertOne(make5GSubscriber('001011234567909', '4370816125816165', 1));
 
+// ─── NO insertar: 901 (bad_imsi E2 — IMSI no registrado intencionalmente) ───
 // ─── NO insertar: 905 (bad_supi E4 — SUPI no registrado intencionalmente) ───
 
 // ─── Verificar ───
