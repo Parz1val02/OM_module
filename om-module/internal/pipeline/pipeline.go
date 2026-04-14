@@ -420,14 +420,28 @@ func (p *Pipeline) buildIPToNFMap(ctx context.Context) map[string]string {
 
 	// RAN container name → friendly label
 	ranNames := map[string]string{
-		// srsRAN
-		"srsenb_zmq":   "enb",
+		// srsRAN 4G (E1/E2)
+		"srsenb_zmq":         "enb",
+		"srsenb_zmq2":        "enb",
+		"srsenb_zmq3":        "enb",
+		"srsenb_zmq4":        "enb",
+		"srsue_zmq":          "ue",
+		"srsue_zmq_bad_ki":   "ue",
+		"srsue_zmq_bad_imsi": "ue",
+		"srsue_zmq_bad_apn":  "ue",
+		// srsRAN 5G (E3/E4)
 		"srsgnb_zmq":   "gnb",
-		"srsue_zmq":    "ue",
 		"srsue_5g_zmq": "ue",
-		// UERANSIM
-		"nr_gnb": "gnb",
-		"nr_ue":  "ue",
+		// UERANSIM (E4)
+		"nr_gnb":         "gnb",
+		"nr_gnb2":        "gnb",
+		"nr_ue":          "ue",
+		"nr_ue2":         "ue",
+		"nr_ue3":         "ue",
+		"nr_ue_bad_supi": "ue",
+		"nr_ue_bad_ki":   "ue",
+		"nr_ue_bad_dnn":  "ue",
+		"nr_ue_bad_sst":  "ue",
 	}
 
 	result := make(map[string]string, len(ipToName))
