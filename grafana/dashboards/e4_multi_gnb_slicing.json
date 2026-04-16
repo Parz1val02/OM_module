@@ -24,16 +24,16 @@
     {
       "icon": "dashboard",
       "targetBlank": false,
-      "title": "5G Overview",
+      "title": "E3 \u2014 Flujo base 5G",
       "type": "link",
-      "url": "/d/5g-overview"
+      "url": "/d/e3-flujo-base-5g"
     },
     {
       "icon": "dashboard",
       "targetBlank": false,
-      "title": "E3 Fault Injection",
+      "title": "Live Traces 5G",
       "type": "link",
-      "url": "/d/e3-fault-injection-amf"
+      "url": "/d/5g-live-traces"
     }
   ],
   "panels": [

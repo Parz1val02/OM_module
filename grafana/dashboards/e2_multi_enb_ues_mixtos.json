@@ -24,16 +24,16 @@
     {
       "icon": "dashboard",
       "targetBlank": false,
-      "title": "4G Overview",
+      "title": "E1 \u2014 Flujo base 4G",
       "type": "link",
-      "url": "/d/4g-overview"
+      "url": "/d/e1-flujo-base-4g"
     },
     {
       "icon": "dashboard",
       "targetBlank": false,
-      "title": "E1 Fault Injection",
+      "title": "Live Traces 4G",
       "type": "link",
-      "url": "/d/e1-fault-injection-mme"
+      "url": "/d/4g-live-traces"
     }
   ],
   "panels": [
