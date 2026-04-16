@@ -45,7 +45,7 @@ func (p *Pipeline) Run(ctx context.Context, pkts <-chan capture.Packet) {
 
 	// Build IP→NF map once at start; refresh every 60 seconds.
 	ipToNF := p.buildIPToNFMap(ctx)
-	ticker := time.NewTicker(60 * time.Second)
+	ticker := time.NewTicker(10 * time.Second)
 	defer ticker.Stop()
 
 	for {
@@ -57,6 +57,9 @@ func (p *Pipeline) Run(ctx context.Context, pkts <-chan capture.Packet) {
 			// Ignore heartbeats and keepalives — they add noise with no value
 			if isHeartbeat(pkt) {
 				continue
+			}
+			if ipToNF[pkt.SrcIP] == "" || ipToNF[pkt.DstIP] == "" {
+				ipToNF = p.buildIPToNFMap(ctx)
 			}
 			go p.emitSpan(ctx, pkt, ipToNF)
 
