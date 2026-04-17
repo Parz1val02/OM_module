@@ -1,0 +1,80 @@
+Deploying component: 'mme'
+..............................................................................................................++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+..++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+-----
+Using configuration from /usr/lib/ssl/openssl.cnf
+4057928FCB7F0000:error:0700006C:configuration file routines:NCONF_get_string:no value:../crypto/conf/conf_lib.c:315:group=<NULL> name=unique_subject
+Check that the request matches the signature
+Signature ok
+Certificate Details:
+        Serial Number: 1 (0x1)
+        Validity
+            Not Before: Apr 17 22:37:20 2026 GMT
+            Not After : Apr 14 22:37:20 2036 GMT
+        Subject:
+            countryName               = KO
+            stateOrProvinceName       = Seoul
+            organizationName          = Open5GS
+            organizationalUnitName    = Tests
+            commonName                = mme.epc.mnc001.mcc001.3gppnetwork.org
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            X509v3 Subject Key Identifier: 
+                93:A9:35:D7:E6:26:4E:3F:71:4A:B3:8E:56:2F:28:32:5B:35:56:43
+            X509v3 Authority Key Identifier: 
+                71:3F:F5:FF:7C:49:F9:AF:D4:CD:27:59:A4:96:6D:9E:46:96:1E:E5
+Certificate is to be certified until Apr 14 22:37:20 2036 GMT (3650 days)
+
+Write out database with 1 new entries
+Data Base Updated
+Open5GS daemon v2.7.6-131-g782a97e
+
+[32m04/17 17:37:20.751[0m: [[33mapp[0m] [1;32mINFO[0m: Configuration: '/open5gs/install/etc/open5gs/mme.yaml' (../lib/app/ogs-init.c:144)
+[32m04/17 17:37:20.752[0m: [[33mapp[0m] [1;32mINFO[0m: File Logging: '/open5gs/install/var/log/open5gs/mme.log' (../lib/app/ogs-init.c:147)
+[32m04/17 17:37:20.755[0m: [[33mmetrics[0m] [1;32mINFO[0m: metrics_server() [http://172.22.0.9]:9091 (../lib/metrics/prometheus/context.c:392)
+[32m04/17 17:37:20.786[0m: [[33mapp[0m] [1;32mINFO[0m: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+[32m04/17 17:37:20.786[0m: [[33mgtp[0m] [1;32mINFO[0m: gtp_server() [172.22.0.9]:2123 (../lib/gtp/path.c:30)
+[32m04/17 17:37:20.786[0m: [[33mgtp[0m] [1;32mINFO[0m: gtp_connect() [172.22.0.5]:2123 (../lib/gtp/path.c:60)
+[32m04/17 17:37:20.786[0m: [[33mmme[0m] [1;32mINFO[0m: s1ap_server() [172.22.0.9]:36412 (../src/mme/s1ap-sctp.c:62)
+[32m04/17 17:37:20.786[0m: [[33msctp[0m] [1;32mINFO[0m: MME initialize...done (../src/mme/app-init.c:33)
+[32m04/17 17:37:30.364[0m: [[33mdiam[0m] [1;32mINFO[0m: CONNECTED TO 'hss.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#8): (../lib/diameter/common/logger.c:81)
+[32m04/17 17:41:12.074[0m: [[33mmme[0m] [1;32mINFO[0m: eNB-S1 accepted[172.22.0.22]:60938 in s1_path module (../src/mme/s1ap-sctp.c:114)
+[32m04/17 17:41:12.074[0m: [[33mmme[0m] [1;32mINFO[0m: eNB-S1 accepted[172.22.0.22] in master_sm module (../src/mme/mme-sm.c:108)
+[32m04/17 17:41:12.074[0m: [[33mmme[0m] [1;32mINFO[0m: [Added] Number of eNBs is now 1 (../src/mme/mme-context.c:3131)
+[32m04/17 17:41:12.074[0m: [[33mmme[0m] [1;32mINFO[0m: eNB-S1[172.22.0.22] max_num_of_ostreams : 30 (../src/mme/mme-sm.c:157)
+[32m04/17 17:41:58.844[0m: [[33mmme[0m] [1;32mINFO[0m: InitialUEMessage (../src/mme/s1ap-handler.c:493)
+[32m04/17 17:41:58.844[0m: [[33mmme[0m] [1;32mINFO[0m: [Added] Number of eNB-UEs is now 1 (../src/mme/mme-context.c:5256)
+[32m04/17 17:41:58.844[0m: [[33mmme[0m] [1;32mINFO[0m: Unknown UE by S_TMSI[G:2,C:1,M_TMSI:0xc000065f] (../src/mme/s1ap-handler.c:594)
+[32m04/17 17:41:58.844[0m: [[33mmme[0m] [1;32mINFO[0m:     ENB_UE_S1AP_ID[1] MME_UE_S1AP_ID[1] TAC[1] CellID[0x19b01] (../src/mme/s1ap-handler.c:734)
+[32m04/17 17:41:58.845[0m: [[33mmme[0m] [1;32mINFO[0m: Unknown UE by GUTI[G:2,C:1,M_TMSI:0xc000065f] (../src/mme/mme-context.c:3945)
+[32m04/17 17:41:58.845[0m: [[33mmme[0m] [1;32mINFO[0m: [Added] Number of MME-UEs is now 1 (../src/mme/mme-context.c:3736)
+[32m04/17 17:41:58.845[0m: [[33memm[0m] [1;32mINFO[0m: [] Attach request (../src/mme/emm-sm.c:469)
+[32m04/17 17:41:58.845[0m: [[33memm[0m] [1;32mINFO[0m:     GUTI[G:2,C:1,M_TMSI:0xc000065f] IMSI[Unknown IMSI] (../src/mme/emm-handler.c:256)
+[32m04/17 17:41:58.886[0m: [[33memm[0m] [1;32mINFO[0m: Identity response (../src/mme/emm-sm.c:439)
+[32m04/17 17:41:58.887[0m: [[33memm[0m] [1;32mINFO[0m:     IMSI[001011234567895] (../src/mme/emm-handler.c:492)
+[32m04/17 17:41:58.954[0m: [[33mmme[0m] [1;32mINFO[0m: [Added] Number of MME-Sessions is now 1 (../src/mme/mme-context.c:5270)
+[32m04/17 17:41:59.265[0m: [[33memm[0m] [1;32mINFO[0m: [001011234567895] Attach complete (../src/mme/emm-sm.c:1573)
+[32m04/17 17:41:59.265[0m: [[33memm[0m] [1;32mINFO[0m:     IMSI[001011234567895] (../src/mme/emm-handler.c:296)
+[32m04/17 17:41:59.265[0m: [[33memm[0m] [1;32mINFO[0m:     UTC [2026-04-17T22:41:59] Timezone[0]/DST[0] (../src/mme/emm-handler.c:302)
+[32m04/17 17:41:59.266[0m: [[33memm[0m] [1;32mINFO[0m:     LOCAL [2026-04-17T17:41:59] Timezone[-18000]/DST[0] (../src/mme/emm-handler.c:306)
+[32m04/17 17:42:31.506[0m: [[33mmme[0m] [1;32mINFO[0m: UE Context Release [Action:2] (../src/mme/s1ap-handler.c:2142)
+[32m04/17 17:42:31.506[0m: [[33mmme[0m] [1;32mINFO[0m:     ENB_UE_S1AP_ID[1] MME_UE_S1AP_ID[1] (../src/mme/s1ap-handler.c:2143)
+[32m04/17 17:42:31.506[0m: [[33mmme[0m] [1;32mINFO[0m:     IMSI[001011234567895] (../src/mme/s1ap-handler.c:2148)
+[32m04/17 17:42:31.506[0m: [[33mmme[0m] [1;32mINFO[0m: Mobile Reachable timer started for IMSI[001011234567895] (../src/mme/s1ap-handler.c:2161)
+[32m04/17 17:42:31.506[0m: [[33mmme[0m] [1;32mINFO[0m: [Removed] Number of eNB-UEs is now 0 (../src/mme/mme-context.c:5263)
+[32m04/17 17:43:28.422[0m: [[33mmme[0m] [1;32mINFO[0m: InitialUEMessage (../src/mme/s1ap-handler.c:493)
+[32m04/17 17:43:28.422[0m: [[33mmme[0m] [1;32mINFO[0m: [Added] Number of eNB-UEs is now 1 (../src/mme/mme-context.c:5256)
+[32m04/17 17:43:28.422[0m: [[33mmme[0m] [1;32mINFO[0m:     S_TMSI[G:2,C:1,M_TMSI:0xc00000d7] IMSI:[001011234567895] (../src/mme/s1ap-handler.c:597)
+[32m04/17 17:43:28.423[0m: [[33mmme[0m] [1;32mINFO[0m:     ENB_UE_S1AP_ID[2] MME_UE_S1AP_ID[2] TAC[1] CellID[0x19b01] (../src/mme/s1ap-handler.c:734)
+[32m04/17 17:43:28.423[0m: [[33memm[0m] [1;32mINFO[0m: [001011234567895] Service request (../src/mme/emm-sm.c:352)
+[32m04/17 17:43:28.423[0m: [[33memm[0m] [1;32mINFO[0m:     GUTI[G:2,C:1,M_TMSI:0xc00000d7] IMSI[001011234567895] (../src/mme/emm-handler.c:632)
+[32m04/17 17:44:53.354[0m: [[33memm[0m] [1;32mINFO[0m: [001011234567895] Detach request (../src/mme/emm-sm.c:896)
+[32m04/17 17:44:53.366[0m: [[33mmme[0m] [1;32mINFO[0m: Removed Session: UE IMSI:[001011234567895] APN:[internet] (../src/mme/mme-s11-handler.c:902)
+[32m04/17 17:44:53.367[0m: [[33mmme[0m] [1;32mINFO[0m: [Removed] Number of MME-Sessions is now 0 (../src/mme/mme-context.c:5277)
+[32m04/17 17:44:53.367[0m: [[33mmme[0m] [1;32mINFO[0m: UE Context Release [Action:2] (../src/mme/s1ap-handler.c:2142)
+[32m04/17 17:44:53.367[0m: [[33mmme[0m] [1;32mINFO[0m:     ENB_UE_S1AP_ID[2] MME_UE_S1AP_ID[2] (../src/mme/s1ap-handler.c:2143)
+[32m04/17 17:44:53.367[0m: [[33mmme[0m] [1;32mINFO[0m:     IMSI[001011234567895] (../src/mme/s1ap-handler.c:2148)
+[32m04/17 17:44:53.367[0m: [[33mmme[0m] [1;32mINFO[0m: [Removed] Number of eNB-UEs is now 0 (../src/mme/mme-context.c:5263)
+[32m04/17 17:44:55.880[0m: [[33mmme[0m] [1;32mINFO[0m: eNB-S1[172.22.0.22] connection refused!!! (../src/mme/mme-sm.c:173)
+[32m04/17 17:44:55.880[0m: [[33mmme[0m] [1;32mINFO[0m: [Removed] Number of eNBs is now 0 (../src/mme/mme-context.c:3166)

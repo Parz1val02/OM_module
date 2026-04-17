@@ -1,0 +1,15 @@
+Deploying component: 'sgwc'
+Open5GS daemon v2.7.6-131-g782a97e
+
+[32m04/17 17:48:51.921[0m: [[33mapp[0m] [1;32mINFO[0m: Configuration: '/open5gs/install/etc/open5gs/sgwc.yaml' (../lib/app/ogs-init.c:144)
+[32m04/17 17:48:51.921[0m: [[33mapp[0m] [1;32mINFO[0m: File Logging: '/open5gs/install/var/log/open5gs/sgwc.log' (../lib/app/ogs-init.c:147)
+[32m04/17 17:48:51.999[0m: [[33mgtp[0m] [1;32mINFO[0m: gtp_server() [172.22.0.5]:2123 (../lib/gtp/path.c:30)
+[32m04/17 17:48:51.999[0m: [[33mpfcp[0m] [1;32mINFO[0m: pfcp_server() [172.22.0.5]:8805 (../lib/pfcp/path.c:30)
+[32m04/17 17:48:51.999[0m: [[33mapp[0m] [1;32mINFO[0m: SGW-C initialize...done (../src/sgwc/app.c:31)
+[32m04/17 17:48:52.000[0m: [[33msgwc[0m] [1;32mINFO[0m: PFCP associated [172.22.0.6]:8805 (../src/sgwc/pfcp-sm.c:167)
+[32m04/17 17:48:54.493[0m: [[33msgwc[0m] [1;36mWARNING[0m: PFCP[REQ] has already been associated [172.22.0.6]:8805 (../src/sgwc/pfcp-sm.c:259)
+[32m04/17 17:51:46.256[0m: [[33msgwc[0m] [1;32mINFO[0m: [Added] Number of SGWC-UEs is now 1 (../src/sgwc/context.c:239)
+[32m04/17 17:51:46.257[0m: [[33msgwc[0m] [1;32mINFO[0m: [Added] Number of SGWC-Sessions is now 1 (../src/sgwc/context.c:952)
+[32m04/17 17:51:46.257[0m: [[33msgwc[0m] [1;32mINFO[0m: UE IMSI[001011234567895] APN[internet] (../src/sgwc/s11-handler.c:268)
+[32m04/17 17:51:46.258[0m: [[33mgtp[0m] [1;32mINFO[0m: gtp_connect() [172.22.0.7]:2123 (../lib/gtp/path.c:60)
+[32m04/17 17:54:05.988[0m: [[33msgwc[0m] [1;32mINFO[0m: [Removed] Number of SGWC-Sessions is now 0 (../src/sgwc/context.c:958)

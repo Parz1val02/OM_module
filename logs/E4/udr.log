@@ -1,0 +1,16 @@
+Deploying component: 'udr'
+Open5GS daemon v2.7.6-131-g782a97e
+
+[32m04/17 18:07:26.596[0m: [[33mapp[0m] [1;32mINFO[0m: Configuration: '/open5gs/install/etc/open5gs/udr.yaml' (../lib/app/ogs-init.c:144)
+[32m04/17 18:07:26.596[0m: [[33mapp[0m] [1;32mINFO[0m: File Logging: '/open5gs/install/var/log/open5gs/udr.log' (../lib/app/ogs-init.c:147)
+[32m04/17 18:07:26.600[0m: [[33msbi[0m] [1;32mINFO[0m: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/context.c:451)
+[32m04/17 18:07:26.600[0m: [[33msbi[0m] [1;32mINFO[0m: Setup NF EndPoint(addr) [172.22.0.35:7777] (../lib/sbi/context.c:499)
+[32m04/17 18:07:26.602[0m: [[33mdbi[0m] [1;32mINFO[0m: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+[32m04/17 18:07:26.602[0m: [[33msbi[0m] [1;32mINFO[0m: NF Service [nudr-dr] (../lib/sbi/context.c:1985)
+[32m04/17 18:07:26.602[0m: [[33msbi[0m] [1;32mINFO[0m: nghttp2_server() [http://172.22.0.14]:7777 (../lib/sbi/nghttp2-server.c:439)
+[32m04/17 18:07:26.602[0m: [[33mapp[0m] [1;32mINFO[0m: UDR initialize...done (../src/udr/app.c:31)
+[32m04/17 18:07:26.604[0m: [[33msbi[0m] [1;32mINFO[0m: [3364687a-3ab2-41f1-b880-81da303b14dc] NF registered [Heartbeat:10s] (../lib/sbi/nf-sm.c:295)
+[32m04/17 18:07:26.606[0m: [[33msbi[0m] [1;32mINFO[0m: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/nnrf-handler.c:955)
+[32m04/17 18:07:26.606[0m: [[33msbi[0m] [1;32mINFO[0m: [33652f8a-3ab2-41f1-bf45-2fa49d5b6904] Subscription created until 2026-04-18T18:07:26.605559-05:00 [duration:86400000000,validity:86400.000000,patch:43200.000000] (../lib/sbi/nnrf-handler.c:874)
+[32m04/17 18:12:49.435[0m: [[33mdbi[0m] [1;32mINFO[0m: [imsi-001011234567905] Cannot find IMSI in DB (../lib/dbi/subscription.c:63)
+[32m04/17 18:12:49.435[0m: [[33mudr[0m] [1;36mWARNING[0m: [imsi-001011234567905] Cannot find SUPI in DB (../src/udr/nudr-handler.c:68)

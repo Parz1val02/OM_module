@@ -1,0 +1,19 @@
+Deploying component: 'upf'
+Open5GS daemon v2.7.6-131-g782a97e
+
+[32m04/17 17:57:35.667[0m: [[33mapp[0m] [1;32mINFO[0m: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+[32m04/17 17:57:35.667[0m: [[33mapp[0m] [1;32mINFO[0m: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+[32m04/17 17:57:35.717[0m: [[33mmetrics[0m] [1;32mINFO[0m: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+[32m04/17 17:57:35.717[0m: [[33mpfcp[0m] [1;32mINFO[0m: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+[32m04/17 17:57:35.717[0m: [[33mgtp[0m] [1;32mINFO[0m: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+[32m04/17 17:57:35.718[0m: [[33mapp[0m] [1;32mINFO[0m: UPF initialize...done (../src/upf/app.c:31)
+[32m04/17 17:57:35.718[0m: [[33mupf[0m] [1;32mINFO[0m: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+[32m04/17 17:57:38.184[0m: [[33mupf[0m] [1;36mWARNING[0m: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+[32m04/17 18:00:27.147[0m: [[33mupf[0m] [1;32mINFO[0m: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+[32m04/17 18:00:27.147[0m: [[33mgtp[0m] [1;32mINFO[0m: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+[32m04/17 18:00:27.147[0m: [[33mupf[0m] [1;32mINFO[0m: UE F-SEID[UP:0xf32 CP:0xc2f] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+[32m04/17 18:00:27.223[0m: [[33mupf[0m] [1;33mERROR[0m: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: b2adba2e 1a9873a6 ff020000 00000000   ......s.........
+0020: 00000000 00000002 8500821c 00000000   ................
+[32m04/17 18:00:27.224[0m: [[33mgtp[0m] [1;32mINFO[0m: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)

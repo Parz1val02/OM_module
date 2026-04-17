@@ -1,0 +1,13 @@
+Deploying component: 'bsf'
+Open5GS daemon v2.7.6-131-g782a97e
+
+[32m04/17 17:57:44.971[0m: [[33mapp[0m] [1;32mINFO[0m: Configuration: '/open5gs/install/etc/open5gs/bsf.yaml' (../lib/app/ogs-init.c:144)
+[32m04/17 17:57:44.971[0m: [[33mapp[0m] [1;32mINFO[0m: File Logging: '/open5gs/install/var/log/open5gs/bsf.log' (../lib/app/ogs-init.c:147)
+[32m04/17 17:57:44.974[0m: [[33msbi[0m] [1;32mINFO[0m: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/context.c:451)
+[32m04/17 17:57:44.974[0m: [[33msbi[0m] [1;32mINFO[0m: Setup NF EndPoint(addr) [172.22.0.35:7777] (../lib/sbi/context.c:499)
+[32m04/17 17:57:44.974[0m: [[33msbi[0m] [1;32mINFO[0m: NF Service [nbsf-management] (../lib/sbi/context.c:1985)
+[32m04/17 17:57:44.974[0m: [[33msbi[0m] [1;32mINFO[0m: nghttp2_server() [http://172.22.0.29]:7777 (../lib/sbi/nghttp2-server.c:439)
+[32m04/17 17:57:44.974[0m: [[33mapp[0m] [1;32mINFO[0m: BSF initialize...done (../src/bsf/app.c:31)
+[32m04/17 17:57:44.976[0m: [[33msbi[0m] [1;32mINFO[0m: [d8b7495c-3ab0-41f1-b8c8-07aca4fdf62a] NF registered [Heartbeat:10s] (../lib/sbi/nf-sm.c:295)
+[32m04/17 17:57:44.977[0m: [[33msbi[0m] [1;32mINFO[0m: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/nnrf-handler.c:955)
+[32m04/17 17:57:44.977[0m: [[33msbi[0m] [1;32mINFO[0m: [d8b7c7e2-3ab0-41f1-a8f0-a1f0801ddd60] Subscription created until 2026-04-18T17:57:44.977457-05:00 [duration:86400000000,validity:86400.000000,patch:43200.000000] (../lib/sbi/nnrf-handler.c:874)

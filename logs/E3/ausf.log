@@ -1,0 +1,22 @@
+Deploying component: 'ausf'
+Open5GS daemon v2.7.6-131-g782a97e
+
+[32m04/17 17:57:35.019[0m: [[33mapp[0m] [1;32mINFO[0m: Configuration: '/open5gs/install/etc/open5gs/ausf.yaml' (../lib/app/ogs-init.c:144)
+[32m04/17 17:57:35.019[0m: [[33mapp[0m] [1;32mINFO[0m: File Logging: '/open5gs/install/var/log/open5gs/ausf.log' (../lib/app/ogs-init.c:147)
+[32m04/17 17:57:35.023[0m: [[33msbi[0m] [1;32mINFO[0m: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/context.c:451)
+[32m04/17 17:57:35.023[0m: [[33msbi[0m] [1;32mINFO[0m: Setup NF EndPoint(addr) [172.22.0.35:7777] (../lib/sbi/context.c:499)
+[32m04/17 17:57:35.023[0m: [[33msbi[0m] [1;32mINFO[0m: NF Service [nausf-auth] (../lib/sbi/context.c:1985)
+[32m04/17 17:57:35.023[0m: [[33msbi[0m] [1;32mINFO[0m: nghttp2_server() [http://172.22.0.11]:7777 (../lib/sbi/nghttp2-server.c:439)
+[32m04/17 17:57:35.023[0m: [[33mapp[0m] [1;32mINFO[0m: AUSF initialize...done (../src/ausf/app.c:31)
+[32m04/17 17:57:35.026[0m: [[33msbi[0m] [1;32mINFO[0m: [d2c8d79a-3ab0-41f1-a830-4dd0f5bd1707] NF registered [Heartbeat:10s] (../lib/sbi/nf-sm.c:295)
+[32m04/17 17:57:35.028[0m: [[33msbi[0m] [1;32mINFO[0m: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/nnrf-handler.c:955)
+[32m04/17 17:57:35.028[0m: [[33msbi[0m] [1;32mINFO[0m: [d2c97664-3ab0-41f1-a8f0-a1f0801ddd60] Subscription created until 2026-04-18T17:57:35.027123-05:00 [duration:86400000000,validity:86400.000000,patch:43200.000000] (../lib/sbi/nnrf-handler.c:874)
+[32m04/17 17:57:35.028[0m: [[33msbi[0m] [1;32mINFO[0m: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/nnrf-handler.c:955)
+[32m04/17 17:57:35.028[0m: [[33msbi[0m] [1;32mINFO[0m: [d2c98992-3ab0-41f1-a8f0-a1f0801ddd60] Subscription created until 2026-04-18T17:57:35.027477-05:00 [duration:86400000000,validity:86400.000000,patch:43200.000000] (../lib/sbi/nnrf-handler.c:874)
+[32m04/17 17:57:35.031[0m: [[33msbi[0m] [1;32mINFO[0m: [d2c4f364-3ab0-41f1-b4f9-43cd66ad47cc] (NRF-profile-get) NF registered (../lib/sbi/nf-sm.c:81)
+[32m04/17 17:57:35.031[0m: [[33msbi[0m] [1;32mINFO[0m: Setup NF EndPoint(addr) [172.22.0.13:80] (../lib/sbi/context.c:2439)
+[32m04/17 17:57:35.031[0m: [[33msbi[0m] [1;32mINFO[0m: Setup NF EndPoint(addr) [172.22.0.13:7777] (../lib/sbi/context.c:2104)
+[32m04/17 17:57:35.031[0m: [[33msbi[0m] [1;32mINFO[0m: Setup NF EndPoint(addr) [172.22.0.13:7777] (../lib/sbi/context.c:2104)
+[32m04/17 17:57:35.031[0m: [[33msbi[0m] [1;32mINFO[0m: Setup NF EndPoint(addr) [172.22.0.13:7777] (../lib/sbi/context.c:2104)
+[32m04/17 18:00:26.885[0m: [[33msbi[0m] [1;32mINFO[0m: [d2c4f364-3ab0-41f1-b4f9-43cd66ad47cc] Setup NF Instance [type:UDM] (../lib/sbi/path.c:307)
+[32m04/17 18:00:26.928[0m: [[33mausf[0m] [1;32mINFO[0m: Setup NF EndPoint(addr) [172.22.0.13:7777] (../src/ausf/nudm-handler.c:337)

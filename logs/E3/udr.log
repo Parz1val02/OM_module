@@ -1,0 +1,14 @@
+Deploying component: 'udr'
+Open5GS daemon v2.7.6-131-g782a97e
+
+[32m04/17 17:57:44.924[0m: [[33mapp[0m] [1;32mINFO[0m: Configuration: '/open5gs/install/etc/open5gs/udr.yaml' (../lib/app/ogs-init.c:144)
+[32m04/17 17:57:44.924[0m: [[33mapp[0m] [1;32mINFO[0m: File Logging: '/open5gs/install/var/log/open5gs/udr.log' (../lib/app/ogs-init.c:147)
+[32m04/17 17:57:44.927[0m: [[33msbi[0m] [1;32mINFO[0m: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/context.c:451)
+[32m04/17 17:57:44.927[0m: [[33msbi[0m] [1;32mINFO[0m: Setup NF EndPoint(addr) [172.22.0.35:7777] (../lib/sbi/context.c:499)
+[32m04/17 17:57:44.929[0m: [[33mdbi[0m] [1;32mINFO[0m: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+[32m04/17 17:57:44.929[0m: [[33msbi[0m] [1;32mINFO[0m: NF Service [nudr-dr] (../lib/sbi/context.c:1985)
+[32m04/17 17:57:44.929[0m: [[33msbi[0m] [1;32mINFO[0m: nghttp2_server() [http://172.22.0.14]:7777 (../lib/sbi/nghttp2-server.c:439)
+[32m04/17 17:57:44.930[0m: [[33mapp[0m] [1;32mINFO[0m: UDR initialize...done (../src/udr/app.c:31)
+[32m04/17 17:57:44.933[0m: [[33msbi[0m] [1;32mINFO[0m: [d8b0145c-3ab0-41f1-a1c9-41f54eb7f8ff] NF registered [Heartbeat:10s] (../lib/sbi/nf-sm.c:295)
+[32m04/17 17:57:44.934[0m: [[33msbi[0m] [1;32mINFO[0m: Setup NF EndPoint(addr) [172.22.0.12:7777] (../lib/sbi/nnrf-handler.c:955)
+[32m04/17 17:57:44.935[0m: [[33msbi[0m] [1;32mINFO[0m: [d8b13300-3ab0-41f1-a8f0-a1f0801ddd60] Subscription created until 2026-04-18T17:57:44.934310-05:00 [duration:86400000000,validity:86400.000000,patch:43200.000000] (../lib/sbi/nnrf-handler.c:874)

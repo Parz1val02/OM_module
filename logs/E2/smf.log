@@ -1,0 +1,125 @@
+Deploying component: 'smf'
+............................................................................................++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+.....++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+-----
+Using configuration from /usr/lib/ssl/openssl.cnf
+40370A1432700000:error:0700006C:configuration file routines:NCONF_get_string:no value:../crypto/conf/conf_lib.c:315:group=<NULL> name=unique_subject
+Check that the request matches the signature
+Signature ok
+Certificate Details:
+        Serial Number: 1 (0x1)
+        Validity
+            Not Before: Apr 17 22:48:51 2026 GMT
+            Not After : Apr 14 22:48:51 2036 GMT
+        Subject:
+            countryName               = KO
+            stateOrProvinceName       = Seoul
+            organizationName          = Open5GS
+            organizationalUnitName    = Tests
+            commonName                = mme.epc.mnc001.mcc001.3gppnetwork.org
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            X509v3 Subject Key Identifier: 
+                C4:50:EE:E4:A8:2D:00:54:FA:76:28:09:4C:14:08:52:4F:06:87:E1
+            X509v3 Authority Key Identifier: 
+                33:DF:C7:0A:A7:68:1E:31:93:1B:6F:31:46:C2:50:D0:CA:7E:37:66
+Certificate is to be certified until Apr 14 22:48:51 2036 GMT (3650 days)
+
+Write out database with 1 new entries
+Data Base Updated
+Using configuration from /usr/lib/ssl/openssl.cnf
+Check that the request matches the signature
+Signature ok
+Certificate Details:
+        Serial Number: 2 (0x2)
+        Validity
+            Not Before: Apr 17 22:48:51 2026 GMT
+            Not After : Apr 14 22:48:51 2036 GMT
+        Subject:
+            countryName               = KO
+            stateOrProvinceName       = Seoul
+            organizationName          = Open5GS
+            organizationalUnitName    = Tests
+            commonName                = hss.epc.mnc001.mcc001.3gppnetwork.org
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            X509v3 Subject Key Identifier: 
+                4D:7C:5A:46:2A:BF:CB:AA:39:19:64:08:87:9D:4E:03:9B:30:8E:D1
+            X509v3 Authority Key Identifier: 
+                33:DF:C7:0A:A7:68:1E:31:93:1B:6F:31:46:C2:50:D0:CA:7E:37:66
+Certificate is to be certified until Apr 14 22:48:51 2036 GMT (3650 days)
+
+Write out database with 1 new entries
+Data Base Updated
+Using configuration from /usr/lib/ssl/openssl.cnf
+Check that the request matches the signature
+Signature ok
+Certificate Details:
+        Serial Number: 3 (0x3)
+        Validity
+            Not Before: Apr 17 22:48:51 2026 GMT
+            Not After : Apr 14 22:48:51 2036 GMT
+        Subject:
+            countryName               = KO
+            stateOrProvinceName       = Seoul
+            organizationName          = Open5GS
+            organizationalUnitName    = Tests
+            commonName                = smf.epc.mnc001.mcc001.3gppnetwork.org
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            X509v3 Subject Key Identifier: 
+                1F:0A:07:51:51:3D:7B:BE:54:F8:18:8C:C0:9E:AA:EB:81:D0:C4:CE
+            X509v3 Authority Key Identifier: 
+                33:DF:C7:0A:A7:68:1E:31:93:1B:6F:31:46:C2:50:D0:CA:7E:37:66
+Certificate is to be certified until Apr 14 22:48:51 2036 GMT (3650 days)
+
+Write out database with 1 new entries
+Data Base Updated
+Using configuration from /usr/lib/ssl/openssl.cnf
+Check that the request matches the signature
+Signature ok
+Certificate Details:
+        Serial Number: 4 (0x4)
+        Validity
+            Not Before: Apr 17 22:48:51 2026 GMT
+            Not After : Apr 14 22:48:51 2036 GMT
+        Subject:
+            countryName               = KO
+            stateOrProvinceName       = Seoul
+            organizationName          = Open5GS
+            organizationalUnitName    = Tests
+            commonName                = pcrf.epc.mnc001.mcc001.3gppnetwork.org
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            X509v3 Subject Key Identifier: 
+                DF:2B:C6:F6:36:83:32:09:7E:75:CE:FB:D9:98:AB:11:F8:EE:73:52
+            X509v3 Authority Key Identifier: 
+                33:DF:C7:0A:A7:68:1E:31:93:1B:6F:31:46:C2:50:D0:CA:7E:37:66
+Certificate is to be certified until Apr 14 22:48:51 2036 GMT (3650 days)
+
+Write out database with 1 new entries
+Data Base Updated
+Open5GS daemon v2.7.6-131-g782a97e
+
+[32m04/17 17:48:51.916[0m: [[33mapp[0m] [1;32mINFO[0m: Configuration: '/open5gs/install/etc/open5gs/smf.yaml' (../lib/app/ogs-init.c:144)
+[32m04/17 17:48:51.916[0m: [[33mapp[0m] [1;32mINFO[0m: File Logging: '/open5gs/install/var/log/open5gs/smf.log' (../lib/app/ogs-init.c:147)
+[32m04/17 17:48:52.003[0m: [[33mmetrics[0m] [1;32mINFO[0m: metrics_server() [http://172.22.0.7]:9091 (../lib/metrics/prometheus/context.c:392)
+[32m04/17 17:48:52.156[0m: [[33mapp[0m] [1;32mINFO[0m: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+[32m04/17 17:48:52.156[0m: [[33mgtp[0m] [1;32mINFO[0m: gtp_server() [172.22.0.7]:2123 (../lib/gtp/path.c:30)
+[32m04/17 17:48:52.156[0m: [[33mgtp[0m] [1;32mINFO[0m: gtp_server() [172.22.0.7]:2152 (../lib/gtp/path.c:30)
+[32m04/17 17:48:52.156[0m: [[33mpfcp[0m] [1;32mINFO[0m: pfcp_server() [172.22.0.7]:8805 (../lib/pfcp/path.c:30)
+[32m04/17 17:48:52.156[0m: [[33mapp[0m] [1;32mINFO[0m: SMF initialize...done (../src/smf/app.c:31)
+[32m04/17 17:48:52.160[0m: [[33msmf[0m] [1;32mINFO[0m: PFCP associated [172.22.0.8]:8805 (../src/smf/pfcp-sm.c:189)
+[32m04/17 17:48:54.659[0m: [[33msmf[0m] [1;36mWARNING[0m: PFCP[RSP] has already been associated [172.22.0.8]:8805 (../src/smf/pfcp-sm.c:293)
+[32m04/17 17:49:01.878[0m: [[33mdiam[0m] [1;32mINFO[0m: CONNECTED TO 'pcrf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#8): (../lib/diameter/common/logger.c:81)
+[32m04/17 17:51:46.258[0m: [[33msmf[0m] [1;32mINFO[0m: [Added] Number of SMF-UEs is now 1 (../src/smf/context.c:1069)
+[32m04/17 17:51:46.258[0m: [[33msmf[0m] [1;32mINFO[0m: [Added] Number of SMF-Sessions is now 1 (../src/smf/context.c:3381)
+[32m04/17 17:51:46.258[0m: [[33msmf[0m] [1;32mINFO[0m: UE IMSI[001011234567895] APN[internet] IPv4[192.168.100.2] IPv6[] (../src/smf/s5c-handler.c:311)
+[32m04/17 17:51:46.262[0m: [[33mgtp[0m] [1;32mINFO[0m: gtp_connect() [172.22.0.8]:2152 (../lib/gtp/path.c:60)
+[32m04/17 17:54:05.986[0m: [[33msmf[0m] [1;32mINFO[0m: Removed Session: UE IMSI:[001011234567895] DNN:[internet:0] IPv4:[192.168.100.2] IPv6:[] (../src/smf/context.c:1789)
+[32m04/17 17:54:05.987[0m: [[33msmf[0m] [1;32mINFO[0m: [Removed] Number of SMF-Sessions is now 0 (../src/smf/context.c:3389)
+[32m04/17 17:54:05.987[0m: [[33msmf[0m] [1;32mINFO[0m: [Removed] Number of SMF-UEs is now 0 (../src/smf/context.c:1133)
