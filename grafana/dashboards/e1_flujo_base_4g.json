@@ -290,13 +290,14 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "gtp2_sessions_active",
+          "expr": "smf_4g_pdu_session_count",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Sesiones GTPv2",
-      "type": "stat"
+      "title": "PDU Sessions 4G (SMF)",
+      "type": "stat",
+      "description": "Sesiones PDU activas en el SMF. Debe ser 1 cuando el UE está attached y con tráfico activo."
     },
     {
       "datasource": {
@@ -639,7 +640,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "AMBR del UE confirma que las políticas de bearer se aplicaron correctamente.",
+      "description": "mme_ue_count y mme_session deben subir juntos en attach y bajar en detach. bearers_active confirma que el plano de usuario está establecido. smf_4g_pdu_session_count confirma la sesión en el SMF.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -696,8 +697,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "mme_ue_ambr_uplink_bps",
-          "legendFormat": "AMBR Uplink bps",
+          "expr": "bearers_active",
+          "legendFormat": "Bearers activos",
           "refId": "C"
         },
         {
@@ -705,8 +706,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "mme_ue_ambr_downlink_bps",
-          "legendFormat": "AMBR Downlink bps",
+          "expr": "smf_4g_pdu_session_count",
+          "legendFormat": "PDU Sessions 4G",
           "refId": "D"
         }
       ],
@@ -871,7 +872,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Confirma que el eNB completó el S1 Setup y que el UE es visible desde el RAN.",
+      "description": "mme_enb_count sube cuando el eNB completa el S1 Setup. mme_ue_count sube cuando el UE completa el attach. Ambas métricas provienen directamente del MME y son confiables.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -910,8 +911,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "mme_enb_s1_setup_success",
-          "legendFormat": "S1 Setup Success",
+          "expr": "mme_ue_count",
+          "legendFormat": "UEs en MME",
           "refId": "A"
         },
         {
@@ -919,21 +920,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "mme_enb_connected_ues",
-          "legendFormat": "UEs conectados (eNB)",
+          "expr": "mme_enb_count",
+          "legendFormat": "eNBs en MME",
           "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "enb_ue",
-          "legendFormat": "eNB UE (RAN)",
-          "refId": "C"
         }
       ],
-      "title": "S1 Setup — eNB conectado",
+      "title": "S1 Setup — eNBs y UEs en MME",
       "type": "timeseries"
     },
     {

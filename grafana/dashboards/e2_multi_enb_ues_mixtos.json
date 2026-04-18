@@ -24,7 +24,7 @@
     {
       "icon": "dashboard",
       "targetBlank": false,
-      "title": "E1 \u2014 Flujo base 4G",
+      "title": "E1 — Flujo base 4G",
       "type": "link",
       "url": "/d/e1-flujo-base-4g"
     },
@@ -470,13 +470,14 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "gtp2_sessions_active",
-          "legendFormat": "GTP2",
+          "expr": "smf_4g_pdu_session_count",
+          "legendFormat": "PDU Sessions 4G",
           "refId": "A"
         }
       ],
-      "title": "Sesiones GTPv2 (esperado: 2)",
-      "type": "stat"
+      "title": "PDU Sessions 4G (esperado: 1)",
+      "type": "stat",
+      "description": "Solo el UE válido genera PDU session en el SMF. Los UEs inválidos (bad_ki, bad_imsi, bad_apn) son rechazados antes de llegar al SMF o durante el PDN setup."
     },
     {
       "collapsed": false,
@@ -617,7 +618,7 @@
       },
       "id": 21,
       "options": {
-        "content": "## 🔍 Qué observar por fase\n\n**Fase 1 — Preparación:**\n- `mme_enb_count` sube de 0→1→2 al levantar cada par eNB\n\n**Fase 2 — UEs válidos:**\n- `mme_ue_count` sube de 0→1→2\n- `bearers_active` sube de 0→1→2\n- `gtp2_sessions_active` == 2\n\n**Fase 3 — UEs inválidos (secuencial):**\n\n🔑 `bad_ki` (IMSI 902):\n- `mme_ue_count` **NO incrementa**\n- Logs HSS: `Authentication failure`\n- Revisar: `hss_auth_failure_count`\n\n🚫 `no-reg` (IMSI 901):\n- `mme_ue_count` **NO incrementa**\n- Logs HSS: `User not found`\n- MME devuelve Attach Reject",
+        "content": "## 🔍 Qué observar por fase\n\n**Fase 1 — Preparación:**\n- `mme_enb_count` sube de 0→1→2 al levantar cada par eNB\n\n**Fase 2 — UEs válidos:**\n- `mme_ue_count` sube de 0→1→2\n- `bearers_active` sube de 0→1→2\n- `gtp2_sessions_active` == 2\n\n**Fase 3 — UEs inválidos (secuencial):**\n\n🔑 `bad_ki` (IMSI 902):\n- `mme_ue_count` **NO incrementa**\n- Logs HSS: `Authentication failure`\n- Revisar: logs MME con `procedure=\"error\"`\n\n🚫 `no-reg` (IMSI 901):\n- `mme_ue_count` **NO incrementa**\n- Logs HSS: `User not found`\n- MME devuelve Attach Reject",
         "mode": "markdown"
       },
       "pluginVersion": "11.3.0",
@@ -642,7 +643,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Intentos de attach vs attach exitosos. La brecha entre ambas líneas representa los UEs inválidos que fueron rechazados.",
+      "description": "Fallos de autenticación y configuración (logs MME con procedure=error por minuto) vs UEs que completaron attach (incremento de mme_ue_count). La brecha = UEs inválidos rechazados.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -709,11 +710,11 @@
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "increase(hss_auth_failure_count[1m])",
-          "legendFormat": "Auth Failures (bad Ki)",
+          "expr": "count_over_time({nf=\"mme\", procedure=\"error\"}[1m])",
+          "legendFormat": "Fallos auth/config (logs MME)",
           "refId": "A"
         },
         {
@@ -986,7 +987,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Muestra cómo se van registrando los eNBs. mme_enb_connected_ues refleja la suma de UEs vistos desde la perspectiva del RAN (puede diferir de mme_ue_count si hay UEs inválidos).",
+      "description": "Progresión de eNBs y UEs válidos. mme_enb_count debe llegar a 4. mme_ue_count debe quedarse en 1 aunque los UEs inválidos intenten conectarse.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1025,27 +1026,18 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "mme_enb_s1_setup_success",
-          "legendFormat": "S1 Setup Success acum.",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "mme_enb_connected_ues",
-          "legendFormat": "UEs conectados (eNB)",
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
           "expr": "mme_enb_count",
           "legendFormat": "eNBs en MME",
           "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "mme_ue_count",
+          "legendFormat": "UEs válidos en MME",
+          "refId": "D"
         }
       ],
       "title": "S1 Setup — progresión de eNBs",

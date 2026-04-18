@@ -788,7 +788,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Tráfico activo durante el paso 3 (ping). Debe cesar al liberar la PDU session.",
+      "description": "Tráfico N3 GTP activo. NOTA: en modo ZMQ los contadores GTP N3 (fivegs_ep_n3_gtp_indatapktn3upf/outdatapktn3upf) permanecen en 0 — usar fivegs_upffunction_upf_qosflows como indicador alternativo de plano de usuario activo.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -839,6 +839,15 @@
           "expr": "rate(fivegs_ep_n3_gtp_outdatapktn3upf[1m])",
           "legendFormat": "N3 Downlink (UPF→gNB)",
           "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_upffunction_upf_qosflows",
+          "legendFormat": "QoS Flows activos (UPF)",
+          "refId": "C"
         }
       ],
       "title": "N3 GTP — Tráfico de datos activo",
@@ -970,6 +979,67 @@
       ],
       "title": "📜 Logs AUSF/UDM — autenticación",
       "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "Número de QoS flows activos en el UPF. Más confiable que los contadores GTP N3 en modo ZMQ para confirmar que el plano de usuario está establecido.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 8
+      },
+      "id": 105,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_upffunction_upf_qosflows",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "QoS Flows activos (UPF)",
+      "type": "stat"
     }
   ],
   "preload": false,
