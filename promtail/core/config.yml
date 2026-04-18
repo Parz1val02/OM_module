@@ -25,31 +25,57 @@ scrape_configs:
           source: filename
           expression: '/var/log/open5gs/5g/(?P<nf>[^.]+)\.log'
       - labels:
-          nf: # amf, smf, upf, pcf, nrf, ausf, udm, udr, nssf, bsf, scp
+          nf:
 
       - regex:
-          expression: '^(?P<timestamp>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}\.\d+)\s+\[(?P<level>\w+)\]\s+\S+:\s+(?P<message>.*)'
-      - timestamp:
-          source: timestamp
-          format: "2006/01/02 15:04:05.000"
+          expression: '(?:\x1b\[[0-9;]*m)?(?P<timestamp>\d{2}/\d{2} \d{2}:\d{2}:\d{2}\.\d+)(?:\x1b\[[0-9;]*m)?:\s+\[(?:\x1b\[[0-9;]*m)?\w+(?:\x1b\[[0-9;]*m)?\]\s+(?:\x1b\[[0-9;]*m)?(?P<level>\w+)(?:\x1b\[[0-9;]*m)?:\s+(?P<message>.*)'
+      - template:
+          source: level
+          template: "{{ ToLower .Value }}"
       - labels:
           level:
 
       - regex:
           source: message
-          expression: 'imsi[:\s-]*(?P<imsi>\d{15})'
+          expression: '(?:imsi-|IMSI\[)(?P<imsi>\d{15})'
       - labels:
           imsi:
 
       - regex:
           source: message
-          expression: '(?i)\b(?P<procedure>registration|authentication|pdu.session|deregistration)\b'
+          expression: '(?i)(?P<_p1>InitialUEMessage|Unknown UE by SUCI|Registration request|Registration complete|Configuration update command|No GUTI allocated|gNB-N2 accepted|\[Added\] Number of (?:AMF|gNB)-UEs is now \d+|\[Added\] Number of gNBs is now \d+)'
+      - template:
+          source: _p1
+          template: "{{ if .Value }}attach{{ end }}"
       - labels:
-          procedure:
+          procedure: _p1
 
-      - match:
-          selector: '{level="DEBUG"}'
-          action: drop
+      - regex:
+          source: message
+          expression: '(?i)(?P<_p2>UE SUPI\[imsi-|UE F-SEID\[|Removed Session:|\[Added\] Number of (?:SMF|UPF|AMF)-Sessions is now \d+|\[Added\] Number of (?:SMF|UPF)-UEs is now \d+)'
+      - template:
+          source: _p2
+          template: "{{ if .Value }}session{{ end }}"
+      - labels:
+          procedure: _p2
+
+      - regex:
+          source: message
+          expression: '(?i)(?P<_p3>Deregistration request|UE Context Release|Release SM [Cc]ontext|\[Removed\] Number of (?:AMF|gNB)-UEs is now \d+|\[Removed\] Number of (?:SMF|UPF|AMF)-(?:UEs?|Sessions) is now \d+|\[Removed\] Number of gNBs is now \d+)'
+      - template:
+          source: _p3
+          template: "{{ if .Value }}release{{ end }}"
+      - labels:
+          procedure: _p3
+
+      - regex:
+          source: message
+          expression: "(?i)(?P<_p4>Authentication failure|Cannot find SUCI|Cannot find.*NSSAI|Registration reject|(?:Not Supported OR Not Subscribed|Ue requested DNN.*Not Supported))"
+      - template:
+          source: _p4
+          template: "{{ if .Value }}error{{ end }}"
+      - labels:
+          procedure: _p4
 
   # ── 4G Core NF Logs ───────────────────────────────────────────────────────
   - job_name: open5gs-4g-logs
@@ -66,28 +92,54 @@ scrape_configs:
           source: filename
           expression: '/var/log/open5gs/4g/(?P<nf>[^.]+)\.log'
       - labels:
-          nf: # mme, sgwc, sgwu, smf, upf, hss, pcrf
+          nf:
 
       - regex:
-          expression: '^(?P<timestamp>\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}\.\d+)\s+\[(?P<level>\w+)\]\s+\S+:\s+(?P<message>.*)'
-      - timestamp:
-          source: timestamp
-          format: "2006/01/02 15:04:05.000"
+          expression: '(?:\x1b\[[0-9;]*m)?(?P<timestamp>\d{2}/\d{2} \d{2}:\d{2}:\d{2}\.\d+)(?:\x1b\[[0-9;]*m)?:\s+\[(?:\x1b\[[0-9;]*m)?\w+(?:\x1b\[[0-9;]*m)?\]\s+(?:\x1b\[[0-9;]*m)?(?P<level>\w+)(?:\x1b\[[0-9;]*m)?:\s+(?P<message>.*)'
+      - template:
+          source: level
+          template: "{{ ToLower .Value }}"
       - labels:
           level:
 
       - regex:
           source: message
-          expression: 'imsi[:\s-]*(?P<imsi>\d{15})'
+          expression: 'IMSI\[(?P<imsi>\d{15})\]'
       - labels:
           imsi:
 
       - regex:
           source: message
-          expression: '(?i)\b(?P<procedure>attach|detach|authentication|handover|bearer|location.update)\b'
+          expression: '(?i)(?P<_p1>InitialUEMessage|Unknown UE by (?:GUTI|S_TMSI)|Attach request|Identity response|Attach complete|Service request|eNB-S1 accepted|\[Added\] Number of (?:eNBs|eNB-UEs|MME-UEs) is now \d+)'
+      - template:
+          source: _p1
+          template: "{{ if .Value }}attach{{ end }}"
       - labels:
-          procedure:
+          procedure: _p1
 
-      - match:
-          selector: '{level="DEBUG"}'
-          action: drop
+      - regex:
+          source: message
+          expression: '(?i)(?P<_p2>UE IMSI\[\d+\] APN\[|UE F-SEID\[|Removed Session:|\[Added\] Number of (?:SGWC|SGWU|SMF|UPF)-(?:UEs?|[Ss]essions) is now \d+|\[Added\] Number of MME-Sessions is now \d+)'
+      - template:
+          source: _p2
+          template: "{{ if .Value }}session{{ end }}"
+      - labels:
+          procedure: _p2
+
+      - regex:
+          source: message
+          expression: '(?i)(?P<_p3>Detach request|UE Context Release|Mobile Reachable timer|\[Removed\] Number of (?:SGWC|SGWU|SMF|MME|UPF)-(?:UEs?|Sessions|[Ss]essions) is now \d+|\[Removed\] Number of (?:eNBs|eNB-UEs|MME-UEs) is now \d+)'
+      - template:
+          source: _p3
+          template: "{{ if .Value }}release{{ end }}"
+      - labels:
+          procedure: _p3
+
+      - regex:
+          source: message
+          expression: '(?i)(?P<_p4>Authentication failure|Authentication Information failed|Attach reject|Invalid APN\[|Failure in transaction|connection refused)'
+      - template:
+          source: _p4
+          template: "{{ if .Value }}error{{ end }}"
+      - labels:
+          procedure: _p4
