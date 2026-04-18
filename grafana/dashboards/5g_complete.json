@@ -523,7 +523,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_smffunction_sm_qos_flow_nbr",
+          "expr": "sum(fivegs_smffunction_sm_qos_flow_nbr)",
           "legendFormat": "QoS Flows",
           "refId": "A"
         }
@@ -1388,7 +1388,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "description": "Actual user data packets traversing the N3 GTP tunnel. Uplink = UE sending data. Downlink = UE receiving data. Zero here means no active data traffic even if the session is established.",
+          "description": "Actual user data packets traversing the N3 GTP tunnel. Uplink = UE sending data. Downlink = UE receiving data. Zero here means no active data traffic even if the session is established. NOTA: en modo ZMQ fivegs_ep_n3_gtp_* permanece en 0 — usar fivegs_upffunction_upf_qosflows como indicador de tráfico activo.",
           "fieldConfig": {
             "defaults": {
               "custom": {
@@ -1465,6 +1465,15 @@
               "expr": "rate(fivegs_ep_n3_gtp_outdatapktn3upf[1m])",
               "legendFormat": "Downlink (UPF→gNB)",
               "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "PBFA97CFB590B2093"
+              },
+              "expr": "fivegs_upffunction_upf_qosflows",
+              "legendFormat": "QoS Flows activos (ZMQ workaround)",
+              "refId": "C"
             }
           ],
           "title": "N3 GTP Packet Rate — gNB ↔ UPF",

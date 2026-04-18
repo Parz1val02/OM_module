@@ -252,15 +252,6 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "mme_enb_s1_setup_success",
-          "legendFormat": "S1 Setup Success",
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
           "expr": "mme_enb_connected_ues",
           "legendFormat": "Connected UEs",
           "refId": "C"
@@ -1400,6 +1391,6 @@
   "timezone": "browser",
   "title": "4G EPC Core Detail",
   "uid": "4g-core-detail",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }

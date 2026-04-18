@@ -652,15 +652,6 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "mme_enb_s1_setup_success",
-              "legendFormat": "S1 Setup Success",
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
               "expr": "mme_enb_connected_ues",
               "legendFormat": "Connected UEs",
               "refId": "C"
@@ -863,7 +854,7 @@
                 "type": "prometheus",
                 "uid": "PBFA97CFB590B2093"
               },
-              "expr": "gtp2_sessions_active",
+              "expr": "smf_4g_pdu_session_count",
               "legendFormat": "GTP2 Sessions",
               "refId": "C"
             }
@@ -1835,6 +1826,6 @@
   "timezone": "browser",
   "title": "4G EPC — Complete",
   "uid": "4g-complete",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }

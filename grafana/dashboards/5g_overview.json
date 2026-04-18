@@ -1608,6 +1608,66 @@
       ],
       "title": "5G Core Logs — All NFs",
       "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "type": "stat",
+      "id": 105,
+      "title": "QoS Flows activos (UPF)",
+      "description": "Número de QoS flows activos en el UPF. Indica plano de usuario establecido.",
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 18,
+        "y": 1
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_upffunction_upf_qosflows",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ]
     }
   ],
   "preload": false,
@@ -1625,6 +1685,6 @@
   "timezone": "browser",
   "title": "5G Testbed Overview",
   "uid": "5g-overview",
-  "version": 3,
+  "version": 1,
   "weekStart": ""
 }

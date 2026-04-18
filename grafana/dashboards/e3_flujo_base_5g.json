@@ -788,7 +788,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Tráfico N3 GTP activo. NOTA: en modo ZMQ los contadores GTP N3 (fivegs_ep_n3_gtp_indatapktn3upf/outdatapktn3upf) permanecen en 0 — usar fivegs_upffunction_upf_qosflows como indicador alternativo de plano de usuario activo.",
+      "description": "Tráfico N3 GTP. NOTA: en modo ZMQ los contadores GTP N3 permanecen en 0 — usar fivegs_upffunction_upf_qosflows como indicador de plano de usuario activo.",
       "fieldConfig": {
         "defaults": {
           "color": {

@@ -2323,6 +2323,45 @@
       ],
       "title": "PCF Logs",
       "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "P8E80F9AEF21F6940"
+      },
+      "type": "logs",
+      "id": 107,
+      "title": "Logs 5G — filtrado por procedure",
+      "description": "Filtra logs por procedimiento semántico: attach, session, release, error.",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 55
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "showLabels": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "{domain=\"core\", generation=\"5g\", procedure=~\"attach|session|release|error\"}",
+          "refId": "A"
+        }
+      ]
     }
   ],
   "preload": false,
