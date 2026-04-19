@@ -2,267 +2,240 @@ apiVersion: 1
 
 deleteRules:
   - orgId: 1
-    uid: 5g-ue-detached
+    uid: 4g-auth-failure
   - orgId: 1
     uid: 5g-auth-failure
   - orgId: 1
     uid: 5g-reg-failure-rate
   - orgId: 1
-    uid: 4g-ue-detached
-  - orgId: 1
     uid: 4g-attach-failure
 
 groups: []
 
-  #groups:
-  #  # ── 5G Core Alerts ─────────────────────────────────────────────────────────
-  #  - orgId: 1
-  #    name: 5G Core Alerts
-  #    folder: 5G Testbed
-  #    interval: 30s
-  #    rules:
-  #      - uid: 5g-ue-detached
-  #        title: "[5G] No UEs Registered"
-  #        condition: C
-  #        for: 30s
-  #        labels:
-  #          severity: warning
-  #          generation: 5g
-  #        annotations:
-  #          summary: "No UEs currently registered in the 5G core"
-  #          description: "fivegs_amffunction_rm_registeredsubnbr has dropped to zero. The UE may have detached, the srsUE container stopped, or the AMF lost state. Check ue and gNB containers."
-  #        data:
-  #          - refId: A
-  #            relativeTimeRange:
-  #              from: 60
-  #              to: 0
-  #            datasourceUid: PBFA97CFB590B2093
-  #            model:
-  #              expr: fivegs_amffunction_rm_registeredsubnbr
-  #              instant: true
-  #              intervalMs: 1000
-  #              maxDataPoints: 43200
-  #              refId: A
-  #          - refId: C
-  #            relativeTimeRange:
-  #              from: 60
-  #              to: 0
-  #            datasourceUid: "__expr__"
-  #            model:
-  #              conditions:
-  #                - evaluator:
-  #                    params: [1]
-  #                    type: lt
-  #                  operator:
-  #                    type: and
-  #                  query:
-  #                    params: [A]
-  #                  reducer:
-  #                    type: last
-  #                  type: query
-  #              datasource:
-  #                type: __expr__
-  #                uid: __expr__
-  #              expression: A
-  #              refId: C
-  #              type: threshold
-  #
-  #      - uid: 5g-auth-failure
-  #        title: "[5G] UE Authentication Failure"
-  #        condition: C
-  #        for: 0s
-  #        labels:
-  #          severity: critical
-  #          generation: 5g
-  #        annotations:
-  #          summary: "5G UE authentication failure detected"
-  #          description: "AMF received an authentication failure or reject. Possible causes: wrong Ki/OPc keys in UE config, SIM credentials mismatch with UDM subscriber data, or AUSF unreachable."
-  #        data:
-  #          - refId: A
-  #            relativeTimeRange:
-  #              from: 300
-  #              to: 0
-  #            datasourceUid: PBFA97CFB590B2093
-  #            model:
-  #              expr: increase(fivegs_amffunction_amf_authfail[5m]) + increase(fivegs_amffunction_amf_authreject[5m])
-  #              instant: true
-  #              intervalMs: 1000
-  #              maxDataPoints: 43200
-  #              refId: A
-  #          - refId: C
-  #            relativeTimeRange:
-  #              from: 300
-  #              to: 0
-  #            datasourceUid: "__expr__"
-  #            model:
-  #              conditions:
-  #                - evaluator:
-  #                    params: [0]
-  #                    type: gt
-  #                  operator:
-  #                    type: and
-  #                  query:
-  #                    params: [A]
-  #                  reducer:
-  #                    type: last
-  #                  type: query
-  #              datasource:
-  #                type: __expr__
-  #                uid: __expr__
-  #              expression: A
-  #              refId: C
-  #              type: threshold
-  #
-  #      - uid: 5g-reg-failure-rate
-  #        title: "[5G] High UE Registration Failure Rate"
-  #        condition: C
-  #        for: 1m
-  #        labels:
-  #          severity: critical
-  #          generation: 5g
-  #        annotations:
-  #          summary: "High 5G UE registration failure rate (>20%)"
-  #          description: >
-  #            More than 20% of UE registration attempts are failing over the last
-  #            5 minutes. Possible causes: subscriber not provisioned, wrong IMSI/Ki/OPc,
-  #            PLMN mismatch, authentication issues, or RAN-Core connectivity problems.
-  #        data:
-  #          - refId: A
-  #            relativeTimeRange:
-  #              from: 300
-  #              to: 0
-  #            datasourceUid: PBFA97CFB590B2093
-  #            model:
-  #              expr: |
-  #                increase(fivegs_amffunction_rm_reginitfail[5m])
-  #                /
-  #                clamp_min(
-  #                  increase(fivegs_amffunction_rm_reginitfail[5m]) +
-  #                  increase(fivegs_amffunction_rm_reginitsucc[5m]),
-  #                  1
-  #                )
-  #              instant: true
-  #              intervalMs: 1000
-  #              maxDataPoints: 43200
-  #              refId: A
-  #          - refId: C
-  #            relativeTimeRange:
-  #              from: 300
-  #              to: 0
-  #            datasourceUid: "__expr__"
-  #            model:
-  #              conditions:
-  #                - evaluator:
-  #                    params: [0.2]
-  #                    type: gt
-  #                  operator:
-  #                    type: and
-  #                  query:
-  #                    params: [A]
-  #                  reducer:
-  #                    type: last
-  #                  type: query
-  #              datasource:
-  #                type: __expr__
-  #                uid: __expr__
-  #              expression: A
-  #              refId: C
-  #              type: threshold
-  #
-  #  # ── 4G Core Alerts ─────────────────────────────────────────────────────────
-  #  - orgId: 1
-  #    name: 4G Core Alerts
-  #    folder: 4G Testbed
-  #    interval: 30s
-  #    rules:
-  #      - uid: 4g-ue-detached
-  #        title: "[4G] No UEs Attached"
-  #        condition: C
-  #        for: 30s
-  #        labels:
-  #          severity: warning
-  #          generation: 4g
-  #        annotations:
-  #          summary: "No UEs currently attached to the 4G EPC"
-  #          description: "ues_active has dropped to zero. The UE may have detached, the srsUE container stopped, or the MME lost state. Check ue and eNB containers."
-  #        data:
-  #          - refId: A
-  #            relativeTimeRange:
-  #              from: 60
-  #              to: 0
-  #            datasourceUid: PBFA97CFB590B2093
-  #            model:
-  #              expr: ues_active
-  #              instant: true
-  #              intervalMs: 1000
-  #              maxDataPoints: 43200
-  #              refId: A
-  #          - refId: C
-  #            relativeTimeRange:
-  #              from: 60
-  #              to: 0
-  #            datasourceUid: "__expr__"
-  #            model:
-  #              conditions:
-  #                - evaluator:
-  #                    params: [1]
-  #                    type: lt
-  #                  operator:
-  #                    type: and
-  #                  query:
-  #                    params: [A]
-  #                  reducer:
-  #                    type: last
-  #                  type: query
-  #              datasource:
-  #                type: __expr__
-  #                uid: __expr__
-  #              expression: A
-  #              refId: C
-  #              type: threshold
-  #
-  #      - uid: 4g-attach-failure
-  #        title: "[4G] UE Attach Failure Suspected"
-  #        condition: C
-  #        for: 1m
-  #        labels:
-  #          severity: critical
-  #          generation: 4g
-  #        annotations:
-  #          summary: "UEs detected but no EPS sessions established"
-  #          description: >
-  #            One or more UEs are active on the radio interface but the EPC
-  #            has not established any sessions. Possible causes include
-  #            authentication failure, missing subscriber in HSS,
-  #            APN misconfiguration, or SGW/PGW issues.
-  #        data:
-  #          - refId: A
-  #            relativeTimeRange:
-  #              from: 120
-  #              to: 0
-  #            datasourceUid: PBFA97CFB590B2093
-  #            model:
-  #              expr: ues_active > 0 and mme_session == 0
-  #              instant: true
-  #              refId: A
-  #
-  #          - refId: C
-  #            relativeTimeRange:
-  #              from: 120
-  #              to: 0
-  #            datasourceUid: "__expr__"
-  #            model:
-  #              conditions:
-  #                - evaluator:
-  #                    params: [0.5]
-  #                    type: gt
-  #                  operator:
-  #                    type: and
-  #                  query:
-  #                    params: [A]
-  #                  reducer:
-  #                    type: last
-  #                  type: query
-  #              expression: A
-  #              refId: C
-  #              type: threshold
+#apiVersion: 1
+#
+#groups:
+#  # ── 4G Core Alerts ─────────────────────────────────────────────────────────
+#  - orgId: 1
+#    name: 4G Core Alerts
+#    folder: 4G Testbed
+#    interval: 30s
+#    rules:
+#
+#      - uid: 4g-attach-failure
+#        title: "[4G] UE Attach Failure Suspected"
+#        condition: C
+#        for: 1m
+#        labels:
+#          severity: critical
+#          generation: 4g
+#        annotations:
+#          summary: "UEs en RAN sin sesión en EPC"
+#          description: >
+#            Hay UEs activos en el RAN pero el MME no tiene ninguna sesión
+#            establecida. Posibles causas: authentication failure (bad_ki),
+#            IMSI desconocido (bad_imsi), APN inválido (bad_apn),
+#            o problema en SGW/PGW.
+#        data:
+#          - refId: A
+#            relativeTimeRange:
+#              from: 120
+#              to: 0
+#            datasourceUid: PBFA97CFB590B2093
+#            model:
+#              expr: ues_active > 0 and mme_session == 0
+#              instant: true
+#              intervalMs: 1000
+#              maxDataPoints: 43200
+#              refId: A
+#          - refId: C
+#            relativeTimeRange:
+#              from: 120
+#              to: 0
+#            datasourceUid: "__expr__"
+#            model:
+#              conditions:
+#                - evaluator:
+#                    params: [0.5]
+#                    type: gt
+#                  operator:
+#                    type: and
+#                  query:
+#                    params: [A]
+#                  reducer:
+#                    type: last
+#                  type: query
+#              datasource:
+#                type: __expr__
+#                uid: __expr__
+#              expression: A
+#              refId: C
+#              type: threshold
+#
+#      - uid: 4g-auth-failure
+#        title: "[4G] Fallo de autenticación o configuración en MME"
+#        condition: C
+#        for: 0s
+#        labels:
+#          severity: warning
+#          generation: 4g
+#        annotations:
+#          summary: "Fallo de autenticación o configuración detectado en MME"
+#          description: >
+#            El MME registró al menos un evento con procedure=error en el
+#            último minuto. Cubre authentication failure (bad_ki),
+#            attach reject (bad_imsi) e invalid APN (bad_apn).
+#        data:
+#          - refId: A
+#            relativeTimeRange:
+#              from: 60
+#              to: 0
+#            datasourceUid: P8E80F9AEF21F6940
+#            model:
+#              expr: 'count_over_time({nf="mme", procedure="error"}[1m])'
+#              instant: true
+#              intervalMs: 1000
+#              maxDataPoints: 43200
+#              refId: A
+#              datasource:
+#                type: loki
+#                uid: P8E80F9AEF21F6940
+#          - refId: C
+#            relativeTimeRange:
+#              from: 60
+#              to: 0
+#            datasourceUid: "__expr__"
+#            model:
+#              conditions:
+#                - evaluator:
+#                    params: [0]
+#                    type: gt
+#                  operator:
+#                    type: and
+#                  query:
+#                    params: [A]
+#                  reducer:
+#                    type: last
+#                  type: query
+#              datasource:
+#                type: __expr__
+#                uid: __expr__
+#              expression: A
+#              refId: C
+#              type: threshold
+#
+#  # ── 5G Core Alerts ─────────────────────────────────────────────────────────
+#  - orgId: 1
+#    name: 5G Core Alerts
+#    folder: 5G Testbed
+#    interval: 30s
+#    rules:
+#
+#      - uid: 5g-reg-failure-rate
+#        title: "[5G] Tasa de fallos de registro > 20%"
+#        condition: C
+#        for: 1m
+#        labels:
+#          severity: critical
+#          generation: 5g
+#        annotations:
+#          summary: "Tasa de fallos de registro 5G > 20%"
+#          description: >
+#            Más del 20% de los intentos de registro Initial están fallando
+#            en los últimos 5 minutos. Revisar UEs inválidos conectados,
+#            configuración NSSAI/DNN, o credenciales.
+#        data:
+#          - refId: A
+#            relativeTimeRange:
+#              from: 300
+#              to: 0
+#            datasourceUid: PBFA97CFB590B2093
+#            model:
+#              expr: >
+#                increase(fivegs_amffunction_rm_reginitfail[5m])
+#                /
+#                clamp_min(
+#                  increase(fivegs_amffunction_rm_reginitfail[5m]) +
+#                  increase(fivegs_amffunction_rm_reginitsucc[5m]),
+#                  1
+#                )
+#              instant: true
+#              intervalMs: 1000
+#              maxDataPoints: 43200
+#              refId: A
+#          - refId: C
+#            relativeTimeRange:
+#              from: 300
+#              to: 0
+#            datasourceUid: "__expr__"
+#            model:
+#              conditions:
+#                - evaluator:
+#                    params: [0.2]
+#                    type: gt
+#                  operator:
+#                    type: and
+#                  query:
+#                    params: [A]
+#                  reducer:
+#                    type: last
+#                  type: query
+#              datasource:
+#                type: __expr__
+#                uid: __expr__
+#              expression: A
+#              refId: C
+#              type: threshold
+#
+#      - uid: 5g-auth-failure
+#        title: "[5G] Fallo de registro o autenticación en AMF"
+#        condition: C
+#        for: 0s
+#        labels:
+#          severity: warning
+#          generation: 5g
+#        annotations:
+#          summary: "Fallo de registro o autenticación detectado en AMF"
+#          description: >
+#            El AMF registró al menos un evento con procedure=error en el
+#            último minuto. Cubre todos los tipos de fallo 5G:
+#            bad_ki (auth failure), bad_supi (unknown subscriber),
+#            bad_sst (slice not available), bad_dnn (DNN rejected).
+#        data:
+#          - refId: A
+#            relativeTimeRange:
+#              from: 60
+#              to: 0
+#            datasourceUid: P8E80F9AEF21F6940
+#            model:
+#              expr: 'count_over_time({nf="amf", procedure="error"}[1m])'
+#              instant: true
+#              intervalMs: 1000
+#              maxDataPoints: 43200
+#              refId: A
+#              datasource:
+#                type: loki
+#                uid: P8E80F9AEF21F6940
+#          - refId: C
+#            relativeTimeRange:
+#              from: 60
+#              to: 0
+#            datasourceUid: "__expr__"
+#            model:
+#              conditions:
+#                - evaluator:
+#                    params: [0]
+#                    type: gt
+#                  operator:
+#                    type: and
+#                  query:
+#                    params: [A]
+#                  reducer:
+#                    type: last
+#                  type: query
+#              datasource:
+#                type: __expr__
+#                uid: __expr__
+#              expression: A
+#              refId: C
+#              type: threshold

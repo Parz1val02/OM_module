@@ -151,7 +151,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "sum(om_capture_packets_total{generation=\"5g\",protocol=\"pfcp\"}) or vector(0)",
+          "expr": "sum(om_capture_packets_total{generation=\"5g\",protocol=\"PFCP\"}) or vector(0)",
           "instant": true,
           "legendFormat": "",
           "refId": "A"

@@ -88,7 +88,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "sum(om_capture_packets_total{generation=\"4g\",protocol=\"s1ap\"}) or vector(0)",
+          "expr": "sum(om_capture_packets_total{generation=\"4g\",protocol=\"S1AP\"}) or vector(0)",
           "instant": true,
           "legendFormat": "",
           "refId": "A"
@@ -151,7 +151,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "sum(om_capture_packets_total{generation=\"4g\",protocol=\"gtpv2\"}) or vector(0)",
+          "expr": "sum(om_capture_packets_total{generation=\"4g\",protocol=\"GTPV2\"}) or vector(0)",
           "instant": true,
           "legendFormat": "",
           "refId": "A"
@@ -214,7 +214,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "sum(om_capture_packets_total{generation=\"4g\",protocol=\"pfcp\"}) or vector(0)",
+          "expr": "sum(om_capture_packets_total{generation=\"4g\",protocol=\"PFCP\"}) or vector(0)",
           "instant": true,
           "legendFormat": "",
           "refId": "A"
@@ -277,7 +277,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "sum(om_capture_packets_total{generation=\"4g\",protocol=\"diameter\"}) or vector(0)",
+          "expr": "sum(om_capture_packets_total{generation=\"4g\",protocol=\"DIAMETER\"}) or vector(0)",
           "instant": true,
           "legendFormat": "",
           "refId": "A"
