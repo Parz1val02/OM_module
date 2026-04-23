@@ -7,7 +7,7 @@ set -euo pipefail
 
 CONTAINER="${1}"
 MESSAGE="${2}"
-TIMEOUT=120
+TIMEOUT=60
 INTERVAL=2
 
 echo "  Esperando '$MESSAGE' en $CONTAINER..."

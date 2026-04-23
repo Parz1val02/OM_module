@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-GW="192.168.100.1"
+GW="8.8.8.8"
 PING_INTERVAL="0.2"
 PING_SIZE="1400"
 

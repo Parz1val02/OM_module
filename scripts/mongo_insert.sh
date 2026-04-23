@@ -1,3 +1,6 @@
+#!/usr/bin/bash
+# Asegura que todos los ues necesarios para los escenarios están provisionados en mongo
+
 docker exec -it mongo mongosh --eval "
 db = db.getSiblingDB('open5gs');
 db.subscribers.deleteMany({});

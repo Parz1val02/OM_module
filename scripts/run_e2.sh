@@ -11,23 +11,23 @@ SCRIPTS_DIR="$(dirname "$0")"
 
 echo "  Par 1 — eNB1 + UE válido (IMSI 895)..."
 $COMPOSE -f $RAN --profile ran-4g-srs up -d srsenb_zmq
-bash "$SCRIPTS_DIR/wait_ran.sh" srsenb_zmq "eNB started"
+bash "$SCRIPTS_DIR/wait_ran.sh" srsenb_zmq "eNodeB started"
 $COMPOSE -f $RAN --profile ran-4g-srs up -d srsue_zmq
 bash "$SCRIPTS_DIR/wait_ran.sh" srsue_zmq "Network attach successful"
 
 echo "  Par 2 — eNB2 + UE bad_ki (IMSI 902)..."
 $COMPOSE -f $RAN --profile ran-4g-e2 up -d srsenb_zmq2
-bash "$SCRIPTS_DIR/wait_ran.sh" srsenb_zmq2 "eNB started"
+bash "$SCRIPTS_DIR/wait_ran.sh" srsenb_zmq2 "eNodeB started"
 $COMPOSE -f $RAN --profile ran-4g-e2 up -d srsue_zmq_bad_ki
 
 echo "  Par 3 — eNB3 + UE bad_imsi (IMSI 901)..."
 $COMPOSE -f $RAN --profile ran-4g-e2 up -d srsenb_zmq3
-bash "$SCRIPTS_DIR/wait_ran.sh" srsenb_zmq3 "eNB started"
+bash "$SCRIPTS_DIR/wait_ran.sh" srsenb_zmq3 "eNodeB started"
 $COMPOSE -f $RAN --profile ran-4g-e2 up -d srsue_zmq_bad_imsi
 
 echo "  Par 4 — eNB4 + UE bad_apn (IMSI 903)..."
 $COMPOSE -f $RAN --profile ran-4g-e2 up -d srsenb_zmq4
-bash "$SCRIPTS_DIR/wait_ran.sh" srsenb_zmq4 "eNB started"
+bash "$SCRIPTS_DIR/wait_ran.sh" srsenb_zmq4 "eNodeB started"
 $COMPOSE -f $RAN --profile ran-4g-e2 up -d srsue_zmq_bad_apn
 
 echo "  ✓ 4 pares eNB+UE levantados"

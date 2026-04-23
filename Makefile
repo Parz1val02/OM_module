@@ -56,12 +56,12 @@ help:
 # ── Servicios O&M ─────────────────────────────────────────────────────────────
 
 services-up:
-	@echo "▶ Levantando pila de observabilidad..."
-	$(COMPOSE) -f $(SERVICES) up -d
+	@echo "▶ Levantando stack de observabilidad..."
+	$(COMPOSE) -f $(SERVICES) up --build -d
 	@echo "✅ Servicios O&M activos"
 
 services-down:
-	@echo "▶ Bajando pila de observabilidad..."
+	@echo "▶ Bajando stack de observabilidad..."
 	$(COMPOSE) -f $(SERVICES) down
 	@echo "✅ Servicios O&M detenidos"
 
@@ -96,10 +96,10 @@ core-5g-down:
 e1:
 	@echo "▶ Levantando RAN E1 (srsRAN 4G)..."
 	$(COMPOSE) -f $(RAN) --profile ran-4g-srs up -d srsenb_zmq
-	@bash $(SCRIPTS_DIR)/wait_ran.sh srsenb_zmq "eNB started"
+	@bash $(SCRIPTS_DIR)/wait_ran.sh srsenb_zmq "eNodeB started"
 	$(COMPOSE) -f $(RAN) --profile ran-4g-srs up -d srsue_zmq
 	@bash $(SCRIPTS_DIR)/wait_ran.sh srsue_zmq "Network attach successful"
-	@echo "✅ E1 listo — UE attached"
+	@echo "✅ E1 listo — UE attached y Bearer establecido"
 
 e1-down:
 	@echo "▶ Bajando RAN E1..."
@@ -111,7 +111,7 @@ e1-down:
 e2:
 	@echo "▶ Levantando RAN E2 (multi-eNB + UEs mixtos 4G)..."
 	@bash $(SCRIPTS_DIR)/run_e2.sh
-	@echo "✅ E2 listo — 4 pares eNB+UE activos"
+	@echo "✅ E2 listo — eNB+UE activo + 3 pares ENB+UE inválidos"
 
 e2-down:
 	@echo "▶ Bajando RAN E2..."
@@ -126,7 +126,7 @@ e3:
 	$(COMPOSE) -f $(RAN) --profile ran-5g-srs up -d srsgnb_zmq
 	@bash $(SCRIPTS_DIR)/wait_ran.sh srsgnb_zmq "gNB started"
 	$(COMPOSE) -f $(RAN) --profile ran-5g-srs up -d srsue_5g_zmq
-	@bash $(SCRIPTS_DIR)/wait_ran.sh srsue_5g_zmq "PDU Session establishment is successful"
+	@bash $(SCRIPTS_DIR)/wait_ran.sh srsue_5g_zmq "PDU Session Establishment successful"
 	@echo "✅ E3 listo — UE registrado y PDU session establecida"
 
 e3-down:
@@ -154,16 +154,12 @@ e3-ueransim-down:
 e4:
 	@echo "▶ Levantando RAN E4 (multi-gNB slicing 5G)..."
 	@bash $(SCRIPTS_DIR)/run_e4.sh
-	@echo "✅ E4 listo"
-	@echo "   Para inyectar UEs inválidos:"
-	@echo "   docker compose -f ran.yaml --profile ran-5g-e4 up -d nr_ue_bad_supi"
-	@echo "   docker compose -f ran.yaml --profile ran-5g-e4 up -d nr_ue_bad_ki"
-	@echo "   docker compose -f ran.yaml --profile ran-5g-e4 up -d nr_ue_bad_dnn"
-	@echo "   docker compose -f ran.yaml --profile ran-5g-e4 up -d nr_ue_bad_sst"
+	@echo "✅ E4 listo — 3 gNBs + 4 UEs válidos + 4 UEs inválidos activos"
 
 e4-down:
 	@echo "▶ Bajando RAN E4..."
 	$(COMPOSE) -f $(RAN) --profile ran-5g-e4 down
+	$(COMPOSE) -f $(RAN) --profile ran-5g-ueransim down
 	$(COMPOSE) -f $(RAN) --profile ran-5g-srs down
 	@echo "✅ RAN E4 detenido"
 
