@@ -16,7 +16,6 @@ import (
 	dockerclient "github.com/Parz1val02/OM_module/internal/docker"
 	"github.com/Parz1val02/OM_module/internal/exporter"
 	"github.com/Parz1val02/OM_module/internal/pipeline"
-	"github.com/Parz1val02/OM_module/internal/reconstructor"
 	"github.com/Parz1val02/OM_module/internal/tracing"
 	"github.com/prometheus/client_golang/prometheus"
 )
@@ -31,11 +30,8 @@ func main() {
 	log.Printf("Docker socket     : %s", cfg.DockerSocket)
 	log.Printf("Compose project   : %s", cfg.ComposeProject)
 	log.Printf("Tempo endpoint    : %s", cfg.TempoEndpoint)
-	log.Printf("Loki URL          : %s", cfg.LokiURL)
-	log.Printf("Trace window      : %s", cfg.TraceQueryWindow)
 	log.Printf("Capture enabled   : %v", cfg.CaptureEnabled)
 	log.Printf("Capture interface : %s", cfg.CaptureInterface)
-	log.Printf("Procedure timeout : %s", cfg.ProcedureTimeout)
 	log.Printf("MCC/MNC           : %s/%s", cfg.MCC, cfg.MNC)
 
 	// --- Context with graceful shutdown ---
@@ -78,23 +74,6 @@ func main() {
 	exporter.New(coll.Snapshot(), cfg.ComposeProject, reg)
 	log.Printf("✅ Prometheus exporter registered")
 
-	// --- Trace reconstructor config ---
-	queryWindow, err := time.ParseDuration(cfg.TraceQueryWindow)
-	if err != nil {
-		queryWindow = 10 * time.Minute
-	}
-	recCfg := reconstructor.Config{
-		LokiURL:     cfg.LokiURL,
-		QueryWindow: queryWindow,
-	}
-
-	// --- Procedure timeout (kept for reconstructor config only) ---
-	procTimeout, err := time.ParseDuration(cfg.ProcedureTimeout)
-	if err != nil {
-		procTimeout = 30 * time.Second
-	}
-	_ = procTimeout // no longer used by pipeline
-
 	// --- Capture manager and pipeline (optional) ---
 	var capManager *capture.Manager
 
@@ -135,10 +114,7 @@ func main() {
 		coll.Snapshot(),
 		cfg.ComposeProject,
 		reg,
-		recCfg,
 		capManager,
-		nil, // correlator removed — pipeline handles spans directly
-		cfg.LokiURL,
 	)
 	handlers.Register(mux)
 
@@ -154,8 +130,6 @@ func main() {
 		log.Printf("   GET /metrics                           → Prometheus scrape endpoint")
 		log.Printf("   GET /topology                          → Testbed topology + health (JSON)")
 		log.Printf("   GET /ping                              → Liveness probe")
-		log.Printf("   GET /traces/reconstruct?imsi=<IMSI>    → Log-based trace reconstruction → Tempo")
-		log.Printf("   GET /traces/search                     → Search recent live traces in Tempo")
 		log.Printf("   GET /capture/status                    → Capture pipeline health")
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("HTTP server error: %v", err)

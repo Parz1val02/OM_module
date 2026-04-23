@@ -11,17 +11,12 @@ services:
     restart: unless-stopped
     environment:
       - TEMPO_ENDPOINT=tempo:4318
-      - LOKI_URL=http://loki:3100
-      - TRACE_QUERY_WINDOW=10m
       # Set to "false" to disable the capture pipeline without rebuilding
       - CAPTURE_ENABLED=true
       # Bridge interface to capture on.
       # "auto" = dynamic discovery via Docker network inspection (recommended).
       # Set to explicit name (e.g. "br-c91787205592") to bypass discovery.
       - CAPTURE_INTERFACE=auto
-      # How long the correlator waits before flushing an in-flight procedure
-      # as timed out and triggering the log-based reconstructor as fallback.
-      - PROCEDURE_TIMEOUT=30s
       - MCC=${MCC}
       - MNC=${MNC}
     cap_add:

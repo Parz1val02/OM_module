@@ -57,7 +57,7 @@ help:
 
 services-up:
 	@echo "▶ Levantando pila de observabilidad..."
-	$(COMPOSE) -f $(SERVICES) up --build -d
+	$(COMPOSE) -f $(SERVICES) up -d
 	@echo "✅ Servicios O&M activos"
 
 services-down:
@@ -176,12 +176,12 @@ traffic:
 
 down:
 	@echo "▶ Bajando todo el testbed..."
-	-$(COMPOSE) -f $(RAN) --profile ran-4g-srs down 2>/dev/null
-	-$(COMPOSE) -f $(RAN) --profile ran-4g-e2 down 2>/dev/null
-	-$(COMPOSE) -f $(RAN) --profile ran-5g-srs down 2>/dev/null
-	-$(COMPOSE) -f $(RAN) --profile ran-5g-ueransim down 2>/dev/null
-	-$(COMPOSE) -f $(RAN) --profile ran-5g-e4 down 2>/dev/null
-	-$(COMPOSE) -f $(CORE_4G) down 2>/dev/null
-	-$(COMPOSE) -f $(CORE_5G) down 2>/dev/null
-	-$(COMPOSE) -f $(SERVICES) down 2>/dev/null
+	-$(COMPOSE) -f $(RAN) --profile ran-4g-srs down
+	-$(COMPOSE) -f $(RAN) --profile ran-4g-e2 down
+	-$(COMPOSE) -f $(RAN) --profile ran-5g-srs down
+	-$(COMPOSE) -f $(RAN) --profile ran-5g-ueransim down
+	-$(COMPOSE) -f $(RAN) --profile ran-5g-e4 down
+	-$(COMPOSE) -f $(SERVICES) down
+	-$(COMPOSE) -f $(CORE_4G) down
+	-$(COMPOSE) -f $(CORE_5G) down
 	@echo "✅ Testbed detenido completamente"

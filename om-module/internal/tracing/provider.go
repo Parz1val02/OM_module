@@ -21,15 +21,15 @@ const ServiceName = "om-module"
 // Init sets up the global OpenTelemetry TracerProvider and returns a shutdown
 // function that must be deferred by the caller.
 //
-// jaegerEndpoint should be the OTLP/HTTP collector endpoint, e.g.
+// tempoEndpoint should be the OTLP/HTTP collector endpoint, e.g.
 //
-//	"http://jaeger:4318"   (inside Docker network)
-//	"http://localhost:4318" (local dev)
-func Init(ctx context.Context, jaegerEndpoint string) (func(context.Context) error, error) {
-	// Build the OTLP HTTP exporter pointing at Jaeger's OTLP receiver.
+//	"tempo:4318"   (inside Docker network)
+//	"localhost:4318" (local dev)
+func Init(ctx context.Context, tempoEndpoint string) (func(context.Context) error, error) {
+	// Build the OTLP HTTP exporter pointing at Tempo's OTLP receiver.
 	// otlptracehttp appends "/v1/traces" automatically.
 	exp, err := otlptracehttp.New(ctx,
-		otlptracehttp.WithEndpoint(jaegerEndpoint),
+		otlptracehttp.WithEndpoint(tempoEndpoint),
 		otlptracehttp.WithInsecure(), // no TLS needed inside Docker
 	)
 	if err != nil {
@@ -66,7 +66,7 @@ func Init(ctx context.Context, jaegerEndpoint string) (func(context.Context) err
 		propagation.Baggage{},
 	))
 
-	log.Printf("✅ Distributed tracing initialised → %s", jaegerEndpoint)
+	log.Printf("✅ Distributed tracing initialised → %s", tempoEndpoint)
 
 	return tp.Shutdown, nil
 }
