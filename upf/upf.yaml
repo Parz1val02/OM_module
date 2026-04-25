@@ -13,6 +13,7 @@ upf:
     client:
       smf:
         - address: SMF_IP
+          dnn: internet
   gtpu:
     server:
       - address: UPF_IP

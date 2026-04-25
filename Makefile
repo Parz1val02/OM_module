@@ -6,6 +6,7 @@
 COMPOSE      := docker compose
 CORE_4G      := 4G_core.yaml
 CORE_5G      := 5G_core.yaml
+CORE_5G_E4 := 5G_core_e4.yaml
 RAN          := ran.yaml
 SERVICES     := services.yaml
 SCRIPTS_DIR  := scripts
@@ -152,6 +153,8 @@ e3-ueransim-down:
 # ── E4 — Multi-gNB Slicing 5G ────────────────────────────────────────────────
 
 e4:
+	@echo "▶ Levantando core E4 (smf2 + upf2)..."
+	$(COMPOSE) -f $(CORE_5G_E4) up -d
 	@echo "▶ Levantando RAN E4 (multi-gNB slicing 5G)..."
 	@bash $(SCRIPTS_DIR)/run_e4.sh
 	@echo "✅ E4 listo — 3 gNBs + 4 UEs válidos + 4 UEs inválidos activos"
@@ -161,7 +164,9 @@ e4-down:
 	$(COMPOSE) -f $(RAN) --profile ran-5g-e4 down
 	$(COMPOSE) -f $(RAN) --profile ran-5g-ueransim down
 	$(COMPOSE) -f $(RAN) --profile ran-5g-srs down
-	@echo "✅ RAN E4 detenido"
+	@echo "▶ Bajando core E4 (smf2 + upf2)..."
+	$(COMPOSE) -f $(CORE_5G_E4) down
+	@echo "✅ RAN E4 y core E4 detenidos"
 
 # ── Tráfico ──────────────────────────────────────────────────────────────────
 

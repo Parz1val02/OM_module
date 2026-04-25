@@ -42,14 +42,17 @@ sessions:
     apn: "internet"
     slice:
       sst: 1
+      sd: 0x000001
 
 # Configured NSSAI for this UE by HPLMN
 configured-nssai:
   - sst: 1
+    sd: 0x000001
 
 # Default Configured NSSAI for this UE
 default-nssai:
   - sst: 1
+    sd: 0x000001
 
 # Supported encryption algorithms by this UE
 integrity:

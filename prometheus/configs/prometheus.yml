@@ -72,12 +72,26 @@ scrape_configs:
         replacement: json-exporter:7979
 
   # 5G — SMF endpoints
+  # 5G — SMF slice 1 (SST=1 SD=000001, DNN=internet)
   - job_name: smf_pdu_5g
     metrics_path: /probe
     params:
       module: [smf_pdu_5g]
     static_configs:
       - targets: ["http://smf:9091/pdu-info"]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - target_label: __address__
+        replacement: json-exporter:7979
+
+  # 5G — SMF2 slice 2 (SST=1 SD=000002, DNN=private) — E4 only
+  - job_name: smf2_pdu_5g
+    metrics_path: /probe
+    params:
+      module: [smf2_pdu_5g]
+    static_configs:
+      - targets: ["http://smf2:9091/pdu-info"]
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target

@@ -344,8 +344,8 @@ func messageDirection(pkt capture.Packet, ipToNF map[string]string) string {
 	}
 	srcNF := ipToNF[pkt.SrcIP]
 	coreNFs := map[string]bool{
-		"amf": true, "mme": true, "smf": true,
-		"pgw": true, "sgw": true, "upf": true,
+		"amf": true, "mme": true, "smf": true, "smf2": true,
+		"pgw": true, "sgw": true, "upf": true, "upf2": true,
 	}
 	if coreNFs[srcNF] {
 		return "response"

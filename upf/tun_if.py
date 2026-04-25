@@ -32,7 +32,7 @@ import click
 """
 Usage in command line:
 e.g:
-$ python3 tun_if.py --tun_ifname ogstun --tun_ifmode tun --ipv4_range 192.168.100.0/24 --ipv6_range 2001:230:cafe::/48
+$ python3 tun_if.py --tun_ifname ogstun --tun_ifmode tun --ipv4_range 192.168.100.0/24 --ipv6_range 2001:230:cafe::/48 --no_nat_ipv4_addr 172.22.0.21 --no_nat_ipv6_addr 2001:230:eafe::1
 """
 
 
@@ -42,6 +42,14 @@ def validate_ip_net(ctx, param, value):
         return ip_net
     except ValueError:
         raise click.BadParameter("Value does not represent a valid IPv4/IPv6 range")
+
+
+def validate_ip(ctx, param, value):
+    try:
+        ip_addr = ipaddress.ip_address(value)
+        return ip_addr.exploded
+    except ValueError:
+        raise click.BadParameter("Value does not represent a valid IPv4/IPv6 address")
 
 
 @click.command()
@@ -65,11 +73,31 @@ def validate_ip_net(ctx, param, value):
     help="UE IPv6 Address range in CIDR format e.g. 2001:230:cafe::/48",
 )
 @click.option(
+    "--no_nat_ipv4_addr",
+    required=True,
+    callback=validate_ip,
+    help="Destination IPv4 address to which NATing must not be applied e.g. 172.22.0.21",
+)
+@click.option(
+    "--no_nat_ipv6_addr",
+    required=True,
+    callback=validate_ip,
+    help="Destination IPv6 address to which NATing must not be applied e.g. 2001:230:eafe::1",
+)
+@click.option(
     "--nat_rule",
     default="yes",
     help="Option specifying whether to add NATing iptables rule or not",
 )
-def start(tun_ifname, tun_ifmode, ipv4_range, ipv6_range, nat_rule):
+def start(
+    tun_ifname,
+    tun_ifmode,
+    ipv4_range,
+    ipv6_range,
+    no_nat_ipv4_addr,
+    no_nat_ipv6_addr,
+    nat_rule,
+):
 
     # Get the first IP address in the IP range and netmask prefix length
     first_ipv4_addr = next(ipv4_range.hosts(), None)
@@ -112,11 +140,15 @@ def start(tun_ifname, tun_ifmode, ipv4_range, ipv6_range, nat_rule):
             + ipv4_range.with_prefixlen
             + " ! -o "
             + tun_ifname
+            + " ! -d "
+            + no_nat_ipv4_addr
             + ' -j MASQUERADE" ; then '
             + "iptables -t nat -A POSTROUTING -s "
             + ipv4_range.with_prefixlen
             + " ! -o "
             + tun_ifname
+            + " ! -d "
+            + no_nat_ipv4_addr
             + " -j MASQUERADE; fi"
         )
         execute_bash_cmd(
@@ -124,11 +156,15 @@ def start(tun_ifname, tun_ifmode, ipv4_range, ipv6_range, nat_rule):
             + ipv6_range.with_prefixlen
             + " ! -o "
             + tun_ifname
+            + " ! -d "
+            + no_nat_ipv6_addr
             + ' -j MASQUERADE" ; then '
             + "ip6tables -t nat -A POSTROUTING -s "
             + ipv6_range.with_prefixlen
             + " ! -o "
             + tun_ifname
+            + " ! -d "
+            + no_nat_ipv6_addr
             + " -j MASQUERADE; fi"
         )
         execute_bash_cmd(

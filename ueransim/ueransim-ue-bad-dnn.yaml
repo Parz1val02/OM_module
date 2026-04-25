@@ -28,12 +28,15 @@ sessions:
     apn: "invalid_dnn"
     slice:
       sst: 1
+      sd: 0x000001
 
 configured-nssai:
   - sst: 1
+    sd: 0x000001
 
 default-nssai:
   - sst: 1
+    sd: 0x000001
 
 integrity:
   IA1: true

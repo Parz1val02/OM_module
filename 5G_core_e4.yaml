@@ -1,0 +1,82 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# 5G Core — E4 slice extension
+# Adds smf2 (SST=1 SD=000002, DNN=private) and upf2 to the existing 5G core.
+# Requires 5G_core.yaml to already be running.
+# Usage: docker compose -f 5G_core_e4.yaml up -d
+#        docker compose -f 5G_core_e4.yaml down
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+  smf2:
+    image: docker_open5gs
+    depends_on:
+      - upf2
+    container_name: smf2
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=smf2
+      - DEPLOY_MODE=5G
+    volumes:
+      - ./smf:/mnt/smf2
+      - open5gs_5g_logs:/open5gs/install/var/log/open5gs
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    expose:
+      - "8805/udp"
+      - "7777/tcp"
+      - "9091/tcp"
+    networks:
+      default:
+        ipv4_address: ${SMF2_IP}
+    labels:
+      prometheus.scrape: "true"
+      prometheus.port: "9091"
+      prometheus.path: "/metrics"
+      om.domain: "core"
+      om.nf: "smf2"
+      om.generation: "5g"
+      om.project: "open5gs"
+
+  upf2:
+    image: docker_open5gs
+    container_name: upf2
+    env_file:
+      - .env
+    environment:
+      - COMPONENT_NAME=upf2
+    volumes:
+      - ./upf:/mnt/upf2
+      - open5gs_5g_logs:/open5gs/install/var/log/open5gs
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    expose:
+      - "2152/udp"
+      - "8805/udp"
+      - "9091/tcp"
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    sysctls:
+      - net.ipv4.ip_forward=1
+    networks:
+      default:
+        ipv4_address: ${UPF2_IP}
+    labels:
+      prometheus.scrape: "true"
+      prometheus.port: "9091"
+      prometheus.path: "/metrics"
+      om.domain: "core"
+      om.nf: "upf2"
+      om.generation: "5g"
+      om.project: "open5gs"
+
+networks:
+  default:
+    name: docker_open5gs_default
+    external: true
+
+volumes:
+  open5gs_5g_logs:
+    name: open5gs_5g_logs
+    external: true

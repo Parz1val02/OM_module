@@ -8,6 +8,7 @@ cu_cp:
           - plmn: "PLMN" # PLMN broadcasted by the gNB.
             tai_slice_support_list: # The list of TAI slices for this PLMN item.
               - sst: 1 # Sets the Slice Service Type.
+                sd: 0x000001 # Slice Differentiator — SD=000001
 
 ru_sdr:
   device_driver: zmq # The RF driver name.

@@ -36,41 +36,37 @@ update-alternatives --set iptables `which iptables-nft`
 update-alternatives --set ip6tables `which ip6tables-nft`
 
 # Remove UPF Interfaces if they exist
-ip link delete $UPF_INTERNET_APN_IF_NAME 2>/dev/null
-ip link delete $UPF_IMS_APN_IF_NAME 2>/dev/null
+ip link delete $UPF2_PRIVATE_APN_IF_NAME 2>/dev/null
 
-# Validate interface names based on UPF_TUNTAP_MODE
-if [ "$UPF_TUNTAP_MODE" = "tap" ]; then
-    if [[ "$UPF_INTERNET_APN_IF_NAME" != *"tap"* ]] || [[ "$UPF_IMS_APN_IF_NAME" != *"tap"* ]]; then
-        echo "Error: When UPF_TUNTAP_MODE is 'tap', both UPF_INTERNET_APN_IF_NAME and UPF_IMS_APN_IF_NAME must contain 'tap'"
+# Validate interface names based on UPF2_TUNTAP_MODE
+if [ "$UPF2_TUNTAP_MODE" = "tap" ]; then
+    if [[ "$UPF2_PRIVATE_APN_IF_NAME" != *"tap"* ]]; then
+        echo "Error: When UPF2_TUNTAP_MODE is 'tap', UPF2_PRIVATE_APN_IF_NAME must contain 'tap'"
         exit 1
     fi
-elif [ "$UPF_TUNTAP_MODE" = "tun" ]; then
-    if [[ "$UPF_INTERNET_APN_IF_NAME" == *"tap"* ]] || [[ "$UPF_IMS_APN_IF_NAME" == *"tap"* ]]; then
-        echo "Error: When UPF_TUNTAP_MODE is 'tun', UPF_INTERNET_APN_IF_NAME and UPF_IMS_APN_IF_NAME must not contain 'tap'"
+elif [ "$UPF2_TUNTAP_MODE" = "tun" ]; then
+    if [[ "$UPF2_PRIVATE_APN_IF_NAME" == *"tap"* ]]; then
+        echo "Error: When UPF2_TUNTAP_MODE is 'tun', UPF2_PRIVATE_APN_IF_NAME must not contain 'tap'"
         exit 1
     fi
 else
-    echo "Error: UPF_TUNTAP_MODE must be either 'tap' or 'tun'"
+    echo "Error: UPF2_TUNTAP_MODE must be either 'tap' or 'tun'"
     exit 1
 fi
 
-python3 /mnt/upf/tun_if.py --tun_ifname $UPF_INTERNET_APN_IF_NAME --tun_ifmode $UPF_TUNTAP_MODE --ipv4_range $UE_IPV4_INTERNET --ipv6_range 2001:230:cafe::/48 --no_nat_ipv4_addr $PCSCF_IP --no_nat_ipv6_addr 2001:230:eafe::1
+python3 /mnt/upf2/tun_if.py --tun_ifname $UPF2_PRIVATE_APN_IF_NAME --tun_ifmode $UPF2_TUNTAP_MODE --ipv4_range $UE_IPV4_PRIVATE --ipv6_range 2001:230:fafe::/48 --no_nat_ipv4_addr $PCSCF_IP --no_nat_ipv6_addr 2001:230:eafe::1
 
-UE_IPV4_INTERNET_APN_GATEWAY_IP=$(python3 /mnt/upf/ip_utils.py --ip_range $UE_IPV4_INTERNET)
-UE_IPV4_IMS_TUN_IP=$(python3 /mnt/upf/ip_utils.py --ip_range $UE_IPV4_IMS)
+UE_IPV4_PRIVATE_APN_GATEWAY_IP=$(python3 /mnt/upf2/ip_utils.py --ip_range $UE_IPV4_PRIVATE)
 
-cp /mnt/upf/upf.yaml install/etc/open5gs
-sed -i 's|UPF_IP|'$UPF_IP'|g' install/etc/open5gs/upf.yaml
-sed -i 's|SMF_IP|'$SMF_IP'|g' install/etc/open5gs/upf.yaml
-sed -i 's|UE_IPV4_INTERNET_APN_GATEWAY_IP|'$UE_IPV4_INTERNET_APN_GATEWAY_IP'|g' install/etc/open5gs/upf.yaml
-sed -i 's|UE_IPV4_INTERNET_APN_SUBNET|'$UE_IPV4_INTERNET'|g' install/etc/open5gs/upf.yaml
-sed -i 's|UE_IPV4_IMS_TUN_IP|'$UE_IPV4_IMS_TUN_IP'|g' install/etc/open5gs/upf.yaml
-sed -i 's|UE_IPV4_IMS_SUBNET|'$UE_IPV4_IMS'|g' install/etc/open5gs/upf.yaml
-sed -i 's|UPF_ADVERTISE_IP|'$UPF_ADVERTISE_IP'|g' install/etc/open5gs/upf.yaml
+cp /mnt/upf2/upf2.yaml install/etc/open5gs/upf.yaml
+
+sed -i 's|UPF2_IP|'$UPF2_IP'|g' install/etc/open5gs/upf.yaml
+sed -i 's|SMF2_IP|'$SMF2_IP'|g' install/etc/open5gs/upf.yaml
+sed -i 's|UE_IPV4_PRIVATE_APN_GATEWAY_IP|'$UE_IPV4_PRIVATE_APN_GATEWAY_IP'|g' install/etc/open5gs/upf.yaml
+sed -i 's|UE_IPV4_PRIVATE_APN_SUBNET|'$UE_IPV4_PRIVATE'|g' install/etc/open5gs/upf.yaml
+sed -i 's|UPF2_ADVERTISE_IP|'$UPF2_ADVERTISE_IP'|g' install/etc/open5gs/upf.yaml
 sed -i 's|MAX_NUM_UE|'$MAX_NUM_UE'|g' install/etc/open5gs/upf.yaml
-sed -i 's|UPF_INTERNET_APN_IF_NAME|'$UPF_INTERNET_APN_IF_NAME'|g' install/etc/open5gs/upf.yaml
-sed -i 's|UPF_IMS_APN_IF_NAME|'$UPF_IMS_APN_IF_NAME'|g' install/etc/open5gs/upf.yaml
+sed -i 's|UPF2_PRIVATE_APN_IF_NAME|'$UPF2_PRIVATE_APN_IF_NAME'|g' install/etc/open5gs/upf.yaml
 
 cd install/bin
 exec ./open5gs-upfd $@
