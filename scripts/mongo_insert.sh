@@ -134,17 +134,51 @@ function make5GPrivateSubscriber(imsi, imeisv) {
   };
 }
 
-// ─── E1 — UE base srsRAN 4G ───
-db.subscribers.insertOne(make4GSubscriber('001011234567895', '4370816125816151'));
+// ─── E1 + E3 — UE base srsRAN (4G y 5G, IMSI 895) ───
+db.subscribers.insertOne({
+  imsi: '001011234567895',
+  msisdn: [],
+  imeisv: '4370816125816151',
+  mme_host: 'mme.epc.mnc001.mcc001.3gppnetwork.org',
+  mme_realm: 'epc.mnc001.mcc001.3gppnetwork.org',
+  purge_flag: false,
+  access_restriction_data: 32,
+  subscriber_status: 0,
+  operator_determined_barring: 0,
+  network_access_mode: 0,
+  subscribed_rau_tau_timer: 12,
+  ambr: { downlink: { value: 1, unit: 3 }, uplink: { value: 1, unit: 3 } },
+  schema_version: 1,
+  security: {
+    k: '8baf473f2f8fd09487cccbd7097c6862',
+    amf: '8000',
+    op: '11111111111111111111111111111111',
+    opc: null,
+    sqn: NumberLong('0')
+  },
+  slice: [{
+    sst: 1,
+    sd: '000001',
+    default_indicator: true,
+    session: [{
+      name: 'internet',
+      type: 3,
+      qos: {
+        index: 9,
+        arp: { priority_level: 8, pre_emption_capability: 1, pre_emption_vulnerability: 1 }
+      },
+      ambr: { downlink: { value: 1, unit: 3 }, uplink: { value: 1, unit: 3 } },
+      pcc_rule: []
+    }]
+  }],
+  __v: 0
+});
 
 // ─── E2 — UEs multi-eNB 4G ───
 db.subscribers.insertOne(make4GSubscriber('001011234567902', '4370816125816154'));
 
 // ─── E2 — UE invalido APN incorrecto (credenciales correctas en DB, APN malo en .conf) ───
 db.subscribers.insertOne(make4GSubscriber('001011234567903', '4370816125816155'));
-
-// ─── E3 / E4 — UE base srsRAN 5G (srsgnb, SST=1 SD=000001, DNN=internet) ───
-db.subscribers.insertOne(make5GSubscriber('001011234567895', '4370816125816151', 1, '000001'));
 
 // ─── E3 / E4 — UE base UERANSIM nr_gnb SST=1 SD=000001 DNN=internet ───
 db.subscribers.insertOne(make5GSubscriber('001011234567896', '4370816125816152', 1, '000001'));

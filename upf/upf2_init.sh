@@ -54,11 +54,11 @@ else
     exit 1
 fi
 
-python3 /mnt/upf2/tun_if.py --tun_ifname $UPF2_PRIVATE_APN_IF_NAME --tun_ifmode $UPF2_TUNTAP_MODE --ipv4_range $UE_IPV4_PRIVATE --ipv6_range 2001:230:fafe::/48 --no_nat_ipv4_addr $PCSCF_IP --no_nat_ipv6_addr 2001:230:eafe::1
+python3 /mnt/upf/tun_if.py --tun_ifname $UPF2_PRIVATE_APN_IF_NAME --tun_ifmode $UPF2_TUNTAP_MODE --ipv4_range $UE_IPV4_PRIVATE --ipv6_range 2001:230:fafe::/48 --no_nat_ipv4_addr $PCSCF_IP --no_nat_ipv6_addr 2001:230:eafe::1
 
-UE_IPV4_PRIVATE_APN_GATEWAY_IP=$(python3 /mnt/upf2/ip_utils.py --ip_range $UE_IPV4_PRIVATE)
+UE_IPV4_PRIVATE_APN_GATEWAY_IP=$(python3 /mnt/upf/ip_utils.py --ip_range $UE_IPV4_PRIVATE)
 
-cp /mnt/upf2/upf2.yaml install/etc/open5gs/upf.yaml
+cp /mnt/upf/upf2.yaml install/etc/open5gs/upf.yaml
 
 sed -i 's|UPF2_IP|'$UPF2_IP'|g' install/etc/open5gs/upf.yaml
 sed -i 's|SMF2_IP|'$SMF2_IP'|g' install/etc/open5gs/upf.yaml

@@ -18,7 +18,7 @@ services:
       - COMPONENT_NAME=smf2
       - DEPLOY_MODE=5G
     volumes:
-      - ./smf:/mnt/smf2
+      - ./smf:/mnt/smf
       - open5gs_5g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
@@ -46,7 +46,7 @@ services:
     environment:
       - COMPONENT_NAME=upf2
     volumes:
-      - ./upf:/mnt/upf2
+      - ./upf:/mnt/upf
       - open5gs_5g_logs:/open5gs/install/var/log/open5gs
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro

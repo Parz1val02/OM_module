@@ -185,4 +185,5 @@ down:
 	-$(COMPOSE) -f $(SERVICES) down
 	-$(COMPOSE) -f $(CORE_4G) down
 	-$(COMPOSE) -f $(CORE_5G) down
+	$(COMPOSE) -f $(CORE_5G_E4) down
 	@echo "✅ Testbed detenido completamente"

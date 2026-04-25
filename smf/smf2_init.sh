@@ -33,9 +33,9 @@ export IF_NAME=$(ip r | awk '/default/ { print $5 }')
 
 [ ${#MNC} == 3 ] && EPC_DOMAIN="epc.mnc${MNC}.mcc${MCC}.3gppnetwork.org" || EPC_DOMAIN="epc.mnc0${MNC}.mcc${MCC}.3gppnetwork.org"
 
-UE_IPV4_PRIVATE_APN_GATEWAY_IP=$(python3 /mnt/smf2/ip_utils.py --ip_range $UE_IPV4_PRIVATE)
+UE_IPV4_PRIVATE_APN_GATEWAY_IP=$(python3 /mnt/smf/ip_utils.py --ip_range $UE_IPV4_PRIVATE)
 
-cp /mnt/smf2/smf2.yaml install/etc/open5gs/smf.yaml
+cp /mnt/smf/smf2.yaml install/etc/open5gs/smf.yaml
 if [[ ${DEPLOY_MODE} == 4G ]];
 then
     echo "Error: Invalid deployment mode for SMF: '$DEPLOY_MODE'"
