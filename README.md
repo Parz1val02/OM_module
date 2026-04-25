@@ -11,8 +11,6 @@
 [![Tempo](https://img.shields.io/badge/Tempo-latest-7B61FF.svg)](https://grafana.com/oss/tempo/)
 [![Docker](https://img.shields.io/badge/Docker-Compose%20v2-2496ED.svg)](https://docs.docker.com/compose/)
  
-> Educational 4G/5G mobile network testbed with a custom O&M module, packet capture, Prometheus metrics, distributed tracing, and 4 controlled fault-injection scenarios.
- 
 ---
  
 ## Overview
@@ -21,7 +19,7 @@ This project is a containerized 4G/5G mobile network testbed developed as a PUCP
  
 The testbed runs Open5GS as the 4G/5G core and srsRAN/UERANSIM as the radio access network simulator. On top of the network stack, the O&M module provides **full observability**: per-container resource metrics, structured log aggregation, and distributed traces that correlate signaling events across network functions — S1AP, NGAP, GTPv2, PFCP, Diameter, and 5G SBI.
  
-Four test scenarios (E1–E4) cover both 4G and 5G with normal attach flows and controlled fault injection (wrong Ki, invalid APN, bad SUPI, wrong DNN/SD), allowing students to observe how the core responds to authentication and session errors in real time.
+Four test scenarios (E1–E4) cover both 4G and 5G with normal attach/registration flows and controlled fault injection (wrong Ki, invalid APN/DNN, bad IMSI/SUPI, wrong DNN/SD), allowing students to observe how the core responds to authentication and session errors in real time.
  
 ---
  
@@ -198,6 +196,15 @@ E4 implements **true network slicing with user plane isolation**: two independen
 > **bad_sst fault mechanism:** The UE requests SST=1 SD=000003 which is not declared in the AMF's `plmn_support`. The AMF rejects at the NSSAI check before authentication begins (cause 62: Requested NSSAI not subscribed).
  
 > **UERANSIM stability note:** In long-running E4 sessions with multiple UERANSIM instances, spontaneous disconnections that block reconnection have been observed. Run E4 within bounded time windows.
+
+### Access Grafana
+
+Open (http://localhost:3000) in a web browser. Login with following credentials
+
+```
+Username : open5gs
+Password : open5gs
+```
  
 ### Teardown
  
@@ -317,35 +324,7 @@ om-module/               # O&M module Go source
 ├── ueransim/                # UERANSIM gNB + UE configs
 └── procedures_captures/     # Reference packet captures for E1–E4 (PCAP + JSON)
 ```
- 
----
- 
-## Troubleshooting
- 
-**O&M module doesn't see any containers**
-Check that `COMPOSE_PROJECT` matches the Docker Compose project name. Run `docker ps --format '{{.Labels}}'` and look for the `om.project` label. The default is `om_module` (derived from the directory name).
- 
-**No traces appear in Tempo**
-Verify the capture pipeline is running: `curl localhost:8080/capture/status`. If `running` is `false`, check that `CAPTURE_ENABLED=true` and that the bridge interface was auto-detected correctly (`interface` field). The module requires `NET_ADMIN` + `NET_RAW` capabilities and `network_mode: host`.
- 
-**Subscribers not found / core rejects UE immediately**
-Run `bash scripts/mongo_insert.sh` after the core is up. If the core was restarted, run it again (it's safe to repeat — drops and re-inserts).
- 
-**MongoDB error when provisioning**
-MongoDB must be running before provisioning. Run `make core-4g-up` or `make core-5g-up` first and wait for the core to be healthy.
- 
-**E4 scenario: nr_ue3 rejected with `DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED`**
-Verify that `ueransim/ueransim-ue3.yaml` has `apn: "private"` and `sd: "000002"` in all three NSSAI fields. Also verify the subscriber record for IMSI 899 in MongoDB has `session.name: "private"` and `sd: "000002"` — run `bash scripts/mongo_insert.sh` to reprovision.
- 
-**E4 scenario: SD=000003 UE connects instead of failing**
-The AMF `plmn_support` must list only `sst: 1 sd: 000001` and `sst: 1 sd: 000002`. If SD=000003 is accepted, check `amf/amf.yaml` and restart the AMF.
- 
-**smf2 or upf2 not starting**
-Check that `smf/smf2_init.sh` and `upf/upf2_init.sh` are executable (`chmod +x`). The init scripts must be in `./smf/` and `./upf/` respectively — the containers mount those directories at `/mnt/smf` and `/mnt/upf`.
- 
-**Orphan container warnings on `make e4`**
-These are cosmetic. Docker Compose sees containers from `5G_core.yaml` and `5G_core_e4.yaml` as belonging to different projects even though they share the same network. The `name: om_module` directive in both files minimizes this but some warnings may still appear.
- 
+
 ---
  
 ## Implementation Notes
@@ -374,4 +353,4 @@ UERANSIM operates exclusively over NGAP (N2) and 5G SA interfaces. It has no sup
  
 MIT License — Copyright 2026 Rodrigo Barrios.
  
-Helper scripts under `scripts/` derived from [docker_open5gs](https://github.com/herlesupreeth/docker_open5gs) are BSD 2-Clause — Copyright Supreeth Herle.
+Helper scripts derived from [docker_open5gs](https://github.com/herlesupreeth/docker_open5gs) are BSD 2-Clause — Copyright Supreeth Herle.
