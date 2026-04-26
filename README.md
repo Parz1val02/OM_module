@@ -149,6 +149,7 @@ The four scenarios are designed in two parallel pairs for direct 4G↔5G compari
  
 - **E1 ↔ E3** — baseline complete flow: same sequence of events (attach/registration → bearer/PDU session → traffic → detach/deregistration), different architecture
 - **E2 ↔ E4** — multi-RAN node + fault injection: same fault categories (identity, authentication, session), different core and slicing
+
 | Scenario | Generation | RAN | Description | Makefile |
 |---|---|---|---|---|
 | E1 | 4G | srsRAN LTE | 1 eNB + 1 valid UE — full EPS Attach → Bearer → Traffic → Detach flow | `make e1` |
