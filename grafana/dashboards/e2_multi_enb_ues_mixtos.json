@@ -970,7 +970,7 @@
       "type": "logs"
     },
     {
-      "collapsed": true,
+      "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1198,6 +1198,148 @@
       ],
       "title": "🔬 Observabilidad extendida — interfaces internas 4G",
       "type": "row"
+    },
+    {
+      "id": 205,
+      "type": "row",
+      "title": "🔐 HSS — S6a Diameter (MME ↔ HSS)",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 59
+      },
+      "panels": []
+    },
+    {
+      "id": 206,
+      "type": "timeseries",
+      "title": "HSS S6a — Mensajes Diameter por tipo",
+      "description": "Cada attach de UE genera un AIR→AIA (autenticación) y un ULR→ULA (perfil de suscripción). Los contadores son cumulativos — lo relevante es la tasa de incremento durante el escenario.\n\n• bad_ki: AIR+AIA incrementan (HSS entrega vectores correctamente), pero el MME rechaza al UE tras comparar RES vs XRES\n• bad_imsi: AIR+AIA incrementan (HSS responde con Diameter 5001 UNKNOWN_USER), ULR no ocurre\n• bad_apn: AIR+AIA+ULR+ULA incrementan (attach completo), el rechazo ocurre en capa ESM del MME",
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 60
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "options": {
+        "legend": {
+          "calcs": ["lastNotNull"],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "short",
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 5,
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "showPoints": "auto",
+            "spanNulls": false
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "AIR Errors"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "red"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 3
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "s6a_rx_air",
+          "legendFormat": "AIR recibidos (Auth Info Request)",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "s6a_tx_aia",
+          "legendFormat": "AIA enviados (Auth Info Answer)",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "s6a_rx_ulr",
+          "legendFormat": "ULR recibidos (Update Location Request)",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "s6a_tx_ula",
+          "legendFormat": "ULA enviados (Update Location Answer)",
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "s6a_rx_air_error",
+          "legendFormat": "AIR Errors (fallo interno HSS)",
+          "refId": "E"
+        }
+      ],
+      "pluginVersion": "11.3.0"
+    },
+    {
+      "id": 207,
+      "type": "text",
+      "title": "📖 Interpretación HSS en E2",
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 68
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "### Lo que muestran los contadores S6a en E2\n\n| UE | AIR | AIA | ULR | ULA | Interpretación |\n|---|---|---|---|---|---|\n| **UE válido** (895) | +1 | +1 | +1 | +1 | Attach completo ✅ |\n| **bad_ki** (902) | +1 | +1 | 0 | 0 | HSS entrega vectores OK — fallo en MME al verificar RES vs XRES ❌ |\n| **bad_imsi** (901) | +1 | +1 | 0 | 0 | HSS responde con Diameter 5001 (UNKNOWN_USER) — attach rechazado antes de ULR ❌ |\n| **bad_apn** (903) | +1 | +1 | +1 | +1 | Attach completo — rechazo en capa ESM (APN inválido), no en HSS ⚠️ |\n\n**Conclusión clave:** `s6a_rx_air_error` permanece en 0 en todos los casos. El HSS procesa correctamente todos los AIR — la diferenciación entre fallos es invisible desde los contadores HSS y requiere correlación con trazas Diameter (código de resultado 5001) o logs del MME."
+      },
+      "pluginVersion": "11.3.0"
     }
   ],
   "preload": false,

@@ -67,10 +67,14 @@ services:
       - "3868/sctp"
       - "5868/tcp"
       - "5868/sctp"
+      - "9091/tcp"
     networks:
       default:
         ipv4_address: ${HSS_IP}
     labels:
+      prometheus.scrape: "true"
+      prometheus.port: "9091"
+      prometheus.path: "/metrics"
       om.domain: "core"
       om.nf: "hss"
       om.generation: "4g"
