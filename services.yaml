@@ -114,7 +114,7 @@ services:
       om.project: "grafana"
 
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v3.10.0
     container_name: prometheus
     user: "65534:${DOCKER_GID}"
     env_file:
@@ -233,7 +233,7 @@ services:
       om.project: "grafana"
 
   json-exporter:
-    image: quay.io/prometheuscommunity/json-exporter:latest
+    image: quay.io/prometheuscommunity/json-exporter:v0.7.0
     container_name: json-exporter
     command:
       - --config.file=/etc/json_exporter/config.yml

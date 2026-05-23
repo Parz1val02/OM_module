@@ -19,13 +19,6 @@ scrape_configs:
         regex: "9091|8080"
         action: keep
 
-      # Build the scrape link using the ip assigned to the container
-      #- source_labels: [__meta_docker_network_ip, __meta_docker_container_label_prometheus_port]
-      #  separator: ":"
-      #  regex: "(.+):(.+)"
-      #  replacement: "${1}:${2}"
-      #  target_label: __address__
-
       # Build the scrape link using the name assigned to the container
       - source_labels:
           [
