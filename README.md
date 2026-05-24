@@ -133,27 +133,6 @@ This ensures `DOCKER_GID` is always correct in every new session without requiri
 
 ---
 
-## Configuration
-
-### Update `DOCKER_HOST_IP` in `.env`
-
-The `.env` file contains a `DOCKER_HOST_IP` value used by RAN components to reach the core. The default value must be replaced with your host's actual IP address before deploying:
-
-```bash
-# Find your host IP
-ip route get 1 | awk '{print $7; exit}'
-```
-
-Then open `.env` and update:
-
-```
-DOCKER_HOST_IP=<your-host-ip>
-```
-
-All other values in `.env` (IP assignments, UE credentials, MCC/MNC) are pre-configured for the `172.22.0.0/24` subnet used by the testbed and do not need to be changed for a standard deployment.
-
----
-
 ## Setup — Pull Docker Images
 
 Pull the base images before first use. This step may take several minutes as images are several GB in size:
