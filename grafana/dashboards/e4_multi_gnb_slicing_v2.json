@@ -1,0 +1,1143 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "E4 — 3 gNBs + 4 UEs válidos + 4 UEs inválidos. Network slicing SST=1 SD=000001 (internet) / SST=1 SD=000002 (private). SMF+UPF dedicados por slice.",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [
+    {
+      "icon": "dashboard",
+      "targetBlank": false,
+      "title": "E3 — Flujo base 5G",
+      "type": "link",
+      "url": "/d/e3-flujo-base-5g"
+    },
+    {
+      "icon": "dashboard",
+      "targetBlank": false,
+      "title": "5G Traces",
+      "type": "link",
+      "url": "/d/5g-traces"
+    }
+  ],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 100,
+      "panels": [],
+      "title": "📋 Escenario E4 — Contexto, topología y UEs",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 1
+      },
+      "id": 1,
+      "options": {
+        "content": "## E4 — Multi-gNB + Slicing + UEs mixtos\n**Stack:** Open5GS 5GC + srsRAN Project + UERANSIM\n**Duración:** 20–25 min\n\n### Fases\n1. **Preparación** — levantar smf2/upf2 + 3 gNBs secuencialmente\n2. **UEs válidos** — 4 UEs en distintos gNBs/slices\n3. **UEs inválidos** — 4 UEs con distintos tipos de fallo\n4. **Observación** — telemetría, slicing y diferenciación\n\n### Slices\n- **Slice 1** SST=1 SD=000001 → DNN `internet` → smf + upf → 192.168.100.x\n- **Slice 2** SST=1 SD=000002 → DNN `private` → smf2 + upf2 → 192.168.200.x\n- `make e4`",
+        "mode": "markdown"
+      },
+      "pluginVersion": "11.3.0",
+      "title": "📖 Descripción del escenario",
+      "type": "text"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 1
+      },
+      "id": 2,
+      "options": {
+        "content": "## 🗺️ Distribución de UEs\n\n| UE | gNB | IMSI | Slice | Resultado |\n|----|-----|------|-------|-----------|\n| srsue_5g | srsgnb | 895 | SD=000001 | ✅ PDU → 192.168.100.x |\n| nr_ue | gNB1 | 896 | SD=000001 | ✅ PDU → 192.168.100.x |\n| nr_ue2 | gNB2 | 898 | SD=000001 | ✅ PDU → 192.168.100.x |\n| nr_ue3 | gNB2 | 899 | SD=000002 | ✅ PDU → 192.168.200.x (smf2/upf2) |\n| nr_ue_bad_supi | gNB1 | 905 | SD=000001 | ❌ Unknown Subscriber |\n| nr_ue_bad_ki | gNB1 | 906 | SD=000001 | ❌ Auth Failure |\n| nr_ue_bad_dnn | gNB1 | 908 | SD=000001 | ⚠️ Registro OK / PDU ❌ |\n| nr_ue_bad_sst | gNB2 | 909 | SD=000003 inexist. | ❌ NSSAI not found |",
+        "mode": "markdown"
+      },
+      "pluginVersion": "11.3.0",
+      "title": "🗺️ Distribución de UEs",
+      "type": "text"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 1
+      },
+      "id": 3,
+      "options": {
+        "content": "## ✅ Condiciones de éxito\n\n**Valores finales esperados:**\n- `amf_gnb_count` == **3**\n- `amf_ue_count` == **5** (4 válidos + 1 que llega a RAN)\n- `fivegs_upffunction_upf_sessionnbr{container=\"upf\"}` == **3** (slice 1)\n- `fivegs_upffunction_upf_sessionnbr{container=\"upf2\"}` == **1** (slice 2)\n- `fivegs_amffunction_rm_reginitfail` == **5** (UEs inválidos + reintentos)\n- `fivegs_amffunction_amf_authfail` == **1** (bad_k)\n- `fivegs_smffunction_sm_sessionnbr{container=\"smf2\"}` == **1** (slice 2 activo)\n\n**✅ Validado**",
+        "mode": "markdown"
+      },
+      "pluginVersion": "11.3.0",
+      "title": "✅ Condiciones de éxito",
+      "type": "text"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "id": 101,
+      "panels": [],
+      "title": "🟢 Estado general — gNBs, UEs y slices",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "gNBs registrados en el AMF. Debe escalar de 0 a 3 conforme se levantan srsgnb, gNB1 y gNB2.",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 0,
+                  "text": "Sin gNBs"
+                },
+                "3": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "🟢 3 gNBs ✓"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 3
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 0,
+        "y": 10
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "amf_gnb_count",
+          "refId": "A"
+        }
+      ],
+      "title": "gNBs Registrados (esperado: 3)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "UEs con contexto NAS en el AMF. 4 válidos se registran exitosamente. bad_supi y bad_ki llegan al AMF pero fallan, por lo que el conteo real es 5 (incluyendo los que llegan a RAN).",
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 4
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 4,
+        "y": 10
+      },
+      "id": 11,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "amf_ue_count",
+          "refId": "A"
+        }
+      ],
+      "title": "UEs en AMF (esperado: 5)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "PDU Sessions en UPF del slice 1 (SD=000001, DNN internet). Esperado: 3 (srsue_5g + nr_ue + nr_ue2).",
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 3
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 8,
+        "y": 10
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf\"}",
+          "refId": "A"
+        }
+      ],
+      "title": "PDU Sessions slice 1 — upf (esperado: 3)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "PDU Sessions en UPF2 del slice 2 (SD=000002, DNN private). Esperado: 1 (nr_ue3). Evidencia directa de que el slicing funciona.",
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 12,
+        "y": 10
+      },
+      "id": 13,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf2\"}",
+          "refId": "A"
+        }
+      ],
+      "title": "PDU Sessions slice 2 — upf2 (esperado: 1)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "Registration failures totales. Incluye bad_supi, bad_k, bad_dnn y bad_sst. En E4 = 5 (con reintentos del sistema).",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "OK"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 16,
+        "y": 10
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_amffunction_rm_reginitfail",
+          "refId": "A"
+        }
+      ],
+      "title": "Registration Failures (esperado: 5)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "Auth failure en el AUSF — indicador de bad_k. En E4 = 1 (nr_ue_bad_ki con IMSI 906).",
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "OK"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 20,
+        "y": 10
+      },
+      "id": 15,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_amffunction_amf_authfail",
+          "refId": "A"
+        }
+      ],
+      "title": "Auth Fail bad_k (esperado: 1)",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "id": 102,
+      "panels": [],
+      "title": "📈 Fase 1+2 — gNBs + UEs válidos + slices",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "Progresión temporal de gNBs, UEs y PDU Sessions por slice. Permite observar cuándo se activa cada slice y la separación entre upf (slice 1) y upf2 (slice 2).",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 2
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "gNBs activos"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "yellow",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "UEs en AMF"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PDU Sessions slice 1 (upf)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PDU Sessions slice 2 (upf2)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 16,
+        "x": 0,
+        "y": 16
+      },
+      "id": 20,
+      "options": {
+        "legend": {
+          "calcs": ["last"],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "amf_gnb_count",
+          "legendFormat": "gNBs activos",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "amf_ue_count",
+          "legendFormat": "UEs en AMF",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf\"}",
+          "legendFormat": "PDU Sessions slice 1 (upf)",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf2\"}",
+          "legendFormat": "PDU Sessions slice 2 (upf2)",
+          "refId": "D"
+        }
+      ],
+      "title": "📈 gNBs + UEs + PDU Sessions por slice",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 16
+      },
+      "id": 21,
+      "options": {
+        "content": "## 🔍 Comandos de arranque\n\n**Fase 0 — Core E4 (smf2 + upf2):**\n```bash\n# make e4 lo levanta automáticamente\nmake e4\n```\n\n**Verificar slices activos:**\n```bash\n# upf2 debe estar corriendo\ndocker ps | grep upf2\n# smf2 debe estar corriendo\ndocker ps | grep smf2\n```\n\n**Verificar IP del UE en slice 2:**\n```bash\n# nr_ue3 debe recibir IP 192.168.200.x\ndocker logs nr_ue3 | grep -i \"pdu session\"\n```\n\n**Generar tráfico:**\n```bash\nmake traffic\n```",
+        "mode": "markdown"
+      },
+      "pluginVersion": "11.3.0",
+      "title": "🔍 Comandos de arranque",
+      "type": "text"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      },
+      "id": 103,
+      "panels": [],
+      "title": "🌐 Network Slicing — aislamiento SMF/UPF por slice",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "smf maneja SD=000001 (DNN internet, 3 UEs). smf2 maneja SD=000002 (DNN private, 1 UE). Los contadores deben ser independientes — evidencia visual del aislamiento por slice.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 2
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sessions smf (slice 1)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Sessions smf2 (slice 2)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 25
+      },
+      "id": 30,
+      "options": {
+        "legend": {
+          "calcs": ["last"],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_smffunction_sm_sessionnbr{container=\"smf\"}",
+          "legendFormat": "Sessions smf (slice 1)",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_smffunction_sm_sessionnbr{container=\"smf2\"}",
+          "legendFormat": "Sessions smf2 (slice 2)",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_smffunction_sm_pdusessioncreationreq{container=\"smf\"}",
+          "legendFormat": "PDU Req smf",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_smffunction_sm_pdusessioncreationreq{container=\"smf2\"}",
+          "legendFormat": "PDU Req smf2",
+          "refId": "D"
+        }
+      ],
+      "title": "SMF Sessions por slice — smf vs smf2",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "PDU Sessions y PFCP sessions en upf y upf2. upf debe tener 3, upf2 debe tener 1. La separación confirma el aislamiento del plano de usuario por slice.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 8,
+            "lineWidth": 2
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 25
+      },
+      "id": 31,
+      "options": {
+        "legend": {
+          "calcs": ["last"],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf\"}",
+          "legendFormat": "Sessions upf (slice 1)",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf2\"}",
+          "legendFormat": "Sessions upf2 (slice 2)",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "pfcp_sessions_active{container=\"upf\"}",
+          "legendFormat": "PFCP activas upf",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "pfcp_sessions_active{container=\"upf2\"}",
+          "legendFormat": "PFCP activas upf2",
+          "refId": "D"
+        }
+      ],
+      "title": "UPF Sessions por slice — upf vs upf2",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 33
+      },
+      "id": 104,
+      "panels": [],
+      "title": "🔴 Fase 3 — UEs inválidos y tipos de rechazo",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "Registration requests vs successes y failures en tiempo real. La brecha reginitreq - reginitsucc debe ser ~4 al final (los 4 UEs inválidos). fivegs_amffunction_rm_reginitfail hace visible cada fallo en tiempo real.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "lineWidth": 2
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reg Fail"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Auth Fail (bad_k)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 16,
+        "x": 0,
+        "y": 34
+      },
+      "id": 40,
+      "options": {
+        "legend": {
+          "calcs": ["last"],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_amffunction_rm_reginitreq",
+          "legendFormat": "Reg Req",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_amffunction_rm_reginitsucc",
+          "legendFormat": "Reg Succ",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_amffunction_rm_reginitfail",
+          "legendFormat": "Reg Fail",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_amffunction_amf_authfail",
+          "legendFormat": "Auth Fail (bad_k)",
+          "refId": "D"
+        }
+      ],
+      "title": "AMF — Registration y fallos en tiempo real",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 34
+      },
+      "id": 41,
+      "options": {
+        "content": "## ❌ Tipos de fallo en E4\n\n| UE | IMSI | Falla en | Causa | Métrica |\n|----|------|----------|-------|----------|\n| bad_supi | 905 | AMF/UDM | SUPI desconocido | `rm_reginitfail` ↑ |\n| bad_ki | 906 | AUSF | K incorrecto — MAC failure | `amf_authfail` ↑ |\n| bad_dnn | 908 | SMF | DNN no soportado | `rm_reginitfail` ↑ (post-reg) |\n| bad_sst | 909 | AMF/NSSF | SST=3 inexistente | `rm_reginitfail` ↑ |\n\n**Nota:** `rm_reginitfail` = 5 (no 4) por reintentos del sistema ante algunos tipos de fallo.\n\n**Clave de diferenciación:** La separación entre fallos requiere correlación con logs del AMF — las métricas solo muestran el total de fallos, no la causa.",
+        "mode": "markdown"
+      },
+      "pluginVersion": "11.3.0",
+      "title": "❌ Tipos de fallo y métricas",
+      "type": "text"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 42
+      },
+      "id": 105,
+      "panels": [],
+      "title": "📜 Logs — AMF, SMF, SMF2 y core 5G",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "P8E80F9AEF21F6940"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 43
+      },
+      "id": 50,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "showLabels": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "{nf=\"amf\"} |= ``",
+          "refId": "A"
+        }
+      ],
+      "title": "📜 Logs AMF — Registration y fallos",
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "P8E80F9AEF21F6940"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 43
+      },
+      "id": 51,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "showLabels": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "{domain=\"core\", generation=\"5g\"} |= ``",
+          "refId": "A"
+        }
+      ],
+      "title": "📜 Logs todos los NFs core 5G (smf + smf2)",
+      "type": "logs"
+    }
+  ],
+  "preload": false,
+  "refresh": "5s",
+  "schemaVersion": 40,
+  "tags": ["5g", "escenario", "e4", "slicing", "multi-gnb", "5gc"],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-25m",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": ["5s", "10s", "30s", "1m"]
+  },
+  "timezone": "browser",
+  "title": "E4 — Multi-gNB Slicing (5G) v2",
+  "uid": "e4-multi-gnb-slicing-v2",
+  "version": 1,
+  "weekStart": ""
+}

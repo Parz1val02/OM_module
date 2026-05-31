@@ -1103,7 +1103,7 @@
   "time": { "from": "now-25m", "to": "now" },
   "timepicker": { "refresh_intervals": ["5s", "10s", "30s", "1m"] },
   "timezone": "browser",
-  "title": "E4 — Multi-gNB Slicing SD=000001/SD=000002 (5G)",
+  "title": "E4 — Multi-gNB Slicing (5G)",
   "uid": "e4-multi-gnb-slicing",
   "version": 1,
   "weekStart": ""

@@ -91,6 +91,7 @@ core-5g-up:
 
 core-5g-down:
 	@echo "▶ Bajando core 5G..."
+	$(COMPOSE) -f $(CORE_5G_E4) down
 	$(COMPOSE) -f $(CORE_5G) down
 	@echo "✅ Core 5G detenido"
 
@@ -177,7 +178,6 @@ e4-down:
 	$(COMPOSE) -f $(RAN) --profile ran-5g-e4 down
 	$(COMPOSE) -f $(RAN) --profile ran-5g-ueransim down
 	$(COMPOSE) -f $(RAN) --profile ran-5g-srs down
-	$(COMPOSE) -f $(CORE_5G_E4) down
 	@echo "✅ E4 detenido"
 
 # ── Tráfico ──────────────────────────────────────────────────────────────────

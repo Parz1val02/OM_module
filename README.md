@@ -51,7 +51,7 @@ Four test scenarios (E1–E4) cover both 4G and 5G with normal attach/registrati
     └──────┬──────┘  └────────────┘  └──────────────┘
            │ PromQL / LogQL / TraceQL
     ┌──────▼──────┐
-    │   Grafana   │  ← 14 pre-built dashboards
+    │   Grafana   │
     └─────────────┘
 ```
 
