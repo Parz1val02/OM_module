@@ -198,4 +198,4 @@ down:
 	-$(COMPOSE) -f $(CORE_5G_E4) down
 	-$(COMPOSE) -f $(CORE_5G) down
 	-$(COMPOSE) -f $(CORE_4G) down
-	@echo "✅ Testbed detenido completamente"
+	@echo "✅ Testbed y O&M module detenido completamente"

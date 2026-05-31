@@ -10,49 +10,49 @@ RAN="ran.yaml"
 SCRIPTS_DIR="$(dirname "$0")"
 
 echo "  Fase 1 — gNB srsRAN (referencia SST=1)..."
-$COMPOSE -f $RAN --profile ran-5g-srs up -d srsgnb_zmq
+COMPOSE_IGNORE_ORPHANS=true $COMPOSE -f $RAN --profile ran-5g-srs up -d srsgnb_zmq
 bash "$SCRIPTS_DIR/wait_ran.sh" srsgnb_zmq "gNB started"
 
 echo "  Fase 1 — gNB UERANSIM nr_gnb (SST=1)..."
-$COMPOSE -f $RAN --profile ran-5g-ueransim up -d nr_gnb
+COMPOSE_IGNORE_ORPHANS=true $COMPOSE -f $RAN --profile ran-5g-ueransim up -d nr_gnb
 bash "$SCRIPTS_DIR/wait_ran.sh" nr_gnb "NG Setup procedure is successful"
 
 echo "  Fase 1 — gNB UERANSIM nr_gnb2 (SST=1+2)..."
-$COMPOSE -f $RAN --profile ran-5g-e4 up -d nr_gnb2
+COMPOSE_IGNORE_ORPHANS=true $COMPOSE -f $RAN --profile ran-5g-e4 up -d nr_gnb2
 bash "$SCRIPTS_DIR/wait_ran.sh" nr_gnb2 "NG Setup procedure is successful"
 
 echo "  ✓ 3 gNBs registrados"
 
 echo "  Fase 2 — UEs válidos..."
-$COMPOSE -f $RAN --profile ran-5g-srs up -d srsue_5g_zmq
+COMPOSE_IGNORE_ORPHANS=true $COMPOSE -f $RAN --profile ran-5g-srs up -d srsue_5g_zmq
 bash "$SCRIPTS_DIR/wait_ran.sh" srsue_5g_zmq "PDU Session Establishment successful"
 
-$COMPOSE -f $RAN --profile ran-5g-ueransim up -d nr_ue
+COMPOSE_IGNORE_ORPHANS=true $COMPOSE -f $RAN --profile ran-5g-ueransim up -d nr_ue
 bash "$SCRIPTS_DIR/wait_ran.sh" nr_ue "PDU Session establishment is successful"
 
-$COMPOSE -f $RAN --profile ran-5g-e4 up -d nr_ue2
+COMPOSE_IGNORE_ORPHANS=true $COMPOSE -f $RAN --profile ran-5g-e4 up -d nr_ue2
 bash "$SCRIPTS_DIR/wait_ran.sh" nr_ue2 "PDU Session establishment is successful"
 
-$COMPOSE -f $RAN --profile ran-5g-e4 up -d nr_ue3
+COMPOSE_IGNORE_ORPHANS=true $COMPOSE -f $RAN --profile ran-5g-e4 up -d nr_ue3
 bash "$SCRIPTS_DIR/wait_ran.sh" nr_ue3 "PDU Session establishment is successful"
 
 echo "  ✓ 4 UEs válidos levantados"
 
 echo "  Fase 3 — UEs inválidos (secuencial)..."
 
-$COMPOSE -f $RAN --profile ran-5g-e4 up -d nr_ue_bad_supi
+COMPOSE_IGNORE_ORPHANS=true $COMPOSE -f $RAN --profile ran-5g-e4 up -d nr_ue_bad_supi
 echo "    ✓ nr_ue_bad_supi levantado (SUPI no registrado — falla en UDM)"
 sleep 3
 
-$COMPOSE -f $RAN --profile ran-5g-e4 up -d nr_ue_bad_ki
+COMPOSE_IGNORE_ORPHANS=true $COMPOSE -f $RAN --profile ran-5g-e4 up -d nr_ue_bad_ki
 echo "    ✓ nr_ue_bad_ki levantado (Ki incorrecto — falla en AUSF)"
 sleep 3
 
-$COMPOSE -f $RAN --profile ran-5g-e4 up -d nr_ue_bad_dnn
+COMPOSE_IGNORE_ORPHANS=true $COMPOSE -f $RAN --profile ran-5g-e4 up -d nr_ue_bad_dnn
 echo "    ✓ nr_ue_bad_dnn levantado (DNN incorrecto — registro OK, PDU falla en SMF)"
 sleep 3
 
-$COMPOSE -f $RAN --profile ran-5g-e4 up -d nr_ue_bad_sst
+COMPOSE_IGNORE_ORPHANS=true $COMPOSE -f $RAN --profile ran-5g-e4 up -d nr_ue_bad_sst
 echo "    ✓ nr_ue_bad_sst levantado (SST=3 inexistente — falla en AMF)"
 
 echo "  ✓ 4 UEs inválidos levantados"

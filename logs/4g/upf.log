@@ -1,0 +1,2017 @@
+Open5GS daemon v2.7.6-131-g782a97e
+
+03/30 22:51:50.615: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+03/30 22:51:50.615: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+03/30 22:51:50.701: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+03/30 22:51:50.701: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+03/30 22:51:50.702: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+03/30 22:51:50.702: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+03/30 22:51:50.703: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+03/30 22:51:52.964: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/01 18:02:33.467: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/01 18:02:33.467: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/01 18:02:33.527: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/01 18:02:33.527: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/01 18:02:33.528: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/01 18:02:33.528: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/01 18:02:33.528: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/01 18:02:36.022: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/01 18:08:26.411: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/01 18:08:26.412: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/01 18:08:26.412: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/01 18:08:26.412: [upf] INFO: UE F-SEID[UP:0xd0a CP:0x764] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/01 18:08:26.412: [upf] INFO: UE F-SEID[UP:0xd0a CP:0x764] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/01 18:08:26.524: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 5ba1ff6e 3d4f366d ff020000 00000000   [..n=O6m........
+0020: 00000000 00000002 8500ae6a 00000000   ...........j....
+04/01 18:34:59.654: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/04 10:06:47.247: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/04 10:06:47.247: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/04 10:06:47.305: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/04 10:06:47.305: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/04 10:06:47.306: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/04 10:06:47.306: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/04 10:06:47.306: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/04 10:06:49.725: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/04 10:09:21.706: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/04 10:09:21.706: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/04 10:09:21.706: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/04 10:09:21.706: [upf] INFO: UE F-SEID[UP:0xb4e CP:0x47e] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/04 10:09:21.706: [upf] INFO: UE F-SEID[UP:0xb4e CP:0x47e] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/04 10:09:21.814: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 0de8e5ec 704889b1 ff020000 00000000   ....pH..........
+0020: 00000000 00000002 85008f68 00000000   ...........h....
+04/04 10:15:22.088: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/05 16:21:02.477: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/05 16:21:02.477: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/05 16:21:02.533: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/05 16:21:02.533: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/05 16:21:02.533: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/05 16:21:02.533: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/05 16:21:02.534: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/05 16:21:04.991: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/05 16:27:18.612: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/05 16:27:18.612: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/05 16:27:18.612: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/05 16:27:18.612: [upf] INFO: UE F-SEID[UP:0x424 CP:0xe52] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/05 16:27:18.612: [upf] INFO: UE F-SEID[UP:0x424 CP:0xe52] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/05 16:27:18.719: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: d0527d90 474794c7 ff020000 00000000   .R}.GG..........
+0020: 00000000 00000002 85005345 00000000   ..........SE....
+04/05 16:38:40.666: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/05 18:59:25.137: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/05 18:59:25.137: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/05 18:59:25.199: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/05 18:59:25.199: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/05 18:59:25.200: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/05 18:59:25.200: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/05 18:59:25.200: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/05 18:59:27.611: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/05 19:04:23.481: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/05 19:04:23.481: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/05 19:04:23.481: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/05 19:04:23.481: [upf] INFO: UE F-SEID[UP:0xa43 CP:0xf53] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/05 19:04:23.481: [upf] INFO: UE F-SEID[UP:0xa43 CP:0xf53] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/05 19:04:23.590: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 983ac3a4 f32e63f3 ff020000 00000000   .:....c.........
+0020: 00000000 00000002 8500ca35 00000000   ...........5....
+04/05 19:25:24.949: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/05 19:33:22.519: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/05 19:33:22.519: [upf] INFO: UE F-SEID[UP:0xfc7 CP:0x55e] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/05 19:33:22.519: [upf] INFO: UE F-SEID[UP:0xfc7 CP:0x55e] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/05 19:33:22.628: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 1caf8779 b19d0cdd ff020000 00000000   ...y............
+0020: 00000000 00000002 85001a94 00000000   ................
+04/05 19:36:00.095: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/05 19:36:36.231: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/05 19:36:36.231: [upf] INFO: UE F-SEID[UP:0x796 CP:0x18d] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+04/05 19:36:36.231: [upf] INFO: UE F-SEID[UP:0x796 CP:0x18d] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+04/05 19:36:36.338: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 4a4f02eb 0cd0d379 ff020000 00000000   JO.....y........
+0020: 00000000 00000002 85004fb3 00000000   ..........O.....
+04/05 19:41:35.818: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/05 19:42:38.790: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/05 19:42:38.790: [upf] INFO: UE F-SEID[UP:0xaf2 CP:0x97c] APN[internet] PDN-Type[1] IPv4[192.168.100.5] IPv6[] (../src/upf/context.c:498)
+04/05 19:42:38.790: [upf] INFO: UE F-SEID[UP:0xaf2 CP:0x97c] APN[internet] PDN-Type[1] IPv4[192.168.100.5] IPv6[] (../src/upf/context.c:498)
+04/05 19:42:38.896: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 9b8f58c7 49932336 ff020000 00000000   ..X.I.#6........
+0020: 00000000 00000002 85001c17 00000000   ................
+04/05 19:45:15.592: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/05 19:46:04.403: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/05 19:46:04.403: [upf] INFO: UE F-SEID[UP:0x912 CP:0x568] APN[internet] PDN-Type[1] IPv4[192.168.100.6] IPv6[] (../src/upf/context.c:498)
+04/05 19:46:04.403: [upf] INFO: UE F-SEID[UP:0x912 CP:0x568] APN[internet] PDN-Type[1] IPv4[192.168.100.6] IPv6[] (../src/upf/context.c:498)
+04/05 19:46:04.510: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: c5e698df bd146236 ff020000 00000000   ......b6........
+0020: 00000000 00000002 8500ff25 00000000   ...........%....
+04/05 20:12:36.983: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/05 20:41:04.049: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/05 20:41:04.049: [upf] INFO: UE F-SEID[UP:0xb3c CP:0x9b3] APN[internet] PDN-Type[1] IPv4[192.168.100.7] IPv6[] (../src/upf/context.c:498)
+04/05 20:41:04.049: [upf] INFO: UE F-SEID[UP:0xb3c CP:0x9b3] APN[internet] PDN-Type[1] IPv4[192.168.100.7] IPv6[] (../src/upf/context.c:498)
+04/05 20:41:04.154: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: abe5c4dc ad012e8e ff020000 00000000   ................
+0020: 00000000 00000002 850030e5 00000000   ..........0.....
+04/05 21:05:16.059: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/05 21:05:16.104: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/05 21:05:16.104: [upf] INFO: UE F-SEID[UP:0x3d7 CP:0xf94] APN[internet] PDN-Type[1] IPv4[192.168.100.8] IPv6[] (../src/upf/context.c:498)
+04/05 21:05:16.104: [upf] INFO: UE F-SEID[UP:0x3d7 CP:0xf94] APN[internet] PDN-Type[1] IPv4[192.168.100.8] IPv6[] (../src/upf/context.c:498)
+04/05 21:05:16.211: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: b09e625b 381ae495 ff020000 00000000   ..b[8...........
+0020: 00000000 00000002 85004d8d 00000000   ..........M.....
+04/05 21:06:52.548: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/05 21:07:37.764: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/05 21:07:37.764: [upf] INFO: UE F-SEID[UP:0x8ba CP:0x50] APN[internet] PDN-Type[1] IPv4[192.168.100.9] IPv6[] (../src/upf/context.c:498)
+04/05 21:07:37.764: [upf] INFO: UE F-SEID[UP:0x8ba CP:0x50] APN[internet] PDN-Type[1] IPv4[192.168.100.9] IPv6[] (../src/upf/context.c:498)
+04/05 21:07:37.872: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 1d7b8835 4a666792 ff020000 00000000   .{.5Jfg.........
+0020: 00000000 00000002 8500258e 00000000   ..........%.....
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/05 21:30:16.705: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/05 21:30:16.705: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/05 21:30:16.769: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/05 21:30:16.769: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/05 21:30:16.769: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/05 21:30:16.769: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/05 21:30:16.770: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/05 21:30:19.211: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/05 21:32:12.204: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/05 21:32:12.204: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/05 21:32:12.204: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/05 21:32:12.204: [upf] INFO: UE F-SEID[UP:0x4bd CP:0xd90] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/05 21:32:12.204: [upf] INFO: UE F-SEID[UP:0x4bd CP:0xd90] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/05 21:32:12.310: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: df764586 ec647bd9 ff020000 00000000   .vE..d{.........
+0020: 00000000 00000002 8500effb 00000000   ................
+04/05 21:34:03.193: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/05 21:35:46.950: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/05 21:35:46.950: [upf] INFO: UE F-SEID[UP:0xd15 CP:0x9ce] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/05 21:35:46.951: [upf] INFO: UE F-SEID[UP:0xd15 CP:0x9ce] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/05 21:35:47.058: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: a2b37a59 26e4f766 ff020000 00000000   ..zY&..f........
+0020: 00000000 00000002 850041df 00000000   ..........A.....
+04/05 21:37:02.895: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/05 21:46:54.228: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/05 21:46:54.228: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/05 21:46:54.284: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/05 21:46:54.284: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/05 21:46:54.284: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/05 21:46:54.284: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/05 21:46:54.285: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/05 21:46:56.697: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/05 21:48:12.181: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/05 21:48:12.181: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/05 21:48:12.181: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/05 21:48:12.181: [upf] INFO: UE F-SEID[UP:0x91 CP:0xb30] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/05 21:48:12.181: [upf] INFO: UE F-SEID[UP:0x91 CP:0xb30] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/05 21:48:12.288: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: a0263058 d37237fd ff020000 00000000   .&0X.r7.........
+0020: 00000000 00000002 8500a148 00000000   ...........H....
+04/05 21:48:40.173: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/05 22:00:32.024: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/05 22:00:32.024: [upf] INFO: UE F-SEID[UP:0x7d CP:0xf30] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/05 22:00:32.024: [upf] INFO: UE F-SEID[UP:0x7d CP:0xf30] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/05 22:00:32.130: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 17e2fd2b 3ae41528 ff020000 00000000   ...+:..(........
+0020: 00000000 00000002 8500181d 00000000   ................
+04/05 22:02:46.146: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/05 22:04:57.992: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/05 22:04:57.992: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/05 22:04:58.046: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/05 22:04:58.046: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/05 22:04:58.046: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/05 22:04:58.047: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/05 22:04:58.047: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/05 22:05:00.471: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/05 22:07:11.390: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/05 22:07:11.391: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/05 22:07:11.391: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/05 22:07:11.391: [upf] INFO: UE F-SEID[UP:0xe22 CP:0x9c2] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/05 22:07:11.391: [upf] INFO: UE F-SEID[UP:0xe22 CP:0x9c2] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/05 22:07:11.499: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: f424358a 7a6326cc ff020000 00000000   .$5.zc&.........
+0020: 00000000 00000002 8500b258 00000000   ...........X....
+04/05 22:11:27.645: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/05 22:12:45.753: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/05 22:12:45.753: [upf] INFO: UE F-SEID[UP:0x486 CP:0xc3d] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/05 22:12:45.753: [upf] INFO: UE F-SEID[UP:0x486 CP:0xc3d] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/05 22:12:45.859: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: d3b468ad 6753c3f4 ff020000 00000000   ..h.gS..........
+0020: 00000000 00000002 8500158d 00000000   ................
+04/05 22:15:52.504: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/05 22:19:18.315: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/05 22:19:18.315: [upf] INFO: UE F-SEID[UP:0x26b CP:0x9fc] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+04/05 22:19:18.315: [upf] INFO: UE F-SEID[UP:0x26b CP:0x9fc] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+04/05 22:19:18.422: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 008c63d9 547e5a46 ff020000 00000000   ..c.T~ZF........
+0020: 00000000 00000002 85006a0d 00000000   ..........j.....
+04/05 22:22:10.965: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/05 22:23:40.463: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/05 22:23:40.463: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/05 22:23:40.519: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/05 22:23:40.519: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/05 22:23:40.520: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/05 22:23:40.520: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/05 22:23:40.520: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/05 22:23:42.950: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/05 22:25:31.895: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/05 22:25:31.896: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/05 22:25:31.896: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/05 22:25:31.896: [upf] INFO: UE F-SEID[UP:0x76e CP:0x86] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/05 22:25:31.896: [upf] INFO: UE F-SEID[UP:0x76e CP:0x86] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/05 22:25:32.004: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 5abf12cd 29117c71 ff020000 00000000   Z...).|q........
+0020: 00000000 00000002 85006a28 00000000   ..........j(....
+04/05 22:27:17.681: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/05 23:42:01.315: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/05 23:42:01.315: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/05 23:42:01.370: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/05 23:42:01.370: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/05 23:42:01.371: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/05 23:42:01.371: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/05 23:42:01.371: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/05 23:42:03.804: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/05 23:43:57.813: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/05 23:43:57.813: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/05 23:43:57.813: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/05 23:43:57.813: [upf] INFO: UE F-SEID[UP:0x5dd CP:0x74d] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/05 23:43:57.813: [upf] INFO: UE F-SEID[UP:0x5dd CP:0x74d] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/05 23:43:57.927: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 546b39a1 e0f7c188 ff020000 00000000   Tk9.............
+0020: 00000000 00000002 85004caa 00000000   ..........L.....
+04/05 23:53:28.074: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/06 05:05:47.606: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/06 05:05:47.606: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/06 05:05:47.665: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/06 05:05:47.665: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/06 05:05:47.665: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/06 05:05:47.666: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/06 05:05:47.666: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/06 05:05:50.140: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/06 05:14:00.730: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/06 05:14:00.730: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/06 05:14:00.730: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/06 05:14:00.730: [upf] INFO: UE F-SEID[UP:0x8d3 CP:0xf80] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/06 05:14:00.730: [upf] INFO: UE F-SEID[UP:0x8d3 CP:0xf80] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/06 05:14:00.838: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 200367dc a46b5244 ff020000 00000000    .g..kRD........
+0020: 00000000 00000002 8500fea7 00000000   ................
+04/06 05:18:34.853: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/06 05:24:28.675: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/06 05:24:28.675: [upf] INFO: UE F-SEID[UP:0x6d3 CP:0x94b] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/06 05:24:28.675: [upf] INFO: UE F-SEID[UP:0x6d3 CP:0x94b] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/06 05:24:28.782: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: a1f37dc5 0c2cb1e4 ff020000 00000000   ..}..,..........
+0020: 00000000 00000002 85009f6d 00000000   ...........m....
+04/06 05:27:14.766: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/06 05:29:57.170: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/06 05:29:57.170: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/06 05:29:57.221: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/06 05:29:57.221: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/06 05:29:57.221: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/06 05:29:57.222: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/06 05:29:57.222: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/06 05:29:59.630: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/06 05:32:52.327: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/06 05:32:52.327: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/06 05:32:52.327: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/06 05:32:52.327: [upf] INFO: UE F-SEID[UP:0xbd1 CP:0x3b7] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/06 05:32:52.327: [upf] INFO: UE F-SEID[UP:0xbd1 CP:0x3b7] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/06 05:32:52.433: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 392d6221 896e02c4 ff020000 00000000   9-b!.n..........
+0020: 00000000 00000002 850055b6 00000000   ..........U.....
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/08 23:29:02.554: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/08 23:29:02.554: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/08 23:29:02.607: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/08 23:29:02.607: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/08 23:29:02.608: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/08 23:29:02.608: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/08 23:29:02.608: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/08 23:29:05.072: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/08 23:34:11.761: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/08 23:34:11.761: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/08 23:34:11.761: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/08 23:34:11.761: [upf] INFO: UE F-SEID[UP:0xa79 CP:0x834] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/08 23:34:11.761: [upf] INFO: UE F-SEID[UP:0xa79 CP:0x834] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/08 23:34:11.868: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 482d362f f9c03100 ff020000 00000000   H-6/..1.........
+0020: 00000000 00000002 8500d419 00000000   ................
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/11 22:18:15.321: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/11 22:18:15.321: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/11 22:18:15.457: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/11 22:18:15.457: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/11 22:18:15.458: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/11 22:18:15.459: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/11 22:18:15.459: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/11 22:18:17.755: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/11 22:23:28.675: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/11 22:23:28.676: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/11 22:23:28.676: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/11 22:23:28.676: [upf] INFO: UE F-SEID[UP:0x63f CP:0x7bf] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/11 22:23:28.676: [upf] INFO: UE F-SEID[UP:0x63f CP:0x7bf] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/11 22:23:28.781: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 495ba604 3ff8c9a5 ff020000 00000000   I[..?...........
+0020: 00000000 00000002 85008439 00000000   ...........9....
+04/11 22:26:55.833: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/12 08:33:11.283: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/12 08:33:11.283: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/12 08:33:11.340: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/12 08:33:11.340: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/12 08:33:11.341: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/12 08:33:11.341: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/12 08:33:11.341: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/12 08:33:13.803: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/12 09:03:15.613: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/12 09:03:15.613: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/12 09:03:15.613: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/12 09:03:15.614: [upf] INFO: UE F-SEID[UP:0xb2b CP:0x210] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/12 09:03:15.614: [upf] INFO: UE F-SEID[UP:0xb2b CP:0x210] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/12 09:03:15.723: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: a6705245 40c08eb0 ff020000 00000000   .pRE@...........
+0020: 00000000 00000002 8500b510 00000000   ................
+04/12 09:31:12.496: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/12 11:50:46.706: [core] ERROR: epoll failed (4:Interrupted system call) (../lib/core/ogs-epoll.c:221)
+04/12 11:52:01.867: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/12 11:52:01.867: [upf] INFO: UE F-SEID[UP:0x11e CP:0x28c] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/12 11:52:01.867: [upf] INFO: UE F-SEID[UP:0x11e CP:0x28c] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/12 11:52:01.973: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 70cc7ad3 67e76065 ff020000 00000000   p.z.g.`e........
+0020: 00000000 00000002 8500c94a 00000000   ...........J....
+04/12 12:00:14.739: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+04/12 12:00:14.739: [upf] INFO: UE F-SEID[UP:0x128 CP:0x621] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+04/12 12:00:14.739: [upf] INFO: UE F-SEID[UP:0x128 CP:0x621] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+04/12 12:00:14.833: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.833: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 fbbe4000 40010a2f c0a86403   E..T..@.@../..d.
+0010: 08080808 0800dc46 00020113 16cfdb69   .......F.......i
+0020: 00000000 5f980a00 00000000 10111213   ...._...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.833: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.834: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 fc554000 40010998 c0a86403   E..T.U@.@.....d.
+0010: 08080808 080037e4 00020114 17cfdb69   ......7........i
+0020: 00000000 02fa0a00 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.834: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.834: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 ffb24000 4001063b c0a86403   E..T..@.@..;..d.
+0010: 08080808 08006389 00020115 18cfdb69   ......c........i
+0020: 00000000 d5530b00 00000000 10111213   .....S..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.834: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.834: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 03774000 40010277 c0a86403   E..T.w@.@..w..d.
+0010: 08080808 0800b226 00020116 19cfdb69   .......&.......i
+0020: 00000000 85b50b00 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.834: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.834: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 05454000 400100a9 c0a86403   E..T.E@.@.....d.
+0010: 08080808 0800fac7 00020117 1acfdb69   ...............i
+0020: 00000000 3b130c00 00000000 10111213   ....;...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.834: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.834: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 07a34000 4001fe4a c0a86403   E..T..@.@..J..d.
+0010: 08080808 08001d6d 00020118 1bcfdb69   .......m.......i
+0020: 00000000 176d0c00 00000000 10111213   .....m..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.834: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.834: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 08174000 4001fdd6 c0a86403   E..T..@.@.....d.
+0010: 08080808 0800530e 00020119 1ccfdb69   ......S........i
+0020: 00000000 e0ca0c00 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.834: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.834: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 0a7e4000 4001fb6f c0a86403   E..T.~@.@..o..d.
+0010: 08080808 080097af 0002011a 1dcfdb69   ...............i
+0020: 00000000 9a280d00 00000000 10111213   .....(..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.834: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.834: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 0e454000 4001f7a8 c0a86403   E..T.E@.@.....d.
+0010: 08080808 0800d050 0002011b 1ecfdb69   .......P.......i
+0020: 00000000 60860d00 00000000 10111213   ....`...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.834: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.834: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 11074000 4001f4e6 c0a86403   E..T..@.@.....d.
+0010: 08080808 08001cf2 0002011c 1fcfdb69   ...............i
+0020: 00000000 12e40d00 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.834: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.834: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 11db4000 4001f412 c0a86403   E..T..@.@.....d.
+0010: 08080808 08005693 0002011d 20cfdb69   ......V..... ..i
+0020: 00000000 d7410e00 00000000 10111213   .....A..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.834: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.834: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 156f4000 4001f07e c0a86403   E..T.o@.@..~..d.
+0010: 08080808 0800b230 0002011e 21cfdb69   .......0....!..i
+0020: 00000000 7aa30e00 00000000 10111213   ....z...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.834: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.834: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 166c4000 4001ef81 c0a86403   E..T.l@.@.....d.
+0010: 08080808 0800d0d5 0002011f 22cfdb69   ............"..i
+0020: 00000000 5afd0e00 00000000 10111213   ....Z...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.834: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.834: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 178f4000 4001ee5e c0a86403   E..T..@.@..^..d.
+0010: 08080808 080070b5 00020120 24cfdb69   ......p.... $..i
+0020: 00000000 c71c0000 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.834: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.834: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 19504000 4001ec9d c0a86403   E..T.P@.@.....d.
+0010: 08080808 0800a55a 00020121 25cfdb69   .......Z...!%..i
+0020: 00000000 91760000 00000000 10111213   .....v..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.834: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.834: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 1c814000 4001e96c c0a86403   E..T..@.@..l..d.
+0010: 08080808 0800dcfb 00020122 26cfdb69   ..........."&..i
+0020: 00000000 58d40000 00000000 10111213   ....X...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.834: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.834: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 1f2a4000 4001e6c3 c0a86403   E..T.*@.@.....d.
+0010: 08080808 08002a99 00020123 27cfdb69   ......*....#'..i
+0020: 00000000 09360100 00000000 10111213   .....6..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.834: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.834: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 22934000 4001e35a c0a86403   E..T".@.@..Z..d.
+0010: 08080808 0800603e 00020124 28cfdb69   ......`>...$(..i
+0020: 00000000 d28f0100 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 232f4000 4001e2be c0a86403   E..T#/@.@.....d.
+0010: 08080808 0800b2db 00020125 29cfdb69   ...........%)..i
+0020: 00000000 7ef10100 00000000 10111213   ....~...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 24d94000 4001e114 c0a86403   E..T$.@.@.....d.
+0010: 08080808 0800ef7c 00020126 2acfdb69   .......|...&*..i
+0020: 00000000 404f0200 00000000 10111213   ....@O..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 26f74000 4001def6 c0a86403   E..T&.@.@.....d.
+0010: 08080808 0800231e 00020127 2bcfdb69   ......#....'+..i
+0020: 00000000 0bad0200 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 2a994000 4001db54 c0a86403   E..T*.@.@..T..d.
+0010: 08080808 080056c3 00020128 2ccfdb69   ......V....(,..i
+0020: 00000000 d6060300 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 2d894000 4001d864 c0a86403   E..T-.@.@..d..d.
+0010: 08080808 0800b160 00020129 2dcfdb69   .......`...)-..i
+0020: 00000000 7a680300 00000000 10111213   ....zh..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 2dd54000 4001d818 c0a86403   E..T-.@.@.....d.
+0010: 08080808 0800eb01 0002012a 2ecfdb69   ...........*...i
+0020: 00000000 3fc60300 00000000 10111213   ....?...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 2eff4000 4001d6ee c0a86403   E..T..@.@.....d.
+0010: 08080808 08000fa7 0002012b 2fcfdb69   ...........+/..i
+0020: 00000000 19200400 00000000 10111213   ..... ..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 32fc4000 4001d2f1 c0a86403   E..T2.@.@.....d.
+0010: 08080808 08005348 0002012c 30cfdb69   ......SH...,0..i
+0020: 00000000 d47d0400 00000000 10111213   .....}..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 33c34000 4001d22a c0a86403   E..T3.@.@..*..d.
+0010: 08080808 080082e9 0002012d 31cfdb69   ...........-1..i
+0020: 00000000 a3db0400 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 35114000 4001d0dc c0a86403   E..T5.@.@.....d.
+0010: 08080808 0800cd86 0002012e 32cfdb69   ............2..i
+0020: 00000000 573d0500 00000000 10111213   ....W=..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 37e84000 4001ce05 c0a86403   E..T7.@.@.....d.
+0010: 08080808 08002328 0002012f 33cfdb69   ......#(.../3..i
+0020: 00000000 009b0500 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 3ba44000 4001ca49 c0a86403   E..T;.@.@..I..d.
+0010: 08080808 080020cd 00020130 34cfdb69   ...... ....04..i
+0020: 00000000 01f50500 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 3c144000 4001c9d9 c0a86403   E..T<.@.@.....d.
+0010: 08080808 0800a26a 00020131 35cfdb69   .......j...15..i
+0020: 00000000 7e560600 00000000 10111213   ....~V..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 3db24000 4001c83b c0a86403   E..T=.@.@..;..d.
+0010: 08080808 0800cb0b 00020132 36cfdb69   ...........26..i
+0020: 00000000 54b40600 00000000 10111213   ....T...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 40a44000 4001c549 c0a86403   E..T@.@.@..I..d.
+0010: 08080808 08000fad 00020133 37cfdb69   ...........37..i
+0020: 00000000 0e120700 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 43974000 4001c256 c0a86403   E..TC.@.@..V..d.
+0010: 08080808 0800584e 00020134 38cfdb69   ......XN...48..i
+0020: 00000000 c46f0700 00000000 10111213   .....o..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 43f94000 4001c1f4 c0a86403   E..TC.@.@.....d.
+0010: 08080808 080076ef 00020135 39cfdb69   ......v....59..i
+0020: 00000000 a4cd0700 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 46ae4000 4001bf3f c0a86403   E..TF.@.@..?..d.
+0010: 08080808 0800dc90 00020136 3acfdb69   ...........6:..i
+0020: 00000000 3d2b0800 00000000 10111213   ....=+..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 48684000 4001bd85 c0a86403   E..THh@.@.....d.
+0010: 08080808 0800f331 00020137 3bcfdb69   .......1...7;..i
+0020: 00000000 25890800 00000000 10111213   ....%...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 4be84000 4001ba05 c0a86403   E..TK.@.@.....d.
+0010: 08080808 080059d3 00020138 3ccfdb69   ......Y....8<..i
+0020: 00000000 bde60800 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.835: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 4fd14000 4001b61c c0a86403   E..TO.@.@.....d.
+0010: 08080808 08008474 00020139 3dcfdb69   .......t...9=..i
+0020: 00000000 91440900 00000000 10111213   .....D..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.835: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 4ff24000 4001b5fb c0a86403   E..TO.@.@.....d.
+0010: 08080808 0800bd19 0002013a 3ecfdb69   ...........:>..i
+0020: 00000000 579e0900 00000000 10111213   ....W...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 51174000 4001b4d6 c0a86403   E..TQ.@.@.....d.
+0010: 08080808 080005b7 0002013b 3fcfdb69   ...........;?..i
+0020: 00000000 0d000a00 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 54984000 4001b155 c0a86403   E..TT.@.@..U..d.
+0010: 08080808 08003c5c 0002013c 40cfdb69   ......<\...<@..i
+0020: 00000000 d5590a00 00000000 10111213   .....Y..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 56864000 4001af67 c0a86403   E..TV.@.@..g..d.
+0010: 08080808 080093f9 0002013d 41cfdb69   ...........=A..i
+0020: 00000000 7cbb0a00 00000000 10111213   ....|...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 59494000 4001aca4 c0a86403   E..TYI@.@.....d.
+0010: 08080808 0800cf9a 0002013e 42cfdb69   ...........>B..i
+0020: 00000000 3f190b00 00000000 10111213   ....?...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 5b8f4000 4001aa5e c0a86403   E..T[.@.@..^..d.
+0010: 08080808 0800f33f 0002013f 43cfdb69   .......?...?C..i
+0020: 00000000 1a730b00 00000000 10111213   .....s..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 5b934000 4001aa5a c0a86403   E..T[.@.@..Z..d.
+0010: 08080808 08002de1 00020140 44cfdb69   ......-....@D..i
+0020: 00000000 ded00b00 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 5b964000 4001aa57 c0a86403   E..T[.@.@..W..d.
+0010: 08080808 08006f82 00020141 45cfdb69   ......o....AE..i
+0020: 00000000 9b2e0c00 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 5bfb4000 4001a9f2 c0a86403   E..T[.@.@.....d.
+0010: 08080808 0800b523 00020142 46cfdb69   .......#...BF..i
+0020: 00000000 548c0c00 00000000 10111213   ....T...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 5dec4000 4001a801 c0a86403   E..T].@.@.....d.
+0010: 08080808 08000ec1 00020143 47cfdb69   ...........CG..i
+0020: 00000000 f9ed0c00 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 5fbd4000 4001a630 c0a86403   E..T_.@.@..0..d.
+0010: 08080808 08002c66 00020144 48cfdb69   ......,f...DH..i
+0020: 00000000 da470d00 00000000 10111213   .....G..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 605e4000 4001a58f c0a86403   E..T`^@.@.....d.
+0010: 08080808 08007307 00020145 49cfdb69   ......s....EI..i
+0020: 00000000 92a50d00 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 61374000 4001a4b6 c0a86403   E..Ta7@.@.....d.
+0010: 08080808 0800c2a4 00020146 4acfdb69   ...........FJ..i
+0020: 00000000 41070e00 00000000 10111213   ....A...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 64204000 4001a1cd c0a86403   E..Td @.@.....d.
+0010: 08080808 08000446 00020147 4bcfdb69   .......F...GK..i
+0020: 00000000 fe640e00 00000000 10111213   .....d..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 66cc4000 40019f21 c0a86403   E..Tf.@.@..!..d.
+0010: 08080808 080049e7 00020148 4ccfdb69   ......I....HL..i
+0020: 00000000 b7c20e00 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 67304000 40019ebd c0a86403   E..Tg0@.@.....d.
+0010: 08080808 08008188 00020149 4dcfdb69   ...........IM..i
+0020: 00000000 7e200f00 00000000 10111213   ....~ ..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 68df4000 40019d0e c0a86403   E..Th.@.@.....d.
+0010: 08080808 08000e6c 0002014a 4fcfdb69   .......l...JO..i
+0020: 00000000 fe3b0000 00000000 10111213   .....;..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 6ad74000 40019b16 c0a86403   E..Tj.@.@.....d.
+0010: 08080808 08002e11 0002014b 50cfdb69   ...........KP..i
+0020: 00000000 dd950000 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 6b0c4000 40019ae1 c0a86403   E..Tk.@.@.....d.
+0010: 08080808 08007dae 0002014c 51cfdb69   ......}....LQ..i
+0020: 00000000 8cf70000 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 6c714000 4001997c c0a86403   E..Tlq@.@..|..d.
+0010: 08080808 0800ae53 0002014d 52cfdb69   .......S...MR..i
+0020: 00000000 5a510100 00000000 10111213   ....ZQ..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 6df74000 400197f6 c0a86403   E..Tm.@.@.....d.
+0010: 08080808 0800f2f4 0002014e 53cfdb69   ...........NS..i
+0020: 00000000 14af0100 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 6e344000 400197b9 c0a86403   E..Tn4@.@.....d.
+0010: 08080808 08004a92 0002014f 54cfdb69   ......J....OT..i
+0020: 00000000 bb100200 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.836: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.836: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 6efd4000 400196f0 c0a86403   E..Tn.@.@.....d.
+0010: 08080808 08007c33 00020150 55cfdb69   ......|3...PU..i
+0020: 00000000 886e0200 00000000 10111213   .....n..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 71284000 400194c5 c0a86403   E..Tq(@.@.....d.
+0010: 08080808 080096d8 00020151 56cfdb69   ...........QV..i
+0020: 00000000 6cc80200 00000000 10111213   ....l...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 72024000 400193eb c0a86403   E..Tr.@.@.....d.
+0010: 08080808 0800dc79 00020152 57cfdb69   .......y...RW..i
+0020: 00000000 25260300 00000000 10111213   ....%&..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 73254000 400192c8 c0a86403   E..Ts%@.@.....d.
+0010: 08080808 08003317 00020153 58cfdb69   ......3....SX..i
+0020: 00000000 cd870300 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 737d4000 40019270 c0a86403   E..Ts}@.@..p..d.
+0010: 08080808 08005ebc 00020154 59cfdb69   ......^....TY..i
+0020: 00000000 a0e10300 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 766d4000 40018f80 c0a86403   E..Tvm@.@.....d.
+0010: 08080808 0800be59 00020155 5acfdb69   .......Y...UZ..i
+0020: 00000000 3f430400 00000000 10111213   ....?C..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 77bd4000 40018e30 c0a86403   E..Tw.@.@..0..d.
+0010: 08080808 0800fdfa 00020156 5bcfdb69   ...........V[..i
+0020: 00000000 fea00400 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 7a044000 40018be9 c0a86403   E..Tz.@.@.....d.
+0010: 08080808 080026a0 00020157 5ccfdb69   ......&....W\..i
+0020: 00000000 d4fa0400 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 7a884000 40018b65 c0a86403   E..Tz.@.@..e..d.
+0010: 08080808 08006541 00020158 5dcfdb69   ......eA...X]..i
+0020: 00000000 94580500 00000000 10111213   .....X..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 7ded4000 40018800 c0a86403   E..T}.@.@.....d.
+0010: 08080808 0800bbde 00020159 5ecfdb69   ...........Y^..i
+0020: 00000000 3cba0500 00000000 10111213   ....<...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 7eae4000 4001873f c0a86403   E..T~.@.@..?..d.
+0010: 08080808 0800f87f 0002015a 5fcfdb69   ...........Z_..i
+0020: 00000000 fe170600 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 80734000 4001857a c0a86403   E..T.s@.@..z..d.
+0010: 08080808 08001f25 0002015b 60cfdb69   .......%...[`..i
+0020: 00000000 d6710600 00000000 10111213   .....q..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 80de4000 4001850f c0a86403   E..T..@.@.....d.
+0010: 08080808 08004fc6 0002015c 61cfdb69   ......O....\a..i
+0020: 00000000 a4cf0600 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 81c04000 4001842d c0a86403   E..T..@.@..-..d.
+0010: 08080808 08004967 0002015d 62cfdb69   ......Ig...]b..i
+0020: 00000000 a92d0700 00000000 10111213   .....-..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 83b74000 40018236 c0a86403   E..T..@.@..6..d.
+0010: 08080808 0800eb04 0002015e 63cfdb69   ...........^c..i
+0020: 00000000 068f0700 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 845d4000 40018190 c0a86403   E..T.]@.@.....d.
+0010: 08080808 08002ba6 0002015f 64cfdb69   ......+...._d..i
+0020: 00000000 c4ec0700 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 85494000 400180a4 c0a86403   E..T.I@.@.....d.
+0010: 08080808 08007547 00020160 65cfdb69   ......uG...`e..i
+0020: 00000000 794a0800 00000000 10111213   ....yJ..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 88344000 40017db9 c0a86403   E..T.4@.@.}...d.
+0010: 08080808 0800b4e8 00020161 66cfdb69   ...........af..i
+0020: 00000000 38a80800 00000000 10111213   ....8...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 8a1a4000 40017bd3 c0a86403   E..T..@.@.{...d.
+0010: 08080808 0800eb89 00020162 67cfdb69   ...........bg..i
+0020: 00000000 00060900 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 8cca4000 40017923 c0a86403   E..T..@.@.y#..d.
+0010: 08080808 0800182f 00020163 68cfdb69   ......./...ch..i
+0020: 00000000 d25f0900 00000000 10111213   ....._..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 8dfd4000 400177f0 c0a86403   E..T..@.@.w...d.
+0010: 08080808 080022d0 00020164 69cfdb69   ......"....di..i
+0020: 00000000 c6bd0900 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 8fcd4000 40017620 c0a86403   E..T..@.@.v ..d.
+0010: 08080808 0800a36d 00020165 6acfdb69   .......m...ej..i
+0020: 00000000 441f0a00 00000000 10111213   ....D...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 90df4000 4001750e c0a86403   E..T..@.@.u...d.
+0010: 08080808 0800d212 00020166 6bcfdb69   ...........fk..i
+0020: 00000000 14790a00 00000000 10111213   .....y..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.837: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.837: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 91454000 400174a8 c0a86403   E..T.E@.@.t...d.
+0010: 08080808 080028b0 00020167 6ccfdb69   ......(....gl..i
+0020: 00000000 bcda0a00 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.838: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.838: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 936d4000 40017280 c0a86403   E..T.m@.@.r...d.
+0010: 08080808 08003d55 00020168 6dcfdb69   ......=U...hm..i
+0020: 00000000 a6340b00 00000000 10111213   .....4..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.838: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.838: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 93e14000 4001720c c0a86403   E..T..@.@.r...d.
+0010: 08080808 08007df6 00020169 6ecfdb69   ......}....in..i
+0020: 00000000 64920b00 00000000 10111213   ....d...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.838: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.838: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 96614000 40016f8c c0a86403   E..T.a@.@.o...d.
+0010: 08080808 0800a397 0002016a 6fcfdb69   ...........jo..i
+0020: 00000000 3df00b00 00000000 10111213   ....=...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.838: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.838: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 97274000 40016ec6 c0a86403   E..T.'@.@.n...d.
+0010: 08080808 0800ff38 0002016b 70cfdb69   .......8...kp..i
+0020: 00000000 e04d0c00 00000000 10111213   .....M..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.838: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.838: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 99d94000 40016c14 c0a86403   E..T..@.@.l...d.
+0010: 08080808 080035da 0002016c 71cfdb69   ......5....lq..i
+0020: 00000000 a8ab0c00 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.838: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.838: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 9c734000 4001697a c0a86403   E..T.s@.@.iz..d.
+0010: 08080808 0800a577 0002016d 72cfdb69   .......w...mr..i
+0020: 00000000 370d0d00 00000000 10111213   ....7...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.838: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.838: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 9ef24000 400166fb c0a86403   E..T..@.@.f...d.
+0010: 08080808 0800e218 0002016e 73cfdb69   ...........ns..i
+0020: 00000000 f96a0d00 00000000 10111213   .....j..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.838: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.838: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 9f774000 40016676 c0a86403   E..T.w@.@.fv..d.
+0010: 08080808 0800ffbd 0002016f 74cfdb69   ...........ot..i
+0020: 00000000 dac40d00 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.838: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.838: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 9ffb4000 400165f2 c0a86403   E..T..@.@.e...d.
+0010: 08080808 0800405f 00020170 75cfdb69   ......@_...pu..i
+0020: 00000000 98220e00 00000000 10111213   ....."..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.838: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.838: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 a3284000 400162c5 c0a86403   E..T.(@.@.b...d.
+0010: 08080808 08007f00 00020171 76cfdb69   ...........qv..i
+0020: 00000000 58800e00 00000000 10111213   ....X...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.838: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.838: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 a5854000 40016068 c0a86403   E..T..@.@.`h..d.
+0010: 08080808 0800d29d 00020172 77cfdb69   ...........rw..i
+0020: 00000000 03e20e00 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.838: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.838: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 a7fe4000 40015def c0a86403   E..T..@.@.]...d.
+0010: 08080808 0800183f 00020173 78cfdb69   .......?...sx..i
+0020: 00000000 bc3f0f00 00000000 10111213   .....?..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.838: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.838: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 abdc4000 40015a11 c0a86403   E..T..@.@.Z...d.
+0010: 08080808 0800a422 00020174 7acfdb69   ......."...tz..i
+0020: 00000000 3d5b0000 00000000 10111213   ....=[..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.838: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.838: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 ae574000 40015796 c0a86403   E..T.W@.@.W...d.
+0010: 08080808 0800c2c7 00020175 7bcfdb69   ...........u{..i
+0020: 00000000 1db50000 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.838: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.838: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 ae9c4000 40015751 c0a86403   E..T..@.@.WQ..d.
+0010: 08080808 0800ee68 00020176 7ccfdb69   .......h...v|..i
+0020: 00000000 f0120100 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.838: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.838: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 b0784000 40015575 c0a86403   E..T.x@.@.Uu..d.
+0010: 08080808 0800410a 00020177 7dcfdb69   ......A....w}..i
+0020: 00000000 9c700100 00000000 10111213   .....p..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.838: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.838: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 b3904000 4001525d c0a86403   E..T..@.@.R]..d.
+0010: 08080808 080085ab 00020178 7ecfdb69   ...........x~..i
+0020: 00000000 56ce0100 00000000 10111213   ....V...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.838: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.838: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 b55a4000 40015093 c0a86403   E..T.Z@.@.P...d.
+0010: 08080808 0800ce48 00020179 7fcfdb69   .......H...y...i
+0020: 00000000 0c300200 00000000 10111213   .....0..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.839: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.839: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 b94f4000 40014c9e c0a86403   E..T.O@.@.L...d.
+0010: 08080808 0800fbed 0002017a 80cfdb69   ...........z...i
+0020: 00000000 dd890200 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.839: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.839: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 bb8c4000 40014a61 c0a86403   E..T..@.@.Ja..d.
+0010: 08080808 0800418f 0002017b 81cfdb69   ......A....{...i
+0020: 00000000 96e70200 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.839: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.839: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 bc514000 4001499c c0a86403   E..T.Q@.@.I...d.
+0010: 08080808 08007d30 0002017c 82cfdb69   ......}0...|...i
+0020: 00000000 59450300 00000000 10111213   ....YE..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.839: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.839: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 bfff4000 400145ee c0a86403   E..T..@.@.E...d.
+0010: 08080808 0800add1 0002017d 83cfdb69   ...........}...i
+0020: 00000000 27a30300 00000000 10111213   ....'...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.839: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.839: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 c3c84000 40014225 c0a86403   E..T..@.@.B%..d.
+0010: 08080808 0800f572 0002017e 84cfdb69   .......r...~...i
+0020: 00000000 de000400 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.839: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.839: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 c7044000 40013ee9 c0a86403   E..T..@.@.>...d.
+0010: 08080808 08003c10 0002017f 85cfdb69   ......<........i
+0020: 00000000 96620400 00000000 10111213   .....b..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.839: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.839: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 ca104000 40013bdd c0a86403   E..T..@.@.;...d.
+0010: 08080808 080093b1 00020180 86cfdb69   ...............i
+0020: 00000000 3dc00400 00000000 10111213   ....=...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.839: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.839: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 ccc14000 4001392c c0a86403   E..T..@.@.9,..d.
+0010: 08080808 0800d252 00020181 87cfdb69   .......R.......i
+0020: 00000000 fd1d0500 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.839: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.839: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 d05c4000 40013591 c0a86403   E..T.\@.@.5...d.
+0010: 08080808 08000cf4 00020182 88cfdb69   ...............i
+0020: 00000000 c17b0500 00000000 10111213   .....{..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.839: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.839: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 d20f4000 400133de c0a86403   E..T..@.@.3...d.
+0010: 08080808 08003299 00020183 89cfdb69   ......2........i
+0020: 00000000 9ad50500 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.839: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.839: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 d3154000 400132d8 c0a86403   E..T..@.@.2...d.
+0010: 08080808 08005f3a 00020184 8acfdb69   ......_:.......i
+0020: 00000000 6c330600 00000000 10111213   ....l3..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.839: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.839: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 d3954000 40013258 c0a86403   E..T..@.@.2X..d.
+0010: 08080808 0800b0db 00020185 8bcfdb69   ...............i
+0020: 00000000 19910600 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.839: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.839: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 d5cc4000 40013021 c0a86403   E..T..@.@.0!..d.
+0010: 08080808 0800e97c 00020186 8ccfdb69   .......|.......i
+0020: 00000000 dfee0600 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.839: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.839: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 d9334000 40012cba c0a86403   E..T.3@.@.,...d.
+0010: 08080808 0800f81d 00020187 8dcfdb69   ...............i
+0020: 00000000 cf4c0700 00000000 10111213   .....L..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.839: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.839: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 dadc4000 40012b11 c0a86403   E..T..@.@.+...d.
+0010: 08080808 080041bf 00020188 8ecfdb69   ......A........i
+0020: 00000000 84aa0700 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.839: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.839: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 dcff4000 400128ee c0a86403   E..T..@.@.(...d.
+0010: 08080808 0800ad60 00020189 8fcfdb69   .......`.......i
+0020: 00000000 17080800 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.839: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.839: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 e0bf4000 4001252e c0a86403   E..T..@.@.%...d.
+0010: 08080808 0800ee01 0002018a 90cfdb69   ...............i
+0020: 00000000 d5650800 00000000 10111213   .....e..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.839: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.840: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 e2b74000 40012336 c0a86403   E..T..@.@.#6..d.
+0010: 08080808 0800439f 0002018b 91cfdb69   ......C........i
+0020: 00000000 7ec70800 00000000 10111213   ....~...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.840: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.840: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 e3bf4000 4001222e c0a86403   E..T..@.@."...d.
+0010: 08080808 08005644 0002018c 92cfdb69   ......VD.......i
+0020: 00000000 6a210900 00000000 10111213   ....j!..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.840: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.840: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 e5194000 400120d4 c0a86403   E..T..@.@. ...d.
+0010: 08080808 0800a6e5 0002018d 93cfdb69   ...............i
+0020: 00000000 187f0900 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.840: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.840: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 e6ee4000 40011eff c0a86403   E..T..@.@.....d.
+0010: 08080808 0800df86 0002018e 94cfdb69   ...............i
+0020: 00000000 dedc0900 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.840: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.840: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 e8e54000 40011d08 c0a86403   E..T..@.@.....d.
+0010: 08080808 08002c28 0002018f 95cfdb69   ......,(.......i
+0020: 00000000 903a0a00 00000000 10111213   .....:..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.840: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.840: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 ea714000 40011b7c c0a86403   E..T.q@.@..|..d.
+0010: 08080808 08005dc9 00020190 96cfdb69   ......]........i
+0020: 00000000 5d980a00 00000000 10111213   ....]...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.840: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.840: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 eb064000 40011ae7 c0a86403   E..T..@.@.....d.
+0010: 08080808 08009c6a 00020191 97cfdb69   .......j.......i
+0020: 00000000 1df60a00 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.840: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.840: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 ec794000 40011974 c0a86403   E..T.y@.@..t..d.
+0010: 08080808 0800c60b 00020192 98cfdb69   ...............i
+0020: 00000000 f2530b00 00000000 10111213   .....S..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.840: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.840: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 ed544000 40011899 c0a86403   E..T.T@.@.....d.
+0010: 08080808 08001ead 00020193 99cfdb69   ...............i
+0020: 00000000 98b10b00 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.840: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.840: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 ee2d4000 400117c0 c0a86403   E..T.-@.@.....d.
+0010: 08080808 08007b4a 00020194 9acfdb69   ......{J.......i
+0020: 00000000 3a130c00 00000000 10111213   ....:...........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.840: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.840: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 f0404000 400115ad c0a86403   E..T.@@.@.....d.
+0010: 08080808 080099ef 00020195 9bcfdb69   ...............i
+0020: 00000000 1a6d0c00 00000000 10111213   .....m..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.840: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.840: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 f3fb4000 400111f2 c0a86403   E..T..@.@.....d.
+0010: 08080808 0800de90 00020196 9ccfdb69   ...............i
+0020: 00000000 d4ca0c00 00000000 10111213   ................
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:00:14.840: [upf] ERROR: [DROP] Source IP-4 Spoofing APN:internet SrcIf:0 DstIf:1 TEID:0xbb39 (../src/upf/gtp-path.c:611)
+04/12 12:00:14.840: [upf] ERROR:        SRC:C0A86403, UE:C0A86404 (../src/upf/gtp-path.c:613)
+0000: 45000054 f6854000 40010f68 c0a86403   E..T..@.@..h..d.
+0010: 08080808 08001932 00020197 9dcfdb69   .......2.......i
+0020: 00000000 98280d00 00000000 10111213   .....(..........
+0030: 14151617 18191a1b 1c1d1e1f 20212223   ............ !"#
+0040: 24252627 28292a2b 2c2d2e2f 30313233   $%&'()*+,-./0123
+0050: 34353637                              4567
+04/12 12:05:09.614: [upf] INFO: [Removed] Number of UPF-sessions is now 1 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/13 21:45:42.092: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/13 21:45:42.092: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/13 21:45:42.232: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/13 21:45:42.232: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/13 21:45:42.233: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/13 21:45:42.233: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/13 21:45:42.234: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/13 21:45:44.412: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/13 21:51:28.097: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/13 21:51:28.097: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/13 21:51:28.097: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/13 21:51:28.097: [upf] INFO: UE F-SEID[UP:0xaf2 CP:0x426] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/13 21:51:28.097: [upf] INFO: UE F-SEID[UP:0xaf2 CP:0x426] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/13 21:51:28.203: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: d2f0270c a87c47aa ff020000 00000000   ..'..|G.........
+0020: 00000000 00000002 85009313 00000000   ................
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/13 22:10:11.757: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/13 22:10:11.757: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/13 22:10:11.898: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/13 22:10:11.898: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/13 22:10:11.898: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/13 22:10:11.899: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/13 22:10:11.900: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/13 22:10:14.159: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/13 22:45:21.732: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/13 22:45:21.732: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/13 22:45:21.873: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/13 22:45:21.873: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/13 22:45:21.873: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/13 22:45:21.874: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/13 22:45:21.874: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/13 22:45:24.132: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/15 21:22:56.099: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/15 21:22:56.099: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/15 21:22:56.157: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/15 21:22:56.157: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/15 21:22:56.158: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/15 21:22:56.158: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/15 21:22:56.199: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/15 21:22:58.661: [upf] WARNING: PFCP[RSP] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:262)
+04/15 21:25:52.615: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/15 21:25:52.615: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/15 21:25:52.615: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/15 21:25:52.615: [upf] INFO: UE F-SEID[UP:0x249 CP:0xe41] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/15 21:25:52.615: [upf] INFO: UE F-SEID[UP:0x249 CP:0xe41] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/15 21:25:52.722: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: c3cb2d31 fd69c721 ff020000 00000000   ..-1.i.!........
+0020: 00000000 00000002 8500c7ae 00000000   ................
+04/15 21:30:18.698: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+04/15 21:30:18.698: [upf] INFO: UE F-SEID[UP:0xedd CP:0x63d] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/15 21:30:18.698: [upf] INFO: UE F-SEID[UP:0xedd CP:0x63d] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/15 21:39:36.413: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/15 21:39:36.413: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/15 21:39:36.481: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/15 21:39:36.481: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/15 21:39:36.481: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/15 21:39:36.481: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/15 21:39:36.481: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/15 21:39:38.832: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/15 21:43:15.668: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/15 21:43:15.669: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/15 21:43:15.669: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/15 21:43:15.669: [upf] INFO: UE F-SEID[UP:0xa49 CP:0xc3f] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/15 21:43:15.669: [upf] INFO: UE F-SEID[UP:0xa49 CP:0xc3f] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/15 21:43:15.775: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 915613c7 d6848dcf ff020000 00000000   .V..............
+0020: 00000000 00000002 850073c5 00000000   ..........s.....
+04/15 21:50:59.851: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/15 22:03:22.236: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/15 22:03:22.236: [upf] INFO: UE F-SEID[UP:0xc89 CP:0x203] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/15 22:03:22.236: [upf] INFO: UE F-SEID[UP:0xc89 CP:0x203] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/15 22:03:22.334: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 149e7a85 93d0a021 ff020000 00000000   ..z....!........
+0020: 00000000 00000002 8500ba21 00000000   ...........!....
+04/15 22:05:25.357: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/17 17:24:22.256: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/17 17:24:22.256: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/17 17:24:22.317: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/17 17:24:22.317: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/17 17:24:22.317: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/17 17:24:22.317: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/17 17:24:22.317: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/17 17:24:24.815: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/17 17:37:20.683: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/17 17:37:20.683: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/17 17:37:20.737: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/17 17:37:20.737: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/17 17:37:20.737: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/17 17:37:20.737: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/17 17:37:20.737: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/17 17:37:23.148: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/17 17:41:58.998: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/17 17:41:58.998: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/17 17:41:58.998: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/17 17:41:58.998: [upf] INFO: UE F-SEID[UP:0x1a9 CP:0xdb7] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/17 17:41:58.998: [upf] INFO: UE F-SEID[UP:0x1a9 CP:0xdb7] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/17 17:41:59.108: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 91e438c7 fe46bca4 ff020000 00000000   ..8..F..........
+0020: 00000000 00000002 8500f79f 00000000   ................
+04/17 17:44:53.363: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/17 17:48:52.102: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/17 17:48:52.102: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/17 17:48:52.159: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/17 17:48:52.159: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/17 17:48:52.160: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/17 17:48:52.160: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/17 17:48:52.160: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/17 17:48:54.659: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/17 17:51:46.261: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/17 17:51:46.262: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/17 17:51:46.262: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/17 17:51:46.262: [upf] INFO: UE F-SEID[UP:0xcd5 CP:0x476] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/17 17:51:46.262: [upf] INFO: UE F-SEID[UP:0xcd5 CP:0x476] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/17 17:51:46.370: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 5866b903 365ca64a ff020000 00000000   Xf..6\.J........
+0020: 00000000 00000002 85008f26 00000000   ...........&....
+04/17 17:54:05.980: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/17 19:04:02.309: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/17 19:04:02.309: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/17 19:04:02.363: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/17 19:04:02.363: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/17 19:04:02.363: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/17 19:04:02.363: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/17 19:04:02.363: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/17 19:04:04.770: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/17 19:08:39.568: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/17 19:08:39.568: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/17 19:08:39.569: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/17 19:08:39.569: [upf] INFO: UE F-SEID[UP:0x3a9 CP:0x449] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/17 19:08:39.569: [upf] INFO: UE F-SEID[UP:0x3a9 CP:0x449] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/17 19:08:39.680: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: b4c495c8 52c271b0 ff020000 00000000   ....R.q.........
+0020: 00000000 00000002 85006e37 00000000   ..........n7....
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/17 22:08:23.657: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/17 22:08:23.657: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/17 22:08:23.712: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/17 22:08:23.712: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/17 22:08:23.712: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/17 22:08:23.713: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/17 22:08:23.713: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/17 22:08:26.149: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/17 22:10:05.860: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/17 22:10:05.860: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/17 22:10:05.860: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/17 22:10:05.860: [upf] INFO: UE F-SEID[UP:0x386 CP:0x487] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/17 22:10:05.860: [upf] INFO: UE F-SEID[UP:0x386 CP:0x487] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/17 22:10:05.969: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 36d40868 caafddf5 ff020000 00000000   6..h............
+0020: 00000000 00000002 85009555 00000000   ...........U....
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/17 22:18:18.987: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/17 22:18:18.987: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/17 22:18:19.042: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/17 22:18:19.042: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/17 22:18:19.043: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/17 22:18:19.043: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/17 22:18:19.043: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/17 22:18:21.435: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/17 22:19:55.471: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/17 22:19:55.471: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/17 22:19:55.471: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/17 22:19:55.471: [upf] INFO: UE F-SEID[UP:0x6 CP:0x8a7] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/17 22:19:55.471: [upf] INFO: UE F-SEID[UP:0x6 CP:0x8a7] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/17 22:19:55.581: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 26490ff8 87595106 ff020000 00000000   &I...YQ.........
+0020: 00000000 00000002 85006e96 00000000   ..........n.....
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/17 22:38:34.796: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/17 22:38:34.796: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/17 22:38:34.865: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/17 22:38:34.865: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/17 22:38:34.865: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/17 22:38:34.865: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/17 22:38:34.887: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/17 22:38:37.368: [upf] WARNING: PFCP[RSP] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:262)
+04/17 22:40:07.391: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/17 22:40:07.392: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/17 22:40:07.392: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/17 22:40:07.392: [upf] INFO: UE F-SEID[UP:0xc52 CP:0xf3b] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/17 22:40:07.392: [upf] INFO: UE F-SEID[UP:0xc52 CP:0xf3b] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/17 22:40:07.503: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 34f92896 d88324d2 ff020000 00000000   4.(...$.........
+0020: 00000000 00000002 85002252 00000000   .........."R....
+04/17 23:06:39.984: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/17 23:18:57.070: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/17 23:18:57.070: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/17 23:18:57.132: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/17 23:18:57.132: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/17 23:18:57.132: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/17 23:18:57.132: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/17 23:18:57.133: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/17 23:18:59.543: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/17 23:21:39.312: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/17 23:21:39.313: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/17 23:21:39.313: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/17 23:21:39.313: [upf] INFO: UE F-SEID[UP:0xb08 CP:0x5dd] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/17 23:21:39.313: [upf] INFO: UE F-SEID[UP:0xb08 CP:0x5dd] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/17 23:21:39.418: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: d7afee1d 05f4a4e5 ff020000 00000000   ................
+0020: 00000000 00000002 85000c90 00000000   ................
+04/17 23:24:18.884: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/17 23:30:11.616: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/17 23:30:11.616: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/17 23:30:11.670: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/17 23:30:11.670: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/17 23:30:11.670: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/17 23:30:11.670: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/17 23:30:11.671: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/17 23:30:14.108: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/17 23:34:14.834: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/17 23:34:14.835: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/17 23:34:14.835: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/17 23:34:14.835: [upf] INFO: UE F-SEID[UP:0x9fd CP:0xac1] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/17 23:34:14.835: [upf] INFO: UE F-SEID[UP:0x9fd CP:0xac1] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/17 23:34:14.944: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: fc55276e b0fe0932 ff020000 00000000   .U'n...2........
+0020: 00000000 00000002 85009f42 00000000   ...........B....
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/17 23:52:23.388: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/17 23:52:23.388: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/17 23:52:23.438: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/17 23:52:23.438: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/17 23:52:23.439: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/17 23:52:23.439: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/17 23:52:23.439: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/17 23:52:25.866: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/18 07:46:11.818: [core] ERROR: epoll failed (4:Interrupted system call) (../lib/core/ogs-epoll.c:221)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/18 07:51:06.080: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/18 07:51:06.080: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/18 07:51:06.133: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/18 07:51:06.133: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/18 07:51:06.133: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/18 07:51:06.133: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/18 07:51:06.133: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/18 07:51:08.583: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/18 07:57:48.457: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/18 07:57:48.457: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/18 07:57:48.512: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/18 07:57:48.512: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/18 07:57:48.512: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/18 07:57:48.512: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/18 07:57:48.512: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/18 07:57:50.915: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/18 08:10:16.276: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/18 08:10:16.277: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/18 08:10:16.277: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/18 08:10:16.277: [upf] INFO: UE F-SEID[UP:0x23d CP:0x78a] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/18 08:10:16.277: [upf] INFO: UE F-SEID[UP:0x23d CP:0x78a] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/18 08:10:16.382: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 25ff858c 4294aabd ff020000 00000000   %...B...........
+0020: 00000000 00000002 8500e459 00000000   ...........Y....
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/18 13:31:56.090: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/18 13:31:56.090: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/18 13:31:56.219: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/18 13:31:56.219: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/18 13:31:56.219: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/18 13:31:56.219: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/18 13:31:56.220: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/18 13:31:58.705: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/18 13:43:10.804: [core] ERROR: epoll failed (4:Interrupted system call) (../lib/core/ogs-epoll.c:221)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/19 08:55:34.130: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/19 08:55:34.130: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/19 08:55:34.270: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/19 08:55:34.270: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/19 08:55:34.271: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/19 08:55:34.271: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/19 08:55:34.392: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/19 08:55:36.775: [upf] WARNING: PFCP[RSP] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:262)
+04/19 08:58:42.407: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/19 08:58:42.407: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/19 08:58:42.407: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/19 08:58:42.407: [upf] INFO: UE F-SEID[UP:0xaf4 CP:0x372] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/19 08:58:42.407: [upf] INFO: UE F-SEID[UP:0xaf4 CP:0x372] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/19 08:58:42.509: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: f7306a4a 6c18a765 ff020000 00000000   .0jJl..e........
+0020: 00000000 00000002 8500083e 00000000   ...........>....
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/22 20:52:29.746: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/22 20:52:29.746: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/22 20:52:29.799: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/22 20:52:29.799: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/22 20:52:29.800: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/22 20:52:29.800: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/22 20:52:29.800: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/22 20:52:32.160: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/22 20:54:43.768: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/22 20:54:43.768: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/22 20:54:43.768: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/22 20:54:43.768: [upf] INFO: UE F-SEID[UP:0x1d9 CP:0x95e] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/22 20:54:43.768: [upf] INFO: UE F-SEID[UP:0x1d9 CP:0x95e] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/22 20:54:43.875: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: dc20f71a bc8dda44 ff020000 00000000   . .....D........
+0020: 00000000 00000002 85001329 00000000   ...........)....
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/22 21:44:15.525: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/22 21:44:15.525: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/22 21:44:15.583: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/22 21:44:15.583: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/22 21:44:15.583: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/22 21:44:15.584: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/22 21:44:15.584: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/22 21:44:17.892: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/22 21:57:03.755: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/22 21:57:03.755: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/22 21:57:03.822: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/22 21:57:03.822: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/22 21:57:03.823: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/22 21:57:03.823: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/22 21:57:03.823: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/22 21:57:06.234: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/22 22:06:04.957: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/22 22:06:04.958: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/22 22:06:04.958: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/22 22:06:04.958: [upf] INFO: UE F-SEID[UP:0x34b CP:0x1fb] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/22 22:06:04.958: [upf] INFO: UE F-SEID[UP:0x34b CP:0x1fb] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/22 22:06:05.063: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: dcbdf355 0b6d3812 ff020000 00000000   ...U.m8.........
+0020: 00000000 00000002 850069a4 00000000   ..........i.....
+04/22 22:09:04.883: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/22 22:10:11.688: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/22 22:10:11.688: [upf] INFO: UE F-SEID[UP:0x302 CP:0x7f1] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/22 22:10:11.688: [upf] INFO: UE F-SEID[UP:0x302 CP:0x7f1] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/22 22:10:11.785: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: c4cc7915 6080ed7a ff020000 00000000   ..y.`..z........
+0020: 00000000 00000002 8500f159 00000000   ...........Y....
+04/22 22:10:42.766: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/22 22:10:52.020: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/22 22:10:52.025: [upf] INFO: UE F-SEID[UP:0xf12 CP:0xec9] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+04/22 22:10:52.025: [upf] INFO: UE F-SEID[UP:0xf12 CP:0xec9] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+04/22 22:10:52.143: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 67aef58a 3fe95023 ff020000 00000000   g...?.P#........
+0020: 00000000 00000002 85008ff1 00000000   ................
+04/22 22:13:03.095: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/24 18:18:40.041: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/24 18:18:40.041: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/24 18:18:40.139: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/24 18:18:40.139: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/24 18:18:40.139: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/24 18:18:40.140: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/24 18:18:40.140: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/24 18:18:42.554: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/24 18:25:43.994: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/24 18:25:43.994: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/24 18:25:43.994: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/24 18:25:43.994: [upf] INFO: UE F-SEID[UP:0xd7e CP:0x41a] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/24 18:25:43.994: [upf] INFO: UE F-SEID[UP:0xd7e CP:0x41a] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/24 18:25:44.103: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 7209a594 2847ee29 ff020000 00000000   r...(G.)........
+0020: 00000000 00000002 85004f28 00000000   ..........O(....
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/25 00:06:10.732: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/25 00:06:10.732: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/25 00:06:10.813: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/25 00:06:10.813: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/25 00:06:10.813: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/25 00:06:10.814: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/25 00:06:10.814: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/25 00:06:13.251: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/25 00:06:38.563: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/25 00:06:38.563: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/25 00:06:38.563: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/25 00:06:38.563: [upf] INFO: UE F-SEID[UP:0xdfb CP:0x6f5] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/25 00:06:38.563: [upf] INFO: UE F-SEID[UP:0xdfb CP:0x6f5] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/25 00:06:38.673: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: f0df38b4 17f58bae ff020000 00000000   ..8.............
+0020: 00000000 00000002 8500afff 00000000   ................
+04/25 00:07:16.049: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/30 21:17:31.477: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/30 21:17:31.477: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/30 21:17:31.578: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/30 21:17:31.578: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/30 21:17:31.578: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/30 21:17:31.579: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/30 21:17:31.579: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/30 21:17:34.080: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/30 21:26:58.441: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/30 21:26:58.442: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/30 21:26:58.442: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/30 21:26:58.442: [upf] INFO: UE F-SEID[UP:0xc52 CP:0x7a6] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/30 21:26:58.442: [upf] INFO: UE F-SEID[UP:0xc52 CP:0x7a6] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/30 21:26:58.551: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 1edec8b7 7ff59107 ff020000 00000000   ................
+0020: 00000000 00000002 850084a4 00000000   ................
+04/30 21:31:03.254: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/30 21:31:03.299: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/30 21:31:03.299: [upf] INFO: UE F-SEID[UP:0xb2a CP:0xdf6] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/30 21:31:03.299: [upf] INFO: UE F-SEID[UP:0xb2a CP:0xdf6] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/30 21:31:03.408: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 22cc3d86 f202cb1e ff020000 00000000   ".=.............
+0020: 00000000 00000002 85005fc3 00000000   .........._.....
+04/30 21:31:34.066: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/30 21:31:42.301: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/30 21:31:42.301: [upf] INFO: UE F-SEID[UP:0xb31 CP:0x127] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+04/30 21:31:42.301: [upf] INFO: UE F-SEID[UP:0xb31 CP:0x127] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+04/30 21:31:42.423: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: ecb31595 d605e159 ff020000 00000000   .......Y........
+0020: 00000000 00000002 8500c38e 00000000   ................
+04/30 21:36:37.116: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+04/30 21:49:53.608: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+04/30 21:49:53.608: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+04/30 21:49:53.681: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+04/30 21:49:53.681: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+04/30 21:49:53.681: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+04/30 21:49:53.682: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+04/30 21:49:53.682: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+04/30 21:49:56.177: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+04/30 21:50:17.733: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/30 21:50:17.733: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+04/30 21:50:17.733: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+04/30 21:50:17.733: [upf] INFO: UE F-SEID[UP:0xd5b CP:0x389] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/30 21:50:17.733: [upf] INFO: UE F-SEID[UP:0xd5b CP:0x389] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+04/30 21:50:17.841: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 12d18929 871efe4f ff020000 00000000   ...)...O........
+0020: 00000000 00000002 85005bce 00000000   ..........[.....
+04/30 21:53:22.078: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/30 21:54:29.681: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/30 21:54:29.681: [upf] INFO: UE F-SEID[UP:0x47a CP:0xd0f] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/30 21:54:29.681: [upf] INFO: UE F-SEID[UP:0x47a CP:0xd0f] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+04/30 21:54:29.791: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: c4a7e2b3 324037b2 ff020000 00000000   ....2@7.........
+0020: 00000000 00000002 85006be9 00000000   ..........k.....
+04/30 21:55:47.507: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/30 21:56:29.073: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/30 21:56:29.073: [upf] INFO: UE F-SEID[UP:0xef7 CP:0xeb0] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+04/30 21:56:29.073: [upf] INFO: UE F-SEID[UP:0xef7 CP:0xeb0] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+04/30 21:56:29.177: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 8538d475 1d286479 ff020000 00000000   .8.u.(dy........
+0020: 00000000 00000002 8500a1e7 00000000   ................
+04/30 21:57:02.306: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+04/30 21:57:10.534: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+04/30 21:57:10.535: [upf] INFO: UE F-SEID[UP:0xf6 CP:0xce4] APN[internet] PDN-Type[1] IPv4[192.168.100.5] IPv6[] (../src/upf/context.c:498)
+04/30 21:57:10.535: [upf] INFO: UE F-SEID[UP:0xf6 CP:0xce4] APN[internet] PDN-Type[1] IPv4[192.168.100.5] IPv6[] (../src/upf/context.c:498)
+04/30 21:57:10.672: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: ea094989 8d3b6e12 ff020000 00000000   ..I..;n.........
+0020: 00000000 00000002 85004e56 00000000   ..........NV....
+Open5GS daemon v2.7.6-131-g782a97e
+
+05/27 23:02:28.023: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+05/27 23:02:28.023: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+05/27 23:02:28.070: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+05/27 23:02:28.070: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+05/27 23:02:28.071: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+05/27 23:02:28.071: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+05/27 23:02:28.126: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+05/27 23:02:30.574: [upf] WARNING: PFCP[RSP] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:262)
+05/27 23:03:03.816: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+05/27 23:03:03.816: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+05/27 23:03:03.816: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+05/27 23:03:03.816: [upf] INFO: UE F-SEID[UP:0x7eb CP:0x4f3] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+05/27 23:03:03.816: [upf] INFO: UE F-SEID[UP:0x7eb CP:0x4f3] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+05/27 23:03:03.921: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 8ca81e65 5f211301 ff020000 00000000   ...e_!..........
+0020: 00000000 00000002 85006007 00000000   ..........`.....
+05/27 23:04:05.759: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+05/28 18:56:01.516: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+05/28 18:56:01.516: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+05/28 18:56:01.566: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+05/28 18:56:01.566: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+05/28 18:56:01.566: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+05/28 18:56:01.566: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+05/28 18:56:01.644: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+05/28 18:56:04.069: [upf] WARNING: PFCP[RSP] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:262)
+Open5GS daemon v2.7.6-131-g782a97e
+
+05/30 19:48:39.469: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+05/30 19:48:39.469: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+05/30 19:48:39.518: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+05/30 19:48:39.518: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+05/30 19:48:39.518: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+05/30 19:48:39.519: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+05/30 19:48:39.608: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+05/30 19:48:42.021: [upf] WARNING: PFCP[RSP] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:262)
+05/30 19:53:46.157: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+05/30 19:53:46.157: [gtp] INFO: gtp_connect() [172.22.0.6]:2152 (../lib/gtp/path.c:60)
+05/30 19:53:46.157: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+05/30 19:53:46.157: [upf] INFO: UE F-SEID[UP:0xd25 CP:0xcd3] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+05/30 19:53:46.157: [upf] INFO: UE F-SEID[UP:0xd25 CP:0xcd3] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+05/30 19:53:46.260: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: a1914f9e eab7e685 ff020000 00000000   ..O.............
+0020: 00000000 00000002 8500bac9 00000000   ................
+05/30 20:00:00.756: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
