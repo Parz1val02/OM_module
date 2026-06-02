@@ -15,12 +15,27 @@
       }
     ]
   },
-  "description": "E3 — Flujo completo 5G SA: Registration → PDU Session → Tráfico → Release → Deregistration. Línea base 5G.",
+  "description": "E3 — Flujo completo 5G SA: Registration → PDU Session → Tráfico → Release → Deregistration.",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
   "id": null,
-  "links": [],
+  "links": [
+    {
+      "icon": "dashboard",
+      "targetBlank": false,
+      "title": "5G Core",
+      "type": "link",
+      "url": "/d/5g-core"
+    },
+    {
+      "icon": "dashboard",
+      "targetBlank": false,
+      "title": "E4 — Multi-gNB Slicing",
+      "type": "link",
+      "url": "/d/e4-multi-gnb-slicing"
+    }
+  ],
   "panels": [
     {
       "collapsed": false,
@@ -45,11 +60,11 @@
       },
       "id": 1,
       "options": {
-        "content": "## E3 — Flujo completo base (5G)\n**Stack:** Open5GS 5GC + srsRAN Project (ZMQ) · **Duración:** 10–15 min\n\n### Flujo (5 pasos)\n1. **Registration** — Initial Registration Request → Accept\n2. **PDU Session** — PDU Session Establishment\n3. **Tráfico activo** — ping en loop\n4. **PDU Release** — PDU Session Release\n5. **Deregistration** — UE-initiated\n\n### Prerrequisitos\n- `docker compose -f 5G_core.yaml up -d`\n- `docker compose -f services.yaml up -d`\n- IMSI 895 provisionado (K, OPc, SST=1, DNN=internet)",
+        "content": "## E3 — Flujo completo base (5G SA)\n**Stack:** Open5GS 5GC + srsRAN Project (ZMQ) · **Duración:** 10–15 min\n\n### Flujo (5 pasos)\n1. **Registration** — Initial Registration Request → Accept\n2. **PDU Session** — PDU Session Establishment (N1/N2/N4)\n3. **Tráfico activo** — ping en loop\n4. **PDU Release** — PDU Session Release\n5. **Deregistration** — UE-initiated Deregistration\n\n**Prerrequisito:** `make core-5g-up && make services-up && make e3`\n\n**IMSI:** 001011234567895 · **DNN:** internet · **Slice:** SST=1 SD=000001",
         "mode": "markdown"
       },
       "pluginVersion": "11.3.0",
-      "title": "📖 Descripción del escenario",
+      "title": "📖 Descripción",
       "type": "text"
     },
     {
@@ -62,7 +77,7 @@
       },
       "id": 2,
       "options": {
-        "content": "## ✅ Condiciones de éxito\n\n- `amf_ue_count` sube a **1** en registration → vuelve a **0** en deregistration\n- `fivegs_upffunction_upf_sessionnbr` sube en PDU Setup → baja en Release\n- `fivegs_ep_n3_gtp_indatapktn3upf` activo durante tráfico\n- `fivegs_amffunction_rm_reginitreq` == `fivegs_amffunction_rm_reginitsucc`\n- `fivegs_smffunction_sm_pdusessioncreationreq` == `fivegs_smffunction_sm_pdusessioncreationsucc`\n- Trazas en Tempo muestran los **5 pasos** completos",
+        "content": "## ✅ Condiciones de éxito\n\n| Métrica | Tipo | Valor esperado |\n|---------|------|---------------|\n| `ran_ue` | gauge | 0→**1**→0 |\n| `upf_sessionnbr` | gauge | 0→**1**→0 |\n| `upf_qosflows` | gauge | **1** con tráfico |\n| `smf_sessionnbr` | gauge | 0→**1**→0 |\n| `pcf_pa_sessionnbr` | gauge | 0→**1**→0 |\n| `rm_reginitsucc` | counter | ↑1 |\n| `policysmassoreq` | counter | ↑1 |\n\n⚠️ Mayoría de métricas 5G son **counters** — solo suben.\n⚠️ `succ` siempre duplica a `req` en PDU Session — normal.\n⚠️ `ep_n3_gtp_*` siempre 0 en ZMQ.",
         "mode": "markdown"
       },
       "pluginVersion": "11.3.0",
@@ -79,11 +94,11 @@
       },
       "id": 3,
       "options": {
-        "content": "## 🔄 E3 vs E1 — Equivalencia\n\n| Aspecto | E1 (4G) | E3 (5G) |\n|---------|---------|--------|\n| NF central | MME | AMF |\n| Procedimiento | EPS Attach | 5G Registration |\n| Sesión datos | EPS Bearer | PDU Session |\n| Interfaz RAN | S1-MME | N2 (NGAP) |\n| Plano usuario | GTPv1 S1-U | GTPv1 N3 |\n| Interfaz core | S5/S8 (GTPv2) | N4 (PFCP) |\n\n**RAN:** srsRAN Project (no UERANSIM) — comportamiento más predecible ante pérdida de N2.",
+        "content": "## 🔍 Diferencias clave vs E1 (4G)\n\n**Arquitectura:**\n- MME → **AMF** (registro y movilidad)\n- HSS → **UDM/AUSF** (suscripción y auth)\n- PCRF → **PCF** (política vía SBI, no Diameter)\n- SGW/PGW → **SMF + UPF** separados\n\n**Señalización:**\n- S1AP → **NGAP** (N2)\n- GTPv2 → **PFCP** (N4) + NGAP\n- Diameter → **HTTP/2 SBI**\n\n**Lo que se observa en E3 que no existe en E1:**\n- PCF crea asociación de política SM\n- SMF coordina con UPF vía PFCP\n- NRF/SCP visibles en trazas SBI",
         "mode": "markdown"
       },
       "pluginVersion": "11.3.0",
-      "title": "🔄 E3 vs E1 — Diferencias clave",
+      "title": "🔍 E3 vs E1 — diferencias 5G/4G",
       "type": "text"
     },
     {
@@ -104,9 +119,26 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "Gauge confiable de estado actual en 5G. Sube a 1 en registration y baja a 0 en deregistration. amf_session y amf_ue_count NO bajan porque Open5GS mantiene el contexto — usar ran_ue como indicador de estado actual.",
       "fieldConfig": {
         "defaults": {
-          "mappings": [],
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "orange",
+                  "index": 0,
+                  "text": "Sin UEs"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "1 UE registrado"
+                }
+              },
+              "type": "value"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -139,7 +171,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
@@ -152,12 +186,11 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "amf_ue_count",
-          "legendFormat": "",
+          "expr": "ran_ue",
           "refId": "A"
         }
       ],
-      "title": "UEs en AMF",
+      "title": "UEs en RAN (estado actual)",
       "type": "stat"
     },
     {
@@ -165,9 +198,9 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "PDU Sessions activas en el UPF (gauge). Sube en PDU Session Establishment y baja en Release.",
       "fieldConfig": {
         "defaults": {
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -200,7 +233,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
@@ -213,12 +248,11 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_upffunction_upf_sessionnbr",
-          "legendFormat": "",
+          "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf\"}",
           "refId": "A"
         }
       ],
-      "title": "PDU Sessions (UPF)",
+      "title": "Sesiones UPF",
       "type": "stat"
     },
     {
@@ -226,9 +260,9 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "QoS Flows activos. En modo ZMQ es el indicador correcto de tráfico activo — fivegs_ep_n3_gtp_* siempre es 0 en ZMQ. Un QoS Flow activo confirma que el plano de usuario está establecido.",
       "fieldConfig": {
         "defaults": {
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -261,7 +295,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
@@ -274,12 +310,11 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_smffunction_sm_sessionnbr",
-          "legendFormat": "",
+          "expr": "fivegs_upffunction_upf_qosflows{container=\"upf\"}",
           "refId": "A"
         }
       ],
-      "title": "Sessions activas (SMF)",
+      "title": "QoS Flows UPF",
       "type": "stat"
     },
     {
@@ -287,9 +322,9 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "PDU Sessions activas en el SMF (gauge). Debe coincidir con upf_sessionnbr — si difieren indica inconsistencia control/usuario.",
       "fieldConfig": {
         "defaults": {
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -322,7 +357,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
@@ -335,12 +372,11 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "pfcp_sessions_active",
-          "legendFormat": "",
+          "expr": "fivegs_smffunction_sm_sessionnbr{container=\"smf\"}",
           "refId": "A"
         }
       ],
-      "title": "PFCP Sessions",
+      "title": "Sesiones SMF",
       "type": "stat"
     },
     {
@@ -348,9 +384,9 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "Sesiones de política activas en el PCF (gauge). En 5G el PCF participa en cada PDU Session — a diferencia del PCRF en 4G, la interfaz es SBI (HTTP/2) en lugar de Diameter Gx. pa_sessionnbr = 1 confirma que el PCF está coordinando la política de QoS.",
       "fieldConfig": {
         "defaults": {
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -383,7 +419,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
@@ -396,12 +434,11 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "amf_gnb_count",
-          "legendFormat": "",
+          "expr": "fivegs_pcffunction_pa_sessionnbr",
           "refId": "A"
         }
       ],
-      "title": "gNBs registrados",
+      "title": "PCF Sessions",
       "type": "stat"
     },
     {
@@ -409,18 +446,18 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "gNBs registrados en el AMF. Debe ser 1 durante E3.",
       "fieldConfig": {
         "defaults": {
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "orange",
                 "value": null
               },
               {
-                "color": "red",
+                "color": "green",
                 "value": 1
               }
             ]
@@ -444,7 +481,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
@@ -457,12 +496,11 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_amffunction_amf_authreject",
-          "legendFormat": "",
+          "expr": "amf_gnb_count",
           "refId": "A"
         }
       ],
-      "title": "Auth Rejects (esperado: 0)",
+      "title": "gNBs Registrados",
       "type": "stat"
     },
     {
@@ -475,7 +513,7 @@
       },
       "id": 102,
       "panels": [],
-      "title": "📈 Señalización 5G SA — flujo completo",
+      "title": "📈 Ciclo completo — Registration y PDU Session",
       "type": "row"
     },
     {
@@ -483,7 +521,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "amf_ue_count y upf_sessionnbr deben subir y bajar juntos. pfcp_sessions_active refleja el túnel SMF↔UPF activo.",
+      "description": "Gauges de estado actual. La secuencia esperada: ran_ue sube primero (conexión RAN/N2), luego upf_sessionnbr y smf_sessionnbr juntos (PDU Session Establishment), luego upf_qosflows (QoS Flow activo). En deregistration la secuencia es inversa.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -499,7 +537,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "UEs en AMF"
+              "options": "UEs en RAN"
             },
             "properties": [
               {
@@ -514,7 +552,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "PDU Sessions (UPF)"
+              "options": "PDU Sessions UPF"
             },
             "properties": [
               {
@@ -529,7 +567,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "gNBs registrados"
+              "options": "QoS Flows UPF"
             },
             "properties": [
               {
@@ -552,7 +590,9 @@
       "id": 20,
       "options": {
         "legend": {
-          "calcs": ["last"],
+          "calcs": [
+            "last"
+          ],
           "displayMode": "table",
           "placement": "right",
           "showLegend": true
@@ -568,8 +608,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "amf_ue_count",
-          "legendFormat": "UEs en AMF",
+          "expr": "ran_ue",
+          "legendFormat": "UEs en RAN",
           "refId": "A"
         },
         {
@@ -577,8 +617,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_upffunction_upf_sessionnbr",
-          "legendFormat": "PDU Sessions (UPF)",
+          "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf\"}",
+          "legendFormat": "PDU Sessions UPF",
           "refId": "B"
         },
         {
@@ -586,30 +626,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_smffunction_sm_sessionnbr",
-          "legendFormat": "Sessions SMF",
+          "expr": "fivegs_upffunction_upf_qosflows{container=\"upf\"}",
+          "legendFormat": "QoS Flows UPF",
           "refId": "C"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "pfcp_sessions_active",
-          "legendFormat": "PFCP Sessions",
-          "refId": "D"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "amf_gnb_count",
-          "legendFormat": "gNBs registrados",
-          "refId": "E"
         }
       ],
-      "title": "📈 Ciclo completo — Registration y PDU Sessions",
+      "title": "Ciclo completo — Gauges de estado actual",
       "type": "timeseries"
     },
     {
@@ -617,7 +639,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "En E3 normal Req y Succ deben ser iguales. Cualquier brecha indica fallo.",
+      "description": "Counters acumulativos de Registration y PDU Session. En E3 (flujo limpio): req == succ, fail == 0. PDU Succ siempre duplica a PDU Req — comportamiento normal de Open5GS (emite dos eventos succ por sesión). Estos counters NO bajan con deregistration.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -625,7 +647,7 @@
           },
           "custom": {
             "drawStyle": "line",
-            "fillOpacity": 8,
+            "fillOpacity": 5,
             "lineWidth": 2
           }
         },
@@ -640,7 +662,9 @@
       "id": 21,
       "options": {
         "legend": {
-          "calcs": ["last"],
+          "calcs": [
+            "last"
+          ],
           "displayMode": "table",
           "placement": "right",
           "showLegend": true
@@ -674,7 +698,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_smffunction_sm_pdusessioncreationreq",
+          "expr": "fivegs_smffunction_sm_pdusessioncreationreq{container=\"smf\"}",
           "legendFormat": "PDU Req",
           "refId": "C"
         },
@@ -683,12 +707,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_smffunction_sm_pdusessioncreationsucc",
-          "legendFormat": "PDU Succ",
+          "expr": "fivegs_smffunction_sm_pdusessioncreationsucc{container=\"smf\"}",
+          "legendFormat": "PDU Succ (×2 normal)",
           "refId": "D"
         }
       ],
-      "title": "Registration + PDU — Req vs Succ",
+      "title": "Registration + PDU — Counters acumulativos",
       "type": "timeseries"
     },
     {
@@ -701,7 +725,7 @@
       },
       "id": 103,
       "panels": [],
-      "title": "🔌 Interfaces internas — N4 (PFCP) y N3 (GTP)",
+      "title": "🔌 PCF + N4 — Política y plano de usuario",
       "type": "row"
     },
     {
@@ -709,7 +733,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "N4 es el equivalente 5G de S5/S8. SMF y UPF deben mostrar el mismo número de N4 Estab.",
+      "description": "Política en el PCF. En 5G hay dos tipos: AM Policy (Access and Mobility) — creada al registrar el UE — y SM Policy (Session Management) — creada al establecer la PDU Session. La presencia de ambas en E3 confirma que el PCF está activo en el ciclo completo. Esto no existe en 4G donde el PCRF solo maneja política Gx en el establecimiento de bearer.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -717,14 +741,14 @@
           },
           "custom": {
             "drawStyle": "line",
-            "fillOpacity": 8,
+            "fillOpacity": 5,
             "lineWidth": 2
           }
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 8,
         "w": 12,
         "x": 0,
         "y": 22
@@ -732,7 +756,9 @@
       "id": 30,
       "options": {
         "legend": {
-          "calcs": ["last"],
+          "calcs": [
+            "last"
+          ],
           "displayMode": "table",
           "placement": "right",
           "showLegend": true
@@ -748,8 +774,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_smffunction_sm_n4sessionestabreq",
-          "legendFormat": "SMF N4 Estab",
+          "expr": "fivegs_pcffunction_pa_policysmassoreq",
+          "legendFormat": "PCF SM Policy Req",
           "refId": "A"
         },
         {
@@ -757,8 +783,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_upffunction_sm_n4sessionestabreq",
-          "legendFormat": "UPF N4 Estab",
+          "expr": "fivegs_pcffunction_pa_policysmassosucc",
+          "legendFormat": "PCF SM Policy Succ",
           "refId": "B"
         },
         {
@@ -766,8 +792,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_smffunction_sm_n4sessionreport",
-          "legendFormat": "N4 Reports (SMF)",
+          "expr": "fivegs_pcffunction_pa_policyamassoreq",
+          "legendFormat": "PCF AM Policy Req",
           "refId": "C"
         },
         {
@@ -775,12 +801,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_upffunction_sm_n4sessionreportsucc",
-          "legendFormat": "N4 Reports (UPF)",
+          "expr": "fivegs_pcffunction_pa_sessionnbr",
+          "legendFormat": "PCF Sessions activas",
           "refId": "D"
         }
       ],
-      "title": "Interfaz N4 — SMF↔UPF (PFCP)",
+      "title": "PCF — Política SM y AM (diferencia clave vs 4G)",
       "type": "timeseries"
     },
     {
@@ -788,7 +814,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Tráfico N3 GTP. NOTA: en modo ZMQ los contadores GTP N3 permanecen en 0 — usar fivegs_upffunction_upf_qosflows como indicador de plano de usuario activo.",
+      "description": "Interfaz N4 PFCP entre SMF y UPF. pfcp_peers_active = 1 confirma la asociación PFCP establecida entre SMF y UPF — condición previa para que las PDU Sessions funcionen. fivegs_upffunction_sm_n4sessionestabreq confirma que el UPF recibió y procesó la solicitud de sesión del plano de usuario. En E3 ambos deben ser 1.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -796,14 +822,14 @@
           },
           "custom": {
             "drawStyle": "line",
-            "fillOpacity": 8,
+            "fillOpacity": 5,
             "lineWidth": 2
           }
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 8,
         "w": 12,
         "x": 12,
         "y": 22
@@ -811,7 +837,9 @@
       "id": 31,
       "options": {
         "legend": {
-          "calcs": ["last"],
+          "calcs": [
+            "last"
+          ],
           "displayMode": "table",
           "placement": "right",
           "showLegend": true
@@ -827,8 +855,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(fivegs_ep_n3_gtp_indatapktn3upf[1m])",
-          "legendFormat": "N3 Uplink (gNB→UPF)",
+          "expr": "fivegs_upffunction_sm_n4sessionestabreq{container=\"upf\"}",
+          "legendFormat": "N4 Estab Req (UPF)",
           "refId": "A"
         },
         {
@@ -836,8 +864,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(fivegs_ep_n3_gtp_outdatapktn3upf[1m])",
-          "legendFormat": "N3 Downlink (UPF→gNB)",
+          "expr": "pfcp_peers_active{container=\"smf\"}",
+          "legendFormat": "PFCP Peers (SMF)",
           "refId": "B"
         },
         {
@@ -845,12 +873,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_upffunction_upf_qosflows",
-          "legendFormat": "QoS Flows activos (UPF)",
+          "expr": "pfcp_peers_active{container=\"upf\"}",
+          "legendFormat": "PFCP Peers (UPF)",
           "refId": "C"
         }
       ],
-      "title": "N3 GTP — Tráfico de datos activo",
+      "title": "N4 — Session Establishment + PFCP Peers",
       "type": "timeseries"
     },
     {
@@ -859,11 +887,11 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 29
+        "y": 30
       },
       "id": 104,
       "panels": [],
-      "title": "📜 Logs — señalización por NF",
+      "title": "📜 Logs por NF",
       "type": "row"
     },
     {
@@ -871,6 +899,7 @@
         "type": "loki",
         "uid": "P8E80F9AEF21F6940"
       },
+      "description": "Logs del AMF — equivalente al MME en 4G pero con arquitectura SBI. Secuencia esperada: 'gNB-N2 accepted' → 'Registration request' → 'Registration complete' → 'PDU Session' → 'Deregistration request'. Los WARNING indican fallos en escenarios posteriores (E4).",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -879,7 +908,7 @@
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 30
+        "y": 31
       },
       "id": 40,
       "options": {
@@ -901,7 +930,7 @@
           "refId": "A"
         }
       ],
-      "title": "📜 Logs AMF — NGAP y NAS5G",
+      "title": "📜 AMF — Registration y NAS5G",
       "type": "logs"
     },
     {
@@ -909,6 +938,7 @@
         "type": "loki",
         "uid": "P8E80F9AEF21F6940"
       },
+      "description": "Logs del SMF — gestión de PDU Session y coordinación N4 con el UPF. Se observa el establecimiento de la sesión PFCP, la asignación de dirección IP al UE (DNN internet, 192.168.100.x) y la liberación en PDU Release.",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -917,7 +947,7 @@
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 30
+        "y": 31
       },
       "id": 41,
       "options": {
@@ -939,7 +969,7 @@
           "refId": "A"
         }
       ],
-      "title": "📜 Logs SMF — PDU Session y N4",
+      "title": "📜 SMF — PDU Session y N4",
       "type": "logs"
     },
     {
@@ -947,6 +977,7 @@
         "type": "loki",
         "uid": "P8E80F9AEF21F6940"
       },
+      "description": "Logs del UPF — plano de usuario. Loguea poco en condiciones normales. Los eventos relevantes son el establecimiento del tunnel PFCP y la activación del QoS Flow. Si hay ERRORs aquí en E3, indica problemas en la interfaz N4 o N3.",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -955,7 +986,7 @@
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 30
+        "y": 31
       },
       "id": 42,
       "options": {
@@ -973,79 +1004,23 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "{nf=~\"ausf|udm\"} |= ``",
+          "expr": "{nf=\"upf\"} |= ``",
           "refId": "A"
         }
       ],
-      "title": "📜 Logs AUSF/UDM — autenticación",
+      "title": "📜 UPF — plano de usuario",
       "type": "logs"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "Número de QoS flows activos en el UPF. Más confiable que los contadores GTP N3 en modo ZMQ para confirmar que el plano de usuario está establecido.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "orange",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 20,
-        "y": 8
-      },
-      "id": 105,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "fivegs_upffunction_upf_qosflows",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "QoS Flows activos (UPF)",
-      "type": "stat"
     }
   ],
   "preload": false,
   "refresh": "5s",
   "schemaVersion": 40,
-  "tags": ["5g", "escenario", "e3", "5gc"],
+  "tags": [
+    "5g",
+    "escenario",
+    "e3",
+    "5gc"
+  ],
   "templating": {
     "list": []
   },
@@ -1054,7 +1029,12 @@
     "to": "now"
   },
   "timepicker": {
-    "refresh_intervals": ["5s", "10s", "30s", "1m"]
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m"
+    ]
   },
   "timezone": "browser",
   "title": "E3 — Flujo completo base (5G)",

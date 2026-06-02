@@ -20,7 +20,15 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
   "id": null,
-  "links": [],
+  "links": [
+    {
+      "icon": "dashboard",
+      "targetBlank": false,
+      "title": "4G Core",
+      "type": "link",
+      "url": "/d/4g-core"
+    }
+  ],
   "panels": [
     {
       "collapsed": false,
@@ -45,11 +53,11 @@
       },
       "id": 1,
       "options": {
-        "content": "## E1 — Flujo completo base (4G)\n**Stack:** Open5GS EPC + srsRAN 4G (ZMQ) · **Duración:** 10–15 min\n\n### Flujo (5 pasos)\n1. **Attach** — EPS Attach Request → Accept\n2. **Bearer Setup** — Default Bearer Establishment\n3. **Tráfico activo** — ping en loop\n4. **Bearer Release** — liberación del bearer\n5. **Detach** — UE-initiated Detach\n\n### Prerrequisitos\n- `docker compose -f 4G_core.yaml up -d`\n- `docker compose -f services.yaml up -d`\n- IMSI 895 provisionado (Ki, OPc válidos)",
+        "content": "## E1 — Flujo completo base (4G)\n**Stack:** Open5GS EPC + srsRAN 4G (ZMQ) · **Duración:** 10–15 min\n\n### Flujo (5 pasos)\n1. **Attach** — EPS Attach Request → Attach Accept\n2. **Bearer Setup** — Default EPS Bearer Establishment\n3. **Tráfico activo** — ping en loop sobre el UE\n4. **Bearer Release** — liberación del bearer\n5. **Detach** — UE-initiated EPS Detach\n\n**Prerrequisito:** `make core-4g-up && make services-up && make e1`\n\n**IMSI:** 001011234567895 · **APN:** internet",
         "mode": "markdown"
       },
       "pluginVersion": "11.3.0",
-      "title": "📖 Descripción del escenario",
+      "title": "📖 Descripción",
       "type": "text"
     },
     {
@@ -62,7 +70,7 @@
       },
       "id": 2,
       "options": {
-        "content": "## ✅ Condiciones de éxito\n\n- `mme_ue_count` sube a **1** en attach → vuelve a **0** en detach\n- `bearers_active` incrementa en bearer setup → decrementa en release\n- `gtp2_sessions_active` activo durante tráfico\n- Trazas en Tempo muestran los **5 pasos** completos\n- `gn_rx_createpdpcontextreq` incrementa en 1\n- `s5c_rx_createsessionreq` incrementa en 1",
+        "content": "## ✅ Condiciones de éxito\n\n| Métrica | Valor esperado | Momento |\n|---------|---------------|----------|\n| `mme_session` | 0→**1**→0 | attach / detach |\n| `bearers_active` | 0→**1**→0 | bearer setup / release |\n| `gtp2_sessions_active` | 0→**1**→0 | bearer setup / release |\n| `s5c_rx_createsession` | ↑1 | attach |\n| `s6a_rx_air` | ↑1 | autenticación |\n| `s6a_rx_ulr` | ↑1 | actualización ubicación |\n| `gx_rx_ccr` | ↑2 | attach (+1) + detach (+1) |\n\n⚠️ `mme_ue_count` NO baja a 0 en detach — comportamiento normal.\n⚠️ Contadores Gn siempre 0 en modo ZMQ.",
         "mode": "markdown"
       },
       "pluginVersion": "11.3.0",
@@ -79,11 +87,11 @@
       },
       "id": 3,
       "options": {
-        "content": "## 🔍 Qué observar por paso\n\n**Paso 1 — Attach:**\n↑ `mme_ue_count` 0→1\n\n**Paso 2 — Bearer Setup:**\n↑ `bearers_active` 0→1\n↑ `gtp2_sessions_active` 0→1\n↑ `gtp1_pdpctxs_active` 0→1\n\n**Paso 3 — Tráfico activo:**\nTodos estables en 1\n`gn_rx_createpdpcontextreq` y `s5c_rx_createsessionreq` incrementan\n\n**Paso 4 — Bearer Release:**\n↓ `bearers_active` 1→0\n\n**Paso 5 — Detach:**\n↓ `mme_ue_count` 1→0\n↓ `gtp2_sessions_active` 1→0",
+        "content": "## 🔍 Qué observar en cada paso\n\n**Paso 1 — Attach:**\n↑ `mme_session` 0→1\n↑ `enb_ue` 0→1\nLogs MME: `Attach request` → `Attach complete`\n\n**Paso 2 — Bearer Setup:**\n↑ `bearers_active` 0→1\n↑ `gtp2_sessions_active` 0→1\n↑ `s5c_rx_createsession` → 1\n\n**Paso 3 — Tráfico activo:**\nTodos los gauges estables en 1\n\n**Paso 4 — Bearer Release:**\n↓ `bearers_active` 1→0\n↑ `gx_rx_ccr` → 2 (CCR-T)\n\n**Paso 5 — Detach:**\n↓ `mme_session` 1→0\n↓ `enb_ue` 1→0\nLogs MME: `Detach request` → `UE Context Release`",
         "mode": "markdown"
       },
       "pluginVersion": "11.3.0",
-      "title": "🔍 Qué observar por paso",
+      "title": "🔍 Qué observar",
       "type": "text"
     },
     {
@@ -104,6 +112,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "Indicador primario de UE activo. Gauge confiable — sube a 1 cuando el UE completa el attach y vuelve a 0 en el detach. Es más fiable que mme_ue_count para saber si hay un UE activo en este momento.",
       "fieldConfig": {
         "defaults": {
           "mappings": [
@@ -155,7 +164,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
@@ -168,12 +179,11 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "mme_ue_count",
-          "legendFormat": "",
+          "expr": "mme_session",
           "refId": "A"
         }
       ],
-      "title": "UEs en MME",
+      "title": "Sesiones MME",
       "type": "stat"
     },
     {
@@ -181,9 +191,9 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "Bearers EPS activos. Sube en bearer setup y baja en bearer release. Junto con mme_session, confirma el ciclo completo de attach.",
       "fieldConfig": {
         "defaults": {
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -216,7 +226,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
@@ -230,11 +242,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "bearers_active",
-          "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Bearers activos",
+      "title": "Bearers Activos",
       "type": "stat"
     },
     {
@@ -242,9 +253,9 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "Sesiones GTPv2 activas en S5/S8 (SGW↔PGW). Confirma el plano de usuario establecido entre los dos gateways. Debe subir y bajar junto con bearers_active.",
       "fieldConfig": {
         "defaults": {
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -277,7 +288,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
@@ -290,23 +303,21 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "smf_4g_pdu_session_count",
-          "legendFormat": "",
+          "expr": "gtp2_sessions_active",
           "refId": "A"
         }
       ],
-      "title": "PDU Sessions 4G (SMF)",
-      "type": "stat",
-      "description": "Sesiones PDU activas en el SMF. Debe ser 1 cuando el UE está attached y con tráfico activo."
+      "title": "GTPv2 Sessions",
+      "type": "stat"
     },
     {
       "datasource": {
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "eNBs registrados en el MME. Debe ser 1 durante todo E1. Si baja a 0 con la RAN activa, hay un problema de conectividad S1.",
       "fieldConfig": {
         "defaults": {
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -339,7 +350,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
@@ -352,12 +365,11 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "gtp1_pdpctxs_active",
-          "legendFormat": "",
+          "expr": "mme_enb_count",
           "refId": "A"
         }
       ],
-      "title": "PDP Contexts (SGW)",
+      "title": "eNBs Registrados",
       "type": "stat"
     },
     {
@@ -365,9 +377,9 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "PDU sessions 4G según la REST API del SMF. Complementa mme_session — en condiciones normales deben coincidir.",
       "fieldConfig": {
         "defaults": {
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -400,7 +412,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
@@ -413,12 +427,11 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "mme_enb_count",
-          "legendFormat": "",
+          "expr": "smf_4g_pdu_session_count",
           "refId": "A"
         }
       ],
-      "title": "eNBs registrados",
+      "title": "PDU Sessions SMF",
       "type": "stat"
     },
     {
@@ -426,9 +439,9 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "UEs conectados al eNB en la interfaz S1. Es el gauge más reactivo — sube inmediatamente cuando el UE se conecta al eNB, antes de que el MME procese el attach.",
       "fieldConfig": {
         "defaults": {
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -461,7 +474,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
@@ -474,12 +489,11 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "mme_session",
-          "legendFormat": "",
+          "expr": "enb_ue",
           "refId": "A"
         }
       ],
-      "title": "Sesiones MME",
+      "title": "UEs en eNB (RAN)",
       "type": "stat"
     },
     {
@@ -492,7 +506,7 @@
       },
       "id": 102,
       "panels": [],
-      "title": "📈 Señalización LTE — flujo completo",
+      "title": "📈 Señalización LTE — ciclo completo",
       "type": "row"
     },
     {
@@ -500,7 +514,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Los 4 contadores deben subir juntos en attach/bearer setup y bajar juntos en release/detach. Cualquier desincronización indica sesión stale.",
+      "description": "Los 4 gauges deben subir juntos en attach/bearer setup y bajar juntos en release/detach. La secuencia temporal esperada: enb_ue sube primero (conexión RAN), luego mme_session (NAS attach), luego bearers_active y gtp2_sessions_active juntos (bearer setup). En detach la secuencia es inversa.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -516,7 +530,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "UEs en MME"
+              "options": "Sesiones MME"
             },
             "properties": [
               {
@@ -546,7 +560,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "GTP2 Sessions (PGW)"
+              "options": "GTPv2 Sessions"
             },
             "properties": [
               {
@@ -561,7 +575,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "PDP Contexts (SGW)"
+              "options": "eNBs registrados"
             },
             "properties": [
               {
@@ -584,7 +598,9 @@
       "id": 20,
       "options": {
         "legend": {
-          "calcs": ["last"],
+          "calcs": [
+            "last"
+          ],
           "displayMode": "table",
           "placement": "right",
           "showLegend": true
@@ -600,8 +616,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "mme_ue_count",
-          "legendFormat": "UEs en MME",
+          "expr": "mme_session",
+          "legendFormat": "Sesiones MME",
           "refId": "A"
         },
         {
@@ -619,7 +635,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "gtp2_sessions_active",
-          "legendFormat": "GTP2 Sessions (PGW)",
+          "legendFormat": "GTPv2 Sessions",
           "refId": "C"
         },
         {
@@ -627,12 +643,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "gtp1_pdpctxs_active",
-          "legendFormat": "PDP Contexts (SGW)",
+          "expr": "mme_enb_count",
+          "legendFormat": "eNBs registrados",
           "refId": "D"
         }
       ],
-      "title": "📈 Ciclo completo — UEs, Bearers y Sesiones",
+      "title": "Ciclo completo — Sesiones, Bearers y eNBs",
       "type": "timeseries"
     },
     {
@@ -640,7 +656,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "mme_ue_count y mme_session deben subir juntos en attach y bajar en detach. bearers_active confirma que el plano de usuario está establecido. smf_4g_pdu_session_count confirma la sesión en el SMF.",
+      "description": "Contadores acumulativos de señalización. S5 Create/Delete deben incrementar en 1 durante el escenario — confirma que la sesión GTPv2 se estableció correctamente en S5/S8. Gx CCR incrementa en 2 por ciclo: CCR-I (Initial) en attach y CCR-T (Termination) en detach — valor final = 2 × número de ciclos.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -648,7 +664,7 @@
           },
           "custom": {
             "drawStyle": "line",
-            "fillOpacity": 8,
+            "fillOpacity": 5,
             "lineWidth": 2
           }
         },
@@ -663,7 +679,9 @@
       "id": 21,
       "options": {
         "legend": {
-          "calcs": ["last"],
+          "calcs": [
+            "last"
+          ],
           "displayMode": "table",
           "placement": "right",
           "showLegend": true
@@ -679,8 +697,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "mme_ue_count",
-          "legendFormat": "UEs MME",
+          "expr": "s5c_rx_createsession",
+          "legendFormat": "S5 Create Session",
           "refId": "A"
         },
         {
@@ -688,8 +706,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "mme_session",
-          "legendFormat": "Sesiones MME",
+          "expr": "s5c_rx_deletesession",
+          "legendFormat": "S5 Delete Session",
           "refId": "B"
         },
         {
@@ -697,8 +715,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "bearers_active",
-          "legendFormat": "Bearers activos",
+          "expr": "gx_rx_ccr",
+          "legendFormat": "Gx CCR",
           "refId": "C"
         },
         {
@@ -706,12 +724,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "smf_4g_pdu_session_count",
-          "legendFormat": "PDU Sessions 4G",
+          "expr": "gx_tx_cca",
+          "legendFormat": "Gx CCA",
           "refId": "D"
         }
       ],
-      "title": "Req/Succ Registration + Bearer",
+      "title": "S5/S8 + Gx — Señalización acumulativa",
       "type": "timeseries"
     },
     {
@@ -724,392 +742,7 @@
       },
       "id": 103,
       "panels": [],
-      "title": "🔌 Interfaces internas — Gn, S5/S8 y S1",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "Un attach exitoso produce exactamente 1 Create. Un detach produce 1 Delete.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "drawStyle": "line",
-            "fillOpacity": 8,
-            "lineWidth": 2
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 0,
-        "y": 22
-      },
-      "id": 30,
-      "options": {
-        "legend": {
-          "calcs": ["last"],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi"
-        }
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "gn_rx_createpdpcontextreq",
-          "legendFormat": "Create PDP",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "gn_rx_deletepdpcontextreq",
-          "legendFormat": "Delete PDP",
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "gn_rx_parse_failed",
-          "legendFormat": "Parse Fail",
-          "refId": "C"
-        }
-      ],
-      "title": "Interfaz Gn — MME↔SGW (GTPv1C)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "Equivalente 4G de N4 en 5G. 1 Create y 1 Delete por ciclo attach/detach limpio.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "drawStyle": "line",
-            "fillOpacity": 8,
-            "lineWidth": 2
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 8,
-        "y": 22
-      },
-      "id": 31,
-      "options": {
-        "legend": {
-          "calcs": ["last"],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi"
-        }
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "s5c_rx_createsessionreq",
-          "legendFormat": "Create Session",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "s5c_rx_deletesessionreq",
-          "legendFormat": "Delete Session",
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "gtp_node_s5c_rx_parse_failed",
-          "legendFormat": "Parse Fail",
-          "refId": "C"
-        }
-      ],
-      "title": "Interfaz S5/S8 — SGW↔PGW (GTPv2C)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "mme_enb_count sube cuando el eNB completa el S1 Setup. mme_ue_count sube cuando el UE completa el attach. Ambas métricas provienen directamente del MME y son confiables.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "drawStyle": "line",
-            "fillOpacity": 8,
-            "lineWidth": 2
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 16,
-        "y": 22
-      },
-      "id": 32,
-      "options": {
-        "legend": {
-          "calcs": ["last"],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi"
-        }
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "mme_ue_count",
-          "legendFormat": "UEs en MME",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "mme_enb_count",
-          "legendFormat": "eNBs en MME",
-          "refId": "B"
-        }
-      ],
-      "title": "S1 Setup — eNBs y UEs en MME",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 29
-      },
-      "id": 104,
-      "panels": [],
-      "title": "📡 Plano de usuario — tráfico de datos",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "Tráfico activo durante el ping. UPF debe mostrar tráfico bidireccional durante el paso 3.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "drawStyle": "line",
-            "fillOpacity": 8,
-            "lineWidth": 2
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 12,
-        "x": 0,
-        "y": 30
-      },
-      "id": 40,
-      "options": {
-        "legend": {
-          "calcs": ["last"],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi"
-        }
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "rate(container_network_rx_bytes_total{nf=\"upf\"}[1m])",
-          "legendFormat": "UPF RX",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "rate(container_network_tx_bytes_total{nf=\"upf\"}[1m])",
-          "legendFormat": "UPF TX",
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "rate(container_network_rx_bytes_total{nf=\"mme\"}[1m])",
-          "legendFormat": "MME RX",
-          "refId": "C"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "rate(container_network_tx_bytes_total{nf=\"mme\"}[1m])",
-          "legendFormat": "MME TX",
-          "refId": "D"
-        }
-      ],
-      "title": "Throughput de red — UPF y MME",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "Rate de mensajes GTP. Durante el attach se ven spikes de Create en Gn y S5 simultáneos.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "drawStyle": "line",
-            "fillOpacity": 8,
-            "lineWidth": 2
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 12,
-        "x": 12,
-        "y": 30
-      },
-      "id": 41,
-      "options": {
-        "legend": {
-          "calcs": ["last"],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi"
-        }
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "rate(gn_rx_createpdpcontextreq[1m])",
-          "legendFormat": "Gn Create/s",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "rate(gn_rx_deletepdpcontextreq[1m])",
-          "legendFormat": "Gn Delete/s",
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "rate(s5c_rx_createsessionreq[1m])",
-          "legendFormat": "S5 Create/s",
-          "refId": "C"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "rate(s5c_rx_deletesessionreq[1m])",
-          "legendFormat": "S5 Delete/s",
-          "refId": "D"
-        }
-      ],
-      "title": "GTP sessions — Create/Delete por interfaz",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 37
-      },
-      "id": 105,
-      "panels": [],
-      "title": "📜 Logs — señalización por NF",
+      "title": "📜 Logs por NF",
       "type": "row"
     },
     {
@@ -1117,17 +750,18 @@
         "type": "loki",
         "uid": "P8E80F9AEF21F6940"
       },
+      "description": "Logs del MME — el NF más informativo en E1. Secuencia esperada: 'eNB-S1 accepted' → 'InitialUEMessage' → 'Attach request' → 'Identity response' → 'Attach complete' → 'Detach request' → 'Removed Session' → 'UE Context Release'. Cada línea confirma un paso del procedimiento EPS Attach.",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
       },
       "gridPos": {
         "h": 7,
-        "w": 8,
+        "w": 12,
         "x": 0,
-        "y": 38
+        "y": 22
       },
-      "id": 50,
+      "id": 40,
       "options": {
         "dedupStrategy": "none",
         "enableLogDetails": true,
@@ -1147,7 +781,7 @@
           "refId": "A"
         }
       ],
-      "title": "📜 Logs MME — S1AP y NAS",
+      "title": "📜 MME — procedimientos NAS y S1AP",
       "type": "logs"
     },
     {
@@ -1155,17 +789,18 @@
         "type": "loki",
         "uid": "P8E80F9AEF21F6940"
       },
+      "description": "Logs del HSS — autenticación Diameter S6a. En E1 se ven exactamente un AIR/AIA (vectores de autenticación) y un ULR/ULA (perfil del suscriptor), correspondientes al único attach del escenario. Si no aparece nada, verificar que el IMSI está provisionado en MongoDB.",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
       },
       "gridPos": {
         "h": 7,
-        "w": 8,
-        "x": 8,
-        "y": 38
+        "w": 12,
+        "x": 12,
+        "y": 22
       },
-      "id": 51,
+      "id": 41,
       "options": {
         "dedupStrategy": "none",
         "enableLogDetails": true,
@@ -1185,7 +820,7 @@
           "refId": "A"
         }
       ],
-      "title": "📜 Logs HSS — autenticación",
+      "title": "📜 HSS — autenticación Diameter S6a",
       "type": "logs"
     },
     {
@@ -1193,17 +828,18 @@
         "type": "loki",
         "uid": "P8E80F9AEF21F6940"
       },
+      "description": "Logs del SMF y SGWC — gestión de sesiones GTP. En E1 se observa 'Added Number of MME-Sessions is now 1' en attach y 'Removed Session: UE IMSI:[...] APN:[internet]' en detach. Estos logs confirman que el plano de control de la sesión S5/S8 se estableció correctamente.",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
       },
       "gridPos": {
         "h": 7,
-        "w": 8,
-        "x": 16,
-        "y": 38
+        "w": 12,
+        "x": 0,
+        "y": 29
       },
-      "id": 52,
+      "id": 42,
       "options": {
         "dedupStrategy": "none",
         "enableLogDetails": true,
@@ -1219,18 +855,62 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "{nf=~\"smf|upf\"} |= ``",
+          "expr": "{nf=~\"smf|sgwc\"} |= ``",
           "refId": "A"
         }
       ],
-      "title": "📜 Logs SMF/UPF — sesión GTP",
+      "title": "📜 SMF/SGWC — gestión de sesiones (control)",
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "P8E80F9AEF21F6940"
+      },
+      "description": "Logs del UPF y SGWU — plano de usuario. En condiciones normales de E1 estos NFs generan pocos logs porque su función principal es forwarding. Los eventos más relevantes son el establecimiento del túnel GTP-U. Si aparecen ERRORs aquí, indican problemas de conectividad en el plano de datos.",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 29
+      },
+      "id": 43,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "showLabels": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "{nf=~\"upf|sgwu\"} |= ``",
+          "refId": "A"
+        }
+      ],
+      "title": "📜 UPF/SGWU — plano de usuario",
       "type": "logs"
     }
   ],
   "preload": false,
   "refresh": "5s",
   "schemaVersion": 40,
-  "tags": ["4g", "escenario", "e1", "epc"],
+  "tags": [
+    "4g",
+    "escenario",
+    "e1",
+    "epc"
+  ],
   "templating": {
     "list": []
   },
@@ -1239,7 +919,12 @@
     "to": "now"
   },
   "timepicker": {
-    "refresh_intervals": ["5s", "10s", "30s", "1m"]
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m"
+    ]
   },
   "timezone": "browser",
   "title": "E1 — Flujo completo base (4G)",

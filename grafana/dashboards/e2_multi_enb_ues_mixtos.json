@@ -15,7 +15,7 @@
       }
     ]
   },
-  "description": "E2 — 4 eNBs con UEs mixtos: 1 válido + 3 inválidos (bad_ki, bad_imsi, bad_apn). Fallos de configuración 4G.",
+  "description": "E2 — 4 eNBs con UEs mixtos: 1 válido + 3 inválidos (bad_ki, bad_imsi, bad_apn).",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
@@ -31,9 +31,9 @@
     {
       "icon": "dashboard",
       "targetBlank": false,
-      "title": "Live Traces 4G",
+      "title": "4G Core",
       "type": "link",
-      "url": "/d/4g-live-traces"
+      "url": "/d/4g-core"
     }
   ],
   "panels": [
@@ -60,11 +60,11 @@
       },
       "id": 1,
       "options": {
-        "content": "## E2 — Multi-eNB con UEs mixtos (4G)\n**Stack:** Open5GS EPC + srsRAN 4G (ZMQ) · **Duración:** 15–20 min\n\n### Fases\n1. **Preparación** — levantar 4 eNBs secuencialmente\n2. **UE válido** — attach exitoso en eNB1\n3. **UEs inválidos** — inyectar fallos de configuración secuencialmente\n4. **Observación** — telemetría y diferenciación de rechazos\n\n### Prerrequisitos en MongoDB\n- IMSI 895 → UE válido (eNB1)\n- IMSI 902 → bad_ki (Ki incorrecto en .conf)\n- IMSI 903 → bad_apn (APN inválido en .conf)\n- IMSI 901 → **NO insertado** (bad_imsi)",
+        "content": "## E2 — Multi-eNB con UEs mixtos (4G)\n**Stack:** Open5GS EPC + srsRAN 4G (ZMQ) · **Duración:** 15–20 min\n\n### Fases\n1. Levantar 4 eNBs secuencialmente\n2. Attach del UE válido (eNB1) — línea base\n3. Inyectar UE bad_ki — fallo de autenticación\n4. Inyectar UE bad_imsi — IMSI desconocido\n5. Inyectar UE bad_apn — APN inválido\n6. Observar diferencias en telemetría\n\n**Prerrequisito:** `make core-4g-up && make services-up && make e2`",
         "mode": "markdown"
       },
       "pluginVersion": "11.3.0",
-      "title": "📖 Descripción del escenario",
+      "title": "📖 Descripción",
       "type": "text"
     },
     {
@@ -77,7 +77,7 @@
       },
       "id": 2,
       "options": {
-        "content": "## 🗺️ Topología E2\n\n```\n       Open5GS EPC\n       ┌─────────┐\n       │   MME   │\n       │   SGW   │\n       │   PGW   │\n       │   HSS   │\n       └────┬────┘\n            │ S1-MME\n     ┌──────┴──────┐\n     │             │\n  eNB1 (ZMQ)   eNB2 (ZMQ)\n  ┌──────┐     ┌──────┐\n  │UE válido│  │UE válido│\n  │UE bad_ki│  └──────┘\n  │UE no-reg│\n  └──────┘\n```\n\n**Nota ZMQ multi-UE:** Sockets REQ/REPLY de ZMQ solo permiten 1 conexión por par de puertos. Por eso se usan pares eNB+UE independientes.",
+        "content": "## 🗺️ Topología de UEs\n\n| UE | IMSI | eNB | Resultado esperado |\n|----|------|-----|-------------------|\n| válido | 895 | eNB1 | ✅ Attach completo |\n| bad_ki | 902 | eNB2 | ❌ MAC failure en MME |\n| bad_imsi | 901 | eNB3 | ❌ UNKNOWN_USER en HSS |\n| bad_apn | 903 | eNB4 | ⚠️ Attach OK / ESM reject |\n\n**Estado final esperado:**\n- `mme_enb_count` == **4**\n- `mme_session` == **1** (solo UE válido)\n- Spike momentáneo a 2 cuando UE inválido llega al MME antes de ser rechazado",
         "mode": "markdown"
       },
       "pluginVersion": "11.3.0",
@@ -94,11 +94,11 @@
       },
       "id": 3,
       "options": {
-        "content": "## ✅ Condiciones de éxito\n\n**Estado final esperado:**\n- `mme_enb_count` == **4** (4 eNBs registrados todo el tiempo)\n- `mme_ue_count` == **1** (solo el UE válido cuenta)\n- Rechazos visibles en métricas y logs\n\n**Por tipo de UE inválido:**\n| UE | IMSI | Falla en | Causa |\n|----|------|----------|-------|\n| bad_ki | 902 | HSS | MAC failure — Ki incorrecto |\n| bad_imsi | 901 | HSS | IMSI unknown — no en MongoDB |\n| bad_apn | 903 | SMF/ESM | Attach OK, PDN rechazado |\n\n**✅ Validado (2026-04-13)**",
+        "content": "## 🔍 Señales clave por tipo de fallo\n\n**bad_ki (IMSI 902):**\nLogs MME: `Authentication failure(MAC failure)`\nEl HSS entrega vectores OK — el fallo ocurre en el MME al comparar RES vs XRES. `s6a_rx_air_error` permanece en 0.\n\n**bad_imsi (IMSI 901):**\nLogs MME: `Failure in transaction; no context restoration`\nEl HSS responde Diameter 5001 (UNKNOWN_USER). El MME no llega a enviar ULR.\n\n**bad_apn (IMSI 903):**\nLogs MME: `Invalid APN[invalid_apn]` (nivel ERROR en ESM)\nEl attach completa la autenticación — el rechazo ocurre en la capa ESM al validar el APN. `mme_session` puede subir brevemente a 2 y luego volver a 1.",
         "mode": "markdown"
       },
       "pluginVersion": "11.3.0",
-      "title": "✅ Condiciones de éxito",
+      "title": "🔍 Señales clave",
       "type": "text"
     },
     {
@@ -111,7 +111,7 @@
       },
       "id": 101,
       "panels": [],
-      "title": "🟢 Estado actual del testbed",
+      "title": "🟢 Estado actual",
       "type": "row"
     },
     {
@@ -119,6 +119,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "Escala de 0 a 4 conforme se levantan los eNBs. Observar la progresión: cada eNB que se levanta incrementa este contador. Al llegar a 4, el testbed está listo para inyectar los UEs inválidos.",
       "fieldConfig": {
         "defaults": {
           "mappings": [
@@ -127,17 +128,12 @@
                 "0": {
                   "color": "red",
                   "index": 0,
-                  "text": "🔴 Sin eNBs"
+                  "text": "Sin eNBs"
                 },
-                "1": {
-                  "color": "yellow",
-                  "index": 1,
-                  "text": "🟡 1 eNB"
-                },
-                "2": {
+                "4": {
                   "color": "green",
-                  "index": 2,
-                  "text": "🟢 2 eNBs ✓"
+                  "index": 1,
+                  "text": "🟢 4 eNBs ✓"
                 }
               },
               "type": "value"
@@ -151,23 +147,20 @@
                 "value": null
               },
               {
-                "color": "yellow",
-                "value": 1
-              },
-              {
                 "color": "green",
-                "value": 2
+                "value": 4
               }
             ]
           },
           "color": {
             "mode": "thresholds"
           }
-        }
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 5,
-        "w": 5,
+        "w": 4,
         "x": 0,
         "y": 9
       },
@@ -178,7 +171,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
@@ -192,11 +187,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "mme_enb_count",
-          "legendFormat": "eNBs",
           "refId": "A"
         }
       ],
-      "title": "eNBs registrados (esperado: 2)",
+      "title": "eNBs Registrados (esperado: 4)",
       "type": "stat"
     },
     {
@@ -204,6 +198,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "Debe mantenerse en 1 (solo el UE válido). Puede subir momentáneamente a 2 cuando un UE inválido llega al MME — este spike es didáctico porque demuestra que el MME procesa el intento de attach antes de rechazarlo.",
       "fieldConfig": {
         "defaults": {
           "mappings": [
@@ -215,14 +210,9 @@
                   "text": "Sin UEs"
                 },
                 "1": {
-                  "color": "yellow",
-                  "index": 1,
-                  "text": "1 UE"
-                },
-                "2": {
                   "color": "green",
-                  "index": 2,
-                  "text": "2 UEs válidos ✓"
+                  "index": 1,
+                  "text": "1 UE válido ✓"
                 }
               },
               "type": "value"
@@ -236,24 +226,21 @@
                 "value": null
               },
               {
-                "color": "yellow",
-                "value": 1
-              },
-              {
                 "color": "green",
-                "value": 2
+                "value": 1
               }
             ]
           },
           "color": {
             "mode": "thresholds"
           }
-        }
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 5,
-        "w": 5,
-        "x": 5,
+        "w": 4,
+        "x": 4,
         "y": 9
       },
       "id": 11,
@@ -263,7 +250,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
@@ -276,12 +265,11 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "mme_ue_count",
-          "legendFormat": "UEs",
+          "expr": "mme_session",
           "refId": "A"
         }
       ],
-      "title": "UEs en MME (esperado: 2 válidos)",
+      "title": "Sesiones MME (esperado: 1)",
       "type": "stat"
     },
     {
@@ -289,6 +277,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "Bearer del UE válido. Debe permanecer activo durante todo E2.",
       "fieldConfig": {
         "defaults": {
           "thresholds": {
@@ -307,12 +296,13 @@
           "color": {
             "mode": "thresholds"
           }
-        }
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 5,
-        "w": 5,
-        "x": 10,
+        "w": 4,
+        "x": 8,
         "y": 9
       },
       "id": 12,
@@ -322,7 +312,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
@@ -336,11 +328,10 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "bearers_active",
-          "legendFormat": "Bearers",
           "refId": "A"
         }
       ],
-      "title": "Bearers activos (esperado: 2)",
+      "title": "Bearers Activos",
       "type": "stat"
     },
     {
@@ -348,106 +339,28 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
+      "description": "Total paquetes capturados. En E2 es significativamente mayor que en E1 porque hay más intentos de attach — incluyendo los de los UEs inválidos — que generan señalización S1AP y Diameter adicional.",
       "fieldConfig": {
         "defaults": {
-          "mappings": [
-            {
-              "options": {
-                "1": {
-                  "color": "green",
-                  "index": 0,
-                  "text": "🟢 MME UP"
-                },
-                "0": {
-                  "color": "red",
-                  "index": 1,
-                  "text": "🔴 CAÍDO"
-                }
-              },
-              "type": "value"
-            }
-          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "red",
+                "color": "blue",
                 "value": null
-              },
-              {
-                "color": "green",
-                "value": 1
               }
             ]
           },
           "color": {
             "mode": "thresholds"
           }
-        }
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 5,
         "w": 4,
-        "x": 15,
-        "y": 9
-      },
-      "id": 13,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "container_health_status{name=\"mme\"}",
-          "legendFormat": "MME",
-          "refId": "A"
-        }
-      ],
-      "title": "Estado MME",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "orange",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 2
-              }
-            ]
-          },
-          "color": {
-            "mode": "thresholds"
-          }
-        }
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 5,
-        "x": 19,
+        "x": 12,
         "y": 9
       },
       "id": 14,
@@ -457,7 +370,9 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         },
@@ -470,14 +385,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "smf_4g_pdu_session_count",
-          "legendFormat": "PDU Sessions 4G",
+          "expr": "sum(om_capture_packets_total{generation=\"4g\"}) or vector(0)",
           "refId": "A"
         }
       ],
-      "title": "PDU Sessions 4G (esperado: 1)",
-      "type": "stat",
-      "description": "Solo el UE válido genera PDU session en el SMF. Los UEs inválidos (bad_ki, bad_imsi, bad_apn) son rechazados antes de llegar al SMF o durante el PDN setup."
+      "title": "Paquetes Capturados",
+      "type": "stat"
     },
     {
       "collapsed": false,
@@ -489,7 +402,7 @@
       },
       "id": 102,
       "panels": [],
-      "title": "📈 Evolución temporal — carga y rechazos",
+      "title": "📈 Progresión — eNBs, UEs y señalización",
       "type": "row"
     },
     {
@@ -497,7 +410,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Observar la progresión: 0 eNBs → 1 eNB → 2 eNBs conforme se levantan los pares. mme_ue_count debe subir a 2 cuando ambos UEs válidos se conectan y NO debe incrementar con los UEs inválidos.",
+      "description": "mme_enb_count sube escalonadamente de 0 a 4. mme_session sube a 1 con el UE válido y NO incrementa con los UEs inválidos — evidencia de que el rechazo funciona correctamente. El spike momentáneo a 2 indica que un UE inválido llegó al MME antes de ser rechazado.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -528,7 +441,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "UEs en MME"
+              "options": "Sesiones MME"
             },
             "properties": [
               {
@@ -566,7 +479,9 @@
       "id": 20,
       "options": {
         "legend": {
-          "calcs": ["last", "max"],
+          "calcs": [
+            "last"
+          ],
           "displayMode": "table",
           "placement": "right",
           "showLegend": true
@@ -591,8 +506,8 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "mme_ue_count",
-          "legendFormat": "UEs en MME",
+          "expr": "mme_session",
+          "legendFormat": "Sesiones MME",
           "refId": "B"
         },
         {
@@ -603,13 +518,39 @@
           "expr": "bearers_active",
           "legendFormat": "Bearers activos",
           "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "gtp2_sessions_active",
+          "legendFormat": "GTPv2 Sessions",
+          "refId": "D"
         }
       ],
-      "title": "📈 eNBs + UEs + Bearers — progresión del escenario",
+      "title": "eNBs, Sesiones y Bearers — progresión",
       "type": "timeseries"
     },
     {
-      "datasource": null,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "Señalización acumulativa. S5 Create/Delete suben solo para el UE válido. Gx CCR sube 2 por ciclo (CCR-I + CCR-T). S6a AIR/AIA suben con cada intento de attach (válido e inválido). La brecha entre AIR rx y ULR rx indica los UEs que fallaron en autenticación o no llegaron al ULR.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "lineWidth": 2
+          }
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 8,
         "w": 8,
@@ -618,12 +559,50 @@
       },
       "id": 21,
       "options": {
-        "content": "## 🔍 Qué observar por fase\n\n**Fase 1 — Preparación:**\n- `mme_enb_count` sube de 0→1→2 al levantar cada par eNB\n\n**Fase 2 — UEs válidos:**\n- `mme_ue_count` sube de 0→1→2\n- `bearers_active` sube de 0→1→2\n- `gtp2_sessions_active` == 2\n\n**Fase 3 — UEs inválidos (secuencial):**\n\n🔑 `bad_ki` (IMSI 902):\n- `mme_ue_count` **NO incrementa**\n- Logs HSS: `Authentication failure`\n- Revisar: logs MME con `procedure=\"error\"`\n\n🚫 `no-reg` (IMSI 901):\n- `mme_ue_count` **NO incrementa**\n- Logs HSS: `User not found`\n- MME devuelve Attach Reject",
-        "mode": "markdown"
+        "legend": {
+          "calcs": [
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
       },
       "pluginVersion": "11.3.0",
-      "title": "🔍 Guía de observación por fase",
-      "type": "text"
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "s5c_rx_createsession",
+          "legendFormat": "S5 Create",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "s5c_rx_deletesession",
+          "legendFormat": "S5 Delete",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "gx_rx_ccr",
+          "legendFormat": "Gx CCR",
+          "refId": "C"
+        }
+      ],
+      "title": "Señalización acumulativa",
+      "type": "timeseries"
     },
     {
       "collapsed": false,
@@ -635,7 +614,7 @@
       },
       "id": 103,
       "panels": [],
-      "title": "🔴 Fallos de configuración — UEs inválidos",
+      "title": "🔐 HSS — S6a Diameter (MME ↔ HSS)",
       "type": "row"
     },
     {
@@ -643,64 +622,35 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Fallos de autenticación y configuración (logs MME con procedure=error por minuto) vs UEs que completaron attach (incremento de mme_ue_count). La brecha = UEs inválidos rechazados.",
+      "description": "Mensajes S6a con brecha entre AIR y ULR. La brecha AIR − ULR = número de UEs que fallaron antes de llegar a la actualización de ubicación. En E2: AIR recibe 4 mensajes (1 válido + 3 inválidos), ULR recibe 2 (válido + bad_apn que pasa auth completa). La brecha de 2 corresponde a bad_ki y bad_imsi.\n\nIMPORTANTE: s6a_rx_air_error siempre es 0 en E2 — el HSS procesa correctamente todos los AIR. Los fallos se manifiestan en el MME (bad_ki) o antes del ULR (bad_imsi), no en el HSS.",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "palette-classic"
           },
           "custom": {
-            "drawStyle": "bars",
-            "fillOpacity": 70,
-            "lineWidth": 1
-          },
-          "unit": "short"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Auth Failures (bad Ki)"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Attach completados"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "green",
-                  "mode": "fixed"
-                }
-              }
-            ]
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "lineWidth": 2
           }
-        ]
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 24
       },
       "id": 30,
       "options": {
         "legend": {
-          "calcs": ["sum"],
+          "calcs": [
+            "last"
+          ],
           "displayMode": "table",
-          "placement": "bottom"
+          "placement": "right",
+          "showLegend": true
         },
         "tooltip": {
           "mode": "multi"
@@ -710,11 +660,11 @@
       "targets": [
         {
           "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
           },
-          "expr": "count_over_time({nf=\"mme\", procedure=\"error\"}[1m])",
-          "legendFormat": "Fallos auth/config (logs MME)",
+          "expr": "s6a_rx_air",
+          "legendFormat": "AIR recibidos",
           "refId": "A"
         },
         {
@@ -722,123 +672,48 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "increase(mme_ue_count[1m]) > 0",
-          "legendFormat": "Attach completados",
+          "expr": "s6a_tx_aia",
+          "legendFormat": "AIA enviados",
           "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "s6a_rx_ulr",
+          "legendFormat": "ULR recibidos",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "s6a_tx_ula",
+          "legendFormat": "ULA enviados",
+          "refId": "D"
         }
       ],
-      "title": "Auth Failures vs Attaches exitosos (por minuto)",
+      "title": "HSS S6a — Mensajes Diameter (AIR/AIA/ULR/ULA)",
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
-      },
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 24
-      },
-      "id": 31,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "showLabels": true,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "{nf=\"hss\"} |= ``",
-          "refId": "A"
-        }
-      ],
-      "title": "📜 Logs HSS — autenticación y búsqueda de suscriptores",
-      "type": "logs"
-    },
-    {
       "datasource": null,
       "gridPos": {
         "h": 5,
-        "w": 8,
+        "w": 24,
         "x": 0,
         "y": 32
       },
-      "id": 32,
+      "id": 31,
       "options": {
-        "content": "## 💡 Valor pedagógico — UEs inválidos\n\n**bad_ki (Ki incorrecto):**\nEl IMSI existe en la HSS pero el UE no puede derivar las claves correctas (AUTN falla). La HSS detecta el error en el paso de Authentication Response y devuelve Authentication Reject. El UE nunca llega a registrarse.\n\n**no-reg (IMSI no registrado):**\nLa HSS recibe el Authentication Information Request del MME y no encuentra el IMSI en MongoDB. Devuelve un error que el MME traduce en Attach Reject con causa \"EPS Services not allowed\". \n\n**Diferencia clave:** bad_ki llega más lejos en el procedimiento (hasta RAND/AUTN) que no-reg (falla antes, en la búsqueda).",
+        "content": "### Interpretación S6a en E2 — por qué s6a_rx_air_error siempre es 0\n\n| UE | AIR | AIA | ULR | ULA | air_error | Dónde falla |\n|---|---|---|---|---|---|---|\n| **válido** (895) | +1 | +1 | +1 | +1 | 0 | No falla ✅ |\n| **bad_ki** (902) | +1 | +1 | 0 | 0 | **0** | MME: verifica RES≠XRES → `Authentication failure(MAC failure)` |\n| **bad_imsi** (901) | +1 | +1 | 0 | 0 | **0** | HSS: responde AIA con Diameter Result-Code 5001 (UNKNOWN_USER) — el MME no envía ULR |\n| **bad_apn** (903) | +1 | +1 | +1 | +1 | 0 | ESM: attach completa auth y ubicación — rechazo en `esm-handler.c: Invalid APN` |\n\n**Conclusión:** La diferenciación entre tipos de fallo requiere correlación con los logs del MME — las métricas S6a no distinguen entre bad_ki y bad_imsi.",
         "mode": "markdown"
       },
       "pluginVersion": "11.3.0",
-      "title": "💡 Valor pedagógico — fallos de autenticación",
+      "title": "📖 Interpretación S6a en E2",
       "type": "text"
-    },
-    {
-      "datasource": null,
-      "gridPos": {
-        "h": 5,
-        "w": 8,
-        "x": 8,
-        "y": 32
-      },
-      "id": 33,
-      "options": {
-        "content": "## ⚠️ Qué NO debe ocurrir\n\nLos UEs inválidos **NO deben incrementar:**\n- `mme_ue_count` — el UE no queda registrado\n- `bearers_active` — no se establece bearer\n- `gtp2_sessions_active` — no hay sesión de datos\n\n**Si alguno de estos sube con UE inválido:**\n→ Las credenciales están mal configuradas (el UE es en realidad válido)\n→ Revisar el archivo `.conf` del srsUE correspondiente\n\n**Verificación rápida:**\nLogs MME deben mostrar `Attach reject` para los IMSIs 901 y 902.",
-        "mode": "markdown"
-      },
-      "pluginVersion": "11.3.0",
-      "title": "⚠️ Señales de error en el escenario",
-      "type": "text"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
-      },
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 8,
-        "x": 16,
-        "y": 32
-      },
-      "id": 34,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "showLabels": true,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "{nf=\"mme\"} |= \"reject\"",
-          "refId": "A"
-        }
-      ],
-      "title": "📜 Logs MME — Attach Reject (UEs inválidos)",
-      "type": "logs"
     },
     {
       "collapsed": false,
@@ -850,27 +725,18 @@
       },
       "id": 104,
       "panels": [],
-      "title": "📡 Interfaz S1 y tráfico de datos — UEs válidos",
+      "title": "📜 Logs por NF",
       "type": "row"
     },
     {
       "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "type": "loki",
+        "uid": "P8E80F9AEF21F6940"
       },
-      "description": "Tráfico de red de los contenedores core. Con 2 UEs válidos activos debe haber tráfico bidireccional en MME y UPF.",
+      "description": "Logs del MME — aquí están todas las evidencias de fallos. Para bad_ki buscar: 'Authentication failure(MAC failure)'. Para bad_imsi buscar: 'Failure in transaction; no context restoration'. Para bad_apn buscar: 'Invalid APN[invalid_apn]' (nivel ERROR en ESM). El campo IMSI en cada log permite identificar qué UE generó cada evento.",
       "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "drawStyle": "line",
-            "fillOpacity": 5,
-            "lineWidth": 2
-          },
-          "unit": "Bps"
-        }
+        "defaults": {},
+        "overrides": []
       },
       "gridPos": {
         "h": 7,
@@ -880,62 +746,33 @@
       },
       "id": 40,
       "options": {
-        "legend": {
-          "calcs": ["mean", "max"],
-          "displayMode": "table",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "multi"
-        }
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "showLabels": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
       },
       "pluginVersion": "11.3.0",
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "rate(container_network_rx_bytes_total{nf=\"upf\"}[1m])",
-          "legendFormat": "UPF RX",
+          "expr": "{nf=\"mme\"} |= ``",
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "rate(container_network_tx_bytes_total{nf=\"upf\"}[1m])",
-          "legendFormat": "UPF TX",
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "rate(container_network_rx_bytes_total{nf=\"mme\"}[1m])",
-          "legendFormat": "MME RX",
-          "refId": "C"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "rate(container_network_tx_bytes_total{nf=\"mme\"}[1m])",
-          "legendFormat": "MME TX",
-          "refId": "D"
         }
       ],
-      "title": "Throughput UPF + MME",
-      "type": "timeseries"
+      "title": "📜 MME — Attach/Reject (ver IMSI para identificar UE)",
+      "type": "logs"
     },
     {
       "datasource": {
         "type": "loki",
         "uid": "P8E80F9AEF21F6940"
       },
+      "description": "Logs del HSS — confirma qué UEs encontró en MongoDB. Para bad_imsi se observa aquí la respuesta Diameter con error. Para los demás UEs el HSS responde correctamente con los vectores de autenticación.",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -962,390 +799,103 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "{domain=\"core\", generation=\"4g\"} |= ``",
+          "expr": "{nf=\"hss\"} |= ``",
           "refId": "A"
         }
       ],
-      "title": "📜 Logs todos los NFs core 4G",
+      "title": "📜 HSS — búsqueda de suscriptores",
       "type": "logs"
     },
     {
-      "collapsed": false,
+      "datasource": {
+        "type": "loki",
+        "uid": "P8E80F9AEF21F6940"
+      },
+      "description": "Logs del SMF y SGWC. En E2 solo el UE válido y bad_apn llegan a establecer sesión en el SMF. Para bad_apn se observa 'Invalid APN' y 'Removed Session' inmediatamente después. Para el UE válido la sesión persiste.",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
       "gridPos": {
-        "h": 1,
-        "w": 24,
+        "h": 7,
+        "w": 12,
         "x": 0,
         "y": 45
       },
-      "id": 200,
-      "panels": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "description": "Progresión de eNBs y UEs válidos. mme_enb_count debe llegar a 4. mme_ue_count debe quedarse en 1 aunque los UEs inválidos intenten conectarse.",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "drawStyle": "line",
-                "fillOpacity": 8,
-                "lineWidth": 2
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 0,
-            "y": 46
-          },
-          "id": 201,
-          "options": {
-            "legend": {
-              "calcs": ["last"],
-              "displayMode": "table",
-              "placement": "right",
-              "showLegend": true
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "11.3.0",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "mme_enb_count",
-              "legendFormat": "eNBs en MME",
-              "refId": "C"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "mme_ue_count",
-              "legendFormat": "UEs válidos en MME",
-              "refId": "D"
-            }
-          ],
-          "title": "S1 Setup — progresión de eNBs",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "description": "Con 2 UEs válidos debe haber 2 Create PDP y 2 PDP Contexts activos. Los UEs inválidos no llegan a generar PDP Context — el rechazo ocurre antes en MME/HSS.",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "drawStyle": "line",
-                "fillOpacity": 8,
-                "lineWidth": 2
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 12,
-            "y": 46
-          },
-          "id": 202,
-          "options": {
-            "legend": {
-              "calcs": ["last"],
-              "displayMode": "table",
-              "placement": "right",
-              "showLegend": true
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "11.3.0",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "gn_rx_createpdpcontextreq",
-              "legendFormat": "Create PDP (total)",
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "gn_rx_deletepdpcontextreq",
-              "legendFormat": "Delete PDP (total)",
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "gtp1_pdpctxs_active",
-              "legendFormat": "PDP Contexts activos",
-              "refId": "C"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "PBFA97CFB590B2093"
-              },
-              "expr": "bearers_active",
-              "legendFormat": "Bearers activos",
-              "refId": "D"
-            }
-          ],
-          "title": "Interfaz Gn — Create/Delete PDP por eNB",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 6,
-            "w": 12,
-            "x": 0,
-            "y": 53
-          },
-          "id": 203,
-          "options": {
-            "dedupStrategy": "none",
-            "enableLogDetails": true,
-            "showLabels": true,
-            "showTime": true,
-            "sortOrder": "Descending",
-            "wrapLogMessage": false
-          },
-          "pluginVersion": "11.3.0",
-          "targets": [
-            {
-              "datasource": {
-                "type": "loki",
-                "uid": "P8E80F9AEF21F6940"
-              },
-              "expr": "{nf=\"hss\"} |= ``",
-              "refId": "A"
-            }
-          ],
-          "title": "📜 Logs HSS — búsqueda suscriptores y auth",
-          "type": "logs"
-        },
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 6,
-            "w": 12,
-            "x": 12,
-            "y": 53
-          },
-          "id": 204,
-          "options": {
-            "dedupStrategy": "none",
-            "enableLogDetails": true,
-            "showLabels": true,
-            "showTime": true,
-            "sortOrder": "Descending",
-            "wrapLogMessage": false
-          },
-          "pluginVersion": "11.3.0",
-          "targets": [
-            {
-              "datasource": {
-                "type": "loki",
-                "uid": "P8E80F9AEF21F6940"
-              },
-              "expr": "{nf=\"smf\"} |= ``",
-              "refId": "A"
-            }
-          ],
-          "title": "📜 Logs SMF — sesiones de datos (UEs válidos)",
-          "type": "logs"
-        }
-      ],
-      "title": "🔬 Observabilidad extendida — interfaces internas 4G",
-      "type": "row"
-    },
-    {
-      "id": 205,
-      "type": "row",
-      "title": "🔐 HSS — S6a Diameter (MME ↔ HSS)",
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 59
-      },
-      "panels": []
-    },
-    {
-      "id": 206,
-      "type": "timeseries",
-      "title": "HSS S6a — Mensajes Diameter por tipo",
-      "description": "Cada attach de UE genera un AIR→AIA (autenticación) y un ULR→ULA (perfil de suscripción). Los contadores son cumulativos — lo relevante es la tasa de incremento durante el escenario.\n\n• bad_ki: AIR+AIA incrementan (HSS entrega vectores correctamente), pero el MME rechaza al UE tras comparar RES vs XRES\n• bad_imsi: AIR+AIA incrementan (HSS responde con Diameter 5001 UNKNOWN_USER), ULR no ocurre\n• bad_apn: AIR+AIA+ULR+ULA incrementan (attach completo), el rechazo ocurre en capa ESM del MME",
-      "gridPos": {
-        "h": 8,
-        "w": 24,
-        "x": 0,
-        "y": 60
-      },
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
+      "id": 42,
       "options": {
-        "legend": {
-          "calcs": ["lastNotNull"],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "showLabels": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
       },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "unit": "short",
-          "custom": {
-            "lineWidth": 2,
-            "fillOpacity": 5,
-            "drawStyle": "line",
-            "lineInterpolation": "linear",
-            "showPoints": "auto",
-            "spanNulls": false
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "AIR Errors"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "mode": "fixed",
-                  "fixedColor": "red"
-                }
-              },
-              {
-                "id": "custom.lineWidth",
-                "value": 3
-              }
-            ]
-          }
-        ]
-      },
+      "pluginVersion": "11.3.0",
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "s6a_rx_air",
-          "legendFormat": "AIR recibidos (Auth Info Request)",
+          "expr": "{nf=~\"smf|sgwc\"} |= ``",
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "s6a_tx_aia",
-          "legendFormat": "AIA enviados (Auth Info Answer)",
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "s6a_rx_ulr",
-          "legendFormat": "ULR recibidos (Update Location Request)",
-          "refId": "C"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "s6a_tx_ula",
-          "legendFormat": "ULA enviados (Update Location Answer)",
-          "refId": "D"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "s6a_rx_air_error",
-          "legendFormat": "AIR Errors (fallo interno HSS)",
-          "refId": "E"
         }
       ],
-      "pluginVersion": "11.3.0"
+      "title": "📜 SMF/SGWC — sesiones (control)",
+      "type": "logs"
     },
     {
-      "id": 207,
-      "type": "text",
-      "title": "📖 Interpretación HSS en E2",
+      "datasource": {
+        "type": "loki",
+        "uid": "P8E80F9AEF21F6940"
+      },
+      "description": "Logs del UPF y SGWU. Solo el UE válido y brevemente bad_apn generan actividad en el plano de usuario. Para bad_apn la sesión se establece y libera inmediatamente.",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
       "gridPos": {
-        "h": 5,
-        "w": 24,
-        "x": 0,
-        "y": 68
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 45
       },
+      "id": 43,
       "options": {
-        "mode": "markdown",
-        "content": "### Lo que muestran los contadores S6a en E2\n\n| UE | AIR | AIA | ULR | ULA | Interpretación |\n|---|---|---|---|---|---|\n| **UE válido** (895) | +1 | +1 | +1 | +1 | Attach completo ✅ |\n| **bad_ki** (902) | +1 | +1 | 0 | 0 | HSS entrega vectores OK — fallo en MME al verificar RES vs XRES ❌ |\n| **bad_imsi** (901) | +1 | +1 | 0 | 0 | HSS responde con Diameter 5001 (UNKNOWN_USER) — attach rechazado antes de ULR ❌ |\n| **bad_apn** (903) | +1 | +1 | +1 | +1 | Attach completo — rechazo en capa ESM (APN inválido), no en HSS ⚠️ |\n\n**Conclusión clave:** `s6a_rx_air_error` permanece en 0 en todos los casos. El HSS procesa correctamente todos los AIR — la diferenciación entre fallos es invisible desde los contadores HSS y requiere correlación con trazas Diameter (código de resultado 5001) o logs del MME."
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "showLabels": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
       },
-      "pluginVersion": "11.3.0"
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "P8E80F9AEF21F6940"
+          },
+          "expr": "{nf=~\"upf|sgwu\"} |= ``",
+          "refId": "A"
+        }
+      ],
+      "title": "📜 UPF/SGWU — plano de usuario",
+      "type": "logs"
     }
   ],
   "preload": false,
   "refresh": "5s",
   "schemaVersion": 40,
-  "tags": ["4g", "escenario", "e2", "multi-enb", "ues-mixtos", "epc"],
+  "tags": [
+    "4g",
+    "escenario",
+    "e2",
+    "multi-enb",
+    "ues-mixtos",
+    "epc"
+  ],
   "templating": {
     "list": []
   },
@@ -1354,7 +904,12 @@
     "to": "now"
   },
   "timepicker": {
-    "refresh_intervals": ["5s", "10s", "30s", "1m"]
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m"
+    ]
   },
   "timezone": "browser",
   "title": "E2 — Multi-eNB UEs mixtos (4G)",
