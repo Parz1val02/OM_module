@@ -380,11 +380,11 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf\"}",
+          "expr": "fivegs_upffunction_upf_sessionnbr",
           "refId": "A"
         }
       ],
-      "title": "Sesiones UPF (slice 1)",
+      "title": "Sesiones UPF (slice 1 y 2)",
       "type": "stat"
     },
     {
@@ -440,11 +440,11 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_upffunction_upf_qosflows{container=\"upf\"}",
+          "expr": "fivegs_upffunction_upf_qosflows}",
           "refId": "A"
         }
       ],
-      "title": "QoS Flows UPF",
+      "title": "QoS Flows UPF (slice 1 y 2)",
       "type": "stat"
     },
     {
@@ -500,11 +500,11 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "sum(fivegs_smffunction_sm_sessionnbr)",
+          "expr": "fivegs_smffunction_sm_sessionnbr",
           "refId": "A"
         }
       ],
-      "title": "Sesiones SMF (slice 1)",
+      "title": "Sesiones SMF (slice 1 y 2)",
       "type": "stat"
     },
     {
@@ -564,7 +564,7 @@
           "refId": "A"
         }
       ],
-      "title": "PCF Sessions",
+      "title": "PCF Sessions (slice 1 y 2)",
       "type": "stat"
     },
     {
