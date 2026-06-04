@@ -725,8 +725,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 12,
+        "h": 8,
+        "w": 24,
         "x": 0,
         "y": 38
       },
@@ -758,53 +758,14 @@
         "type": "loki",
         "uid": "P8E80F9AEF21F6940"
       },
-      "description": "Logs del HSS — confirma qué UEs encontró en MongoDB. Para bad_imsi se observa aquí la respuesta Diameter con error. Para los demás UEs el HSS responde correctamente con los vectores de autenticación.",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 12,
-        "x": 12,
-        "y": 38
-      },
-      "id": 41,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "showLabels": true,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "{nf=\"hss\"} |= ``",
-          "refId": "A"
-        }
-      ],
-      "title": "📜 HSS — búsqueda de suscriptores",
-      "type": "logs"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
-      },
       "description": "Logs del SMF y SGWC. En E2 solo el UE válido y bad_apn llegan a establecer sesión en el SMF. Para bad_apn se observa 'Invalid APN' y 'Removed Session' inmediatamente después. Para el UE válido la sesión persiste.",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 12,
+        "h": 8,
+        "w": 24,
         "x": 0,
         "y": 45
       },
@@ -842,9 +803,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 12,
-        "x": 12,
+        "h": 8,
+        "w": 24,
+        "x": 0,
         "y": 45
       },
       "id": 43,

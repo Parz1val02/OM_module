@@ -740,8 +740,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 12,
+        "h": 8,
+        "w": 24,
         "x": 0,
         "y": 22
       },
@@ -773,53 +773,14 @@
         "type": "loki",
         "uid": "P8E80F9AEF21F6940"
       },
-      "description": "Logs del HSS — autenticación Diameter S6a. En E1 se ven exactamente un AIR/AIA (vectores de autenticación) y un ULR/ULA (perfil del suscriptor), correspondientes al único attach del escenario. Si no aparece nada, verificar que el IMSI está provisionado en MongoDB.",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 12,
-        "x": 12,
-        "y": 22
-      },
-      "id": 41,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "showLabels": true,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "{nf=\"hss\"} |= ``",
-          "refId": "A"
-        }
-      ],
-      "title": "📜 HSS — autenticación Diameter S6a",
-      "type": "logs"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
-      },
       "description": "Logs del SMF y SGWC — gestión de sesiones GTP. En E1 se observa 'Added Number of MME-Sessions is now 1' en attach y 'Removed Session: UE IMSI:[...] APN:[internet]' en detach. Estos logs confirman que el plano de control de la sesión S5/S8 se estableció correctamente.",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 12,
+        "h": 8,
+        "w": 24,
         "x": 0,
         "y": 29
       },
@@ -857,9 +818,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 12,
-        "x": 12,
+        "h": 8,
+        "w": 24,
+        "x": 0,
         "y": 29
       },
       "id": 43,

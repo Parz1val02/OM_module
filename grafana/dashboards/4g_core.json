@@ -1554,7 +1554,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 85
       },
@@ -1586,45 +1586,6 @@
         "type": "loki",
         "uid": "P8E80F9AEF21F6940"
       },
-      "description": "Logs del HSS — autenticación Diameter S6a. Muestra las respuestas AIR/AIA (vectores de autenticación) y ULR/ULA (perfil del suscriptor). Útil para confirmar que el HSS encontró al suscriptor en MongoDB y entregó los vectores correctamente. En bad_imsi se observa el rechazo Diameter aquí.",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 85
-      },
-      "id": 61,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "showLabels": true,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "{nf=\"hss\"} |= ``",
-          "refId": "A"
-        }
-      ],
-      "title": "📜 HSS — autenticación Diameter S6a",
-      "type": "logs"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
-      },
       "description": "Logs del SMF y SGWC — gestión de sesiones GTP. Muestra el establecimiento y liberación de sesiones S5/S8: 'Added Number of MME-Sessions', 'Removed Session: UE IMSI'. Útil para confirmar que el plano de control de la sesión se estableció correctamente entre MME, SGW y PGW.",
       "fieldConfig": {
         "defaults": {},
@@ -1632,7 +1593,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 93
       },
@@ -1671,8 +1632,8 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
-        "x": 12,
+        "w": 24,
+        "x": 0,
         "y": 93
       },
       "id": 63,

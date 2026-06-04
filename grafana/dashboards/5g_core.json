@@ -440,7 +440,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_upffunction_upf_qosflows}",
+          "expr": "fivegs_upffunction_upf_qosflows",
           "refId": "A"
         }
       ],
@@ -1561,7 +1561,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 85
       },
@@ -1600,8 +1600,8 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
-        "x": 12,
+        "w": 24,
+        "x": 0,
         "y": 85
       },
       "id": 61,
@@ -1639,7 +1639,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 93
       },

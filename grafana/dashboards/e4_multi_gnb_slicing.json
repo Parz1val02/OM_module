@@ -888,7 +888,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Registration req vs succ vs fail. La brecha req − succ evidencia los UEs rechazados. rm_reginitfail sube en tiempo real con cada rechazo — permite correlacionar temporalmente cuándo ocurrió cada fallo. amf_authfail sube solo para bad_k.",
+      "description": "Counters acumulativos diferenciados por código de causa 3GPP (TS 24.501). cause=7: MAC failure (bad_k, primer intento). cause=21: Synch failure (bad_k, reintento del mismo UE — no representa un UE adicional). cause=62: No Network Slices Available (bad_supi o bad_sst, incluye reintentos automáticos). cause=111: DNN not supported (bad_dnn). rm_reginitfail total = 5 en lugar de 4 porque cause=62 acumula reintentos automáticos del AMF.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -981,7 +981,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "fivegs_amffunction_rm_reginitfail",
-          "legendFormat": "Reg Fail",
+          "legendFormat": "Reg Fail — causa {{cause}}",
           "refId": "C"
         },
         {
@@ -990,7 +990,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "fivegs_amffunction_amf_authfail",
-          "legendFormat": "Auth Fail (bad_k)",
+          "legendFormat": "Auth Fail — causa {{cause}}",
           "refId": "D"
         }
       ],
@@ -1007,7 +1007,7 @@
       },
       "id": 41,
       "options": {
-        "content": "## ❌ Tipos de fallo en E4\n\n| UE | IMSI | Falla en | Causa | Métrica visible |\n|----|------|----------|-------|------------------|\n| bad_supi | 905 | AMF/UDM | SUPI desconocido en UDR | `rm_reginitfail` ↑ |\n| bad_ki | 906 | AUSF | K incorrecto (5G-AKA) | `amf_authfail` ↑ |\n| bad_dnn | 908 | SMF | DNN no soportado en slice | `rm_reginitfail` ↑ |\n| bad_sst | 909 | AMF/NSSF | SST=3 no existe en AMF | `rm_reginitfail` ↑ |\n\n**rm_reginitfail = 5** (no 4) por reintentos automáticos del sistema ante algunos tipos de fallo.\n\nPara identificar qué UE causó cada fallo, correlacionar con logs del AMF usando el SUPI/IMSI.",
+        "content": "## ❌ Tipos de fallo en E4\n\n| UE | IMSI | Causa | Métrica | Código 3GPP |\n|----|------|-------|---------|-------------|\n| bad_supi | 905 | SUPI desconocido | `rm_reginitfail{cause=\"62\"}` ↑ | No Network Slices Available |\n| bad_ki | 906 | K incorrecto | `rm_reginitfail{cause=\"7\"}` + `authfail{cause=\"21\"}` ↑ | MAC failure + Synch failure (mismo UE) |\n| bad_dnn | 908 | DNN no soportado | `rm_reginitfail{cause=\"111\"}` ↑ | DNN not supported |\n| bad_sst | 909 | SST=3 inexistente | `rm_reginitfail{cause=\"62\"}` ↑ | No Network Slices Available |\n\n**cause=21** (Synch failure) es generado por el mismo UE bad_k como reintento tras el MAC failure — no representa un UE adicional.\n\n**rm_reginitfail = 5** (no 4) porque cause=62 acumula reintentos automáticos del sistema.",
         "mode": "markdown"
       },
       "pluginVersion": "11.3.0",
@@ -1038,8 +1038,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 8,
+        "h": 8,
+        "w": 24,
         "x": 0,
         "y": 43
       },
@@ -1077,9 +1077,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 8,
+        "h": 8,
+        "w": 24,
+        "x": 0,
         "y": 43
       },
       "id": 51,
@@ -1116,9 +1116,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 16,
+        "h": 8,
+        "w": 24,
+        "x": 0,
         "y": 43
       },
       "id": 52,
