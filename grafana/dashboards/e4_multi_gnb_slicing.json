@@ -888,7 +888,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Counters acumulativos diferenciados por código de causa 3GPP (TS 24.501). cause=7: MAC failure (bad_k, primer intento). cause=21: Synch failure (bad_k, reintento del mismo UE — no representa un UE adicional). cause=62: No Network Slices Available (bad_supi o bad_sst, incluye reintentos automáticos). cause=111: DNN not supported (bad_dnn). rm_reginitfail total = 5 en lugar de 4 porque cause=62 acumula reintentos automáticos del AMF.",
+      "description": "Counters acumulativos diferenciados por código de causa 3GPP. cause=7: 5GS services not allowed (bad_supi o primer intento bad_k). cause=21: Synch failure (reintento de autenticación tras MAC failure de bad_k — mismo UE). cause=62: No network slices available (bad_sst, incluye reintentos automáticos del sistema). cause=111: Protocol error unspecified (bad_dnn — Open5GS usa este código en lugar del cause=91 estándar). rm_reginitfail total = 5 en lugar de 4 porque cause=62 acumula reintentos automáticos del AMF.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1007,7 +1007,7 @@
       },
       "id": 41,
       "options": {
-        "content": "## ❌ Tipos de fallo en E4\n\n| UE | IMSI | Causa | Métrica | Código 3GPP |\n|----|------|-------|---------|-------------|\n| bad_supi | 905 | SUPI desconocido | `rm_reginitfail{cause=\"62\"}` ↑ | No Network Slices Available |\n| bad_ki | 906 | K incorrecto | `rm_reginitfail{cause=\"7\"}` + `authfail{cause=\"21\"}` ↑ | MAC failure + Synch failure (mismo UE) |\n| bad_dnn | 908 | DNN no soportado | `rm_reginitfail{cause=\"111\"}` ↑ | DNN not supported |\n| bad_sst | 909 | SST=3 inexistente | `rm_reginitfail{cause=\"62\"}` ↑ | No Network Slices Available |\n\n**cause=21** (Synch failure) es generado por el mismo UE bad_k como reintento tras el MAC failure — no representa un UE adicional.\n\n**rm_reginitfail = 5** (no 4) porque cause=62 acumula reintentos automáticos del sistema.",
+        "content": "## ❌ Tipos de fallo en E4\n\n| UE | IMSI | Causa | Métrica | Código 3GPP |\n|----|------|-------|---------|-----------------------------------|\n| bad_supi | 905 | SUPI no autorizado | `rm_reginitfail{cause=\"7\"}` ↑ | cause=7: 5GS services not allowed |\n| bad_ki | 906 | K incorrecto (5G-AKA) | `rm_reginitfail{cause=\"7\"}` + `authfail{cause=\"21\"}` ↑ | cause=7: 5GS services not allowed / cause=21: Synch failure |\n| bad_dnn | 908 | DNN no soportado | `rm_reginitfail{cause=\"111\"}` ↑ | cause=111: Protocol error unspecified (Open5GS usa este código en lugar del cause=91 estándar) |\n| bad_sst | 909 | Slice SST=3 inexistente | `rm_reginitfail{cause=\"62\"}` ↑ | cause=62: No network slices available |\n\n**cause=21** (Synch failure) es el reintento de autenticación tras el MAC failure de bad_k — no representa un UE adicional.\n\n**rm_reginitfail = 5** (no 4) porque cause=62 acumula reintentos automáticos del sistema.\n\n**Nota:** Open5GS utiliza cause=111 (Protocol error, unspecified) para bad_dnn en lugar del cause=91 (DNN not supported or not subscribed in the slice) definido en 3GPP TS 24.501.",
         "mode": "markdown"
       },
       "pluginVersion": "11.3.0",

@@ -17,19 +17,16 @@ groups:
         title: "[5G] Tasa de fallos de registro > 20%"
         condition: C
         for: 1m
+        noDataState: OK
         labels:
           severity: critical
           generation: 5g
         annotations:
           summary: "Tasa de fallos de registro 5G > 20%"
           description: >
-            Más del 20% de los intentos de registro Initial están fallando
-            en los últimos 5 minutos. Los fallos se clasifican por código
-            de causa 3GPP: cause=7 (MAC failure, bad_k), cause=62 (NSSAI
-            not available, bad_supi/bad_sst), cause=111 (DNN not supported,
-            bad_dnn). Revisar logs del AMF para identificar el tipo exacto.
-            Solo dispara cuando hay al menos 3 intentos de registro en la
-            ventana de evaluación.
+            Más del 20% de los intentos de Initial Registratoin están fallando
+            en los últimos 5 minutos. Revisar logs del AMF para identificar el tipo exacto.
+            Solo dispara cuando hay al menos 3 intentos de registro en la ventana de evaluación.
         data:
           - refId: A
             relativeTimeRange:
