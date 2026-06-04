@@ -7,9 +7,8 @@ contactPoints:
       - uid: email-receiver
         type: email
         settings:
-          #addresses: ${ALERT_TO_EMAIL}
-          addresses: rodrigoedu11@gmail.com
-          subject: "[4G/5G Testbed] {{ .GroupLabels.alertname }}"
+          addresses: r.barrios@pucp.edu.pe
+          subject: "[O&M Module] {{ .GroupLabels.alertname }}"
           message: |
             {{ range .Alerts }}
             Alert: {{ .Annotations.summary }}
