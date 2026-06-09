@@ -1,11 +1,8 @@
 apiVersion: 1
 
-deleteRules:
+#deleteRules:
 #  - orgId: 1
-#    uid: 4g-auth-failure
-#  - orgId: 1
-#    uid: 5g-auth-failure
-#groups: []
+#    uid: 5g-reg-failure-rate
 
 groups:
   - orgId: 1
@@ -19,14 +16,17 @@ groups:
         for: 1m
         noDataState: OK
         labels:
-          severity: critical
+          severity: warning
           generation: 5g
         annotations:
-          summary: "Tasa de fallos de registro 5G > 20%"
+          summary: "Tasa de fallos de registro inicial 5G supera el 20%"
           description: >
-            Más del 20% de los intentos de Initial Registratoin están fallando
-            en los últimos 5 minutos. Revisar logs del AMF para identificar el tipo exacto.
-            Solo dispara cuando hay al menos 3 intentos de registro en la ventana de evaluación.
+            La tasa de fallos de registro inicial supera el umbral del 20% en la ventana
+            de los últimos 5 minutos. Revisar dashboards 5G para identificar fallos.
+          resolved_summary: "Tasa de fallos de registro inicial 5G normalizada"
+          resolved_description: >
+            La tasa de fallos de registro inicial ha descendido por debajo del umbral
+            del 20%. El servicio de registro 5G opera con normalidad.
         data:
           - refId: A
             relativeTimeRange:

@@ -8,13 +8,25 @@ contactPoints:
         type: email
         settings:
           addresses: r.barrios@pucp.edu.pe
-          subject: "[O&M Module] {{ .GroupLabels.alertname }}"
+          subject: "[O&M Module] {{ .GroupLabels.alertname }} — {{ .Status | toUpper }}"
           message: |
-            {{ range .Alerts }}
-            Alert: {{ .Annotations.summary }}
-            Description: {{ .Annotations.description }}
-            Severity: {{ .Labels.severity }}
-            State: {{ .Status }}
-            Time: {{ .StartsAt }}
+            {{ if eq .Status "firing" -}}
+            Estado:      FIRING
+            {{ range .Alerts.Firing }}
+            Alerta:      {{ .Annotations.summary }}
+            Descripcion: {{ .Annotations.description }}
+            Severidad:   {{ .Labels.severity }}
+            Generacion:  {{ .Labels.generation }}
+            Inicio:      {{ .StartsAt }}
             {{ end }}
+            {{- else -}}
+            Estado:      RESOLVED
+            {{ range .Alerts.Resolved }}
+            Alerta:      {{ .Annotations.resolved_summary }}
+            Descripcion: {{ .Annotations.resolved_description }}
+            Severidad:   {{ .Labels.severity }}
+            Generacion:  {{ .Labels.generation }}
+            Fin:         {{ .EndsAt }}
+            {{ end }}
+            {{- end }}
         disableResolveMessage: false
