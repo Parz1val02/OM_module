@@ -1033,113 +1033,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Snapshot del uso de CPU actual por NF. Permite comparar rápidamente qué NF consume más CPU en este momento.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "unit": "percent"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 61
-      },
-      "id": 52,
-      "options": {
-        "displayMode": "gradient",
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        },
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "",
-          "values": true
-        }
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "container_cpu_usage_percent{domain=\"core\", generation=\"4g\"}",
-          "legendFormat": "{{nf}}",
-          "instant": true,
-          "refId": "A"
-        }
-      ],
-      "title": "CPU actual — snapshot (%)",
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "Snapshot de memoria actual por NF. Útil para identificar qué NF consume más RAM en este momento.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "unit": "bytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 69
-      },
-      "id": 53,
-      "options": {
-        "displayMode": "gradient",
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        },
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "",
-          "values": true
-        }
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "container_memory_usage_bytes{domain=\"core\", generation=\"4g\"}",
-          "legendFormat": "{{nf}}",
-          "instant": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Memoria actual — snapshot (bytes)",
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "Throughput de red de SGW-U y PGW-U — los únicos NFs que mueven datos de usuario en el plano de datos. En modo ZMQ el tráfico refleja señalización GTP de control, no datos reales de usuario. El resto de NFs tiene throughput mínimo de señalización SIP/Diameter/HTTP y no es informativo visualizarlo.",
+      "description": "Throughput de red de los NFs del plano de usuario (sgwu, upf). En modo ZMQ refleja señalización GTP de control, no datos reales de usuario.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1156,11 +1050,11 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 24,
+        "w": 12,
         "x": 0,
-        "y": 77
+        "y": 61
       },
-      "id": 54,
+      "id": 901,
       "options": {
         "legend": {
           "calcs": ["mean", "max"],
@@ -1179,7 +1073,7 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(container_network_rx_bytes_total{domain=\"core\", generation=\"4g\", nf=~\"sgwu|pgwu|upf\"}[1m])",
+          "expr": "rate(container_network_rx_bytes_total{domain=\"core\", generation=\"4g\", nf=~\"sgwu|upf\"}[1m])",
           "legendFormat": "{{nf}} RX",
           "refId": "A"
         },
@@ -1188,12 +1082,74 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "rate(container_network_tx_bytes_total{domain=\"core\", generation=\"4g\", nf=~\"sgwu|pgwu|upf\"}[1m])",
+          "expr": "rate(container_network_tx_bytes_total{domain=\"core\", generation=\"4g\", nf=~\"sgwu|upf\"}[1m])",
           "legendFormat": "{{nf}} TX",
           "refId": "B"
         }
       ],
-      "title": "Throughput — SGW-U / PGW-U (plano de usuario)",
+      "title": "Throughput — Plano de usuario (sgwu / upf)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "Throughput de red de los NFs de señalización (todos excepto sgwu y upf). Refleja tráfico NAS, Diameter y GTP-C. Los picos coinciden con procedimientos de attach y establecimiento de sesión.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "lineWidth": 2
+          },
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 61
+      },
+      "id": 902,
+      "options": {
+        "legend": {
+          "calcs": ["mean", "max"],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "rate(container_network_rx_bytes_total{domain=\"core\", generation=\"4g\", nf!~\"sgwu|upf\"}[1m])",
+          "legendFormat": "{{nf}} RX",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "rate(container_network_tx_bytes_total{domain=\"core\", generation=\"4g\", nf!~\"sgwu|upf\"}[1m])",
+          "legendFormat": "{{nf}} TX",
+          "refId": "B"
+        }
+      ],
+      "title": "Throughput — Plano de control (señalización)",
       "type": "timeseries"
     },
     {
@@ -1246,45 +1202,6 @@
         }
       ],
       "title": "📜 MME — procedimientos NAS y S1AP",
-      "type": "logs"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
-      },
-      "description": "Logs del HSS — autenticación Diameter S6a. Muestra las respuestas AIR/AIA (vectores de autenticación) y ULR/ULA (perfil del suscriptor). Útil para confirmar que el HSS encontró al suscriptor en MongoDB y entregó los vectores correctamente. En bad_imsi se observa el rechazo Diameter aquí.",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 85
-      },
-      "id": 61,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "showLabels": true,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
-          },
-          "expr": "{nf=\"hss\"} |= ``",
-          "refId": "A"
-        }
-      ],
-      "title": "📜 HSS — autenticación Diameter S6a",
       "type": "logs"
     },
     {
@@ -1706,7 +1623,7 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "4G EPC — Core",
+  "title": "EPC — 4G Core",
   "uid": "4g-core",
   "version": 1,
   "weekStart": ""

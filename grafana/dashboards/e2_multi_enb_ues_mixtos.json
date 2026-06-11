@@ -566,7 +566,27 @@
             "lineWidth": 2
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "AIR Errors ⚠️"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineWidth",
+                "value": 3
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -623,6 +643,15 @@
           "expr": "s6a_tx_ula",
           "legendFormat": "ULA enviados",
           "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "s6a_rx_air_error",
+          "legendFormat": "AIR Errors ⚠️",
+          "refId": "E"
         }
       ],
       "title": "HSS S6a — Mensajes Diameter (AIR/AIA/ULR/ULA)",
@@ -638,7 +667,7 @@
       },
       "id": 31,
       "options": {
-        "content": "### Interpretación S6a en E2 — por qué s6a_rx_air_error siempre es 0\n\n| UE | AIR | AIA | ULR | ULA | air_error | Dónde falla |\n|---|---|---|---|---|---|---|\n| **válido** (895) | +1 | +1 | +1 | +1 | 0 | No falla ✅ |\n| **bad_ki** (902) | +1 | +1 | 0 | 0 | **0** | MME: verifica RES≠XRES → `Authentication failure(MAC failure)` |\n| **bad_imsi** (901) | +1 | +1 | 0 | 0 | **0** | HSS: responde AIA con Diameter Result-Code 5001 (UNKNOWN_USER) — el MME no envía ULR |\n| **bad_apn** (903) | +1 | +1 | +1 | +1 | 0 | ESM: attach completa auth y ubicación — rechazo en `esm-handler.c: Invalid APN` |\n\n**Conclusión:** La diferenciación entre tipos de fallo requiere correlación con los logs del MME — las métricas S6a no distinguen entre bad_ki y bad_imsi.",
+        "content": "## Interpretación S6a en E2\n\n| UE | AIR | AIA | ULR | ULA | air_error | Dónde falla |\n|---|---|---|---|---|---|---|\n| **válido** (895) | +1 | +1 | +1 | +1 | 0 | No falla ✅ |\n| **bad_ki** (902) | +1 | 0 | 0 | 0 | **+1** | MME: verifica RES≠XRES → `Authentication failure(MAC failure)` |\n| **bad_imsi** (901) | +1 | +1 | 0 | 0 | 0 | HSS: responde Diameter 5001 (UNKNOWN_USER) — MME no envía ULR |\n| **bad_apn** (903) | +1 | +1 | +1 | +1 | 0 | Attach completo — rechazo en ESM: `Invalid APN[invalid_apn]` |\n\n**`s6a_rx_air_error` = 1** confirma el fallo de bad_ki. La brecha AIR(8) − AIA(7) = 1 coincide con el air_error. La brecha AIR(8) − ULR(2) = 6 incluye bad_ki y bad_imsi (ambos no llegan a ULR). Para distinguir entre bad_ki y bad_imsi: si air_error > 0 → bad_ki presente. bad_apn pasa auth completa — el rechazo ocurre en ESM, visible en logs del MME.",
         "mode": "markdown"
       },
       "pluginVersion": "11.3.0",

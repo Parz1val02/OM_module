@@ -94,7 +94,7 @@
       },
       "id": 3,
       "options": {
-        "content": "## ✅ Condiciones de éxito\n\n| Métrica | Esperado |\n|---------|----------|\n| `amf_gnb_count` | **3** |\n| `ran_ue` | **4** |\n| `upf_sessionnbr{container=\"upf\"}` | **3** (slice 1) |\n| `upf_sessionnbr{container=\"upf2\"}` | **1** (slice 2) |\n| `smf_sessionnbr{container=\"smf2\"}` | **1** |\n| `rm_reginitfail` | **5** (con reintentos) |\n| `amf_authfail` | **1** (bad_k) |\n\n**Evidencia principal de slicing:**\nupf y upf2 tienen sesiones independientes — confirma aislamiento del plano de usuario.\n\n⚠️ `rm_reginitfail` = 5 (no 4) por reintentos del sistema.",
+        "content": "## ✅ Condiciones de éxito\n\n| Métrica | Esperado |\n|---------|----------|\n| `amf_gnb_count` | **3** |\n| `ran_ue` | **4** |\n| `upf_sessionnbr{container=\"upf\"}` | **3** (slice 1) |\n| `upf_sessionnbr{container=\"upf2\"}` | **1** (slice 2) |\n| `smf_sessionnbr{container=\"smf2\"}` | **1** |\n| `rm_reginitfail` | **5** (con reintentos) |\n| `amf_authfail` | **1** (bad_k) — permite distinguir bad_ki de bad_supi ya que ambos generan `reginitfail{cause=\"7\"}` |\n\n**Evidencia principal de slicing:**\nupf y upf2 tienen sesiones independientes — confirma aislamiento del plano de usuario.\n\n⚠️ `rm_reginitfail` = 5 (no 4) por reintentos del sistema.",
         "mode": "markdown"
       },
       "pluginVersion": "11.3.0",
@@ -322,7 +322,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Registration failures totales. Counter acumulativo. En E4 = 5 (no 4) porque el sistema reintenta algunos procedimientos. La separación entre tipos de fallo (bad_supi/bad_k/bad_dnn/bad_sst) requiere correlación con logs del AMF.",
+      "description": "Registration failures por código de causa 3GPP TS 24.501 §9.11.3.2. cause=7: 5GS services not allowed — generado por bad_supi Y bad_ki (ambos producen el mismo código). cause=62: No network slices available (bad_sst, incluye reintentos automáticos). cause=111: Protocol error unspecified (bad_dnn). Para distinguir bad_supi de bad_ki usar amf_authfail: si authfail > 0, el fallo de cause=7 incluye bad_ki. La separación completa requiere correlación con logs del AMF.",
       "fieldConfig": {
         "defaults": {
           "color": {

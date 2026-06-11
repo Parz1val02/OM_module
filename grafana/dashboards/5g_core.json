@@ -1319,113 +1319,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Snapshot de CPU actual por NF.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "unit": "percent"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 61
-      },
-      "id": 52,
-      "options": {
-        "displayMode": "gradient",
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        },
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "",
-          "values": true
-        }
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "container_cpu_usage_percent{domain=\"core\", generation=\"5g\"}",
-          "legendFormat": "{{nf}}",
-          "instant": true,
-          "refId": "A"
-        }
-      ],
-      "title": "CPU actual — snapshot (%)",
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "Snapshot de memoria actual por NF.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "unit": "bytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 69
-      },
-      "id": 53,
-      "options": {
-        "displayMode": "gradient",
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        },
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "",
-          "values": true
-        }
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "container_memory_usage_bytes{domain=\"core\", generation=\"5g\"}",
-          "legendFormat": "{{nf}}",
-          "instant": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Memoria actual — snapshot (bytes)",
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "Throughput del UPF (y upf2 en E4). En modo ZMQ el tráfico N3 GTP-U real es 0 — este panel muestra tráfico de señalización PFCP y control. En E4 se observa cómo upf y upf2 tienen tráfico independiente, evidenciando el aislamiento del plano de datos por slice.",
+      "description": "Throughput de red de los NFs del plano de usuario (upf, upf2). En modo ZMQ refleja señalización PFCP de control, no datos reales de usuario N3.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1442,11 +1336,11 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 24,
+        "w": 12,
         "x": 0,
-        "y": 77
+        "y": 61
       },
-      "id": 54,
+      "id": 901,
       "options": {
         "legend": {
           "calcs": ["mean", "max"],
@@ -1479,7 +1373,69 @@
           "refId": "B"
         }
       ],
-      "title": "Throughput — UPF / UPF2 (plano de usuario)",
+      "title": "Throughput — Plano de usuario (upf / upf2)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "Throughput de red de los NFs de señalización SBI (todos excepto upf y upf2). Refleja tráfico HTTP/2 SBI, NGAP y PFCP entre las funciones de red del core 5G. Los picos coinciden con procedimientos de registration y PDU Session.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "fillOpacity": 5,
+            "lineWidth": 2
+          },
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 61
+      },
+      "id": 902,
+      "options": {
+        "legend": {
+          "calcs": ["mean", "max"],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "rate(container_network_rx_bytes_total{domain=\"core\", generation=\"5g\", nf!~\"upf|upf2\"}[1m])",
+          "legendFormat": "{{nf}} RX",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "rate(container_network_tx_bytes_total{domain=\"core\", generation=\"5g\", nf!~\"upf|upf2\"}[1m])",
+          "legendFormat": "{{nf}} TX",
+          "refId": "B"
+        }
+      ],
+      "title": "Throughput — Plano de control (SBI / señalización)",
       "type": "timeseries"
     },
     {
@@ -1953,7 +1909,7 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "5G Core — Core",
+  "title": "5GC — 5G Core",
   "uid": "5g-core",
   "version": 1,
   "weekStart": ""
