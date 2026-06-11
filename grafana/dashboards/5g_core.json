@@ -51,11 +51,11 @@
               },
               {
                 "color": "yellow",
-                "value": 17
+                "value": 20
               },
               {
                 "color": "green",
-                "value": 20
+                "value": 22
               }
             ]
           },
@@ -200,403 +200,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "UEs con conexión RAN activa (gauge). Es el indicador más confiable de estado actual en 5G — sube y baja con cada registration/deregistration. IMPORTANTE: amf_session y amf_ue_count NO bajan tras deregistration porque Open5GS 5G mantiene el contexto del UE en el AMF. Usar ran_ue como referencia de UEs activos en este momento.",
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [
-            {
-              "options": {
-                "0": {
-                  "color": "orange",
-                  "index": 0,
-                  "text": "Sin UEs"
-                }
-              },
-              "type": "value"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "orange",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 1
-              }
-            ]
-          },
-          "color": {
-            "mode": "thresholds"
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 0,
-        "y": 10
-      },
-      "id": 10,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "ran_ue",
-          "refId": "A"
-        }
-      ],
-      "title": "UEs en RAN (estado actual)",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "gNBs registrados en el AMF vía NGAP (N2). Sube cuando el gNB completa el NG Setup. En E3 = 1, en E4 = 3 (srsgnb + gNB1 + gNB2). Si es 0 con RAN levantada, verificar la configuración NGAP del gNB.",
-      "fieldConfig": {
-        "defaults": {
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "orange",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 1
-              }
-            ]
-          },
-          "color": {
-            "mode": "thresholds"
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 4,
-        "y": 10
-      },
-      "id": 11,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "amf_gnb_count",
-          "refId": "A"
-        }
-      ],
-      "title": "gNBs Registrados",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "PDU Sessions activas en el UPF principal (slice SD=000001). Gauge confiable — sube con cada PDU Session Establishment y baja con el Release. En E4 complementar con el panel de upf2 para ver el aislamiento por slice.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "orange",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 1
-              }
-            ]
-          },
-          "mappings": []
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 8,
-        "y": 10
-      },
-      "id": 12,
-      "options": {
-        "displayMode": "gradient",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "",
-          "values": true
-        },
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        }
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "fivegs_upffunction_upf_sessionnbr",
-          "refId": "A",
-          "legendFormat": "{{container}}",
-          "instant": true
-        }
-      ],
-      "title": "Sesiones UPF (slice 1 y 2)",
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "QoS Flows activos en el UPF. En modo ZMQ este es el indicador correcto de tráfico de usuario activo — fivegs_ep_n3_gtp_* siempre es 0 en ZMQ porque no hay interfaz GTP-U real. Cada PDU Session activa genera al menos 1 QoS Flow.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "orange",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 1
-              }
-            ]
-          },
-          "mappings": []
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 12,
-        "y": 10
-      },
-      "id": 13,
-      "options": {
-        "displayMode": "gradient",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "",
-          "values": true
-        },
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        }
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "fivegs_upffunction_upf_qosflows",
-          "refId": "A",
-          "legendFormat": "{{container}}",
-          "instant": true
-        }
-      ],
-      "title": "QoS Flows UPF (slice 1 y 2)",
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "PDU Sessions activas en el SMF principal (gauge). Debe coincidir con upf_sessionnbr. Si difieren, indica una inconsistencia entre el plano de control (SMF) y el plano de usuario (UPF).",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "orange",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 1
-              }
-            ]
-          },
-          "mappings": []
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 16,
-        "y": 10
-      },
-      "id": 14,
-      "options": {
-        "displayMode": "gradient",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "",
-          "values": true
-        },
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        }
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "fivegs_smffunction_sm_sessionnbr",
-          "refId": "A",
-          "legendFormat": "{{container}}",
-          "instant": true
-        }
-      ],
-      "title": "Sesiones SMF (slice 1 y 2)",
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "Sesiones de política activas en el PCF. Cada PDU Session genera una asociación de política SM (Session Management) en el PCF. Este panel confirma que el PCF está participando activamente en el ciclo de vida de las sesiones — una diferencia arquitectural clave respecto al PCRF en 4G.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "orange",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 1
-              }
-            ]
-          },
-          "mappings": []
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 20,
-        "y": 10
-      },
-      "id": 15,
-      "options": {
-        "displayMode": "gradient",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "",
-          "values": true
-        },
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        }
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "fivegs_pcffunction_pa_sessionnbr",
-          "refId": "A",
-          "legendFormat": "{{snssai}}",
-          "instant": true
-        }
-      ],
-      "title": "PCF Sessions (slice 1 y 2)",
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "Evolución temporal de los indicadores de tráfico. ran_ue, upf_sessionnbr y upf_qosflows son gauges que reflejan el estado actual. IMPORTANTE: en 5G la mayoría de métricas son counters acumulativos (solo suben) — solo los gauges listados aquí son indicadores de estado actual válidos. En E4 se observa cómo upf_sessionnbr sube escalonadamente con cada UE válido que se conecta.",
+      "description": "Evolución temporal de los indicadores de ran.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -627,43 +231,13 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "gNBs"
+              "options": "gNBs activos"
             },
             "properties": [
               {
                 "id": "color",
                 "value": {
                   "fixedColor": "blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "PDU Sessions UPF"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "yellow",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "QoS Flows UPF"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "purple",
                   "mode": "fixed"
                 }
               }
@@ -675,7 +249,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 14
+        "y": 10
       },
       "id": 16,
       "options": {
@@ -706,26 +280,8 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "amf_gnb_count",
-          "legendFormat": "gNBs",
+          "legendFormat": "gNBs activos",
           "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf\"}",
-          "legendFormat": "PDU Sessions UPF",
-          "refId": "C"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "fivegs_upffunction_upf_qosflows{container=\"upf\"}",
-          "legendFormat": "QoS Flows UPF",
-          "refId": "D"
         }
       ],
       "title": "Tráfico — evolución temporal",
@@ -737,7 +293,525 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 22
+        "y": 18
+      },
+      "id": 701,
+      "panels": [],
+      "title": "📡 Sesiones — Slice 1 (SD=000001, internet)",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "PDU Sessions activas en UPF del slice 1 (SD=000001, DNN internet). En E4=3.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 19
+      },
+      "id": 803,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf\"}",
+          "refId": "A"
+        }
+      ],
+      "title": "PDU Sessions UPF (slice 1)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "PDU Sessions activas en SMF del slice 1. Debe coincidir con upf_sessionnbr.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 19
+      },
+      "id": 805,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_smffunction_sm_sessionnbr{container=\"smf\"}",
+          "refId": "A"
+        }
+      ],
+      "title": "Sesiones SMF (slice 1)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "QoS Flows activos en UPF slice 1. En modo ZMQ es el indicador correcto de tráfico activo.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 19
+      },
+      "id": 807,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_upffunction_upf_qosflows{container=\"upf\"}",
+          "refId": "A"
+        }
+      ],
+      "title": "QoS Flows UPF (slice 1)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "Sesiones de política PCF para slice SD=000001. En E4=3.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "mappings": []
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 19
+      },
+      "id": 809,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_pcffunction_pa_sessionnbr{snssai=\"1-000001\"}",
+          "refId": "A"
+        }
+      ],
+      "title": "PCF Sessions (SD=000001)",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 23
+      },
+      "id": 702,
+      "panels": [],
+      "title": "📡 Sesiones — Slice 2 (SD=000002, private)",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "PDU Sessions activas en UPF2 del slice 2 (SD=000002, DNN private). En E3=0, en E4=1.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "mappings": [],
+          "noValue": "0"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 24
+      },
+      "id": 804,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf2\"}",
+          "refId": "A"
+        }
+      ],
+      "title": "PDU Sessions UPF2 (slice 2)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "PDU Sessions activas en SMF2 del slice 2. En E3=0, en E4=1.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "mappings": [],
+          "noValue": "0"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 24
+      },
+      "id": 806,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_smffunction_sm_sessionnbr{container=\"smf2\"}",
+          "refId": "A"
+        }
+      ],
+      "title": "Sesiones SMF2 (slice 2)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "QoS Flows activos en UPF2 slice 2. En E3=0, en E4=1.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "mappings": [],
+          "noValue": "0"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 24
+      },
+      "id": 808,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_upffunction_upf_qosflows{container=\"upf2\"}",
+          "refId": "A"
+        }
+      ],
+      "title": "QoS Flows UPF2 (slice 2)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "description": "Sesiones de política PCF para slice SD=000002. En E3=0, en E4=1.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "mappings": [],
+          "noValue": "0"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 24
+      },
+      "id": 810,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "11.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_pcffunction_pa_sessionnbr{snssai=\"1-000002\"}",
+          "refId": "A"
+        }
+      ],
+      "title": "PCF Sessions (SD=000002)",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 28
       },
       "id": 102,
       "panels": [],
@@ -779,7 +853,8 @@
           },
           "color": {
             "mode": "thresholds"
-          }
+          },
+          "noValue": "0"
         },
         "overrides": []
       },
@@ -787,7 +862,7 @@
         "h": 6,
         "w": 6,
         "x": 0,
-        "y": 23
+        "y": 29
       },
       "id": 21,
       "options": {
@@ -840,7 +915,8 @@
               }
             ]
           },
-          "mappings": []
+          "mappings": [],
+          "noValue": "0"
         },
         "overrides": []
       },
@@ -848,7 +924,7 @@
         "h": 6,
         "w": 18,
         "x": 6,
-        "y": 23
+        "y": 29
       },
       "id": 22,
       "options": {
@@ -888,7 +964,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 27
+        "y": 35
       },
       "id": 103,
       "panels": [],
@@ -938,7 +1014,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 28
+        "y": 36
       },
       "id": 30,
       "options": {
@@ -1008,7 +1084,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 28
+        "y": 36
       },
       "id": 31,
       "options": {
@@ -1069,7 +1145,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 36
+        "y": 44
       },
       "id": 32,
       "options": {
@@ -1139,7 +1215,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 36
+        "y": 44
       },
       "id": 33,
       "options": {
@@ -1201,7 +1277,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 44
+        "y": 52
       },
       "id": 104,
       "panels": [],
@@ -1232,7 +1308,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 45
+        "y": 53
       },
       "id": 50,
       "options": {
@@ -1444,7 +1520,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 84
+        "y": 69
       },
       "id": 105,
       "panels": [],
@@ -1463,9 +1539,9 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
-        "y": 85
+        "y": 70
       },
       "id": 60,
       "options": {
@@ -1502,9 +1578,9 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 85
+        "w": 24,
+        "x": 0,
+        "y": 78
       },
       "id": 61,
       "options": {
@@ -1541,9 +1617,9 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
-        "y": 93
+        "y": 86
       },
       "id": 62,
       "options": {
@@ -1569,55 +1645,56 @@
       "type": "logs"
     },
     {
-      "collapsed": false,
+      "collapsed": true,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 101
+        "y": 94
       },
       "id": 106,
-      "panels": [],
-      "title": "📜 Logs — todos los NFs (completo)",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
-      },
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 24,
-        "x": 0,
-        "y": 102
-      },
-      "id": 64,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "showLabels": true,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": false
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
+      "panels": [
         {
           "datasource": {
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "expr": "{domain=\"core\", generation=\"5g\"} |= ``",
-          "refId": "A"
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 24,
+            "x": 0,
+            "y": 95
+          },
+          "id": 999,
+          "options": {
+            "dedupStrategy": "none",
+            "enableLogDetails": true,
+            "showLabels": true,
+            "showTime": true,
+            "sortOrder": "Descending",
+            "wrapLogMessage": false
+          },
+          "pluginVersion": "11.3.0",
+          "targets": [
+            {
+              "datasource": {
+                "type": "loki",
+                "uid": "P8E80F9AEF21F6940"
+              },
+              "expr": "{domain=\"core\", generation=\"5g\"} |= ``",
+              "refId": "A"
+            }
+          ],
+          "title": "Logs — All 5G Core NFs",
+          "type": "logs"
         }
       ],
-      "title": "Logs — All 5G Core NFs",
-      "type": "logs"
+      "title": "📜 Logs — todos los NFs (completo)",
+      "type": "row"
     },
     {
       "collapsed": false,
@@ -1625,7 +1702,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 111
+        "y": 95
       },
       "id": 107,
       "panels": [],
@@ -1651,7 +1728,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 112
+        "y": 96
       },
       "id": 70,
       "options": {
@@ -1709,7 +1786,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 112
+        "y": 96
       },
       "id": 71,
       "options": {
@@ -1753,7 +1830,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 122
+        "y": 106
       },
       "id": 108,
       "panels": [],
@@ -1849,7 +1926,7 @@
         "h": 14,
         "w": 24,
         "x": 0,
-        "y": 123
+        "y": 107
       },
       "id": 80,
       "options": {
