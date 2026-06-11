@@ -159,7 +159,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 4,
         "x": 0,
         "y": 10
@@ -219,7 +219,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 4,
         "x": 4,
         "y": 10
@@ -256,69 +256,12 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "PDU Sessions en UPF del slice 1 (SD=000001, DNN internet). Debe ser 3: srsue_5g + nr_ue + nr_ue2.",
+      "description": "PDU Sessions activas por slice. upf = slice 1 (SD=000001, DNN internet). upf2 = slice 2 (SD=000002, DNN private). La separación entre ambos confirma el aislamiento del plano de usuario por slice.",
       "fieldConfig": {
         "defaults": {
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "orange",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 3
-              }
-            ]
-          },
           "color": {
             "mode": "thresholds"
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 4,
-        "x": 8,
-        "y": 10
-      },
-      "id": 12,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf\"}",
-          "refId": "A"
-        }
-      ],
-      "title": "PDU Sessions slice 1 — upf (esperado: 3)",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "PDU Sessions en UPF2 del slice 2 (SD=000002, DNN private). Debe ser 1: solo nr_ue3. Este es el indicador más directo de que el slicing funciona — nr_ue3 fue enrutado a un UPF completamente diferente al resto de los UEs.",
-      "fieldConfig": {
-        "defaults": {
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -332,30 +275,31 @@
               }
             ]
           },
-          "color": {
-            "mode": "thresholds"
-          }
+          "mappings": []
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
-        "w": 4,
-        "x": 12,
+        "h": 6,
+        "w": 8,
+        "x": 8,
         "y": 10
       },
-      "id": 13,
+      "id": 12,
       "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
+        "displayMode": "gradient",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": ["lastNotNull"],
           "fields": "",
-          "values": false
+          "values": true
         },
-        "textMode": "auto"
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        }
       },
       "pluginVersion": "11.3.0",
       "targets": [
@@ -364,12 +308,14 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf2\"}",
+          "expr": "fivegs_upffunction_upf_sessionnbr",
+          "legendFormat": "{{container}}",
+          "instant": true,
           "refId": "A"
         }
       ],
-      "title": "PDU Sessions slice 2 — upf2 (esperado: 1)",
-      "type": "stat"
+      "title": "PDU Sessions por slice (upf / upf2)",
+      "type": "bargauge"
     },
     {
       "datasource": {
@@ -379,18 +325,9 @@
       "description": "Registration failures totales. Counter acumulativo. En E4 = 5 (no 4) porque el sistema reintenta algunos procedimientos. La separación entre tipos de fallo (bad_supi/bad_k/bad_dnn/bad_sst) requiere correlación con logs del AMF.",
       "fieldConfig": {
         "defaults": {
-          "mappings": [
-            {
-              "options": {
-                "0": {
-                  "color": "green",
-                  "index": 0,
-                  "text": "OK"
-                }
-              },
-              "type": "value"
-            }
-          ],
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -404,30 +341,31 @@
               }
             ]
           },
-          "color": {
-            "mode": "thresholds"
-          }
+          "mappings": []
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
-        "w": 4,
+        "h": 6,
+        "w": 8,
         "x": 16,
         "y": 10
       },
       "id": 14,
       "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
+        "displayMode": "gradient",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": ["lastNotNull"],
           "fields": "",
-          "values": false
+          "values": true
         },
-        "textMode": "auto"
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        }
       },
       "pluginVersion": "11.3.0",
       "targets": [
@@ -437,83 +375,23 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "fivegs_amffunction_rm_reginitfail",
-          "refId": "A"
-        }
-      ],
-      "title": "Registration Failures (esperado: 5)",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "Auth failure por K incorrecto. Counter acumulativo. En E4 = 1: solo nr_ue_bad_ki (IMSI 906).",
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [
-            {
-              "options": {
-                "0": {
-                  "color": "green",
-                  "index": 0,
-                  "text": "OK"
-                }
-              },
-              "type": "value"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
-          },
-          "color": {
-            "mode": "thresholds"
-          }
+          "refId": "A",
+          "legendFormat": "causa {{cause}}",
+          "instant": true
         },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 4,
-        "x": 20,
-        "y": 10
-      },
-      "id": 15,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "fivegs_amffunction_amf_authfail",
-          "refId": "A"
+          "legendFormat": "auth fail (bad_k) causa {{cause}}",
+          "instant": true,
+          "refId": "B"
         }
       ],
-      "title": "Auth Fail bad_k (esperado: 1)",
-      "type": "stat"
+      "title": "Registration Failures (esperado: 5)",
+      "type": "bargauge"
     },
     {
       "collapsed": false,
@@ -609,7 +487,7 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 6,
         "w": 24,
         "x": 0,
         "y": 16
@@ -888,7 +766,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Counters acumulativos diferenciados por código de causa 3GPP. cause=7: 5GS services not allowed (bad_supi o primer intento bad_k). cause=21: Synch failure (reintento de autenticación tras MAC failure de bad_k — mismo UE). cause=62: No network slices available (bad_sst, incluye reintentos automáticos del sistema). cause=111: Protocol error unspecified (bad_dnn — Open5GS usa este código en lugar del cause=91 estándar). rm_reginitfail total = 5 en lugar de 4 porque cause=62 acumula reintentos automáticos del AMF.",
+      "description": "Counters acumulativos diferenciados por código de causa 3GPP TS 24.501 §9.11.3.2. cause=7: 5GS services not allowed (bad_supi o primer intento bad_k). cause=21: Synch failure (reintento de autenticación tras MAC failure de bad_k — mismo UE). cause=62: No network slices available (bad_sst, incluye reintentos automáticos del sistema). cause=111: Protocol error unspecified (bad_dnn — Open5GS usa este código en lugar del cause=91 estándar). rm_reginitfail total = 5 en lugar de 4 porque cause=62 acumula reintentos automáticos del AMF.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1007,7 +885,7 @@
       },
       "id": 41,
       "options": {
-        "content": "## ❌ Tipos de fallo en E4\n\n| UE | IMSI | Causa | Métrica | Código 3GPP |\n|----|------|-------|---------|-----------------------------------|\n| bad_supi | 905 | SUPI no autorizado | `rm_reginitfail{cause=\"7\"}` ↑ | cause=7: 5GS services not allowed |\n| bad_ki | 906 | K incorrecto (5G-AKA) | `rm_reginitfail{cause=\"7\"}` + `authfail{cause=\"21\"}` ↑ | cause=7: 5GS services not allowed / cause=21: Synch failure |\n| bad_dnn | 908 | DNN no soportado | `rm_reginitfail{cause=\"111\"}` ↑ | cause=111: Protocol error unspecified (Open5GS usa este código en lugar del cause=91 estándar) |\n| bad_sst | 909 | Slice SST=3 inexistente | `rm_reginitfail{cause=\"62\"}` ↑ | cause=62: No network slices available |\n\n**cause=21** (Synch failure) es el reintento de autenticación tras el MAC failure de bad_k — no representa un UE adicional.\n\n**rm_reginitfail = 5** (no 4) porque cause=62 acumula reintentos automáticos del sistema.\n\n**Nota:** Open5GS utiliza cause=111 (Protocol error, unspecified) para bad_dnn en lugar del cause=91 (DNN not supported or not subscribed in the slice) definido en 3GPP TS 24.501.",
+        "content": "## ❌ Tipos de fallo en E4\n\n| UE | IMSI | Causa | Métrica | Código 3GPP (TS 24.501 §9.11.3.2) |\n|----|------|-------|---------|-----------------------------------|\n| bad_supi | 905 | SUPI no autorizado | `rm_reginitfail{cause=\"7\"}` ↑ | cause=7: 5GS services not allowed |\n| bad_ki | 906 | K incorrecto (5G-AKA) | `rm_reginitfail{cause=\"7\"}` + `authfail{cause=\"21\"}` ↑ | cause=7: 5GS services not allowed / cause=21: Synch failure |\n| bad_dnn | 908 | DNN no soportado | `rm_reginitfail{cause=\"111\"}` ↑ | cause=111: Protocol error unspecified (Open5GS usa este código en lugar del cause=91 estándar) |\n| bad_sst | 909 | Slice SST=3 inexistente | `rm_reginitfail{cause=\"62\"}` ↑ | cause=62: No network slices available |\n\n**cause=21** (Synch failure) es el reintento de autenticación tras el MAC failure de bad_k — no representa un UE adicional.\n\n**rm_reginitfail = 5** (no 4) porque cause=62 acumula reintentos automáticos del sistema.\n\n**Nota:** Open5GS utiliza cause=111 (Protocol error, unspecified) para bad_dnn en lugar del cause=91 (DNN not supported or not subscribed in the slice) definido en 3GPP TS 24.501.",
         "mode": "markdown"
       },
       "pluginVersion": "11.3.0",

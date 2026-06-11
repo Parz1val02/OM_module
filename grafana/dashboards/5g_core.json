@@ -335,6 +335,9 @@
       "description": "PDU Sessions activas en el UPF principal (slice SD=000001). Gauge confiable — sube con cada PDU Session Establishment y baja con el Release. En E4 complementar con el panel de upf2 para ver el aislamiento por slice.",
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -348,9 +351,7 @@
               }
             ]
           },
-          "color": {
-            "mode": "thresholds"
-          }
+          "mappings": []
         },
         "overrides": []
       },
@@ -362,16 +363,19 @@
       },
       "id": 12,
       "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
+        "displayMode": "gradient",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": ["lastNotNull"],
           "fields": "",
-          "values": false
+          "values": true
         },
-        "textMode": "auto"
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        }
       },
       "pluginVersion": "11.3.0",
       "targets": [
@@ -381,11 +385,13 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "fivegs_upffunction_upf_sessionnbr",
-          "refId": "A"
+          "refId": "A",
+          "legendFormat": "{{container}}",
+          "instant": true
         }
       ],
       "title": "Sesiones UPF (slice 1 y 2)",
-      "type": "stat"
+      "type": "bargauge"
     },
     {
       "datasource": {
@@ -395,6 +401,9 @@
       "description": "QoS Flows activos en el UPF. En modo ZMQ este es el indicador correcto de tráfico de usuario activo — fivegs_ep_n3_gtp_* siempre es 0 en ZMQ porque no hay interfaz GTP-U real. Cada PDU Session activa genera al menos 1 QoS Flow.",
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -408,9 +417,7 @@
               }
             ]
           },
-          "color": {
-            "mode": "thresholds"
-          }
+          "mappings": []
         },
         "overrides": []
       },
@@ -422,16 +429,19 @@
       },
       "id": 13,
       "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
+        "displayMode": "gradient",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": ["lastNotNull"],
           "fields": "",
-          "values": false
+          "values": true
         },
-        "textMode": "auto"
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        }
       },
       "pluginVersion": "11.3.0",
       "targets": [
@@ -441,11 +451,13 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "fivegs_upffunction_upf_qosflows",
-          "refId": "A"
+          "refId": "A",
+          "legendFormat": "{{container}}",
+          "instant": true
         }
       ],
       "title": "QoS Flows UPF (slice 1 y 2)",
-      "type": "stat"
+      "type": "bargauge"
     },
     {
       "datasource": {
@@ -455,6 +467,9 @@
       "description": "PDU Sessions activas en el SMF principal (gauge). Debe coincidir con upf_sessionnbr. Si difieren, indica una inconsistencia entre el plano de control (SMF) y el plano de usuario (UPF).",
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -468,9 +483,7 @@
               }
             ]
           },
-          "color": {
-            "mode": "thresholds"
-          }
+          "mappings": []
         },
         "overrides": []
       },
@@ -482,16 +495,19 @@
       },
       "id": 14,
       "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
+        "displayMode": "gradient",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": ["lastNotNull"],
           "fields": "",
-          "values": false
+          "values": true
         },
-        "textMode": "auto"
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        }
       },
       "pluginVersion": "11.3.0",
       "targets": [
@@ -501,11 +517,13 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "fivegs_smffunction_sm_sessionnbr",
-          "refId": "A"
+          "refId": "A",
+          "legendFormat": "{{container}}",
+          "instant": true
         }
       ],
       "title": "Sesiones SMF (slice 1 y 2)",
-      "type": "stat"
+      "type": "bargauge"
     },
     {
       "datasource": {
@@ -515,6 +533,9 @@
       "description": "Sesiones de política activas en el PCF. Cada PDU Session genera una asociación de política SM (Session Management) en el PCF. Este panel confirma que el PCF está participando activamente en el ciclo de vida de las sesiones — una diferencia arquitectural clave respecto al PCRF en 4G.",
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -528,9 +549,7 @@
               }
             ]
           },
-          "color": {
-            "mode": "thresholds"
-          }
+          "mappings": []
         },
         "overrides": []
       },
@@ -542,16 +561,19 @@
       },
       "id": 15,
       "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
+        "displayMode": "gradient",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": ["lastNotNull"],
           "fields": "",
-          "values": false
+          "values": true
         },
-        "textMode": "auto"
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        }
       },
       "pluginVersion": "11.3.0",
       "targets": [
@@ -561,11 +583,13 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "fivegs_pcffunction_pa_sessionnbr",
-          "refId": "A"
+          "refId": "A",
+          "legendFormat": "{{snssai}}",
+          "instant": true
         }
       ],
       "title": "PCF Sessions (slice 1 y 2)",
-      "type": "stat"
+      "type": "bargauge"
     },
     {
       "datasource": {
@@ -725,78 +749,6 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Auth requests rechazados explícitamente por el AMF. Ocurre cuando el AMF recibe un rechazo de autenticación del AUSF. En E4 con bad_k este contador puede no subir directamente — el fallo se manifiesta primero en amf_authfail.",
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [
-            {
-              "options": {
-                "0": {
-                  "color": "green",
-                  "index": 0,
-                  "text": "OK"
-                }
-              },
-              "type": "value"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
-          },
-          "color": {
-            "mode": "thresholds"
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 0,
-        "y": 23
-      },
-      "id": 20,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "fivegs_amffunction_amf_authreject",
-          "refId": "A"
-        }
-      ],
-      "title": "Auth Reject (AMF)",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
       "description": "Fallos de autenticación 5G-AKA por K incorrecto (bad_k). Counter acumulativo. En E4 = 1 (nr_ue_bad_ki con IMSI 906). El proceso: UE envía SUCI → AMF solicita auth al AUSF → AUSF verifica K → fallo → AMF registra authfail.",
       "fieldConfig": {
         "defaults": {
@@ -832,9 +784,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 4,
+        "h": 6,
+        "w": 6,
+        "x": 0,
         "y": 23
       },
       "id": 21,
@@ -869,21 +821,12 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Registration failures totales en el AMF. Counter acumulativo que incluye todos los tipos: bad_supi (SUPI desconocido), bad_k (K incorrecto), bad_dnn (DNN no soportado), bad_sst (slice inexistente). En E4 = 5 (no 4) por reintentos del sistema. La separación entre tipos de fallo requiere correlación con logs del AMF.",
+      "description": "Registration failures por código de causa 3GPP TS 24.501 §9.11.3.2. cause=7: 5GS services not allowed (bad_supi). cause=62: No network slices available (bad_sst, incluye reintentos). cause=111: Protocol error unspecified (bad_dnn — Open5GS usa este código en lugar del cause=91 estándar).",
       "fieldConfig": {
         "defaults": {
-          "mappings": [
-            {
-              "options": {
-                "0": {
-                  "color": "green",
-                  "index": 0,
-                  "text": "OK"
-                }
-              },
-              "type": "value"
-            }
-          ],
+          "color": {
+            "mode": "thresholds"
+          },
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -897,30 +840,31 @@
               }
             ]
           },
-          "color": {
-            "mode": "thresholds"
-          }
+          "mappings": []
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 8,
+        "h": 6,
+        "w": 18,
+        "x": 6,
         "y": 23
       },
       "id": 22,
       "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
+        "displayMode": "gradient",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": ["lastNotNull"],
           "fields": "",
-          "values": false
+          "values": true
         },
-        "textMode": "auto"
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        }
       },
       "pluginVersion": "11.3.0",
       "targets": [
@@ -930,11 +874,13 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "fivegs_amffunction_rm_reginitfail",
-          "refId": "A"
+          "refId": "A",
+          "legendFormat": "causa {{cause}}",
+          "instant": true
         }
       ],
       "title": "Registration Fail (AMF)",
-      "type": "stat"
+      "type": "bargauge"
     },
     {
       "collapsed": false,
@@ -1561,7 +1507,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 24,
+        "w": 12,
         "x": 0,
         "y": 85
       },
@@ -1600,8 +1546,8 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 24,
-        "x": 0,
+        "w": 12,
+        "x": 12,
         "y": 85
       },
       "id": 61,
@@ -1639,7 +1585,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 24,
+        "w": 12,
         "x": 0,
         "y": 93
       },
