@@ -985,3 +985,802 @@ Open5GS daemon v2.7.6-131-g782a97e
 05/30 20:44:24.725: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
 05/30 20:44:24.725: [upf] INFO: UE F-SEID[UP:0x547 CP:0x368] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
 05/30 20:44:24.727: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)
+05/30 20:56:25.406: [upf] INFO: [Removed] Number of UPF-sessions is now 2 (../src/upf/context.c:256)
+05/30 20:56:25.675: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+05/30 20:56:25.675: [upf] INFO: UE F-SEID[UP:0x5cc CP:0x2ff] APN[internet] PDN-Type[1] IPv4[192.168.100.5] IPv6[] (../src/upf/context.c:498)
+05/30 20:56:25.716: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 4827811f 001603c8 ff020000 00000000   H'..............
+0020: 00000000 00000002 8500b012 00000000   ................
+05/30 20:56:27.604: [upf] INFO: [Removed] Number of UPF-sessions is now 2 (../src/upf/context.c:256)
+05/30 20:56:27.835: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+05/30 20:56:27.835: [upf] INFO: UE F-SEID[UP:0x8f5 CP:0x533] APN[internet] PDN-Type[1] IPv4[192.168.100.6] IPv6[] (../src/upf/context.c:498)
+05/30 20:56:30.088: [upf] INFO: [Removed] Number of UPF-sessions is now 2 (../src/upf/context.c:256)
+05/30 20:56:30.317: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+05/30 20:56:30.317: [upf] INFO: UE F-SEID[UP:0xaae CP:0xfb9] APN[internet] PDN-Type[1] IPv4[192.168.100.7] IPv6[] (../src/upf/context.c:498)
+Open5GS daemon v2.7.6-131-g782a97e
+
+05/31 10:03:48.287: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+05/31 10:03:48.287: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+05/31 10:03:48.330: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+05/31 10:03:48.330: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+05/31 10:03:48.330: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+05/31 10:03:48.331: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+05/31 10:03:48.331: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+05/31 10:03:50.810: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+05/31 11:05:21.526: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+05/31 11:05:21.526: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+05/31 11:05:21.568: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+05/31 11:05:21.568: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+05/31 11:05:21.568: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+05/31 11:05:21.569: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+05/31 11:05:21.569: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+05/31 11:05:24.005: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+05/31 11:08:28.983: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+05/31 11:08:28.983: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+05/31 11:08:28.983: [upf] INFO: UE F-SEID[UP:0x978 CP:0x5dd] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+05/31 11:08:29.054: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: eaa5179b 238145bb ff020000 00000000   ....#.E.........
+0020: 00000000 00000002 850011ba 00000000   ................
+05/31 11:08:29.055: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+05/31 11:28:04.315: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+05/31 11:28:04.315: [upf] INFO: UE F-SEID[UP:0x230 CP:0xe2c] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+05/31 11:28:04.318: [gtp] INFO: gtp_connect() [172.22.0.23]:2152 (../lib/gtp/path.c:60)
+05/31 11:28:06.890: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+05/31 11:28:06.890: [upf] INFO: UE F-SEID[UP:0x781 CP:0xc05] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+05/31 11:28:06.893: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/01 21:09:47.975: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/01 21:09:47.975: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/01 21:09:48.015: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/01 21:09:48.015: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/01 21:09:48.016: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/01 21:09:48.016: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/01 21:09:48.016: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/01 21:09:50.459: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/01 21:12:12.353: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/01 21:12:12.354: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/01 21:12:12.354: [upf] INFO: UE F-SEID[UP:0x14a CP:0x95e] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/01 21:12:12.411: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 5dea2e4a a760b7b2 ff020000 00000000   ]..J.`..........
+0020: 00000000 00000002 850091ef 00000000   ................
+06/01 21:12:12.412: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/01 21:21:37.390: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+06/01 21:21:37.645: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/01 21:21:37.645: [upf] INFO: UE F-SEID[UP:0x320 CP:0x8ca] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/01 21:21:37.708: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: bb1b8f53 5dc3aa69 ff020000 00000000   ...S]..i........
+0020: 00000000 00000002 85002a9b 00000000   ..........*.....
+06/01 21:49:43.041: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/01 22:23:55.611: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/01 22:23:55.611: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/01 22:23:55.656: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/01 22:23:55.656: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/01 22:23:55.656: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/01 22:23:55.656: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/01 22:23:55.656: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/01 22:23:58.132: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/01 22:28:56.032: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/01 22:28:56.033: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/01 22:28:56.033: [upf] INFO: UE F-SEID[UP:0xb28 CP:0xa66] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/01 22:28:56.086: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: b5324895 0d8a10b6 ff020000 00000000   .2H.............
+0020: 00000000 00000002 8500612f 00000000   ..........a/....
+06/01 22:28:56.087: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/01 22:28:58.158: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+06/01 22:28:58.158: [upf] INFO: UE F-SEID[UP:0xdb7 CP:0xe1] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/01 22:28:58.160: [gtp] INFO: gtp_connect() [172.22.0.23]:2152 (../lib/gtp/path.c:60)
+06/01 22:29:00.630: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+06/01 22:29:00.630: [upf] INFO: UE F-SEID[UP:0x5bd CP:0x35] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+06/01 22:29:00.632: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/01 23:48:30.373: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/01 23:48:30.373: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/01 23:48:30.417: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/01 23:48:30.417: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/01 23:48:30.417: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/01 23:48:30.418: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/01 23:48:30.418: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/01 23:48:32.885: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/01 23:50:27.616: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/01 23:50:27.617: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/01 23:50:27.617: [upf] INFO: UE F-SEID[UP:0x666 CP:0x80c] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/01 23:50:27.690: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: ad44e21b 3fd3e7a7 ff020000 00000000   .D..?...........
+0020: 00000000 00000002 8500c65b 00000000   ...........[....
+06/01 23:50:27.744: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/01 23:52:47.380: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+06/01 23:52:47.380: [upf] INFO: UE F-SEID[UP:0x73f CP:0xf15] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/01 23:52:47.382: [gtp] INFO: gtp_connect() [172.22.0.23]:2152 (../lib/gtp/path.c:60)
+06/01 23:52:49.773: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+06/01 23:52:49.773: [upf] INFO: UE F-SEID[UP:0x411 CP:0x4df] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+06/01 23:52:49.775: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/02 00:24:38.212: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/02 00:24:38.212: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/02 00:24:38.255: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/02 00:24:38.255: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/02 00:24:38.255: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/02 00:24:38.255: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/02 00:24:38.256: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/02 00:24:40.724: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/02 00:27:16.410: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/02 00:27:16.410: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/02 00:27:16.410: [upf] INFO: UE F-SEID[UP:0x369 CP:0x714] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/02 00:27:16.487: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 79be2a93 0110f49f ff020000 00000000   y.*.............
+0020: 00000000 00000002 8500e335 00000000   ...........5....
+06/02 00:27:16.489: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/02 00:29:35.852: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+06/02 00:29:35.852: [upf] INFO: UE F-SEID[UP:0x6db CP:0xac] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/02 00:29:35.854: [gtp] INFO: gtp_connect() [172.22.0.23]:2152 (../lib/gtp/path.c:60)
+06/02 00:29:38.326: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+06/02 00:29:38.326: [upf] INFO: UE F-SEID[UP:0x7ba CP:0xa1] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+06/02 00:29:38.328: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/03 00:13:20.131: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/03 00:13:20.131: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/03 00:13:20.172: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/03 00:13:20.172: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/03 00:13:20.172: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/03 00:13:20.173: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/03 00:13:20.173: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/03 00:13:22.648: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/03 00:16:57.073: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/03 00:16:57.073: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/03 00:16:57.073: [upf] INFO: UE F-SEID[UP:0x6f6 CP:0x5ac] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/03 00:16:57.138: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: a45e155f 842051fe ff020000 00000000   .^._. Q.........
+0020: 00000000 00000002 8500ed5a 00000000   ...........Z....
+06/03 00:16:57.140: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/03 00:42:15.294: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/03 00:42:15.294: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/03 00:42:15.335: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/03 00:42:15.335: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/03 00:42:15.335: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/03 00:42:15.336: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/03 00:42:15.336: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/03 00:42:17.777: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/03 00:47:59.475: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/03 00:47:59.475: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/03 00:47:59.516: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/03 00:47:59.516: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/03 00:47:59.516: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/03 00:47:59.517: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/03 00:47:59.517: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/03 00:48:01.954: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/03 00:53:43.412: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/03 00:53:43.412: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/03 00:53:43.453: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/03 00:53:43.453: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/03 00:53:43.454: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/03 00:53:43.454: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/03 00:53:43.454: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/03 00:53:45.900: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/03 00:55:09.004: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/03 00:55:09.004: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/03 00:55:09.004: [upf] INFO: UE F-SEID[UP:0xf87 CP:0x193] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/03 00:55:09.046: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: d66ba043 35d8cf15 ff020000 00000000   .k.C5...........
+0020: 00000000 00000002 8500019a 00000000   ................
+06/03 00:55:09.047: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/03 01:03:49.225: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/03 01:03:49.225: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/03 01:03:49.266: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/03 01:03:49.266: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/03 01:03:49.266: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/03 01:03:49.267: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/03 01:03:49.267: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/03 01:03:51.698: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/03 01:11:36.748: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/03 01:11:36.748: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/03 01:11:36.791: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/03 01:11:36.791: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/03 01:11:36.791: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/03 01:11:36.792: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/03 01:11:36.792: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/03 01:11:39.212: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/03 01:23:15.044: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/03 01:23:15.045: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/03 01:23:15.045: [upf] INFO: UE F-SEID[UP:0x422 CP:0x37f] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/03 01:23:15.089: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: f6c1bc9f da0bbbe0 ff020000 00000000   ................
+0020: 00000000 00000002 850033e9 00000000   ..........3.....
+06/03 01:23:15.090: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/03 01:23:17.156: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+06/03 01:23:17.156: [upf] INFO: UE F-SEID[UP:0x226 CP:0x876] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/03 01:23:17.159: [gtp] INFO: gtp_connect() [172.22.0.23]:2152 (../lib/gtp/path.c:60)
+06/03 01:23:19.547: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+06/03 01:23:19.547: [upf] INFO: UE F-SEID[UP:0x3fa CP:0x5db] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+06/03 01:23:19.549: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/03 19:48:16.156: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/03 19:48:16.156: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/03 19:48:16.200: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/03 19:48:16.200: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/03 19:48:16.200: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/03 19:48:16.200: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/03 19:48:16.201: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/03 19:48:18.672: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/03 19:59:39.640: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/03 19:59:39.640: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/03 19:59:39.640: [upf] INFO: UE F-SEID[UP:0x3b3 CP:0x4a2] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/03 19:59:39.708: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 642fed92 bfdda8c6 ff020000 00000000   d/..............
+0020: 00000000 00000002 8500c2d0 00000000   ................
+06/03 19:59:39.709: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/03 19:59:41.810: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+06/03 19:59:41.810: [upf] INFO: UE F-SEID[UP:0x55 CP:0x329] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/03 19:59:41.813: [gtp] INFO: gtp_connect() [172.22.0.23]:2152 (../lib/gtp/path.c:60)
+06/03 19:59:44.201: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+06/03 19:59:44.201: [upf] INFO: UE F-SEID[UP:0xb2c CP:0xc7b] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+06/03 19:59:44.204: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/03 21:09:50.747: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/03 21:09:50.747: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/03 21:09:50.788: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/03 21:09:50.788: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/03 21:09:50.788: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/03 21:09:50.789: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/03 21:09:50.789: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/03 21:09:53.237: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/03 21:15:52.035: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/03 21:15:52.035: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/03 21:15:52.035: [upf] INFO: UE F-SEID[UP:0x64a CP:0x9f] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/03 21:15:52.086: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: dbd55c89 c909902d ff020000 00000000   ..\....-........
+0020: 00000000 00000002 8500eba0 00000000   ................
+06/03 21:15:52.086: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/03 21:15:54.410: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+06/03 21:15:54.410: [upf] INFO: UE F-SEID[UP:0xcba CP:0xb0b] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/03 21:15:54.412: [gtp] INFO: gtp_connect() [172.22.0.23]:2152 (../lib/gtp/path.c:60)
+06/03 21:15:56.834: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+06/03 21:15:56.834: [upf] INFO: UE F-SEID[UP:0xba3 CP:0xd8e] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+06/03 21:15:56.837: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/03 21:44:23.472: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/03 21:44:23.472: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/03 21:44:23.513: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/03 21:44:23.513: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/03 21:44:23.513: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/03 21:44:23.514: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/03 21:44:23.514: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/03 21:44:25.963: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/03 21:52:53.202: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/03 21:52:53.202: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/03 21:52:53.202: [upf] INFO: UE F-SEID[UP:0x28e CP:0xa17] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/03 21:52:53.240: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 1b64664c fdc1d57f ff020000 00000000   .dfL............
+0020: 00000000 00000002 85002845 00000000   ..........(E....
+06/03 21:52:53.241: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/03 21:52:55.362: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+06/03 21:52:55.362: [upf] INFO: UE F-SEID[UP:0xbb7 CP:0x352] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/03 21:52:55.364: [gtp] INFO: gtp_connect() [172.22.0.23]:2152 (../lib/gtp/path.c:60)
+06/03 21:52:57.771: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+06/03 21:52:57.771: [upf] INFO: UE F-SEID[UP:0x715 CP:0x266] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+06/03 21:52:57.773: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)
+06/03 22:20:57.920: [upf] INFO: [Removed] Number of UPF-sessions is now 2 (../src/upf/context.c:256)
+06/03 22:42:18.559: [upf] INFO: [Removed] Number of UPF-sessions is now 1 (../src/upf/context.c:256)
+06/03 22:42:28.796: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/04 20:37:17.882: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/04 20:37:17.882: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/04 20:37:17.923: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/04 20:37:17.924: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/04 20:37:17.924: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/04 20:37:17.924: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/04 20:37:17.924: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/04 20:37:20.363: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/04 20:39:49.941: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/04 20:39:49.942: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/04 20:39:49.942: [upf] INFO: UE F-SEID[UP:0xa6d CP:0x350] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/04 20:39:50.011: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: a39f90be 040069bc ff020000 00000000   ......i.........
+0020: 00000000 00000002 8500db1c 00000000   ................
+06/04 20:39:50.012: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/04 21:11:20.314: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/04 21:11:20.314: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/04 21:11:20.355: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/04 21:11:20.355: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/04 21:11:20.355: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/04 21:11:20.356: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/04 21:11:20.356: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/04 21:11:22.824: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/04 21:21:16.944: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/04 21:21:16.944: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/04 21:21:16.986: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/04 21:21:16.986: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/04 21:21:16.986: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/04 21:21:16.987: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/04 21:21:16.987: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/04 21:21:19.423: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/04 21:24:59.131: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/04 21:24:59.131: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/04 21:24:59.131: [upf] INFO: UE F-SEID[UP:0x1dc CP:0x19d] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/04 21:24:59.183: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: c7f415be c591ce00 ff020000 00000000   ................
+0020: 00000000 00000002 85000bf2 00000000   ................
+06/04 21:24:59.184: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/04 21:25:01.552: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+06/04 21:25:01.552: [upf] INFO: UE F-SEID[UP:0x9db CP:0x4f1] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/04 21:25:01.554: [gtp] INFO: gtp_connect() [172.22.0.23]:2152 (../lib/gtp/path.c:60)
+06/04 21:25:03.952: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+06/04 21:25:03.952: [upf] INFO: UE F-SEID[UP:0x122 CP:0x75b] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+06/04 21:25:03.954: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/09 11:47:52.172: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/09 11:47:52.172: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/09 11:47:52.215: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/09 11:47:52.215: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/09 11:47:52.215: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/09 11:47:52.216: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/09 11:47:52.216: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/09 11:47:54.708: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/09 11:49:45.385: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/09 11:49:45.385: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/09 11:49:45.385: [upf] INFO: UE F-SEID[UP:0x35 CP:0xf9c] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/09 11:49:45.435: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 1fc7ed14 7115200f ff020000 00000000   ....q. .........
+0020: 00000000 00000002 8500df36 00000000   ...........6....
+06/09 11:49:45.436: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/09 11:49:47.622: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+06/09 11:49:47.622: [upf] INFO: UE F-SEID[UP:0xf2e CP:0xfe3] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/09 11:49:47.625: [gtp] INFO: gtp_connect() [172.22.0.23]:2152 (../lib/gtp/path.c:60)
+06/09 11:49:50.025: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+06/09 11:49:50.025: [upf] INFO: UE F-SEID[UP:0x4ce CP:0x38e] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+06/09 11:49:50.027: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/09 12:04:43.138: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/09 12:04:43.138: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/09 12:04:43.180: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/09 12:04:43.180: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/09 12:04:43.180: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/09 12:04:43.181: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/09 12:04:43.181: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/09 12:04:45.619: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/09 12:09:09.047: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/09 12:09:09.047: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/09 12:09:09.047: [upf] INFO: UE F-SEID[UP:0x16c CP:0x6dc] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/09 12:09:09.085: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: baae3d4f 6232bb66 ff020000 00000000   ..=Ob2.f........
+0020: 00000000 00000002 850067a0 00000000   ..........g.....
+06/09 12:09:09.086: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/09 12:09:11.271: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+06/09 12:09:11.271: [upf] INFO: UE F-SEID[UP:0xc8c CP:0xe2] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/09 12:09:11.273: [gtp] INFO: gtp_connect() [172.22.0.23]:2152 (../lib/gtp/path.c:60)
+06/09 12:09:13.814: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+06/09 12:09:13.814: [upf] INFO: UE F-SEID[UP:0xd6b CP:0xc7c] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+06/09 12:09:13.816: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/09 12:23:03.780: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/09 12:23:03.780: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/09 12:23:03.821: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/09 12:23:03.821: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/09 12:23:03.821: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/09 12:23:03.822: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/09 12:23:03.822: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/09 12:23:06.276: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/09 12:32:27.327: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/09 12:32:27.327: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/09 12:32:27.369: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/09 12:32:27.369: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/09 12:32:27.370: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/09 12:32:27.370: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/09 12:32:27.370: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/09 12:32:29.817: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/09 12:34:53.943: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/09 12:34:53.943: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/09 12:34:53.943: [upf] INFO: UE F-SEID[UP:0x768 CP:0x351] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/09 12:34:53.987: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 99dc3146 b391f13d ff020000 00000000   ..1F...=........
+0020: 00000000 00000002 85000d45 00000000   ...........E....
+06/09 12:34:53.988: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/09 12:34:56.294: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+06/09 12:34:56.294: [upf] INFO: UE F-SEID[UP:0x154 CP:0xef5] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/09 12:34:56.296: [gtp] INFO: gtp_connect() [172.22.0.23]:2152 (../lib/gtp/path.c:60)
+06/09 12:34:58.726: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+06/09 12:34:58.726: [upf] INFO: UE F-SEID[UP:0x96d CP:0xdf2] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+06/09 12:34:58.728: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/10 19:01:35.251: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/10 19:01:35.251: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/10 19:01:35.292: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/10 19:01:35.292: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/10 19:01:35.292: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/10 19:01:35.293: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/10 19:01:35.293: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/10 19:01:37.776: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/10 19:03:45.534: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/10 19:03:45.534: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/10 19:03:45.534: [upf] INFO: UE F-SEID[UP:0x460 CP:0xfbc] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/10 19:03:45.585: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 72a18dd2 f7cd777a ff020000 00000000   r.....wz........
+0020: 00000000 00000002 85000d7b 00000000   ...........{....
+06/10 19:03:45.586: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/10 19:03:47.531: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+06/10 19:03:47.531: [upf] INFO: UE F-SEID[UP:0xd19 CP:0xcca] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/10 19:03:47.534: [gtp] INFO: gtp_connect() [172.22.0.23]:2152 (../lib/gtp/path.c:60)
+06/10 19:03:49.932: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+06/10 19:03:49.933: [upf] INFO: UE F-SEID[UP:0xb73 CP:0xd04] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+06/10 19:03:49.935: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/10 19:26:41.595: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/10 19:26:41.595: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/10 19:26:41.641: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/10 19:26:41.641: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/10 19:26:41.641: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/10 19:26:41.642: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/10 19:26:41.642: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/10 19:26:44.124: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/10 19:27:53.482: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/10 19:27:53.482: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/10 19:27:53.482: [upf] INFO: UE F-SEID[UP:0xcf0 CP:0x124] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/10 19:27:53.553: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 8569aad8 fce80f40 ff020000 00000000   .i.....@........
+0020: 00000000 00000002 850040cc 00000000   ..........@.....
+06/10 19:27:53.555: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/10 19:27:55.520: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+06/10 19:27:55.520: [upf] INFO: UE F-SEID[UP:0x16e CP:0x2e1] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/10 19:27:55.523: [gtp] INFO: gtp_connect() [172.22.0.23]:2152 (../lib/gtp/path.c:60)
+06/10 19:28:00.494: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+06/10 19:28:00.494: [upf] INFO: UE F-SEID[UP:0x127 CP:0x476] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+06/10 19:28:00.497: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/10 20:31:52.848: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/10 20:31:52.848: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/10 20:31:52.891: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/10 20:31:52.891: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/10 20:31:52.891: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/10 20:31:52.891: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/10 20:31:52.892: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/10 20:31:55.360: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/10 20:33:17.811: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/10 20:33:17.812: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/10 20:33:17.812: [upf] INFO: UE F-SEID[UP:0x92c CP:0x468] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/10 20:33:17.858: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: e3ad5c42 08cb35a9 ff020000 00000000   ..\B..5.........
+0020: 00000000 00000002 8500fed2 00000000   ................
+06/10 20:33:17.860: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/11 11:17:43.164: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/11 11:17:43.164: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/11 11:17:43.206: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/11 11:17:43.206: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/11 11:17:43.206: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/11 11:17:43.206: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/11 11:17:43.206: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/11 11:17:45.655: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/11 11:23:23.411: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/11 11:23:23.411: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/11 11:23:23.411: [upf] INFO: UE F-SEID[UP:0x451 CP:0x306] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/11 11:23:23.481: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: cdf414ba 20ceb491 ff020000 00000000   .... ...........
+0020: 00000000 00000002 8500c528 00000000   ...........(....
+06/11 11:23:23.540: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/11 16:05:25.419: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/11 16:05:25.419: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/11 16:05:25.462: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/11 16:05:25.462: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/11 16:05:25.462: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/11 16:05:25.462: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/11 16:05:25.463: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/11 16:05:27.932: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/11 16:20:03.663: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/11 16:20:03.663: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/11 16:20:03.704: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/11 16:20:03.704: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/11 16:20:03.704: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/11 16:20:03.704: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/11 16:20:03.705: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/11 16:20:06.150: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/11 16:43:11.954: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/11 16:43:11.954: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/11 16:43:11.954: [upf] INFO: UE F-SEID[UP:0x63a CP:0x6e1] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/11 16:43:12.005: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: db53684e b42c9974 ff020000 00000000   .ShN.,.t........
+0020: 00000000 00000002 8500ebf3 00000000   ................
+06/11 16:43:12.007: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/11 17:32:07.870: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/11 17:32:07.870: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/11 17:32:07.912: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/11 17:32:07.912: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/11 17:32:07.912: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/11 17:32:07.912: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/11 17:32:07.913: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/11 17:32:10.371: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/11 17:34:37.583: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/11 17:34:37.584: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/11 17:34:37.584: [upf] INFO: UE F-SEID[UP:0x4ad CP:0x91f] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/11 17:34:37.641: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 30a9e9fd 464baeca ff020000 00000000   0...FK..........
+0020: 00000000 00000002 85006d7a 00000000   ..........mz....
+06/11 17:34:37.642: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/11 21:35:18.623: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/11 21:35:18.623: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/11 21:35:18.665: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/11 21:35:18.665: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/11 21:35:18.665: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/11 21:35:18.666: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/11 21:35:18.666: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/11 21:35:21.147: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/11 21:37:12.705: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/11 21:37:12.705: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/11 21:37:12.705: [upf] INFO: UE F-SEID[UP:0xeb4 CP:0xa7e] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/11 21:37:12.776: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: e704a4d5 83122ac5 ff020000 00000000   ......*.........
+0020: 00000000 00000002 85004385 00000000   ..........C.....
+06/11 21:37:12.777: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/11 21:46:53.906: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/11 21:46:53.906: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/11 21:46:53.945: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/11 21:46:53.945: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/11 21:46:53.945: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/11 21:46:53.946: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/11 21:46:53.946: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/11 21:46:56.384: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/11 21:48:41.879: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/11 21:48:41.879: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/11 21:48:41.879: [upf] INFO: UE F-SEID[UP:0x732 CP:0xffe] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/11 21:48:41.920: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 089567a8 468991f5 ff020000 00000000   ..g.F...........
+0020: 00000000 00000002 8500347b 00000000   ..........4{....
+06/11 21:48:41.922: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/11 21:54:25.768: [upf] INFO: [Removed] Number of UPF-sessions is now 0 (../src/upf/context.c:256)
+06/11 21:54:26.030: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/11 21:54:26.030: [upf] INFO: UE F-SEID[UP:0x415 CP:0xef3] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/11 21:54:26.066: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 4fa9a7d3 ec3e0637 ff020000 00000000   O....>.7........
+0020: 00000000 00000002 85009344 00000000   ...........D....
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/13 10:28:40.489: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/13 10:28:40.489: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/13 10:28:40.531: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/13 10:28:40.531: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/13 10:28:40.531: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/13 10:28:40.532: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/13 10:28:40.532: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/13 10:28:42.974: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/13 10:42:24.826: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/13 10:42:24.826: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/13 10:42:24.866: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/13 10:42:24.866: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/13 10:42:24.866: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/13 10:42:24.867: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/13 10:42:24.867: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/13 10:42:27.313: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/13 10:57:12.391: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/13 10:57:12.391: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/13 10:57:12.431: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/13 10:57:12.431: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/13 10:57:12.432: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/13 10:57:12.432: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/13 10:57:12.432: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/13 10:57:14.916: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/13 11:00:29.769: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/13 11:00:29.770: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/13 11:00:29.770: [upf] INFO: UE F-SEID[UP:0x5de CP:0x538] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/13 11:00:29.823: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: ecaf566b d33af4d5 ff020000 00000000   ..Vk.:..........
+0020: 00000000 00000002 8500720b 00000000   ..........r.....
+06/13 11:00:29.824: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/13 11:40:42.120: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/13 11:40:42.120: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/13 11:40:42.161: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/13 11:40:42.161: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/13 11:40:42.161: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/13 11:40:42.162: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/13 11:40:42.162: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/13 11:40:44.655: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/13 11:44:14.084: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/13 11:44:14.084: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/13 11:44:14.125: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/13 11:44:14.125: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/13 11:44:14.125: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/13 11:44:14.125: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/13 11:44:14.125: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/13 11:44:16.577: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/13 11:51:58.976: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/13 11:51:58.976: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/13 11:51:58.976: [upf] INFO: UE F-SEID[UP:0x8b2 CP:0x603] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/13 11:51:59.028: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: de133603 5d8b9f92 ff020000 00000000   ..6.]...........
+0020: 00000000 00000002 85006c02 00000000   ..........l.....
+06/13 11:51:59.029: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/13 13:10:00.861: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/13 13:10:00.861: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/13 13:10:00.903: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/13 13:10:00.903: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/13 13:10:00.903: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/13 13:10:00.903: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/13 13:10:00.903: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/13 13:10:03.349: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/13 13:52:32.428: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/13 13:52:32.428: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/13 13:52:32.470: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/13 13:52:32.470: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/13 13:52:32.470: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/13 13:52:32.470: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/13 13:52:32.470: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/13 13:52:34.918: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/13 13:55:24.305: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/13 13:55:24.305: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/13 13:55:24.305: [upf] INFO: UE F-SEID[UP:0x99c CP:0xe39] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/13 13:55:24.360: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 46c18472 4a6c1b3f ff020000 00000000   F..rJl.?........
+0020: 00000000 00000002 85004c58 00000000   ..........LX....
+06/13 13:55:24.361: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/13 13:55:26.519: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+06/13 13:55:26.519: [upf] INFO: UE F-SEID[UP:0x773 CP:0xba6] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/13 13:55:26.521: [gtp] INFO: gtp_connect() [172.22.0.23]:2152 (../lib/gtp/path.c:60)
+06/13 13:55:28.886: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+06/13 13:55:28.886: [upf] INFO: UE F-SEID[UP:0x398 CP:0x623] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+06/13 13:55:28.888: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/13 14:27:34.472: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/13 14:27:34.472: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/13 14:27:34.514: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/13 14:27:34.514: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/13 14:27:34.514: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/13 14:27:34.515: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/13 14:27:34.515: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/13 14:27:36.958: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/13 14:40:09.200: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/13 14:40:09.200: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/13 14:40:09.241: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/13 14:40:09.241: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/13 14:40:09.241: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/13 14:40:09.241: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/13 14:40:09.242: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/13 14:40:11.691: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/13 14:43:25.616: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/13 14:43:25.616: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/13 14:43:25.616: [upf] INFO: UE F-SEID[UP:0x209 CP:0x4aa] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/13 14:43:25.678: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: f7a58a9c f4114cda ff020000 00000000   ......L.........
+0020: 00000000 00000002 8500ba08 00000000   ................
+06/13 14:43:25.679: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/13 14:43:27.864: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+06/13 14:43:27.864: [upf] INFO: UE F-SEID[UP:0x83 CP:0xfc7] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/13 14:43:27.866: [gtp] INFO: gtp_connect() [172.22.0.23]:2152 (../lib/gtp/path.c:60)
+06/13 14:43:30.247: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+06/13 14:43:30.247: [upf] INFO: UE F-SEID[UP:0x66f CP:0x243] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+06/13 14:43:30.250: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/13 15:16:02.316: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/13 15:16:02.316: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/13 15:16:02.358: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/13 15:16:02.358: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/13 15:16:02.358: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/13 15:16:02.359: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/13 15:16:02.359: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/13 15:16:04.806: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/13 15:21:23.504: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/13 15:21:23.504: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/13 15:21:23.504: [upf] INFO: UE F-SEID[UP:0x1b3 CP:0x778] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/13 15:21:23.546: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 033d813d 3257e842 ff020000 00000000   .=.=2W.B........
+0020: 00000000 00000002 8500de22 00000000   ..........."....
+06/13 15:21:23.547: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/13 15:21:25.818: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+06/13 15:21:25.818: [upf] INFO: UE F-SEID[UP:0x7f2 CP:0xe8c] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/13 15:21:25.820: [gtp] INFO: gtp_connect() [172.22.0.23]:2152 (../lib/gtp/path.c:60)
+06/13 15:21:28.191: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+06/13 15:21:28.191: [upf] INFO: UE F-SEID[UP:0x22a CP:0x67f] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+06/13 15:21:28.193: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/13 16:51:08.612: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/upf.yaml' (../lib/app/ogs-init.c:144)
+06/13 16:51:08.612: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/upf.log' (../lib/app/ogs-init.c:147)
+06/13 16:51:08.653: [metrics] INFO: metrics_server() [http://172.22.0.8]:9091 (../lib/metrics/prometheus/context.c:392)
+06/13 16:51:08.654: [pfcp] INFO: pfcp_server() [172.22.0.8]:8805 (../lib/pfcp/path.c:30)
+06/13 16:51:08.654: [gtp] INFO: gtp_server() [172.22.0.8]:2152 (../lib/gtp/path.c:30)
+06/13 16:51:08.654: [app] INFO: UPF initialize...done (../src/upf/app.c:31)
+06/13 16:51:08.654: [upf] INFO: PFCP associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:168)
+06/13 16:51:11.105: [upf] WARNING: PFCP[REQ] has already been associated [172.22.0.7]:8805 (../src/upf/pfcp-sm.c:256)
+06/13 16:53:19.760: [upf] INFO: [Added] Number of UPF-Sessions is now 1 (../src/upf/context.c:212)
+06/13 16:53:19.760: [gtp] INFO: gtp_connect() [172.22.0.7]:2152 (../lib/gtp/path.c:60)
+06/13 16:53:19.760: [upf] INFO: UE F-SEID[UP:0x995 CP:0x188] APN[internet] PDN-Type[1] IPv4[192.168.100.2] IPv6[] (../src/upf/context.c:498)
+06/13 16:53:19.807: [upf] ERROR: Invalid packet [IP version:6, Packet Length:48] (../src/upf/gtp-path.c:694)
+0000: 60000000 00083aff fe800000 00000000   `.....:.........
+0010: 40c663b2 cc5f1c06 ff020000 00000000   @.c.._..........
+0020: 00000000 00000002 8500f058 00000000   ...........X....
+06/13 16:53:19.808: [gtp] INFO: gtp_connect() [172.22.0.37]:2152 (../lib/gtp/path.c:60)
+06/13 16:53:22.134: [upf] INFO: [Added] Number of UPF-Sessions is now 2 (../src/upf/context.c:212)
+06/13 16:53:22.134: [upf] INFO: UE F-SEID[UP:0x6b CP:0xd08] APN[internet] PDN-Type[1] IPv4[192.168.100.3] IPv6[] (../src/upf/context.c:498)
+06/13 16:53:22.136: [gtp] INFO: gtp_connect() [172.22.0.23]:2152 (../lib/gtp/path.c:60)
+06/13 16:53:24.510: [upf] INFO: [Added] Number of UPF-Sessions is now 3 (../src/upf/context.c:212)
+06/13 16:53:24.510: [upf] INFO: UE F-SEID[UP:0x54b CP:0xa13] APN[internet] PDN-Type[1] IPv4[192.168.100.4] IPv6[] (../src/upf/context.c:498)
+06/13 16:53:24.512: [gtp] INFO: gtp_connect() [172.22.0.25]:2152 (../lib/gtp/path.c:60)

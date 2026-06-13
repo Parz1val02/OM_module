@@ -399,3 +399,329 @@ Open5GS daemon v2.7.6-131-g782a97e
 05/30 19:48:49.403: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
 05/30 19:48:49.403: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
 05/30 19:48:49.405: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+05/30 20:13:15.311: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+05/30 20:59:32.508: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+05/30 20:59:32.508: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+05/30 20:59:32.510: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+05/30 20:59:32.511: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+05/30 20:59:32.541: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+05/30 20:59:32.541: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+05/30 20:59:32.542: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+05/30 21:01:37.006: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+05/31 09:35:46.858: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+05/31 09:35:46.858: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+05/31 09:35:46.858: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+05/31 09:35:46.861: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+05/31 09:35:46.894: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+05/31 09:35:46.894: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+05/31 09:35:46.896: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#17): (../lib/diameter/common/logger.c:81)
+05/31 09:47:33.015: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+05/31 09:48:12.329: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+05/31 09:48:12.329: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+05/31 09:48:12.330: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+05/31 09:48:12.331: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+05/31 09:48:12.348: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+05/31 09:48:12.349: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+05/31 09:48:12.350: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/01 19:27:05.755: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/01 19:27:05.755: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/01 19:27:05.756: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/01 19:27:05.759: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/01 19:27:05.784: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/01 19:27:05.784: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/01 19:27:05.786: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#17): (../lib/diameter/common/logger.c:81)
+06/01 20:32:27.435: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/01 21:53:22.726: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/01 21:53:22.726: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/01 21:53:22.727: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/01 21:53:22.728: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/01 21:53:22.748: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/01 21:53:22.748: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/01 21:53:22.750: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#17): (../lib/diameter/common/logger.c:81)
+06/01 22:23:26.867: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/01 22:42:54.042: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/01 22:42:54.042: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/01 22:42:54.042: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/01 22:42:54.044: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/01 22:42:54.108: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/01 22:42:54.108: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/01 22:42:54.110: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+06/01 23:01:36.045: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/01 23:18:45.261: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/01 23:18:45.261: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/01 23:18:45.261: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/01 23:18:45.263: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/01 23:18:45.296: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/01 23:18:45.296: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/01 23:18:45.298: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#17): (../lib/diameter/common/logger.c:81)
+06/01 23:47:47.537: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/02 00:11:52.801: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/02 00:11:52.801: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/02 00:11:52.801: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/02 00:11:52.803: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/02 00:11:52.834: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/02 00:11:52.835: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/02 00:11:52.837: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+06/02 00:24:07.486: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/02 23:44:40.582: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/02 23:44:40.582: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/02 23:44:40.583: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/02 23:44:40.585: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/02 23:44:40.604: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/02 23:44:40.604: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/02 23:44:40.606: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#17): (../lib/diameter/common/logger.c:81)
+06/03 00:12:25.804: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/04 17:16:50.671: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/04 17:16:50.671: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/04 17:16:50.672: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/04 17:16:50.674: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/04 17:16:50.690: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/04 17:16:50.690: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/04 17:16:50.692: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+06/04 17:33:03.770: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/04 19:49:45.086: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/04 19:49:45.086: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/04 19:49:45.087: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/04 19:49:45.090: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/04 19:49:45.184: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/04 19:49:45.184: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/04 19:49:45.185: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#17): (../lib/diameter/common/logger.c:81)
+06/04 20:01:03.626: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/04 20:53:47.221: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/04 20:53:47.221: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/04 20:53:47.222: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/04 20:53:47.223: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/04 20:53:47.251: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/04 20:53:47.251: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/04 20:53:47.253: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+06/04 21:10:47.690: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/10 19:42:21.936: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/10 19:42:21.936: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/10 19:42:21.937: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/10 19:42:21.938: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/10 19:42:22.009: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/10 19:42:22.009: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/10 19:42:22.011: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+06/10 19:43:57.321: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/10 20:13:00.149: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/10 20:13:00.149: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/10 20:13:00.150: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/10 20:13:00.151: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/10 20:13:00.171: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/10 20:13:00.171: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/10 20:13:00.172: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+06/10 20:30:05.474: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/10 21:08:22.549: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/10 21:08:22.549: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/10 21:08:22.551: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/10 21:08:22.552: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/10 21:08:22.583: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/10 21:08:22.583: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/10 21:08:22.584: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+06/10 21:17:09.746: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/10 21:19:04.638: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/10 21:19:04.638: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/10 21:19:04.639: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/10 21:19:04.640: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/10 21:19:04.672: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/10 21:19:04.672: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/10 21:19:04.673: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#17): (../lib/diameter/common/logger.c:81)
+06/10 21:29:05.819: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/11 10:07:31.011: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/11 10:07:31.011: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/11 10:07:31.011: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/11 10:07:31.013: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/11 10:07:31.032: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/11 10:07:31.032: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/11 10:07:31.035: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+06/11 10:13:53.959: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/11 10:21:27.231: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/11 10:21:27.231: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/11 10:21:27.231: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/11 10:21:27.233: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/11 10:21:27.278: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/11 10:21:27.279: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/11 10:21:27.280: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+06/11 10:27:57.245: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/11 10:47:53.595: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/11 10:47:53.595: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/11 10:47:53.596: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/11 10:47:53.597: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/11 10:47:53.660: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/11 10:47:53.660: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/11 10:47:53.662: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#17): (../lib/diameter/common/logger.c:81)
+06/11 11:09:36.485: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/11 13:07:08.387: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/11 13:07:08.387: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/11 13:07:08.388: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/11 13:07:08.389: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/11 13:07:08.431: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/11 13:07:08.431: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/11 13:07:08.433: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#17): (../lib/diameter/common/logger.c:81)
+06/11 13:12:01.900: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/11 13:16:58.588: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/11 13:16:58.588: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/11 13:16:58.589: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/11 13:16:58.589: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/11 13:16:58.641: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/11 13:16:58.641: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/11 13:16:58.642: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+06/11 13:19:48.682: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/11 15:13:02.135: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/11 15:13:02.135: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/11 15:13:02.136: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/11 15:13:02.137: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/11 15:13:02.192: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/11 15:13:02.192: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/11 15:13:02.193: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+06/11 15:36:31.695: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/11 17:03:56.963: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/11 17:03:56.963: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/11 17:03:56.964: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/11 17:03:56.965: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/11 17:03:56.989: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/11 17:03:56.989: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/11 17:03:56.991: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+06/11 17:31:34.301: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/12 19:21:11.539: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/12 19:21:11.539: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/12 19:21:11.540: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/12 19:21:11.542: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/12 19:21:11.588: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/12 19:21:11.588: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/12 19:21:11.589: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#17): (../lib/diameter/common/logger.c:81)
+06/12 19:35:58.231: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/13 05:47:56.213: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/13 05:47:56.213: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/13 05:47:56.214: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/13 05:47:56.216: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/13 05:47:56.237: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/13 05:47:56.237: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/13 05:47:56.239: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#17): (../lib/diameter/common/logger.c:81)
+06/13 05:49:53.138: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/13 05:50:51.045: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/13 05:50:51.045: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/13 05:50:51.046: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/13 05:50:51.047: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/13 05:50:51.071: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/13 05:50:51.071: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/13 05:50:51.072: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+06/13 06:11:57.637: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/13 10:00:31.211: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/13 10:00:31.211: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/13 10:00:31.212: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/13 10:00:31.213: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/13 10:00:31.229: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/13 10:00:31.229: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/13 10:00:31.231: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/13 12:08:43.555: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/13 12:08:43.555: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/13 12:08:43.556: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/13 12:08:43.556: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/13 12:08:43.591: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/13 12:08:43.591: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/13 12:08:43.592: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#17): (../lib/diameter/common/logger.c:81)
+06/13 12:10:15.429: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/13 12:49:26.442: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/13 12:49:26.442: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/13 12:49:26.443: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/13 12:49:26.445: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/13 12:49:26.488: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/13 12:49:26.488: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/13 12:49:26.489: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#16): (../lib/diameter/common/logger.c:81)
+06/13 13:09:20.211: [diam] ERROR: pid:PSM/smf.epc.mnc001.mcc001.3gppnetwork.org in fd_psm_change_state@p_psm.c:284: 'STATE_OPEN'	-> 'STATE_CLOSED'	'smf.epc.mnc001.mcc001.3gppnetwork.org'
+ ((null):0)
+Open5GS daemon v2.7.6-131-g782a97e
+
+06/13 16:41:19.545: [app] INFO: Configuration: '/open5gs/install/etc/open5gs/pcrf.yaml' (../lib/app/ogs-init.c:144)
+06/13 16:41:19.545: [app] INFO: File Logging: '/open5gs/install/var/log/open5gs/pcrf.log' (../lib/app/ogs-init.c:147)
+06/13 16:41:19.546: [metrics] INFO: metrics_server() [http://172.22.0.4]:9091 (../lib/metrics/prometheus/context.c:392)
+06/13 16:41:19.548: [dbi] INFO: MongoDB URI: 'mongodb://172.22.0.2/open5gs' (../lib/dbi/ogs-mongoc.c:130)
+06/13 16:41:19.573: [app] INFO: Polling freeDiameter stats every 60000000 usecs (../lib/diameter/common/stats.c:77)
+06/13 16:41:19.573: [app] INFO: PCRF initialize...done (../src/pcrf/app-init.c:31)
+06/13 16:41:19.574: [diam] INFO: CONNECTED TO 'smf.epc.mnc001.mcc001.3gppnetwork.org' (SCTP,soc#17): (../lib/diameter/common/logger.c:81)
