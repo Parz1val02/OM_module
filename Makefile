@@ -60,7 +60,7 @@ help:
 
 services-up:
 	@echo "▶ Levantando stack de observabilidad..."
-	$(COMPOSE) -f $(SERVICES) up --build -d
+	$(COMPOSE) -f $(SERVICES) up -d
 	@echo "✅ Servicios O&M activos"
 
 services-down:

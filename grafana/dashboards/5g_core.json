@@ -200,7 +200,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Evolución temporal de los indicadores de ran.",
+      "description": "Evolución temporal de los indicadores de ran. amf_session (línea naranja punteada) no baja tras deregistration — comportamiento normal de Open5GS que mantiene el contexto del UE en el AMF. Comparar con ran_ue para observar la diferencia.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -238,6 +238,28 @@
                 "id": "color",
                 "value": {
                   "fixedColor": "blue",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "AMF Sessions"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "fill": "dash",
+                  "dash": [10, 10]
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "semi-dark-orange",
                   "mode": "fixed"
                 }
               }
@@ -282,6 +304,15 @@
           "expr": "amf_gnb_count",
           "legendFormat": "gNBs activos",
           "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "amf_session",
+          "legendFormat": "AMF Sessions",
+          "refId": "C"
         }
       ],
       "title": "Tráfico — evolución temporal",
@@ -885,7 +916,8 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "fivegs_amffunction_amf_authfail",
-          "refId": "A"
+          "refId": "A",
+          "legendFormat": "Auth Fail — causa {{cause}}"
         }
       ],
       "title": "Auth Fail — bad_k (AMF)",
@@ -1007,6 +1039,21 @@
                 "value": 3
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Auth Fail — causa 21"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
@@ -1054,72 +1101,20 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "fivegs_amffunction_rm_reginitfail",
-          "legendFormat": "Reg Init Fail",
+          "legendFormat": "Reg Init Fail — causa {{cause}}",
           "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_amffunction_amf_authfail",
+          "legendFormat": "Auth Fail — causa {{cause}}",
+          "refId": "D"
         }
       ],
       "title": "AMF — Registration Initial (req/succ/fail)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
-      },
-      "description": "PDU Session Creation en el SMF. IMPORTANTE: en Open5GS, succ siempre duplica a req (emite dos eventos succ por sesión) — esto NO indica un error, es el comportamiento normal del SMF. Por tanto, la brecha req−succ siempre es negativa y no sirve como indicador de fallos. Usar rm_reginitfail en el AMF como indicador de fallos de sesión.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "drawStyle": "line",
-            "fillOpacity": 5,
-            "lineWidth": 2
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 36
-      },
-      "id": 31,
-      "options": {
-        "legend": {
-          "calcs": ["last"],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi"
-        }
-      },
-      "pluginVersion": "11.3.0",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "fivegs_smffunction_sm_pdusessioncreationreq{container=\"smf\"}",
-          "legendFormat": "PDU Req",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
-          },
-          "expr": "fivegs_smffunction_sm_pdusessioncreationsucc{container=\"smf\"}",
-          "legendFormat": "PDU Succ (×2 = normal)",
-          "refId": "B"
-        }
-      ],
-      "title": "SMF — PDU Session Creation",
       "type": "timeseries"
     },
     {
@@ -1237,7 +1232,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "fivegs_pcffunction_pa_policysmassoreq",
-          "legendFormat": "PCF SM Policy Req",
+          "legendFormat": "PCF SM Policy Req — {{snssai}}",
           "refId": "A"
         },
         {
@@ -1246,7 +1241,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "fivegs_pcffunction_pa_policysmassosucc",
-          "legendFormat": "PCF SM Policy Succ",
+          "legendFormat": "PCF SM Policy Succ — {{snssai}}",
           "refId": "B"
         },
         {
@@ -1255,7 +1250,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "fivegs_pcffunction_pa_policyamassoreq",
-          "legendFormat": "PCF AM Policy Req",
+          "legendFormat": "PCF AM Policy Req — {{snssai}}",
           "refId": "C"
         },
         {
@@ -1264,7 +1259,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "expr": "fivegs_pcffunction_pa_sessionnbr",
-          "legendFormat": "PCF Sessions activas",
+          "legendFormat": "PCF Sessions activas — {{snssai}}",
           "refId": "D"
         }
       ],
@@ -1664,7 +1659,7 @@
             "overrides": []
           },
           "gridPos": {
-            "h": 10,
+            "h": 16,
             "w": 24,
             "x": 0,
             "y": 95

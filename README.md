@@ -161,10 +161,16 @@ Verify the images were tagged correctly before continuing:
 docker images | grep -E "docker_open5gs|docker_srslte|docker_srsran|docker_ueransim"
 ```
 
-The O&M module image (`docker_om_module`) is built locally from `./om-module`. Docker Compose will use a cached image if one already exists with that name. To force a rebuild (e.g. after modifying the Go source):
+The O&M module image (`docker_om_module`) is built locally from `./om-module` and must be built before the first deploy:
 
 ```bash
-docker compose -f services.yaml up --build -d
+docker compose -f services.yaml build om-module
+```
+
+Docker Compose will use the cached image on subsequent deploys. To force a rebuild (e.g. after modifying the Go source):
+
+```bash
+docker compose -f services.yaml build --no-cache om-module
 ```
 
 ---
