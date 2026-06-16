@@ -1122,7 +1122,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Sesión N4 PFCP entre SMF y UPF. fivegs_upffunction_sm_n4sessionestabreq confirma que el UPF recibió y procesó la solicitud de establecimiento de sesión del plano de usuario. pfcp_peers_active = 1 confirma que la asociación PFCP entre SMF y UPF está establecida — condición necesaria para que las PDU Sessions funcionen.",
+      "description": "Interfaz N4 PFCP entre SMF/SMF2 y UPF/UPF2. pfcp_peers_active = 1 confirma la asociación PFCP establecida — condición previa para PDU Sessions. En E3 solo aparecen smf/upf (slice 1). En E4 aparecen también smf2/upf2 (slice 2).",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1182,6 +1182,33 @@
           "expr": "pfcp_peers_active{container=\"upf\"}",
           "legendFormat": "PFCP Peers (UPF)",
           "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "fivegs_upffunction_sm_n4sessionestabreq{container=\"upf2\"}",
+          "legendFormat": "N4 Estab Req (UPF2)",
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "pfcp_peers_active{container=\"smf2\"}",
+          "legendFormat": "PFCP Peers (SMF2)",
+          "refId": "E"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "expr": "pfcp_peers_active{container=\"upf2\"}",
+          "legendFormat": "PFCP Peers (UPF2)",
+          "refId": "F"
         }
       ],
       "title": "N4 — Session Establishment + PFCP Peers",
@@ -1258,9 +1285,9 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "expr": "fivegs_pcffunction_pa_sessionnbr",
-          "legendFormat": "PCF Sessions activas — {{snssai}}",
-          "refId": "D"
+          "expr": "fivegs_pcffunction_pa_policyamassosucc",
+          "legendFormat": "PCF AM Policy Succ — {{snssai}}",
+          "refId": "E"
         }
       ],
       "title": "PCF — Política de sesión y movilidad",
@@ -1854,10 +1881,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -1878,6 +1901,186 @@
           {
             "matcher": {
               "id": "byName",
+              "options": "Trace ID"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Span ID"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Trace Service"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Service Name"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "service.name"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "generation"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Generation"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "span.generation"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "span_generation"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "source"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Source"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "span.source"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "span_source"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "span.procedure"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "procedure"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
               "options": "Start time"
             },
             "properties": [
@@ -1887,7 +2090,43 @@
               },
               {
                 "id": "custom.width",
-                "value": 220
+                "value": 180
+              },
+              {
+                "id": "displayName",
+                "value": "Time"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "span.src_nf"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "src_nf"
+              },
+              {
+                "id": "custom.width",
+                "value": 80
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "span.dst_nf"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "dst_nf"
+              },
+              {
+                "id": "custom.width",
+                "value": 80
               }
             ]
           },
@@ -1899,19 +2138,67 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 280
+                "value": 400
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "Trace ID"
+              "options": "Trace Name"
             },
             "properties": [
               {
                 "id": "custom.width",
-                "value": 280
+                "value": 400
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "span.protocol"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "protocol"
+              },
+              {
+                "id": "custom.width",
+                "value": 90
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "span.imsi"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "imsi"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "span.message_direction"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "direction"
+              },
+              {
+                "id": "custom.width",
+                "value": 80
               }
             ]
           }
@@ -1936,7 +2223,7 @@
         "sortBy": [
           {
             "desc": true,
-            "displayName": "Start time"
+            "displayName": "Time"
           }
         ]
       },
@@ -1948,14 +2235,14 @@
             "uid": "tempo"
           },
           "limit": 50,
-          "query": "{span.source=\"capture\" && span.generation=\"5g\"} | select(span.src_nf, span.dst_nf, span.protocol, span.procedure, span.nas_message, span.imsi, span.generation, span.message_direction)",
+          "query": "{span.source=\"capture\" && span.generation=\"5g\"} | select(span.src_nf, span.dst_nf, span.protocol, span.imsi, span.message_direction)",
           "queryType": "traceql",
           "refId": "A",
           "spss": 1,
-          "tableType": "traces"
+          "tableType": "spans"
         }
       ],
-      "title": "Paquetes 5G recientes — clic en Trace ID para inspeccionar",
+      "title": "Paquetes 5G recientes",
       "type": "table"
     }
   ],
