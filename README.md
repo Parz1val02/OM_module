@@ -1,4 +1,4 @@
-# OM_module — 4G/5G Testbed with Full Observability
+# OM_module - 4G/5G Testbed with Full Observability
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Go](https://img.shields.io/badge/Go-1.25-00ADD8.svg)](https://golang.org/)
