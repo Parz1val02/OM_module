@@ -17,7 +17,7 @@
 
 This project is a containerized 4G/5G mobile network testbed developed as a PUCP thesis prototype. It extends the [docker_open5gs](https://github.com/herlesupreeth/docker_open5gs) project with a custom **Operations & Maintenance (O&M) module** designed to improve the learning experience in mobile network labs.
 
-The testbed runs Open5GS as the 4G/5G core and srsRAN/UERANSIM as the radio access network simulator. On top of the network stack, the O&M module provides **full observability**: per-container resource metrics, structured log aggregation, and distributed traces that correlate signaling events across network functions — S1AP, NGAP, GTPv2, PFCP, Diameter, and 5G SBI.
+The testbed runs Open5GS as the 4G/5G core and srsRAN/UERANSIM as the radio access network simulator. On top of the network stack, the O&M module provides **full observability**: per-container resource metrics, structured log aggregation, and distributed traces that correlate signaling events across network functions - S1AP, NGAP, GTPv2, PFCP, Diameter, and 5G SBI.
 
 Four test scenarios (E1–E4) cover both 4G and 5G with normal attach/registration flows and controlled fault injection (wrong Ki, invalid APN/DNN, bad IMSI/SUPI, wrong DNN/SD), allowing students to observe how the core responds to authentication and session errors in real time.
 
@@ -36,7 +36,7 @@ Four test scenarios (E1–E4) cover both 4G and 5G with normal attach/registrati
 │  Open5GS EPC (MME · HSS · SGWC/U · SMF · UPF · PCRF)            │
 │  Open5GS 5GC (AMF · NRF · AUSF · UDM · UDR · PCF · NSSF ·       │
 │               BSF · SCP · SMF · UPF)                            │
-│  E4 slice extension (SMF2 · UPF2 — SST=1 SD=000002)             │
+│  E4 slice extension (SMF2 · UPF2 - SST=1 SD=000002)             │
 └──────────────┬──────────────────────────────────────────────────┘
                │ Docker bridge capture (SCTP · UDP)
                │ GTPv2 · PFCP · Diameter · SBI
@@ -95,10 +95,10 @@ Four test scenarios (E1–E4) cover both 4G and 5G with normal attach/registrati
 - **Docker Engine** ≥ 29 (tested on 29.3.1)
 - **Docker Compose** v2 (`docker compose`, tested on v5.1.1)
 - **GNU Make** ≥ 4.3
-- **Linux host** — packet capture requires access to Docker bridge interfaces (`NET_ADMIN`, `NET_RAW`); the O&M container runs with `network_mode: host`
+- **Linux host** - packet capture requires access to Docker bridge interfaces (`NET_ADMIN`, `NET_RAW`); the O&M container runs with `network_mode: host`
 - **8 GB RAM** minimum recommended (more for E4 with multiple gNBs)
 
-> `tshark` (Wireshark CLI) is **included inside the O&M container image** — you do not need to install it on the host.
+> `tshark` (Wireshark CLI) is **included inside the O&M container image** - you do not need to install it on the host.
 
 ### Host configuration (required before first deploy)
 
@@ -133,7 +133,7 @@ This ensures `DOCKER_GID` is always correct in every new session without requiri
 
 ---
 
-## Setup — Pull Docker Images
+## Setup - Pull Docker Images
 
 Pull the base images before first use. This step may take several minutes as images are several GB in size:
 
@@ -180,22 +180,23 @@ docker compose -f services.yaml build --no-cache om-module
 ### Recommended startup order
 
 ```bash
-# Step 1 — Start the core (choose one)
+# Step 1 - Start the core (choose one)
 make core-4g-up       # 4G core (Open5GS EPC: MME, HSS, SGWC/U, SMF, UPF, PCRF)
 make core-5g-up       # 5G core (Open5GS 5GC: AMF, NRF, AUSF, UDM, UDR, PCF, ...)
 
-# Step 2 — Start the observability + O&M stack (after core is up)
+# Step 2 - Start the observability + O&M stack (after core is up)
 make services-up
 
-# Step 3 — Provision subscriber data (MongoDB must be running)
+# Step 3 - Provision subscriber data (MongoDB must be running)
 bash scripts/mongo_insert.sh
 
-# Step 4 — Launch a scenario (choose one)
-make e1               # E1 — Basic 4G attach
-make e3               # E3 — Basic 5G registration (srsRAN)
-make e4               # E4 — Multi-gNB slicing (automatically starts smf2+upf2)
+# Step 4 - Launch a scenario (choose one)
+make e1               # E1 - Basic 4G attach
+make e2               # E2 - Multi-eNB 4G with fault injection
+make e3               # E3 - Basic 5G registration (srsRAN)
+make e4               # E4 - Multi-gNB slicing (automatically starts smf2+upf2)
 
-# Step 5 — Generate traffic
+# Step 5 - Generate traffic
 make traffic
 ```
 
@@ -231,32 +232,32 @@ All four should return a 200 response. If Prometheus is unhealthy, verify that `
 
 The four scenarios are designed in two parallel pairs for direct 4G↔5G comparison:
 
-- **E1 ↔ E3** — baseline complete flow: same sequence of events (attach/registration → bearer/PDU session → traffic → detach/deregistration), different architecture
-- **E2 ↔ E4** — multi-RAN node + fault injection: same fault categories (identity, authentication, session), different core and slicing
+- **E1 ↔ E3** - baseline complete flow: same sequence of events (attach/registration → bearer/PDU session → traffic → detach/deregistration), different architecture
+- **E2 ↔ E4** - multi-RAN node + fault injection: same fault categories (identity, authentication, session), different core and slicing
 
 | Scenario | Generation | RAN | Description | Makefile |
 |---|---|---|---|---|
-| E1 | 4G | srsRAN LTE | 1 eNB + 1 valid UE — full EPS Attach → Bearer → Traffic → Detach flow | `make e1` |
-| E2 | 4G | srsRAN LTE | 4 independent eNB+UE pairs — 1 valid + 3 fault-injected (wrong Ki, bad IMSI, wrong APN) | `make e2` |
-| E3 | 5G | srsRAN Project (default) or UERANSIM | 1 gNB + 1 valid UE — full 5G Registration → PDU Session → Traffic → Deregistration flow | `make e3` / `make e3-ueransim` |
+| E1 | 4G | srsRAN LTE | 1 eNB + 1 valid UE - full EPS Attach → Bearer → Traffic → Detach flow | `make e1` |
+| E2 | 4G | srsRAN LTE | 4 independent eNB+UE pairs - 1 valid + 3 fault-injected (wrong Ki, bad IMSI, wrong APN) | `make e2` |
+| E3 | 5G | srsRAN Project (default) or UERANSIM | 1 gNB + 1 valid UE - full 5G Registration → PDU Session → Traffic → Deregistration flow | `make e3` / `make e3-ueransim` |
 | E4 | 5G | srsRAN Project + UERANSIM | 3 gNBs + network slicing (SST=1 SD=000001 / SST=1 SD=000002) + dedicated SMF+UPF per slice + 4 valid UEs + 4 fault-injected UEs | `make e4` |
 
 The Makefile waits for readiness at each step before proceeding (handled by `scripts/wait_ran.sh`).
 
-### E2 — UE distribution (4G fault injection)
+### E2 - UE distribution (4G fault injection)
 
 | Container | eNB | IMSI | Fault mechanism | Expected failure |
 |---|---|---|---|---|
 | `srsue_zmq` | eNB1 | 895 | None (valid) | ✅ Attach successful |
-| `srsue_zmq_bad_ki` | eNB2 | 902 | Wrong Ki in `.conf` (DB entry correct) | ❌ `Authentication failure (MAC failure)` — `OGS_NAS_EMM_CAUSE[20]` |
-| `srsue_zmq_bad_imsi` | eNB3 | 901 | **IMSI not in MongoDB** | ❌ `Attach reject` — `OGS_NAS_EMM_CAUSE[8]` (IMSI unknown in HLR) |
-| `srsue_zmq_bad_apn` | eNB4 | 903 | Wrong APN in `.conf` (DB entry correct) | ⚠️ Attach succeeds, PDN rejected — `Invalid APN` (ESM layer) |
+| `srsue_zmq_bad_ki` | eNB2 | 902 | Wrong Ki in `.conf` (DB entry correct) | ❌ `Authentication failure (MAC failure)` - `OGS_NAS_EMM_CAUSE[20]` |
+| `srsue_zmq_bad_imsi` | eNB3 | 901 | **IMSI not in MongoDB** | ❌ `Attach reject` - `OGS_NAS_EMM_CAUSE[8]` (IMSI unknown in HLR) |
+| `srsue_zmq_bad_apn` | eNB4 | 903 | Wrong APN in `.conf` (DB entry correct) | ⚠️ Attach succeeds, PDN rejected - `Invalid APN` (ESM layer) |
 
 > **Key pedagogical contrast:** `bad_ki` fails *during* authentication (subscriber found in DB, key derivation fails); `bad_imsi` fails *before* authentication (HSS rejects the identity lookup); `bad_apn` fails *after* attach (session layer, not authentication).
 
-> **ZMQ constraint:** srsRAN 4G ZMQ uses point-to-point REQ/REPLY sockets — one eNB can only serve one srsUE simultaneously. E2 therefore uses 4 independent eNB+UE pairs rather than multiple UEs per eNB.
+> **ZMQ constraint:** srsRAN 4G ZMQ uses point-to-point REQ/REPLY sockets - one eNB can only serve one srsUE simultaneously. E2 therefore uses 4 independent eNB+UE pairs rather than multiple UEs per eNB.
 
-### E4 — UE distribution (5G slicing + fault injection)
+### E4 - UE distribution (5G slicing + fault injection)
 
 E4 implements **true network slicing with user plane isolation**: two independent SMF+UPF pairs, each serving a distinct slice with a separate UE IP subnet.
 
@@ -276,7 +277,7 @@ E4 implements **true network slicing with user plane isolation**: two independen
 | `nr_ue_bad_dnn` | gNB1 | 908 | SST=1 SD=000001 | ⚠️ Registration succeeds, `DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED` |
 | `nr_ue_bad_sst` | gNB2 | 909 | SST=1 SD=000003 (non-existent) | ❌ `Cannot find Requested NSSAI [SST:1 SD:0x3]` → Reject [62] |
 
-> **Slicing isolation proof:** `nr_ue3` always receives an IP in `192.168.200.x`, while all SST=1 SD=000001 UEs receive `192.168.100.x`. Traffic from each slice never crosses the other's UPF — observable via `ogstun` (slice 1) and `ogstun3` (slice 2) interface counters.
+> **Slicing isolation proof:** `nr_ue3` always receives an IP in `192.168.200.x`, while all SST=1 SD=000001 UEs receive `192.168.100.x`. Traffic from each slice never crosses the other's UPF - observable via `ogstun` (slice 1) and `ogstun3` (slice 2) interface counters.
 
 > **bad_sst fault mechanism:** The UE requests SST=1 SD=000003 which is not declared in the AMF's `plmn_support`. The AMF rejects at the NSSAI check before authentication begins (cause 62: Requested NSSAI not subscribed).
 
@@ -304,11 +305,62 @@ make down             # Stop everything (RAN + core + services)
 
 ---
 
+## Scenario Evidence
+
+Every scenario run is backed by reproducible evidence committed to the repository:
+
+| Directory | Content |
+|---|---|
+| `figuras/E1` … `figuras/E4` | Grafana core dashboard captures per scenario, in both **up** (RAN + traffic active) and **down** (post-teardown) states |
+| `figuras/despliegue` | Terminal output of every `make` target across the full 4G and 5G lifecycles (core up → scenario → teardown → core down) |
+| `snapshots/` | Raw Prometheus metrics snapshots (JSON) taken at key moments: core-only baseline, RAN up with traffic, and post-teardown per scenario |
+| `logs/4g` · `logs/5g` | Reference log files per network function, as shipped to Loki by Promtail |
+| `procedures_captures/` | Reference signaling captures in Elastic-JSON (`.jsonl`) format as emitted by tshark - S1AP/NGAP (`capture_ek_*`), GTPv2, PFCP, Diameter, and 5G SBI |
+
+### Dashboard capture naming convention (`figuras/E*`)
+
+Captures are numbered in viewing order. The set per scenario:
+
+| Capture | Shows |
+|---|---|
+| `01_up` / `02_down` | Core dashboard header panels with the scenario active vs. after RAN teardown - demonstrates counters reflecting attach/registration and release in real time |
+| `03_slice2` (E3/E4 only) | Slice 2 (SST=1 SD=000002) panel section - active in E4, all counters at zero in E3 (no slice 2 deployed), evidencing per-slice isolation |
+| `*_nfs` | Per-NF status and resource panels |
+| `*_rendimiento` | Throughput/performance panels during traffic generation |
+| `*_logs_*` | Loki log panels (single view for E1/E3; two-part capture for the multi-UE E2/E4 runs) |
+| `*_senalizacion` | Tempo signaling trace panels (S1AP/NGAP, GTPv2/PFCP, Diameter/SBI spans) |
+
+These captures correspond to the result figures presented in the thesis (Chapter 4.3 for E2/E4; Annex B for the base scenarios E1/E3).
+
+### Sample captures
+
+**E2 (4G, multi-eNB with fault injection): core dashboard with RAN and traffic active**
+
+![E2 core dashboard up](figuras/E2/01_up.png)
+
+**E4 (5G, multi-gNB slicing): core dashboard with RAN and traffic active**
+
+![E4 core dashboard up](figuras/E4/01_up.png)
+
+**Slice isolation evidence: slice 2 panels active in E4 vs. all counters at zero in E3**
+
+| E4 (slice 2 deployed) | E3 (no slice 2) |
+|---|---|
+| ![E4 slice 2 active](figuras/E4/03_slice2.png) | ![E3 slice 2 at zero](figuras/E3/03_slice2.png) |
+
+**Deployment: terminal output of `make e4` (phase 1)**
+
+![make e4 terminal output](figuras/despliegue/08_e4_fase1.png)
+
+Full capture sets for all four scenarios and the complete deployment lifecycle are available under [`figuras/`](figuras/).
+
+---
+
 ## Provisioning Subscriber Data
 
 ### Automated (recommended)
 
-Run after `make core-4g-up` or `make core-5g-up`. Before running, verify MongoDB is ready to accept connections — the container may be marked as `Up` while `mongod` is still initializing:
+Run after `make core-4g-up` or `make core-5g-up`. Before running, verify MongoDB is ready to accept connections - the container may be marked as `Up` while `mongod` is still initializing:
 
 ```bash
 docker exec mongo mongosh --eval "db.adminCommand('ping')"
@@ -321,21 +373,21 @@ Once ready, insert all subscribers:
 bash scripts/mongo_insert.sh
 ```
 
-The script drops existing subscribers and inserts all UEs needed for E1–E4. It is idempotent — safe to run multiple times. Subscribers provisioned:
+The script drops existing subscribers and inserts all UEs needed for E1–E4. It is idempotent - safe to run multiple times. Subscribers provisioned:
 
 | IMSI | Scenario | Role |
 |---|---|---|
-| `001011234567895` | E1 / E3 / E4 | Valid UE (base) — works for 4G and 5G |
-| `001011234567896` | E3 / E4 | Valid 5G UE — SST=1 SD=000001 (internet) |
-| `001011234567898` | E4 | Valid 5G UE — SST=1 SD=000001 (internet), gNB2 |
-| `001011234567899` | E4 | Valid 5G UE — SST=1 SD=000002 (private), routed to smf2/upf2 |
+| `001011234567895` | E1 / E3 / E4 | Valid UE (base) - works for 4G and 5G |
+| `001011234567896` | E3 / E4 | Valid 5G UE - SST=1 SD=000001 (internet) |
+| `001011234567898` | E4 | Valid 5G UE - SST=1 SD=000001 (internet), gNB2 |
+| `001011234567899` | E4 | Valid 5G UE - SST=1 SD=000002 (private), routed to smf2/upf2 |
 | `001011234567902` | E2 | DB entry correct, srsue config has **wrong Ki** → auth failure |
 | `001011234567903` | E2 | DB entry correct, srsue config has **wrong APN** → PDN reject |
 | `001011234567906` | E4 | DB correct, config has **wrong K** → auth failure at AUSF |
 | `001011234567908` | E4 | DB correct, config has **wrong DNN** → PDU reject at SMF |
 | `001011234567909` | E4 | DB correct (SD=000001), config requests **SD=000003** → reject at AMF |
 
-> **Not inserted intentionally**: IMSI `001011234567901` (bad_imsi E2) and `001011234567905` (bad_supi E4). Their absence from MongoDB *is* the fault injection — the core returns `Unknown UE`.
+> **Not inserted intentionally**: IMSI `001011234567901` (bad_imsi E2) and `001011234567905` (bad_supi E4). Their absence from MongoDB *is* the fault injection - the core returns `Unknown UE`.
 
 ### Manual (fallback)
 
@@ -357,7 +409,7 @@ OP   : 11111111111111111111111111111111
 make traffic
 ```
 
-Runs `scripts/traffic.sh`, which executes ping from all active UE containers. Works for any scenario currently up. For E4, `nr_ue3` sends traffic through `upf2` (DNN=private, subnet 192.168.200.x) while the other UEs go through `upf` (DNN=internet, subnet 192.168.100.x) — demonstrating user plane isolation between slices.
+Runs `scripts/traffic.sh`, which executes ping from all active UE containers. Works for any scenario currently up. For E4, `nr_ue3` sends traffic through `upf2` (DNN=private, subnet 192.168.200.x) while the other UEs go through `upf` (DNN=internet, subnet 192.168.100.x) - demonstrating user plane isolation between slices.
 
 ---
 
@@ -367,10 +419,10 @@ Runs `scripts/traffic.sh`, which executes ping from all active UE containers. Wo
 
 The O&M module is a Go service (`./om-module`) that runs alongside the testbed and provides:
 
-1. **Container discovery** — connects to the Docker daemon, filters containers by Compose project label (`om.*` taxonomy: domain, nf, generation, project), and maintains a live snapshot refreshed every 15 seconds.
-2. **Packet capture** — spawns `tshark` as a subprocess on the Docker bridge interface (`auto`-detected or explicitly configured). Captures SCTP (S1AP/NGAP), UDP (GTPv2/PFCP), TCP (Diameter), and HTTP/2 (5G SBI). Parses Elastic-JSON output and emits one OTLP span per packet to Grafana Tempo.
-3. **Prometheus metrics** — exposes container resource metrics and capture pipeline counters at `/metrics`.
-4. **REST API** — four endpoints for integration and monitoring.
+1. **Container discovery** - connects to the Docker daemon, filters containers by Compose project label (`om.*` taxonomy: domain, nf, generation, project), and maintains a live snapshot refreshed every 15 seconds.
+2. **Packet capture** - spawns `tshark` as a subprocess on the Docker bridge interface (`auto`-detected or explicitly configured). Captures SCTP (S1AP/NGAP), UDP (GTPv2/PFCP), TCP (Diameter), and HTTP/2 (5G SBI). Parses Elastic-JSON output and emits one OTLP span per packet to Grafana Tempo.
+3. **Prometheus metrics** - exposes container resource metrics and capture pipeline counters at `/metrics`.
+4. **REST API** - four endpoints for integration and monitoring.
 
 ---
 
@@ -386,11 +438,11 @@ om-module/               # O&M module Go source
 │   │   ├── pipeline/    # Packet → OTLP span pipeline + capture metrics
 │   │   └── tracing/     # OpenTelemetry tracer init (OTLP/HTTP → Tempo)
 │
-├── 4G_core.yaml             # Docker Compose — Open5GS EPC (4G core)
-├── 5G_core.yaml             # Docker Compose — Open5GS 5GC (5G core)
-├── 5G_core_e4.yaml          # Docker Compose — E4 slice extension (smf2 + upf2)
-├── ran.yaml                 # Docker Compose — RAN (profiles: ran-4g-srs, ran-4g-e2, ran-5g-srs, ran-5g-ueransim, ran-5g-e4)
-├── services.yaml            # Docker Compose — O&M module + observability stack
+├── 4G_core.yaml             # Docker Compose - Open5GS EPC (4G core)
+├── 5G_core.yaml             # Docker Compose - Open5GS 5GC (5G core)
+├── 5G_core_e4.yaml          # Docker Compose - E4 slice extension (smf2 + upf2)
+├── ran.yaml                 # Docker Compose - RAN (profiles: ran-4g-srs, ran-4g-e2, ran-5g-srs, ran-5g-ueransim, ran-5g-e4)
+├── services.yaml            # Docker Compose - O&M module + observability stack
 ├── Makefile                 # Automation (see make help)
 ├── .env                     # IP assignments, UE credentials, MCC/MNC
 │
@@ -402,7 +454,10 @@ om-module/               # O&M module Go source
 │   ├── run_e4.sh            # Multi-container launch for E4
 │   └── traffic.sh           # Ping from all active UEs
 │
-├── grafana/                 # Dashboards + provisioning config
+├── grafana/                 # Provisioning config (dashboards, datasources, alerting
+│                            #  contact points / policies / rules) + provisioned core dashboards
+├── dashboards/              # Grafana dashboard JSON exports - general 4G/5G core views
+│                            #  + one dashboard per scenario (e1–e4)
 ├── prometheus/configs/      # Prometheus scrape config (docker SD + json-exporter jobs)
 ├── json_exporter/           # Config for Prometheus json-exporter (Open5GS REST API)
 ├── metrics_endpoints/       # Per-NF metrics endpoint definitions
@@ -415,21 +470,27 @@ om-module/               # O&M module Go source
 │                            #  scp, sgwc, sgwu, smf, udm, udr, upf, webui)
 ├── srslte/  srsran/         # srsRAN LTE / srsRAN Project UE+RAN configs
 ├── ueransim/                # UERANSIM gNB + UE configs
-└── procedures_captures/     # Reference packet captures for E1–E4 (PCAP + JSON)
+│
+├── figuras/                 # Scenario evidence - dashboard captures per scenario (E1–E4)
+│                            #  + terminal output of make targets (despliegue/)
+├── snapshots/               # Prometheus metrics snapshots (JSON) per scenario state
+├── logs/                    # Reference NF log files (4g/, 5g/) as ingested by Loki
+└── procedures_captures/     # Reference signaling captures for E1–E4 in Elastic-JSON
+                             #  (.jsonl): S1AP/NGAP, GTPv2, PFCP, Diameter, 5G SBI
 ```
 
 ---
 
 ## Implementation Notes
 
-**Network slicing in E4 — SD-based, not SST-based**
+**Network slicing in E4 - SD-based, not SST-based**
 E4 uses two slices with the same SST (1) but different Slice Differentiators: SD=000001 (internet) and SD=000002 (private). This reflects real-world deployments where SST identifies the service class and SD identifies the operator-specific instance. Each SD is served by a dedicated SMF+UPF pair with an isolated UE IP subnet, providing true user plane isolation observable via `ogstun` (slice 1) and `ogstun3` (slice 2) interface traffic counters.
 
-**Handover — not included as a scenario**
+**Handover - not included as a scenario**
 In 5G, srsRAN Project only supports intra-gNB handover and requires a USRP X/N-series radio with two RF chains. In 4G, S1 handover over ZMQ requires GNU Radio Companion as an external broker outside the Docker stack. Both constraints make handover impractical in this fully virtualized testbed.
 
 **Multi-UE with ZMQ in 4G**
-srsRAN 4G ZMQ sockets are point-to-point (REQ/REPLY) — one eNB can serve only one srsUE at a time. Supporting multiple UEs per eNB would require a GRC broker. E2 works around this by using 4 independent eNB+UE pairs.
+srsRAN 4G ZMQ sockets are point-to-point (REQ/REPLY) - one eNB can serve only one srsUE at a time. Supporting multiple UEs per eNB would require a GRC broker. E2 works around this by using 4 independent eNB+UE pairs.
 
 **srsRAN Project vs UERANSIM in E3**
 E3 has two variants: `make e3` uses srsRAN Project and `make e3-ueransim` uses UERANSIM. srsRAN Project is the default because its behavior on N2 loss is more predictable. UERANSIM is available as an alternative and is the primary choice for E4 where its lightweight instances allow running 3 gNBs + 7 UEs with low overhead.
@@ -437,13 +498,13 @@ E3 has two variants: `make e3` uses srsRAN Project and `make e3-ueransim` uses U
 **srsRAN UE slice encoding**
 srsRAN's UE implementation (`srsue_5g_zmq`) does not support encoding slice-specific NAS IEs without triggering a protocol error in Open5GS AMF. The `[slicing]` section in `srslte/ue_5g_zmq.conf` must remain commented out. Slice assignment for this UE is handled by the AMF based on the subscriber record in MongoDB (SD=000001), not the UE's NAS request.
 
-**UERANSIM — 5G only**
+**UERANSIM - 5G only**
 UERANSIM operates exclusively over NGAP (N2) and 5G SA interfaces. It has no support for S1AP or 4G EPC.
 
 ---
 
 ## License
 
-MIT License — Copyright 2026 Rodrigo Barrios.
+MIT License - Copyright 2026 Rodrigo Barrios.
 
-Helper scripts derived from [docker_open5gs](https://github.com/herlesupreeth/docker_open5gs) are BSD 2-Clause — Copyright Supreeth Herle.
+Helper scripts derived from [docker_open5gs](https://github.com/herlesupreeth/docker_open5gs) are BSD 2-Clause - Copyright Supreeth Herle.
