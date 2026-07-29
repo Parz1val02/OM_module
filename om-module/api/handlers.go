@@ -45,16 +45,12 @@ func (h *Handlers) Register(mux *http.ServeMux) {
 	mux.HandleFunc("/capture/status", h.handleCaptureStatus)
 }
 
-// --- /ping ---------------------------------------------------------------
-
 func (h *Handlers) handlePing(w http.ResponseWriter, r *http.Request) {
 	_, span := tracing.Tracer().Start(r.Context(), "http.GET /ping")
 	defer span.End()
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write([]byte("pong"))
 }
-
-// --- /topology -----------------------------------------------------------
 
 type topologyContainer struct {
 	Name       string  `json:"name"`
@@ -123,8 +119,6 @@ func (h *Handlers) handleTopology(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	_ = json.NewEncoder(w).Encode(resp)
 }
-
-// --- /capture/status -----------------------------------------------------
 
 type captureStatusResponse struct {
 	Running       bool    `json:"running"`

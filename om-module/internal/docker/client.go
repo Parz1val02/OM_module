@@ -80,9 +80,7 @@ func (c *Client) ListContainers(ctx context.Context, project string) ([]Containe
 	return result, nil
 }
 
-// inspectNetwork wraps the Docker network inspect call with consistent
-// error context; shared by callers that need the network ID or its
-// attached containers.
+// inspectNetwork wraps NetworkInspect with consistent error context.
 func (c *Client) inspectNetwork(ctx context.Context, networkName string) (network.Inspect, error) {
 	nr, err := c.cli.NetworkInspect(ctx, networkName, network.InspectOptions{})
 	if err != nil {
@@ -92,11 +90,8 @@ func (c *Client) inspectNetwork(ctx context.Context, networkName string) (networ
 }
 
 // GetBridgeInterface returns the Linux bridge interface name for the given
-// Docker network name (e.g. "docker_open5gs_default").
-//
-// Docker names bridge interfaces as "br-<first12chars_of_network_id>".
-// The method verifies the interface actually exists on the host before
-// returning it, so the caller can rely on the result being usable.
+// Docker network (e.g. "docker_open5gs_default"). Docker names bridge
+// interfaces "br-<first12charsOfNetworkID>".
 func (c *Client) GetBridgeInterface(ctx context.Context, networkName string) (string, error) {
 	nr, err := c.inspectNetwork(ctx, networkName)
 	if err != nil {

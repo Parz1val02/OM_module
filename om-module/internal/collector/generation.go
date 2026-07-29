@@ -21,23 +21,8 @@ func (s *Snapshot) ActiveGeneration() string {
 	return ""
 }
 
-// NFByName returns the om.nf label value for a container with the given name.
-// Returns the container name itself if no om.nf label is found, and "" if
-// no container with that name exists in the snapshot.
-func (s *Snapshot) NFByName(containerName string) string {
-	for _, cd := range s.All() {
-		if cd.Name == containerName {
-			if cd.NF != "" {
-				return cd.NF
-			}
-			return containerName
-		}
-	}
-	return ""
-}
-
 // NameToNFMap returns a map of container name → om.nf label for all containers
-// currently in the snapshot. Used by the correlator to resolve IP → NF name
+// currently in the snapshot. Used by the pipeline to resolve IP → NF name
 // by joining with the Docker network IP map.
 func (s *Snapshot) NameToNFMap() map[string]string {
 	all := s.All()

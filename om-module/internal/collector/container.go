@@ -127,18 +127,10 @@ func (c *Collector) Run(ctx context.Context) {
 }
 
 // collect performs one full discovery + stats pass.
-//
-// Tracing structure:
-//
-//	collector.collect_cycle          (root — one trace per 15s tick)
-//	  ├── collector.list_containers  (single Docker API call)
-//	  └── collector.get_stats        (one child span per running container)
 func (c *Collector) collect(ctx context.Context) {
-	// --- Root span: covers the entire collection cycle ---
 	ctx, cycleSpan := tracing.Tracer().Start(ctx, "collector.collect_cycle")
 	defer cycleSpan.End()
 
-	// --- List containers ---
 	ctx, listSpan := tracing.Tracer().Start(ctx, "collector.list_containers")
 	containers, err := c.docker.ListContainers(ctx, c.project)
 	if err != nil {
@@ -161,7 +153,6 @@ func (c *Collector) collect(ctx context.Context) {
 			State: ct.State,
 			Image: ct.Image,
 
-			// Read om.* labels — zero-value ("") if label absent
 			Domain:     ct.Labels["om.domain"],
 			NF:         ct.Labels["om.nf"],
 			Generation: ct.Labels["om.generation"],
@@ -174,10 +165,7 @@ func (c *Collector) collect(ctx context.Context) {
 			continue
 		}
 
-		// Only collect resource stats for running containers.
 		if ct.State == "running" {
-			// One child span per container stats call so slow Docker API
-			// calls are individually visible in the Tempo waterfall.
 			_, statsSpan := tracing.Tracer().Start(ctx, "collector.get_stats")
 			statsSpan.SetAttributes(
 				attribute.String("container.name", ct.Name),
@@ -223,8 +211,6 @@ func (c *Collector) collect(ctx context.Context) {
 
 	c.snap.set(newData)
 }
-
-// --- helper calculations -------------------------------------------------
 
 // calcCPUPercent computes CPU usage % using the Docker delta formula:
 // ΔcpuDelta / ΔsystemDelta × numCPUs × 100

@@ -12,7 +12,7 @@ import (
 )
 
 // Packet is the parsed, normalised representation of a single tshark EK packet.
-// Only the fields the correlator needs are extracted; everything else is dropped.
+// Only the fields the pipeline needs are extracted; everything else is dropped.
 type Packet struct {
 	// Timestamp is derived from the frame epoch time in the EK output.
 	// It has nanosecond resolution and reflects the actual capture time.
@@ -29,7 +29,7 @@ type Packet struct {
 	SrcIP string
 	DstIP string
 
-	// --- S1AP fields (4G) ---
+	// S1AP fields (4G)
 	S1APProcedureCode int    // e.g. 12=InitialUEMessage, 11=DownlinkNAS, 13=UplinkNAS
 	ENBUUES1APID      string // ENB-UE-S1AP-ID, present from InitialUEMessage onward
 	MMEUUES1APID      string // MME-UE-S1AP-ID, present from DownlinkNASTransport onward
@@ -37,14 +37,14 @@ type Packet struct {
 	NASESMType        string // hex string for ESM messages
 	IMSI              string // only present in Identity Response (NAS 0x56)
 
-	// --- NGAP fields (5G) ---
+	// NGAP fields (5G)
 	NGAPProcedureCode int    // e.g. 15=InitialUEMessage, 4=DownlinkNAS, 46=UplinkNAS
 	RANUENGAPId       string // RAN-UE-NGAP-ID, present from InitialUEMessage onward
 	AMFUENGAPId       string // AMF-UE-NGAP-ID, present from DownlinkNASTransport onward
 	NASMMType         string // hex string e.g. "0x41" for Registration Request
 	SUCIMsin          string // MSIN portion of SUCI, only in Registration Request
 
-	// --- GTPv2-C fields (4G only, UDP 2123) ---
+	// GTPv2-C fields (4G only, UDP 2123)
 	GTPv2MessageType int    // 32=CreateSessionReq, 33=CreateSessionResp, 34=ModifyBearerReq, 35=ModifyBearerResp
 	GTPv2Seq         string // hex sequence number e.g. "0x000001" — correlation key
 	GTPv2TEID        string // tunnel endpoint ID, "0x00000000" on first request
@@ -54,7 +54,7 @@ type Packet struct {
 	GTPv2UEIP        string // UE IP address, assigned in Create Session Response
 	GTPv2EBI         string // EPS Bearer ID
 
-	// --- PFCP fields (4G and 5G, UDP 8805) ---
+	// PFCP fields (4G and 5G, UDP 8805)
 	PFCPMessageType int    // 50=EstReq, 51=EstResp, 52=ModReq, 53=ModResp, 54=DelReq, 55=DelResp
 	PFCPSeqNo       int    // sequence number — correlation key before SEID known
 	PFCPSEID        string // session endpoint ID (may be array on establishment)
@@ -63,7 +63,7 @@ type Packet struct {
 	PFCPDNN         string // data network name e.g. "internet"
 	PFCPCause       string // "1" = success
 
-	// --- Diameter fields (4G only, TCP 3868/3873/5868) ---
+	// Diameter fields (4G only, TCP 3868/3873/5868)
 	DiameterCmdCode    int    // 318=AIR, 316=ULR, 272=CCR, 275=STR, 280=DWR
 	DiameterIsRequest  bool   // true if R flag set in Diameter flags
 	DiameterIMSI       string // from e212_e212_imsi or Subscription-Id-Data
@@ -71,7 +71,7 @@ type Packet struct {
 	DiameterResultCode string // "2001" = DIAMETER_SUCCESS
 	DiameterOriginHost string // origin NF hostname e.g. "mme.epc..."
 
-	// --- SBI HTTP/2 fields (5G only, TCP 7777) ---
+	// SBI HTTP/2 fields (5G only, TCP 7777)
 	SBIMethod    string // HTTP method: GET, POST, PUT, PATCH, DELETE
 	SBIPath      string // full API path e.g. /nausf-auth/v1/ue-authentications
 	SBIStatus    string // HTTP status code on responses e.g. "200"
@@ -88,14 +88,6 @@ type Packet struct {
 type ekPacket struct {
 	Timestamp json.RawMessage            `json:"timestamp"`
 	Layers    map[string]json.RawMessage `json:"layers"`
-}
-
-// tsharkProcess wraps a running tshark subprocess and its stdout pipe.
-type tsharkProcess struct {
-	cmd    *exec.Cmd
-	cancel context.CancelFunc
-	out    chan Packet
-	errc   chan error
 }
 
 // startTshark launches tshark on the given interface with explicit BPF capture
@@ -170,7 +162,7 @@ func startTshark(ctx context.Context, iface, bpf, display string) (<-chan Packet
 			}
 
 			// Drop packets we could not identify at all.
-			// PFCP packets have no generation set here — the correlator
+			// PFCP packets have no generation set here — the pipeline
 			// determines generation from IP addresses. Allow them through.
 			if pkt.Generation == "" && pkt.Protocol == "" {
 				continue
@@ -349,8 +341,6 @@ func parseS1APObject(raw json.RawMessage, pkt *Packet) {
 	}
 }
 
-// --- helpers ----------------------------------------------------------------
-
 // strField extracts a string value from a map, returning "" if absent or wrong type.
 // Handles arrays by returning the first element (tshark sometimes wraps values in arrays).
 func strField(m map[string]interface{}, key string) string {
@@ -407,8 +397,6 @@ func intField(m map[string]interface{}, key string) int {
 	}
 }
 
-// --- GTPv2-C parser ---------------------------------------------------------
-
 // parseGTPv2 extracts GTPv2-C fields from the gtpv2 layer.
 func parseGTPv2(raw json.RawMessage, pkt *Packet) {
 	var obj map[string]interface{}
@@ -429,8 +417,6 @@ func parseGTPv2(raw json.RawMessage, pkt *Packet) {
 	// IMSI is nested under e212 fields at the gtpv2 layer level
 	pkt.GTPv2IMSI = strField(obj, "e212_e212_imsi")
 }
-
-// --- Diameter parser --------------------------------------------------------
 
 // parseDiameter extracts Diameter fields from the diameter layer.
 func parseDiameter(raw json.RawMessage, pkt *Packet) {
@@ -506,8 +492,6 @@ func parsePFCP(raw json.RawMessage, pkt *Packet) {
 	}
 	pkt.PFCPSEID = seid
 }
-
-// --- SBI HTTP/2 parser ------------------------------------------------------
 
 // parseSBI extracts 5G SBI fields from the http2 layer.
 // Open5GS uses HTTP/2 with prior knowledge (h2c) on TCP port 7777.

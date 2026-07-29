@@ -50,12 +50,9 @@ func sleepOrDone(ctx context.Context, d time.Duration) bool {
 	}
 }
 
-// Manager owns the tshark subprocess and feeds parsed packets to the correlator.
-// It handles:
-//   - Dynamic bridge interface discovery via the Docker socket
-//   - Active generation detection via the collector snapshot
-//   - Auto-restart with exponential backoff after subprocess crashes
-//   - Graceful shutdown when the context is cancelled
+// Manager owns the tshark subprocesses: it discovers the bridge interface
+// and active generation, restarts tshark with backoff if it crashes, and
+// feeds parsed packets to whoever reads from Packets().
 type Manager struct {
 	docker           *dockerclient.Client
 	snap             *collector.Snapshot
@@ -63,7 +60,7 @@ type Manager struct {
 	mnc              string
 	captureInterface string // "auto" or explicit interface name
 
-	// out is the channel the correlator reads from.
+	// out is the channel the pipeline reads from.
 	out chan Packet
 
 	// internal state (atomic where accessed from multiple goroutines)
@@ -96,8 +93,7 @@ func NewManager(
 	}
 }
 
-// Packets returns the channel that delivers parsed packets to consumers.
-// The correlator should range over this channel.
+// Packets returns the channel the pipeline reads parsed packets from.
 func (m *Manager) Packets() <-chan Packet {
 	return m.out
 }
@@ -132,14 +128,12 @@ func (m *Manager) Run(ctx context.Context) {
 	log.Printf("📡 Capture manager started")
 
 	for {
-		// Phase 1: discover which generation is active.
 		gen := m.waitForGeneration(ctx)
 		if ctx.Err() != nil {
 			log.Printf("📡 Capture manager stopped (context cancelled during generation detection)")
 			return
 		}
 
-		// Phase 2: discover the bridge interface.
 		iface, err := m.discoverInterface(ctx)
 		if err != nil {
 			log.Printf("⚠️  Capture: interface discovery failed: %v — retrying in %s", err, generationPollInterval)
@@ -157,7 +151,6 @@ func (m *Manager) Run(ctx context.Context) {
 
 		log.Printf("📡 Capture ready: iface=%s generation=%s", iface, gen)
 
-		// Phase 3: run tshark, restarting on failure with backoff.
 		m.runWithRestart(ctx, iface, gen)
 
 		if ctx.Err() != nil {

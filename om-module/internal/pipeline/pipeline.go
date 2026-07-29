@@ -179,8 +179,6 @@ func (p *Pipeline) emitSpan(ctx context.Context, pkt capture.Packet, ipToNF map[
 	span.End(oteltrace.WithTimestamp(end))
 }
 
-// --- Helpers ----------------------------------------------------------------
-
 // isHeartbeat returns true for PFCP heartbeats, GTPv2 echo, Diameter
 // Device-Watchdog, and SBI NRF heartbeat PATCH messages which add noise.
 func isHeartbeat(pkt capture.Packet) bool {
@@ -200,9 +198,7 @@ func isHeartbeat(pkt capture.Packet) bool {
 	return false
 }
 
-// spanInfo bundles everything derived from a single packet's protocol fields:
-// the span name plus the attributes that would otherwise require re-deriving
-// the same procedure/message lookups a second time.
+// spanInfo bundles the span name and protocol-specific attributes for one packet.
 type spanInfo struct {
 	name      string
 	procedure string
@@ -213,8 +209,7 @@ type spanInfo struct {
 	cause     string
 }
 
-// packetSpanInfo computes the span name and protocol-specific attributes for
-// a packet in one pass. Returns a zero spanInfo (name == "") for packets that
+// packetSpanInfo returns a zero spanInfo (name == "") for packets that
 // shouldn't be emitted as spans.
 func packetSpanInfo(pkt capture.Packet) spanInfo {
 	switch pkt.Protocol {
@@ -428,8 +423,6 @@ func (p *Pipeline) buildIPToNFMap(ctx context.Context) map[string]string {
 	}
 	return result
 }
-
-// --- Protocol name lookup tables --------------------------------------------
 
 var ngapProcedureNames = map[int]string{
 	0:  "AMFConfigurationUpdate",

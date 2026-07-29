@@ -34,11 +34,9 @@ func main() {
 	log.Printf("Capture interface : %s", cfg.CaptureInterface)
 	log.Printf("MCC/MNC           : %s/%s", cfg.MCC, cfg.MNC)
 
-	// --- Context with graceful shutdown ---
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	// --- Distributed tracing → Grafana Tempo ---
 	shutdownTracing, err := tracing.Init(ctx, cfg.TempoEndpoint)
 	if err != nil {
 		log.Printf("⚠️  Tracing init failed (continuing without traces): %v", err)
@@ -53,7 +51,6 @@ func main() {
 		}()
 	}
 
-	// --- Docker client ---
 	dockerClient, err := dockerclient.New(cfg.DockerSocket)
 	if err != nil {
 		log.Fatalf("Cannot connect to Docker: %v", err)
@@ -65,16 +62,13 @@ func main() {
 	}()
 	log.Printf("✅ Connected to Docker daemon")
 
-	// --- Container collector ---
 	coll := collector.New(dockerClient, cfg.ComposeProject, 15*time.Second)
 	go coll.Run(ctx)
 
-	// --- Prometheus registry ---
 	reg := prometheus.NewRegistry()
 	exporter.New(coll.Snapshot(), cfg.ComposeProject, reg)
 	log.Printf("✅ Prometheus exporter registered")
 
-	// --- Capture manager and pipeline (optional) ---
 	var capManager *capture.Manager
 
 	if cfg.CaptureEnabled {
@@ -89,10 +83,8 @@ func main() {
 		pipeMetrics := pipeline.NewMetrics(reg)
 		pipe := pipeline.New(cfg.MCC, cfg.MNC, dockerClient, coll.Snapshot(), pipeMetrics)
 
-		// Start capture manager — self-retries until generation detected.
 		go capManager.Run(ctx)
 
-		// Start pipeline — reads from capture manager and emits one span per packet.
 		go func() {
 			for {
 				pipe.Run(ctx, capManager.Packets())
@@ -108,7 +100,6 @@ func main() {
 		log.Printf("⚠️  Capture pipeline disabled (CAPTURE_ENABLED=false)")
 	}
 
-	// --- HTTP server ---
 	mux := http.NewServeMux()
 	handlers := api.New(
 		coll.Snapshot(),
