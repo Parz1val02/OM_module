@@ -111,7 +111,7 @@ func (c *Collector) Snapshot() *Snapshot { return c.snap }
 
 // Run starts the collection loop. It blocks until ctx is cancelled.
 func (c *Collector) Run(ctx context.Context) {
-	log.Printf("📦 Collector started (project=%q, interval=%s)", c.project, c.interval)
+	log.Printf("Collector started (project=%q, interval=%s)", c.project, c.interval)
 	c.collect(ctx) // run immediately on startup
 	ticker := time.NewTicker(c.interval)
 	defer ticker.Stop()
@@ -120,7 +120,7 @@ func (c *Collector) Run(ctx context.Context) {
 		case <-ticker.C:
 			c.collect(ctx)
 		case <-ctx.Done():
-			log.Printf("📦 Collector stopped")
+			log.Printf("Collector stopped")
 			return
 		}
 	}
@@ -138,7 +138,7 @@ func (c *Collector) collect(ctx context.Context) {
 		listSpan.SetStatus(codes.Error, err.Error())
 		listSpan.End()
 		cycleSpan.RecordError(err)
-		log.Printf("⚠️  Collector: ListContainers error: %v", err)
+		log.Printf("Collector: ListContainers error: %v", err)
 		return
 	}
 	listSpan.SetAttributes(attribute.Int("containers.discovered", len(containers)))
@@ -188,7 +188,7 @@ func (c *Collector) collect(ctx context.Context) {
 			} else if ctx.Err() == nil {
 				statsSpan.RecordError(err)
 				statsSpan.SetStatus(codes.Error, err.Error())
-				log.Printf("⚠️  Collector: GetStats(%s) error: %v", ct.Name, err)
+				log.Printf("Collector: GetStats(%s) error: %v", ct.Name, err)
 			}
 
 			statsSpan.End()

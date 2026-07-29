@@ -41,7 +41,7 @@ func New(mcc, mnc string, docker *dockerclient.Client, snap *collector.Snapshot,
 // Run reads packets from pkts and emits one span per packet to Tempo.
 // Blocks until ctx is cancelled or pkts is closed.
 func (p *Pipeline) Run(ctx context.Context, pkts <-chan capture.Packet) {
-	log.Printf("📡 Pipeline started — emitting one span per packet")
+	log.Printf("Pipeline started — emitting one span per packet")
 
 	// Build IP→NF map once at start; refresh every 60 seconds.
 	ipToNF := p.buildIPToNFMap(ctx)
@@ -68,7 +68,7 @@ func (p *Pipeline) Run(ctx context.Context, pkts <-chan capture.Packet) {
 			ipToNF = p.buildIPToNFMap(ctx)
 
 		case <-ctx.Done():
-			log.Printf("📡 Pipeline stopped")
+			log.Printf("Pipeline stopped")
 			return
 		}
 	}
@@ -116,7 +116,7 @@ func (p *Pipeline) emitSpan(ctx context.Context, pkt capture.Packet, ipToNF map[
 	}
 
 	// Collect IMSI from whichever protocol field has it
-	imsi := packetIMSI(pkt)
+	imsi := packetIMSI(pkt, p.mcc, p.mnc)
 
 	// Determine message direction based on whether src is the core NF
 	direction := messageDirection(pkt, ipToNF)
@@ -296,13 +296,18 @@ func pfcpSpanName(pkt capture.Packet) string {
 	return fmt.Sprintf("PFCP:type_%d", pkt.PFCPMessageType)
 }
 
-// packetIMSI extracts the IMSI from whichever protocol field carries it.
-func packetIMSI(pkt capture.Packet) string {
+// packetIMSI extracts or reconstructs the IMSI from whichever protocol field
+// carries it. NGAP only carries the SUCI MSIN, so the full IMSI is rebuilt
+// as MCC+MNC+MSIN.
+func packetIMSI(pkt capture.Packet, mcc, mnc string) string {
 	switch pkt.Protocol {
 	case "s1ap":
 		return pkt.IMSI
 	case "ngap":
-		return pkt.IMSI
+		if pkt.SUCIMsin == "" {
+			return ""
+		}
+		return mcc + mnc + pkt.SUCIMsin
 	case "gtpv2":
 		return pkt.GTPv2IMSI
 	case "pfcp":
@@ -405,7 +410,7 @@ func isErrorCause(pkt capture.Packet) bool {
 func (p *Pipeline) buildIPToNFMap(ctx context.Context) map[string]string {
 	ipToName, err := p.docker.GetNetworkContainerIPs(ctx, networkName)
 	if err != nil {
-		log.Printf("⚠️  IP→NF resolution failed: %v", err)
+		log.Printf("IP→NF resolution failed: %v", err)
 		return map[string]string{}
 	}
 	nameToNF := p.snap.NameToNFMap()

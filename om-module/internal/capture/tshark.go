@@ -31,35 +31,25 @@ type Packet struct {
 
 	// S1AP fields (4G)
 	S1APProcedureCode int    // e.g. 12=InitialUEMessage, 11=DownlinkNAS, 13=UplinkNAS
-	ENBUUES1APID      string // ENB-UE-S1AP-ID, present from InitialUEMessage onward
-	MMEUUES1APID      string // MME-UE-S1AP-ID, present from DownlinkNASTransport onward
 	NASEMMType        string // hex string e.g. "0x41" for Attach Request
-	NASESMType        string // hex string for ESM messages
 	IMSI              string // only present in Identity Response (NAS 0x56)
 
 	// NGAP fields (5G)
 	NGAPProcedureCode int    // e.g. 15=InitialUEMessage, 4=DownlinkNAS, 46=UplinkNAS
-	RANUENGAPId       string // RAN-UE-NGAP-ID, present from InitialUEMessage onward
-	AMFUENGAPId       string // AMF-UE-NGAP-ID, present from DownlinkNASTransport onward
 	NASMMType         string // hex string e.g. "0x41" for Registration Request
 	SUCIMsin          string // MSIN portion of SUCI, only in Registration Request
 
 	// GTPv2-C fields (4G only, UDP 2123)
 	GTPv2MessageType int    // 32=CreateSessionReq, 33=CreateSessionResp, 34=ModifyBearerReq, 35=ModifyBearerResp
-	GTPv2Seq         string // hex sequence number e.g. "0x000001" — correlation key
 	GTPv2TEID        string // tunnel endpoint ID, "0x00000000" on first request
 	GTPv2IMSI        string // only in Create Session Request
 	GTPv2APN         string // APN/DNN e.g. "internet"
 	GTPv2Cause       string // "16" = Request Accepted
-	GTPv2UEIP        string // UE IP address, assigned in Create Session Response
-	GTPv2EBI         string // EPS Bearer ID
 
 	// PFCP fields (4G and 5G, UDP 8805)
 	PFCPMessageType int    // 50=EstReq, 51=EstResp, 52=ModReq, 53=ModResp, 54=DelReq, 55=DelResp
-	PFCPSeqNo       int    // sequence number — correlation key before SEID known
 	PFCPSEID        string // session endpoint ID (may be array on establishment)
 	PFCPIMSI        string // only in Session Establishment Request
-	PFCPUEIP        string // UE IP address
 	PFCPDNN         string // data network name e.g. "internet"
 	PFCPCause       string // "1" = success
 
@@ -67,9 +57,7 @@ type Packet struct {
 	DiameterCmdCode    int    // 318=AIR, 316=ULR, 272=CCR, 275=STR, 280=DWR
 	DiameterIsRequest  bool   // true if R flag set in Diameter flags
 	DiameterIMSI       string // from e212_e212_imsi or Subscription-Id-Data
-	DiameterSessionID  string // Diameter Session-Id AVP
 	DiameterResultCode string // "2001" = DIAMETER_SUCCESS
-	DiameterOriginHost string // origin NF hostname e.g. "mme.epc..."
 
 	// SBI HTTP/2 fields (5G only, TCP 7777)
 	SBIMethod    string // HTTP method: GET, POST, PUT, PATCH, DELETE
@@ -129,7 +117,7 @@ func startTshark(ctx context.Context, iface, bpf, display string) (<-chan Packet
 		return out, errc
 	}
 
-	log.Printf("🦈 tshark started (pid=%d iface=%s bpf=%q display=%q)",
+	log.Printf("tshark started (pid=%d iface=%s bpf=%q display=%q)",
 		cmd.Process.Pid, iface, bpf, display)
 
 	go func() {
@@ -157,7 +145,7 @@ func startTshark(ctx context.Context, iface, bpf, display string) (<-chan Packet
 			if err != nil {
 				// Non-fatal: log and continue. Malformed lines happen during
 				// SCTP reassembly at capture start.
-				log.Printf("⚠️  tshark: parse error: %v", err)
+				log.Printf("tshark: parse error: %v", err)
 				continue
 			}
 
@@ -299,8 +287,6 @@ func parseNGAPObject(raw json.RawMessage, pkt *Packet) {
 	}
 
 	pkt.NGAPProcedureCode = intField(obj, "ngap_ngap_procedureCode")
-	pkt.RANUENGAPId = strField(obj, "ngap_ngap_RAN_UE_NGAP_ID")
-	pkt.AMFUENGAPId = strField(obj, "ngap_ngap_AMF_UE_NGAP_ID")
 
 	// NAS-5GS is nested inside the ngap object under the key "nas-5gs".
 	if nasRaw, ok := obj["nas-5gs"]; ok {
@@ -326,8 +312,6 @@ func parseS1APObject(raw json.RawMessage, pkt *Packet) {
 	}
 
 	pkt.S1APProcedureCode = intField(obj, "s1ap_s1ap_procedureCode")
-	pkt.ENBUUES1APID = strField(obj, "s1ap_s1ap_ENB_UE_S1AP_ID")
-	pkt.MMEUUES1APID = strField(obj, "s1ap_s1ap_MME_UE_S1AP_ID")
 
 	// NAS-EPS is nested inside the s1ap object under "nas-eps".
 	if nasRaw, ok := obj["nas-eps"]; ok {
@@ -335,7 +319,6 @@ func parseS1APObject(raw json.RawMessage, pkt *Packet) {
 		nasBytes, _ := json.Marshal(nasRaw)
 		if err := json.Unmarshal(nasBytes, &nas); err == nil {
 			pkt.NASEMMType = strField(nas, "nas-eps_nas-eps_nas_msg_emm_type")
-			pkt.NASESMType = strField(nas, "nas-eps_nas-eps_nas_msg_esm_type")
 			pkt.IMSI = strField(nas, "e212_e212_imsi")
 		}
 	}
@@ -405,11 +388,8 @@ func parseGTPv2(raw json.RawMessage, pkt *Packet) {
 	}
 
 	pkt.GTPv2MessageType = intField(obj, "gtpv2_gtpv2_message_type")
-	pkt.GTPv2Seq = strField(obj, "gtpv2_gtpv2_seq")
 	pkt.GTPv2TEID = strField(obj, "gtpv2_gtpv2_teid")
 	pkt.GTPv2APN = strField(obj, "gtpv2_gtpv2_apn")
-	pkt.GTPv2EBI = strField(obj, "gtpv2_gtpv2_ebi")
-	pkt.GTPv2UEIP = strField(obj, "gtpv2_gtpv2_pdn_addr_and_prefix_ipv4")
 
 	// Cause may be a scalar or array — strField handles arrays
 	pkt.GTPv2Cause = strField(obj, "gtpv2_gtpv2_cause")
@@ -436,9 +416,7 @@ func parseDiameterObject(raw json.RawMessage, pkt *Packet) {
 	}
 
 	pkt.DiameterCmdCode = intField(obj, "diameter_diameter_cmd_code")
-	pkt.DiameterSessionID = strField(obj, "diameter_diameter_Session-Id")
 	pkt.DiameterResultCode = strField(obj, "diameter_diameter_Result-Code")
-	pkt.DiameterOriginHost = strField(obj, "diameter_diameter_Origin-Host")
 
 	// Determine request vs response from flags byte (bit 7 = R flag)
 	flags := strField(obj, "diameter_diameter_flags")
@@ -469,9 +447,7 @@ func parsePFCP(raw json.RawMessage, pkt *Packet) {
 	}
 
 	pkt.PFCPMessageType = intField(obj, "pfcp_pfcp_msg_type")
-	pkt.PFCPSeqNo = intField(obj, "pfcp_pfcp_seqno")
 	pkt.PFCPDNN = strField(obj, "pfcp_pfcp_apn_dnn")
-	pkt.PFCPUEIP = strField(obj, "pfcp_pfcp_ue_ip_addr_ipv4")
 	pkt.PFCPCause = strField(obj, "pfcp_pfcp_cause")
 	pkt.PFCPIMSI = strField(obj, "e212_e212_imsi")
 
