@@ -72,24 +72,6 @@ Four test scenarios (E1–E4) cover both 4G and 5G with normal attach/registrati
 
 ---
 
-## Prerequisites
-
-### Version reference
-
-| Tool | Version |
-|---|---|
-| Go | 1.25.0 |
-| Docker Engine | 29.3.1 |
-| Docker Compose | v5.1.1 |
-| GNU Make | 4.3 |
-| Prometheus | 3.10.0 |
-| Grafana | 11.3.0 |
-| Loki | 3.0.0 |
-| Tempo | 2.4.2 |
-| Promtail | 3.0.0 |
-| json-exporter | 0.7.0 |
-| tshark | 3.6.2 |
-
 ### Software requirements
 
 - **Docker Engine** ≥ 29 (tested on 29.3.1)
@@ -135,7 +117,7 @@ This ensures `DOCKER_GID` is always correct in every new session without requiri
 
 ## Setup - Pull Docker Images
 
-Pull the base images before first use. This step may take several minutes as images are several GB in size:
+Pull the base images before first use.
 
 ```bash
 # Open5GS core image
@@ -242,8 +224,6 @@ The four scenarios are designed in two parallel pairs for direct 4G↔5G compari
 | E3 | 5G | srsRAN Project (default) or UERANSIM | 1 gNB + 1 valid UE - full 5G Registration → PDU Session → Traffic → Deregistration flow | `make e3` / `make e3-ueransim` |
 | E4 | 5G | srsRAN Project + UERANSIM | 3 gNBs + network slicing (SST=1 SD=000001 / SST=1 SD=000002) + dedicated SMF+UPF per slice + 4 valid UEs + 4 fault-injected UEs | `make e4` |
 
-The Makefile waits for readiness at each step before proceeding (handled by `scripts/wait_ran.sh`).
-
 ### E2 - UE distribution (4G fault injection)
 
 | Container | eNB | IMSI | Fault mechanism | Expected failure |
@@ -252,10 +232,6 @@ The Makefile waits for readiness at each step before proceeding (handled by `scr
 | `srsue_zmq_bad_ki` | eNB2 | 902 | Wrong Ki in `.conf` (DB entry correct) | ❌ `Authentication failure (MAC failure)` - `OGS_NAS_EMM_CAUSE[20]` |
 | `srsue_zmq_bad_imsi` | eNB3 | 901 | **IMSI not in MongoDB** | ❌ `Attach reject` - `OGS_NAS_EMM_CAUSE[8]` (IMSI unknown in HLR) |
 | `srsue_zmq_bad_apn` | eNB4 | 903 | Wrong APN in `.conf` (DB entry correct) | ⚠️ Attach succeeds, PDN rejected - `Invalid APN` (ESM layer) |
-
-> **Key pedagogical contrast:** `bad_ki` fails *during* authentication (subscriber found in DB, key derivation fails); `bad_imsi` fails *before* authentication (HSS rejects the identity lookup); `bad_apn` fails *after* attach (session layer, not authentication).
-
-> **ZMQ constraint:** srsRAN 4G ZMQ uses point-to-point REQ/REPLY sockets - one eNB can only serve one srsUE simultaneously. E2 therefore uses 4 independent eNB+UE pairs rather than multiple UEs per eNB.
 
 ### E4 - UE distribution (5G slicing + fault injection)
 
@@ -276,12 +252,6 @@ E4 implements **true network slicing with user plane isolation**: two independen
 | `nr_ue_bad_ki` | gNB1 | 906 | SST=1 SD=000001 | ❌ Wrong K in `.yaml` (DB correct) → `Auth failure MAC` → Reject [111] |
 | `nr_ue_bad_dnn` | gNB1 | 908 | SST=1 SD=000001 | ⚠️ Registration succeeds, `DNN_NOT_SUPPORTED_OR_NOT_SUBSCRIBED` |
 | `nr_ue_bad_sst` | gNB2 | 909 | SST=1 SD=000003 (non-existent) | ❌ `Cannot find Requested NSSAI [SST:1 SD:0x3]` → Reject [62] |
-
-> **Slicing isolation proof:** `nr_ue3` always receives an IP in `192.168.200.x`, while all SST=1 SD=000001 UEs receive `192.168.100.x`. Traffic from each slice never crosses the other's UPF - observable via `ogstun` (slice 1) and `ogstun3` (slice 2) interface counters.
-
-> **bad_sst fault mechanism:** The UE requests SST=1 SD=000003 which is not declared in the AMF's `plmn_support`. The AMF rejects at the NSSAI check before authentication begins (cause 62: Requested NSSAI not subscribed).
-
-> **UERANSIM stability note:** In long-running E4 sessions with multiple UERANSIM instances, spontaneous disconnections that block reconnection have been observed. Run E4 within bounded time windows.
 
 ### Access Grafana
 
@@ -308,29 +278,6 @@ make down             # Stop everything (RAN + core + services)
 ## Scenario Evidence
 
 Every scenario run is backed by reproducible evidence committed to the repository:
-
-| Directory | Content |
-|---|---|
-| `figuras/E1` … `figuras/E4` | Grafana core dashboard captures per scenario, in both **up** (RAN + traffic active) and **down** (post-teardown) states |
-| `figuras/despliegue` | Terminal output of every `make` target across the full 4G and 5G lifecycles (core up → scenario → teardown → core down) |
-| `snapshots/` | Raw Prometheus metrics snapshots (JSON) taken at key moments: core-only baseline, RAN up with traffic, and post-teardown per scenario |
-| `logs/4g` · `logs/5g` | Reference log files per network function, as shipped to Loki by Promtail |
-| `procedures_captures/` | Reference signaling captures in Elastic-JSON (`.jsonl`) format as emitted by tshark - S1AP/NGAP (`capture_ek_*`), GTPv2, PFCP, Diameter, and 5G SBI |
-
-### Dashboard capture naming convention (`figuras/E*`)
-
-Captures are numbered in viewing order. The set per scenario:
-
-| Capture | Shows |
-|---|---|
-| `01_up` / `02_down` | Core dashboard header panels with the scenario active vs. after RAN teardown - demonstrates counters reflecting attach/registration and release in real time |
-| `03_slice2` (E3/E4 only) | Slice 2 (SST=1 SD=000002) panel section - active in E4, all counters at zero in E3 (no slice 2 deployed), evidencing per-slice isolation |
-| `*_nfs` | Per-NF status and resource panels |
-| `*_rendimiento` | Throughput/performance panels during traffic generation |
-| `*_logs_*` | Loki log panels (single view for E1/E3; two-part capture for the multi-UE E2/E4 runs) |
-| `*_senalizacion` | Tempo signaling trace panels (S1AP/NGAP, GTPv2/PFCP, Diameter/SBI spans) |
-
-These captures correspond to the result figures presented in the thesis (Chapter 4.3 for E2/E4; Annex B for the base scenarios E1/E3).
 
 ### Sample captures
 
@@ -423,85 +370,6 @@ The O&M module is a Go service (`./om-module`) that runs alongside the testbed a
 2. **Packet capture** - spawns `tshark` as a subprocess on the Docker bridge interface (`auto`-detected or explicitly configured). Captures SCTP (S1AP/NGAP), UDP (GTPv2/PFCP), TCP (Diameter), and HTTP/2 (5G SBI). Parses Elastic-JSON output and emits one OTLP span per packet to Grafana Tempo.
 3. **Prometheus metrics** - exposes container resource metrics and capture pipeline counters at `/metrics`.
 4. **REST API** - four endpoints for integration and monitoring.
-
----
-
-## Repository Structure
-
-```
-om-module/               # O&M module Go source
-│   ├── internal/
-│   │   ├── capture/     # tshark subprocess + packet parser
-│   │   ├── collector/   # Docker container snapshot
-│   │   ├── docker/      # Docker SDK client wrapper
-│   │   ├── exporter/    # Prometheus metrics exporter
-│   │   ├── pipeline/    # Packet → OTLP span pipeline + capture metrics
-│   │   └── tracing/     # OpenTelemetry tracer init (OTLP/HTTP → Tempo)
-│
-├── 4G_core.yaml             # Docker Compose - Open5GS EPC (4G core)
-├── 5G_core.yaml             # Docker Compose - Open5GS 5GC (5G core)
-├── 5G_core_e4.yaml          # Docker Compose - E4 slice extension (smf2 + upf2)
-├── ran.yaml                 # Docker Compose - RAN (profiles: ran-4g-srs, ran-4g-e2, ran-5g-srs, ran-5g-ueransim, ran-5g-e4)
-├── services.yaml            # Docker Compose - O&M module + observability stack
-├── Makefile                 # Automation (see make help)
-├── .env                     # IP assignments, UE credentials, MCC/MNC
-│
-├── scripts/                 # Helper scripts
-│   ├── mongo_insert.sh      # Provision all UEs for E1–E4
-│   ├── wait_core.sh         # Readiness probe for core startup
-│   ├── wait_ran.sh          # Readiness probe for RAN startup
-│   ├── run_e2.sh            # Multi-container launch for E2
-│   ├── run_e4.sh            # Multi-container launch for E4
-│   └── traffic.sh           # Ping from all active UEs
-│
-├── grafana/                 # Provisioning config (dashboards, datasources, alerting
-│                            #  contact points / policies / rules) + provisioned core dashboards
-├── dashboards/              # Grafana dashboard JSON exports - general 4G/5G core views
-│                            #  + one dashboard per scenario (e1–e4)
-├── prometheus/configs/      # Prometheus scrape config (docker SD + json-exporter jobs)
-├── json_exporter/           # Config for Prometheus json-exporter (Open5GS REST API)
-├── metrics_endpoints/       # Per-NF metrics endpoint definitions
-├── promtail/                # Log shipping config (core logs + RAN logs → Loki)
-├── loki/                    # Loki storage config
-├── tempo/                   # Tempo tracing backend config
-│
-├── <nf-config dirs>/        # Per-NF Open5GS config
-│                            # (amf, ausf, bsf, hss, mme, nrf, nssf, pcf, pcrf,
-│                            #  scp, sgwc, sgwu, smf, udm, udr, upf, webui)
-├── srslte/  srsran/         # srsRAN LTE / srsRAN Project UE+RAN configs
-├── ueransim/                # UERANSIM gNB + UE configs
-│
-├── figuras/                 # Scenario evidence - dashboard captures per scenario (E1–E4)
-│                            #  + terminal output of make targets (despliegue/)
-├── snapshots/               # Prometheus metrics snapshots (JSON) per scenario state
-├── logs/                    # Reference NF log files (4g/, 5g/) as ingested by Loki
-└── procedures_captures/     # Reference signaling captures for E1–E4 in Elastic-JSON
-                             #  (.jsonl): S1AP/NGAP, GTPv2, PFCP, Diameter, 5G SBI
-```
-
----
-
-## Implementation Notes
-
-**Network slicing in E4 - SD-based, not SST-based**
-E4 uses two slices with the same SST (1) but different Slice Differentiators: SD=000001 (internet) and SD=000002 (private). This reflects real-world deployments where SST identifies the service class and SD identifies the operator-specific instance. Each SD is served by a dedicated SMF+UPF pair with an isolated UE IP subnet, providing true user plane isolation observable via `ogstun` (slice 1) and `ogstun3` (slice 2) interface traffic counters.
-
-**Handover - not included as a scenario**
-In 5G, srsRAN Project only supports intra-gNB handover and requires a USRP X/N-series radio with two RF chains. In 4G, S1 handover over ZMQ requires GNU Radio Companion as an external broker outside the Docker stack. Both constraints make handover impractical in this fully virtualized testbed.
-
-**Multi-UE with ZMQ in 4G**
-srsRAN 4G ZMQ sockets are point-to-point (REQ/REPLY) - one eNB can serve only one srsUE at a time. Supporting multiple UEs per eNB would require a GRC broker. E2 works around this by using 4 independent eNB+UE pairs.
-
-**srsRAN Project vs UERANSIM in E3**
-E3 has two variants: `make e3` uses srsRAN Project and `make e3-ueransim` uses UERANSIM. srsRAN Project is the default because its behavior on N2 loss is more predictable. UERANSIM is available as an alternative and is the primary choice for E4 where its lightweight instances allow running 3 gNBs + 7 UEs with low overhead.
-
-**srsRAN UE slice encoding**
-srsRAN's UE implementation (`srsue_5g_zmq`) does not support encoding slice-specific NAS IEs without triggering a protocol error in Open5GS AMF. The `[slicing]` section in `srslte/ue_5g_zmq.conf` must remain commented out. Slice assignment for this UE is handled by the AMF based on the subscriber record in MongoDB (SD=000001), not the UE's NAS request.
-
-**UERANSIM - 5G only**
-UERANSIM operates exclusively over NGAP (N2) and 5G SA interfaces. It has no support for S1AP or 4G EPC.
-
----
 
 ## License
 
