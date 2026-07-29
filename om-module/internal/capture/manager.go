@@ -39,6 +39,17 @@ type Status struct {
 	UptimeSeconds float64
 }
 
+// sleepOrDone waits for d, returning true, unless ctx is cancelled first,
+// in which case it returns false immediately.
+func sleepOrDone(ctx context.Context, d time.Duration) bool {
+	select {
+	case <-time.After(d):
+		return true
+	case <-ctx.Done():
+		return false
+	}
+}
+
 // Manager owns the tshark subprocess and feeds parsed packets to the correlator.
 // It handles:
 //   - Dynamic bridge interface discovery via the Docker socket
@@ -132,12 +143,10 @@ func (m *Manager) Run(ctx context.Context) {
 		iface, err := m.discoverInterface(ctx)
 		if err != nil {
 			log.Printf("⚠️  Capture: interface discovery failed: %v — retrying in %s", err, generationPollInterval)
-			select {
-			case <-time.After(generationPollInterval):
-				continue
-			case <-ctx.Done():
+			if !sleepOrDone(ctx, generationPollInterval) {
 				return
 			}
+			continue
 		}
 
 		m.mu.Lock()
@@ -177,9 +186,7 @@ func (m *Manager) waitForGeneration(ctx context.Context) string {
 		}
 
 		log.Printf("📡 No active core generation detected — waiting %s", generationPollInterval)
-		select {
-		case <-time.After(generationPollInterval):
-		case <-ctx.Done():
+		if !sleepOrDone(ctx, generationPollInterval) {
 			return ""
 		}
 	}
@@ -273,9 +280,7 @@ func (m *Manager) runWithRestart(ctx context.Context, iface, gen string) {
 		log.Printf("⚠️  tshark exited unexpectedly (restart #%d): %v — retrying in %s",
 			m.restarts.Load(), exitErr, backoff)
 
-		select {
-		case <-time.After(backoff):
-		case <-ctx.Done():
+		if !sleepOrDone(ctx, backoff) {
 			return
 		}
 

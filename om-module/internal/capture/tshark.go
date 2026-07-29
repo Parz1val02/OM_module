@@ -274,26 +274,30 @@ func parseEKLine(line string) (*Packet, error) {
 	return pkt, nil
 }
 
-// parseNGAP extracts NGAP and nested NAS-5GS fields.
-// The ngap layer may be a JSON object or a JSON array (multiple PDUs per SCTP chunk).
-// In the array case we process each element and merge the results — the first
-// element that has a UE-relevant procedure code wins for procedure routing.
-func parseNGAP(raw json.RawMessage, pkt *Packet) {
-	// Try array first.
+// parseArrayOrObject handles the tshark EK quirk where a layer may be
+// serialised as either a single JSON object or an array of objects (multiple
+// PDUs sharing one SCTP/TCP segment). Each element is parsed in turn via
+// parseObj until done reports the packet has what it needs.
+func parseArrayOrObject(raw json.RawMessage, pkt *Packet, parseObj func(json.RawMessage, *Packet), done func(*Packet) bool) {
 	var arr []json.RawMessage
 	if err := json.Unmarshal(raw, &arr); err == nil {
 		for _, elem := range arr {
-			parseNGAPObject(elem, pkt)
-			// Stop after we have found a UE procedure code.
-			if pkt.NGAPProcedureCode != 0 {
+			parseObj(elem, pkt)
+			if done(pkt) {
 				return
 			}
 		}
 		return
 	}
+	parseObj(raw, pkt)
+}
 
-	// Single object.
-	parseNGAPObject(raw, pkt)
+// parseNGAP extracts NGAP and nested NAS-5GS fields.
+// The ngap layer may be a JSON object or a JSON array (multiple PDUs per SCTP chunk).
+// In the array case we process each element and merge the results — the first
+// element that has a UE-relevant procedure code wins for procedure routing.
+func parseNGAP(raw json.RawMessage, pkt *Packet) {
+	parseArrayOrObject(raw, pkt, parseNGAPObject, func(p *Packet) bool { return p.NGAPProcedureCode != 0 })
 }
 
 func parseNGAPObject(raw json.RawMessage, pkt *Packet) {
@@ -320,17 +324,7 @@ func parseNGAPObject(raw json.RawMessage, pkt *Packet) {
 // parseS1AP extracts S1AP and nested NAS-EPS fields.
 // Same list-or-object handling as NGAP.
 func parseS1AP(raw json.RawMessage, pkt *Packet) {
-	var arr []json.RawMessage
-	if err := json.Unmarshal(raw, &arr); err == nil {
-		for _, elem := range arr {
-			parseS1APObject(elem, pkt)
-			if pkt.S1APProcedureCode != 0 {
-				return
-			}
-		}
-		return
-	}
-	parseS1APObject(raw, pkt)
+	parseArrayOrObject(raw, pkt, parseS1APObject, func(p *Packet) bool { return p.S1APProcedureCode != 0 })
 }
 
 func parseS1APObject(raw json.RawMessage, pkt *Packet) {
