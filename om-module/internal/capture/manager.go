@@ -37,7 +37,6 @@ type Status struct {
 	Packets5G     uint64
 	RestartCount  uint64
 	UptimeSeconds float64
-	ActiveProcs   int
 }
 
 // Manager owns the tshark subprocess and feeds parsed packets to the correlator.
@@ -211,6 +210,21 @@ func (m *Manager) runWithRestart(ctx context.Context, iface, gen string) {
 		udpPkts, udpErrc := startTshark(ctx, iface, f.UDPBPF, f.UDPDisplay)
 
 		// Merge both packet channels into the manager output channel
+		forward := func(pkt Packet) bool {
+			switch pkt.Generation {
+			case Generation4G:
+				m.packets4g.Add(1)
+			case Generation5G:
+				m.packets5g.Add(1)
+			}
+			select {
+			case m.out <- pkt:
+				return true
+			case <-ctx.Done():
+				return false
+			}
+		}
+
 		done := make(chan struct{})
 		go func() {
 			defer close(done)
@@ -219,34 +233,14 @@ func (m *Manager) runWithRestart(ctx context.Context, iface, gen string) {
 				case pkt, ok := <-sctpPkts:
 					if !ok {
 						sctpPkts = nil
-					} else {
-						switch pkt.Generation {
-						case Generation4G:
-							m.packets4g.Add(1)
-						case Generation5G:
-							m.packets5g.Add(1)
-						}
-						select {
-						case m.out <- pkt:
-						case <-ctx.Done():
-							return
-						}
+					} else if !forward(pkt) {
+						return
 					}
 				case pkt, ok := <-udpPkts:
 					if !ok {
 						udpPkts = nil
-					} else {
-						switch pkt.Generation {
-						case Generation4G:
-							m.packets4g.Add(1)
-						case Generation5G:
-							m.packets5g.Add(1)
-						}
-						select {
-						case m.out <- pkt:
-						case <-ctx.Done():
-							return
-						}
+					} else if !forward(pkt) {
+						return
 					}
 				case <-ctx.Done():
 					return

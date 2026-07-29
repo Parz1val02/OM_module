@@ -135,7 +135,6 @@ type captureStatusResponse struct {
 	Packets5G     uint64  `json:"packets_5g"`
 	RestartCount  uint64  `json:"restart_count"`
 	UptimeSeconds float64 `json:"uptime_seconds"`
-	ActiveProcs   int     `json:"active_procedures"`
 }
 
 func (h *Handlers) handleCaptureStatus(w http.ResponseWriter, r *http.Request) {

@@ -260,7 +260,7 @@ func parseEKLine(line string) (*Packet, error) {
 		parseGTPv2(gtpv2Raw, pkt)
 	} else if pfcpRaw, ok := raw.Layers["pfcp"]; ok {
 		pkt.Protocol = "pfcp"
-		parseGTPv2OrPFCP_PFCP(pfcpRaw, pkt)
+		parsePFCP(pfcpRaw, pkt)
 	} else if diameterRaw, ok := raw.Layers["diameter"]; ok {
 		pkt.Generation = Generation4G
 		pkt.Protocol = "diameter"
@@ -480,10 +480,9 @@ func parseDiameterObject(raw json.RawMessage, pkt *Packet) {
 	}
 }
 
-// parseGTPv2OrPFCP_PFCP extracts PFCP fields from the pfcp layer.
-// Named with the longer prefix to avoid collision — called parseGTPv2OrPFCP_PFCP
-// because PFCP generation (4g/5g) is determined by the correlator from IP.
-func parseGTPv2OrPFCP_PFCP(raw json.RawMessage, pkt *Packet) {
+// parsePFCP extracts PFCP fields from the pfcp layer.
+// PFCP generation (4g/5g) is determined by the pipeline from IP, not here.
+func parsePFCP(raw json.RawMessage, pkt *Packet) {
 	var obj map[string]interface{}
 	if err := json.Unmarshal(raw, &obj); err != nil {
 		return
