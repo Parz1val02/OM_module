@@ -117,7 +117,7 @@ func startTshark(ctx context.Context, iface, bpf, display string) (<-chan Packet
 		return out, errc
 	}
 
-	log.Printf("tshark started (pid=%d iface=%s bpf=%q display=%q)",
+	log.Printf("🦈 tshark started (pid=%d iface=%s bpf=%q display=%q)",
 		cmd.Process.Pid, iface, bpf, display)
 
 	go func() {
@@ -145,7 +145,7 @@ func startTshark(ctx context.Context, iface, bpf, display string) (<-chan Packet
 			if err != nil {
 				// Non-fatal: log and continue. Malformed lines happen during
 				// SCTP reassembly at capture start.
-				log.Printf("tshark: parse error: %v", err)
+				log.Printf("⚠️  tshark: parse error: %v", err)
 				continue
 			}
 

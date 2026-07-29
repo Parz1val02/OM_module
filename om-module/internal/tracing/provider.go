@@ -66,7 +66,7 @@ func Init(ctx context.Context, tempoEndpoint string) (func(context.Context) erro
 		propagation.Baggage{},
 	))
 
-	log.Printf("Distributed tracing initialised → %s", tempoEndpoint)
+	log.Printf("✅ Distributed tracing initialised → %s", tempoEndpoint)
 
 	return tp.Shutdown, nil
 }

@@ -125,18 +125,18 @@ func (m *Manager) Status() Status {
 // Run starts the capture manager. It blocks until ctx is cancelled.
 // It should be started in a goroutine from main.
 func (m *Manager) Run(ctx context.Context) {
-	log.Printf("Capture manager started")
+	log.Printf("📡 Capture manager started")
 
 	for {
 		gen := m.waitForGeneration(ctx)
 		if ctx.Err() != nil {
-			log.Printf("Capture manager stopped (context cancelled during generation detection)")
+			log.Printf("📡 Capture manager stopped (context cancelled during generation detection)")
 			return
 		}
 
 		iface, err := m.discoverInterface(ctx)
 		if err != nil {
-			log.Printf("Capture: interface discovery failed: %v — retrying in %s", err, generationPollInterval)
+			log.Printf("⚠️  Capture: interface discovery failed: %v — retrying in %s", err, generationPollInterval)
 			if !sleepOrDone(ctx, generationPollInterval) {
 				return
 			}
@@ -149,18 +149,18 @@ func (m *Manager) Run(ctx context.Context) {
 		m.startTime = time.Now()
 		m.mu.Unlock()
 
-		log.Printf("Capture ready: iface=%s generation=%s", iface, gen)
+		log.Printf("📡 Capture ready: iface=%s generation=%s", iface, gen)
 
 		m.runWithRestart(ctx, iface, gen)
 
 		if ctx.Err() != nil {
-			log.Printf("Capture manager stopped")
+			log.Printf("📡 Capture manager stopped")
 			return
 		}
 
 		// If we get here the context is still alive but the generation may have
 		// changed (e.g. operator switched from 5G to 4G core). Reset and re-detect.
-		log.Printf("Capture loop exited — re-detecting generation")
+		log.Printf("📡 Capture loop exited — re-detecting generation")
 		m.mu.Lock()
 		m.iface = ""
 		m.generation = ""
@@ -174,11 +174,11 @@ func (m *Manager) waitForGeneration(ctx context.Context) string {
 	for {
 		gen := m.snap.ActiveGeneration()
 		if gen != "" {
-			log.Printf("Generation detected: %s", gen)
+			log.Printf("📡 Generation detected: %s", gen)
 			return gen
 		}
 
-		log.Printf("No active core generation detected — waiting %s", generationPollInterval)
+		log.Printf("📡 No active core generation detected — waiting %s", generationPollInterval)
 		if !sleepOrDone(ctx, generationPollInterval) {
 			return ""
 		}
@@ -189,7 +189,7 @@ func (m *Manager) waitForGeneration(ctx context.Context) string {
 // Docker network inspection or from the explicitly configured value.
 func (m *Manager) discoverInterface(ctx context.Context) (string, error) {
 	if m.captureInterface != "" && m.captureInterface != "auto" {
-		log.Printf("Using configured capture interface: %s", m.captureInterface)
+		log.Printf("📡 Using configured capture interface: %s", m.captureInterface)
 		return m.captureInterface, nil
 	}
 	return m.docker.GetBridgeInterface(ctx, networkName)
@@ -270,7 +270,7 @@ func (m *Manager) runWithRestart(ctx context.Context, iface, gen string) {
 		}
 
 		m.restarts.Add(1)
-		log.Printf("tshark exited unexpectedly (restart #%d): %v — retrying in %s",
+		log.Printf("⚠️  tshark exited unexpectedly (restart #%d): %v — retrying in %s",
 			m.restarts.Load(), exitErr, backoff)
 
 		if !sleepOrDone(ctx, backoff) {

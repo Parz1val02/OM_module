@@ -103,7 +103,7 @@ func (c *Client) GetBridgeInterface(ctx context.Context, networkName string) (st
 	}
 
 	ifaceName := "br-" + nr.ID[:12]
-	log.Printf("Bridge interface discovered: %s", ifaceName)
+	log.Printf("🌉 Bridge interface discovered: %s", ifaceName)
 	return ifaceName, nil
 }
 
@@ -170,7 +170,7 @@ func (c *Client) GetStats(ctx context.Context, containerID string) (*RawStats, e
 	}
 	defer func() {
 		if err := resp.Body.Close(); err != nil {
-			log.Printf("Failed to close response body: %v", err)
+			log.Printf("⚠️  Failed to close response body: %v", err)
 		}
 	}()
 
