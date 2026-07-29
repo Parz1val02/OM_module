@@ -117,7 +117,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Gauge confiable de estado actual en 5G. Sube a 1 en registration y baja a 0 en deregistration. amf_session y amf_ue_count NO bajan porque Open5GS mantiene el contexto — usar ran_ue como indicador de estado actual.",
       "fieldConfig": {
@@ -182,7 +182,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "ran_ue",
           "refId": "A"
@@ -194,7 +194,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "PDU Sessions activas en el UPF (gauge). Sube en PDU Session Establishment y baja en Release.",
       "fieldConfig": {
@@ -242,7 +242,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf\"}",
           "refId": "A"
@@ -254,7 +254,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "QoS Flows activos. En modo ZMQ es el indicador correcto de tráfico activo — fivegs_ep_n3_gtp_* siempre es 0 en ZMQ. Un QoS Flow activo confirma que el plano de usuario está establecido.",
       "fieldConfig": {
@@ -302,7 +302,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_upffunction_upf_qosflows{container=\"upf\"}",
           "refId": "A"
@@ -314,7 +314,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "PDU Sessions activas en el SMF (gauge). Debe coincidir con upf_sessionnbr — si difieren indica inconsistencia control/usuario.",
       "fieldConfig": {
@@ -362,7 +362,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_smffunction_sm_sessionnbr{container=\"smf\"}",
           "refId": "A"
@@ -374,7 +374,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Sesiones de política activas en el PCF (gauge). En 5G el PCF participa en cada PDU Session — a diferencia del PCRF en 4G, la interfaz es SBI (HTTP/2) en lugar de Diameter Gx. pa_sessionnbr = 1 confirma que el PCF está coordinando la política de QoS.",
       "fieldConfig": {
@@ -422,7 +422,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_pcffunction_pa_sessionnbr",
           "refId": "A"
@@ -434,7 +434,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "gNBs registrados en el AMF. Debe ser 1 durante E3.",
       "fieldConfig": {
@@ -482,7 +482,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "amf_gnb_count",
           "refId": "A"
@@ -507,7 +507,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Gauges de estado actual. La secuencia esperada: ran_ue sube primero (conexión RAN/N2), luego upf_sessionnbr y smf_sessionnbr juntos (PDU Session Establishment), luego upf_qosflows (QoS Flow activo). En deregistration la secuencia es inversa.",
       "fieldConfig": {
@@ -592,7 +592,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "ran_ue",
           "legendFormat": "UEs en RAN",
@@ -601,7 +601,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf\"}",
           "legendFormat": "PDU Sessions UPF",
@@ -610,7 +610,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_upffunction_upf_qosflows{container=\"upf\"}",
           "legendFormat": "QoS Flows UPF",
@@ -623,7 +623,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Counters acumulativos de Registration y PDU Session. En E3 (flujo limpio): req == succ, fail == 0. PDU Succ siempre duplica a PDU Req — comportamiento normal de Open5GS (emite dos eventos succ por sesión). Estos counters NO bajan con deregistration.",
       "fieldConfig": {
@@ -662,7 +662,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_amffunction_rm_reginitreq",
           "legendFormat": "Reg Req",
@@ -671,7 +671,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_amffunction_rm_reginitsucc",
           "legendFormat": "Reg Succ",
@@ -680,7 +680,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_smffunction_sm_pdusessioncreationreq{container=\"smf\"}",
           "legendFormat": "PDU Req",
@@ -689,7 +689,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_smffunction_sm_pdusessioncreationsucc{container=\"smf\"}",
           "legendFormat": "PDU Succ (×2 normal)",
@@ -715,7 +715,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Política en el PCF. En 5G hay dos tipos: AM Policy (Access and Mobility) — creada al registrar el UE — y SM Policy (Session Management) — creada al establecer la PDU Session. La presencia de ambas en E3 confirma que el PCF está activo en el ciclo completo. Esto no existe en 4G donde el PCRF solo maneja política Gx en el establecimiento de bearer.",
       "fieldConfig": {
@@ -754,7 +754,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_pcffunction_pa_policysmassoreq",
           "legendFormat": "PCF SM Policy Req",
@@ -763,7 +763,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_pcffunction_pa_policysmassosucc",
           "legendFormat": "PCF SM Policy Succ",
@@ -772,7 +772,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_pcffunction_pa_policyamassoreq",
           "legendFormat": "PCF AM Policy Req",
@@ -781,7 +781,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_pcffunction_pa_sessionnbr",
           "legendFormat": "PCF Sessions activas",
@@ -794,7 +794,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Interfaz N4 PFCP entre SMF y UPF. pfcp_peers_active = 1 confirma la asociación PFCP establecida entre SMF y UPF — condición previa para que las PDU Sessions funcionen. fivegs_upffunction_sm_n4sessionestabreq confirma que el UPF recibió y procesó la solicitud de sesión del plano de usuario. En E3 ambos deben ser 1.",
       "fieldConfig": {
@@ -833,7 +833,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_upffunction_sm_n4sessionestabreq{container=\"upf\"}",
           "legendFormat": "N4 Estab Req (UPF)",
@@ -842,7 +842,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "pfcp_peers_active{container=\"smf\"}",
           "legendFormat": "PFCP Peers (SMF)",
@@ -851,7 +851,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "pfcp_peers_active{container=\"upf\"}",
           "legendFormat": "PFCP Peers (UPF)",
@@ -877,7 +877,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "uid": "loki"
       },
       "description": "Logs del AMF — equivalente al MME en 4G pero con arquitectura SBI. Secuencia esperada: 'gNB-N2 accepted' → 'Registration request' → 'Registration complete' → 'PDU Session' → 'Deregistration request'. Los WARNING indican fallos en escenarios posteriores (E4).",
       "fieldConfig": {
@@ -904,7 +904,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "loki"
           },
           "expr": "{nf=\"amf\"} |= ``",
           "refId": "A"
@@ -916,7 +916,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "uid": "loki"
       },
       "description": "Logs del SMF — gestión de PDU Session y coordinación N4 con el UPF. Se observa el establecimiento de la sesión PFCP, la asignación de dirección IP al UE (DNN internet, 192.168.100.x) y la liberación en PDU Release.",
       "fieldConfig": {
@@ -943,7 +943,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "loki"
           },
           "expr": "{nf=\"smf\"} |= ``",
           "refId": "A"
@@ -955,7 +955,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "uid": "loki"
       },
       "description": "Logs del UPF — plano de usuario. Loguea poco en condiciones normales. Los eventos relevantes son el establecimiento del tunnel PFCP y la activación del QoS Flow. Si hay ERRORs aquí en E3, indica problemas en la interfaz N4 o N3.",
       "fieldConfig": {
@@ -982,7 +982,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "loki"
           },
           "expr": "{nf=\"upf\"} |= ``",
           "refId": "A"

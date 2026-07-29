@@ -10,10 +10,10 @@ datasources:
     jsonData:
       httpMethod: GET
       serviceMap:
-        datasourceUid: PBFA97CFB590B2093
+        datasourceUid: prometheus
 
       tracesToLogsV2:
-        datasourceUid: P8E80F9AEF21F6940
+        datasourceUid: loki
         spanStartTimeShift: "-1m"
         spanEndTimeShift: "1m"
         filterByTraceID: false
@@ -22,7 +22,7 @@ datasources:
         query: '{nf="$${__span.tags.nf}", domain="$${__span.tags.domain}"} | = "$${__span.tags.imsi}"'
 
       tracesToMetrics:
-        datasourceUid: PBFA97CFB590B2093
+        datasourceUid: prometheus
         spanStartTimeShift: "-2m"
         spanEndTimeShift: "2m"
         tags:
@@ -43,4 +43,4 @@ datasources:
         hide: false
 
       lokiSearch:
-        datasourceUid: P8E80F9AEF21F6940
+        datasourceUid: loki

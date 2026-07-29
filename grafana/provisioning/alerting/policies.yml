@@ -7,13 +7,3 @@ policies:
     group_wait: 30s
     group_interval: 5m
     repeat_interval: 1h
-    routes:
-      - receiver: Testbed Alerts
-        matchers:
-          - generation = 5g
-          - severity =~ "critical|warning"
-
-      - receiver: Testbed Alerts
-        matchers:
-          - generation = 4g
-          - severity =~ "critical|warning"

@@ -1,9 +1,5 @@
 apiVersion: 1
 
-#deleteRules:
-#  - orgId: 1
-#    uid: 5g-reg-failure-rate
-
 groups:
   - orgId: 1
     name: 5G Core Alerts
@@ -32,7 +28,7 @@ groups:
             relativeTimeRange:
               from: 300
               to: 0
-            datasourceUid: PBFA97CFB590B2093
+            datasourceUid: prometheus
             model:
               expr: >
                 sum(increase(fivegs_amffunction_rm_reginitfail[5m])) > 0

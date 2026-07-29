@@ -1,8 +1,3 @@
-# ─────────────────────────────────────────────────────────────────────────────
-# Módulo O&M — Makefile para automatización de escenarios
-# Uso: make <target>
-# ─────────────────────────────────────────────────────────────────────────────
-
 COMPOSE      := COMPOSE_IGNORE_ORPHANS=true docker compose
 CORE_4G      := 4G_core.yaml
 CORE_5G      := 5G_core.yaml

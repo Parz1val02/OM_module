@@ -11,11 +11,7 @@ services:
     restart: unless-stopped
     environment:
       - TEMPO_ENDPOINT=tempo:4318
-      # Set to "false" to disable the capture pipeline without rebuilding
       - CAPTURE_ENABLED=true
-      # Bridge interface to capture on.
-      # "auto" = dynamic discovery via Docker network inspection (recommended).
-      # Set to explicit name (e.g. "br-c91787205592") to bypass discovery.
       - CAPTURE_INTERFACE=auto
       - MCC=${MCC}
       - MNC=${MNC}
@@ -45,8 +41,6 @@ services:
       om.generation: "none"
       om.project: "golang"
       prometheus.scrape: "false"
-      #prometheus.port: "8080"
-      #prometheus.path: "/metrics"
 
   loki:
     image: grafana/loki:3.0.0
@@ -194,7 +188,6 @@ services:
       - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
       - GF_USERS_ALLOW_SIGN_UP=false
-      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource,yesoreyeram-infinity-datasource
       # --- SMTP / alerting ---
       - GF_SMTP_ENABLED=true
       - GF_SMTP_HOST=smtp.gmail.com:587

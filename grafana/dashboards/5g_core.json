@@ -37,7 +37,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Total de contenedores activos en el testbed, incluyendo core 5G y stack de observabilidad. El core 5G tiene más NFs que el 4G (AMF, SMF, UPF, PCF, AUSF, UDM, UDR, NRF, NSSF, BSF, SCP) — un valor menor al esperado indica que algún NF no arrancó. En E4 se añaden smf2 y upf2.",
       "fieldConfig": {
@@ -89,7 +89,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "testbed_containers_running",
           "refId": "A"
@@ -101,7 +101,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Estado de salud por NF derivado del healthcheck de Docker. Verde (1) = healthy, Rojo (0) = unhealthy. En 5G hay más NFs que en 4G — verificar que todos estén en verde antes de ejecutar cualquier escenario. NRF, SCP y BSF deben estar healthy antes que AMF y SMF porque estos dependen del registro de servicios.",
       "fieldConfig": {
@@ -171,7 +171,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "container_health_status{domain=\"core\", generation=\"5g\"}",
           "legendFormat": "{{nf}}",
@@ -198,7 +198,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Evolución temporal de los indicadores de ran. amf_session (línea naranja punteada) no baja tras deregistration — comportamiento normal de Open5GS que mantiene el contexto del UE en el AMF. Comparar con ran_ue para observar la diferencia.",
       "fieldConfig": {
@@ -290,7 +290,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "ran_ue",
           "legendFormat": "UEs en RAN",
@@ -299,7 +299,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "amf_gnb_count",
           "legendFormat": "gNBs activos",
@@ -308,7 +308,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "amf_session",
           "legendFormat": "AMF Sessions",
@@ -334,7 +334,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "PDU Sessions activas en UPF del slice 1 (SD=000001, DNN internet). En E4=3.",
       "fieldConfig": {
@@ -383,7 +383,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf\"}",
           "refId": "A"
@@ -395,7 +395,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "PDU Sessions activas en SMF del slice 1. Debe coincidir con upf_sessionnbr.",
       "fieldConfig": {
@@ -444,7 +444,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_smffunction_sm_sessionnbr{container=\"smf\"}",
           "refId": "A"
@@ -456,7 +456,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "QoS Flows activos en UPF slice 1. En modo ZMQ es el indicador correcto de tráfico activo.",
       "fieldConfig": {
@@ -505,7 +505,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_upffunction_upf_qosflows{container=\"upf\"}",
           "refId": "A"
@@ -517,7 +517,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Sesiones de política PCF para slice SD=000001. En E4=3.",
       "fieldConfig": {
@@ -566,7 +566,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_pcffunction_pa_sessionnbr{snssai=\"1-000001\"}",
           "refId": "A"
@@ -591,7 +591,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "PDU Sessions activas en UPF2 del slice 2 (SD=000002, DNN private). En E3=0, en E4=1.",
       "fieldConfig": {
@@ -641,7 +641,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf2\"}",
           "refId": "A"
@@ -653,7 +653,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "PDU Sessions activas en SMF2 del slice 2. En E3=0, en E4=1.",
       "fieldConfig": {
@@ -703,7 +703,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_smffunction_sm_sessionnbr{container=\"smf2\"}",
           "refId": "A"
@@ -715,7 +715,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "QoS Flows activos en UPF2 slice 2. En E3=0, en E4=1.",
       "fieldConfig": {
@@ -765,7 +765,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_upffunction_upf_qosflows{container=\"upf2\"}",
           "refId": "A"
@@ -777,7 +777,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Sesiones de política PCF para slice SD=000002. En E3=0, en E4=1.",
       "fieldConfig": {
@@ -827,7 +827,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_pcffunction_pa_sessionnbr{snssai=\"1-000002\"}",
           "refId": "A"
@@ -852,7 +852,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Fallos de autenticación 5G-AKA por K incorrecto (bad_k). Counter acumulativo. En E4 = 1 (nr_ue_bad_ki con IMSI 906). El proceso: UE envía SUCI → AMF solicita auth al AUSF → AUSF verifica K → fallo → AMF registra authfail.",
       "fieldConfig": {
@@ -913,7 +913,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_amffunction_amf_authfail",
           "refId": "A",
@@ -926,7 +926,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Registration failures por código de causa 3GPP TS 24.501 §9.11.3.2. cause=7: 5GS services not allowed (bad_supi). cause=62: No network slices available (bad_sst, incluye reintentos). cause=111: Protocol error unspecified (bad_dnn — Open5GS usa este código en lugar del cause=91 estándar).",
       "fieldConfig": {
@@ -979,7 +979,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_amffunction_rm_reginitfail",
           "refId": "A",
@@ -1006,7 +1006,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Counters acumulativos de Registration Initial en el AMF. req = intentos totales de registro inicial. succ = registros exitosos. fail = rechazados por cualquier causa. En E3 (flujo limpio): req == succ, fail == 0. En E4: req > succ, fail > 0 por los UEs inválidos. IMPORTANTE: estos counters NO bajan con deregistration — solo sirven para observar la cadencia de eventos.",
       "fieldConfig": {
@@ -1080,7 +1080,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_amffunction_rm_reginitreq",
           "legendFormat": "Reg Init Req",
@@ -1089,7 +1089,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_amffunction_rm_reginitsucc",
           "legendFormat": "Reg Init Succ",
@@ -1098,7 +1098,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_amffunction_rm_reginitfail",
           "legendFormat": "Reg Init Fail — causa {{cause}}",
@@ -1107,7 +1107,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_amffunction_amf_authfail",
           "legendFormat": "Auth Fail — causa {{cause}}",
@@ -1120,7 +1120,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Interfaz N4 PFCP entre SMF/SMF2 y UPF/UPF2. pfcp_peers_active = 1 confirma la asociación PFCP establecida — condición previa para PDU Sessions. En E3 solo aparecen smf/upf (slice 1). En E4 aparecen también smf2/upf2 (slice 2).",
       "fieldConfig": {
@@ -1159,7 +1159,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_upffunction_sm_n4sessionestabreq{container=\"upf\"}",
           "legendFormat": "N4 Estab Req (UPF)",
@@ -1168,7 +1168,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "pfcp_peers_active{container=\"smf\"}",
           "legendFormat": "PFCP Peers (SMF)",
@@ -1177,7 +1177,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "pfcp_peers_active{container=\"upf\"}",
           "legendFormat": "PFCP Peers (UPF)",
@@ -1186,7 +1186,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_upffunction_sm_n4sessionestabreq{container=\"upf2\"}",
           "legendFormat": "N4 Estab Req (UPF2)",
@@ -1195,7 +1195,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "pfcp_peers_active{container=\"smf2\"}",
           "legendFormat": "PFCP Peers (SMF2)",
@@ -1204,7 +1204,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "pfcp_peers_active{container=\"upf2\"}",
           "legendFormat": "PFCP Peers (UPF2)",
@@ -1217,7 +1217,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Política de sesión (SM) y movilidad (AM) en el PCF. En 5G el PCF reemplaza al PCRF de 4G con una interfaz SBI REST en lugar de Diameter Gx. policysmassoreq/succ = 1 por cada PDU Session establecida — confirma que el PCF participó en el ciclo de vida de la sesión. pa_sessionnbr es un gauge que refleja las sesiones de política activas actualmente.",
       "fieldConfig": {
@@ -1256,7 +1256,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_pcffunction_pa_policysmassoreq",
           "legendFormat": "PCF SM Policy Req — {{snssai}}",
@@ -1265,7 +1265,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_pcffunction_pa_policysmassosucc",
           "legendFormat": "PCF SM Policy Succ — {{snssai}}",
@@ -1274,7 +1274,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_pcffunction_pa_policyamassoreq",
           "legendFormat": "PCF AM Policy Req — {{snssai}}",
@@ -1283,7 +1283,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_pcffunction_pa_policyamassosucc",
           "legendFormat": "PCF AM Policy Succ — {{snssai}}",
@@ -1309,7 +1309,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "CPU por NF a lo largo del tiempo. En 5G hay más NFs que en 4G — AMF y SMF suelen ser los más activos. En modo ZMQ los valores son bajos porque no hay tráfico de datos real.",
       "fieldConfig": {
@@ -1349,7 +1349,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "sum(container_cpu_usage_percent{domain=\"core\", generation=\"5g\"}) by (nf)",
           "legendFormat": "{{nf}}",
@@ -1362,7 +1362,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Memoria por NF. El SMF suele ser el NF con mayor consumo en Open5GS 5G. En E4 smf2 y upf2 aparecen como NFs adicionales.",
       "fieldConfig": {
@@ -1402,7 +1402,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "sum(container_memory_usage_bytes{domain=\"core\", generation=\"5g\"}) by (nf)",
           "legendFormat": "{{nf}}",
@@ -1415,7 +1415,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Throughput de red de los NFs del plano de usuario (upf, upf2). En modo ZMQ refleja señalización PFCP de control, no datos reales de usuario N3.",
       "fieldConfig": {
@@ -1455,7 +1455,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "rate(container_network_rx_bytes_total{domain=\"core\", generation=\"5g\", nf=~\"upf|upf2\"}[1m])",
           "legendFormat": "{{nf}} RX",
@@ -1464,7 +1464,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "rate(container_network_tx_bytes_total{domain=\"core\", generation=\"5g\", nf=~\"upf|upf2\"}[1m])",
           "legendFormat": "{{nf}} TX",
@@ -1477,7 +1477,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Throughput de red de los NFs de señalización SBI (todos excepto upf y upf2). Refleja tráfico HTTP/2 SBI, NGAP y PFCP entre las funciones de red del core 5G. Los picos coinciden con procedimientos de registration y PDU Session.",
       "fieldConfig": {
@@ -1517,7 +1517,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "rate(container_network_rx_bytes_total{domain=\"core\", generation=\"5g\", nf!~\"upf|upf2\"}[1m])",
           "legendFormat": "{{nf}} RX",
@@ -1526,7 +1526,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "rate(container_network_tx_bytes_total{domain=\"core\", generation=\"5g\", nf!~\"upf|upf2\"}[1m])",
           "legendFormat": "{{nf}} TX",
@@ -1552,7 +1552,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "uid": "loki"
       },
       "description": "Logs del AMF — el NF más rico en información en 5G. Muestra el ciclo completo: gNB-N2 accepted → Registration request → Authentication → Registration complete → PDU Session → Deregistration. Los WARNING y ERROR indican fallos: 'Authentication failure(Synch failure)' = bad_k, 'Cannot find SUCI' = bad_supi, 'Registration reject' = cualquier rechazo, 'Cannot find NSSAI' = bad_sst.",
       "fieldConfig": {
@@ -1579,7 +1579,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "loki"
           },
           "expr": "{nf=\"amf\"} |= ``",
           "refId": "A"
@@ -1591,7 +1591,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "uid": "loki"
       },
       "description": "Logs del SMF (slice 1) y SMF2 (slice 2 en E4). Muestra el ciclo de PDU Session: establecimiento de sesión N4 con el UPF, asignación de dirección IP, liberación. En E4 es especialmente útil ver cómo smf y smf2 manejan sesiones completamente independientes para cada slice.",
       "fieldConfig": {
@@ -1618,7 +1618,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "loki"
           },
           "expr": "{nf=~\"smf|smf2\"} |= ``",
           "refId": "A"
@@ -1630,7 +1630,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "uid": "loki"
       },
       "description": "Logs del UPF (slice 1) y UPF2 (slice 2 en E4). Estos NFs loguean poco en condiciones normales porque su función es forwarding de paquetes. Los eventos relevantes son el establecimiento del túnel PFCP/GTP-U y errores de plano de datos. En E4 confirma el aislamiento del plano de usuario entre slices.",
       "fieldConfig": {
@@ -1657,7 +1657,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "loki"
           },
           "expr": "{nf=~\"upf|upf2\"} |= ``",
           "refId": "A"
@@ -1679,7 +1679,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "loki"
           },
           "fieldConfig": {
             "defaults": {},
@@ -1705,7 +1705,7 @@
             {
               "datasource": {
                 "type": "loki",
-                "uid": "P8E80F9AEF21F6940"
+                "uid": "loki"
               },
               "expr": "{domain=\"core\", generation=\"5g\"} |= ``",
               "refId": "A"
@@ -1734,7 +1734,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Distribución de paquetes capturados por NF origen y protocolo. NGAP = señalización N2 entre gNB y AMF. PFCP = gestión de sesiones N4 entre SMF y UPF. SBI = peticiones HTTP/2 entre NFs (namf-comm, nsmf-pdusession, npcf-smpolicycontrol, etc.). La presencia de SBI es una característica distintiva de 5G respecto a 4G, donde toda la señalización era Diameter o GTP.",
       "fieldConfig": {
@@ -1773,7 +1773,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "sum by (src_nf, protocol) (om_capture_packets_total{generation=\"5g\"})",
           "legendFormat": "{{src_nf}} — {{protocol}}",
@@ -1787,7 +1787,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Evolución temporal de la señalización capturada. Los picos de NGAP coinciden con registration/deregistration. PFCP aparece en el establecimiento de sesión N4. SBI es continuo porque las NFs 5G se comunican vía HTTP/2 constantemente para heartbeat y descubrimiento de servicios.",
       "fieldConfig": {
@@ -1827,7 +1827,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "sum by (src_nf, protocol) (om_capture_packets_total{generation=\"5g\"})",
           "legendFormat": "{{src_nf}} — {{protocol}}",
@@ -1836,7 +1836,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "om_capture_errors_total",
           "legendFormat": "Capture Errors",

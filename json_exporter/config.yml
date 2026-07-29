@@ -1,6 +1,3 @@
-# json_exporter configuration for Open5GS 4G/5G core NF endpoints
-# and the OM module topology endpoint.
-
 modules:
   # ---------------------------------------------------------------------------
   # 5G — AMF UE info  (curl http://amf:9091/ue-info)

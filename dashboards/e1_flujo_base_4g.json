@@ -110,7 +110,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Indicador primario de UE activo. Gauge confiable — sube a 1 cuando el UE completa el attach y vuelve a 0 en el detach. Es más fiable que mme_ue_count para saber si hay un UE activo en este momento.",
       "fieldConfig": {
@@ -175,7 +175,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "mme_session",
           "refId": "A"
@@ -187,7 +187,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Bearers EPS activos. Sube en bearer setup y baja en bearer release. Junto con mme_session, confirma el ciclo completo de attach.",
       "fieldConfig": {
@@ -235,7 +235,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "bearers_active",
           "refId": "A"
@@ -247,7 +247,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Sesiones GTPv2 activas en S5/S8 (SGW↔PGW). Confirma el plano de usuario establecido entre los dos gateways. Debe subir y bajar junto con bearers_active.",
       "fieldConfig": {
@@ -295,7 +295,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "gtp2_sessions_active",
           "refId": "A"
@@ -307,7 +307,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "eNBs registrados en el MME. Debe ser 1 durante todo E1. Si baja a 0 con la RAN activa, hay un problema de conectividad S1.",
       "fieldConfig": {
@@ -355,7 +355,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "mme_enb_count",
           "refId": "A"
@@ -367,7 +367,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "UEs conectados al eNB en la interfaz S1. Es el gauge más reactivo — sube inmediatamente cuando el UE se conecta al eNB, antes de que el MME procese el attach.",
       "fieldConfig": {
@@ -415,7 +415,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "enb_ue",
           "refId": "A"
@@ -440,7 +440,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Los 4 gauges deben subir juntos en attach/bearer setup y bajar juntos en release/detach. La secuencia temporal esperada: enb_ue sube primero (conexión RAN), luego mme_session (NAS attach), luego bearers_active y gtp2_sessions_active juntos (bearer setup). En detach la secuencia es inversa.",
       "fieldConfig": {
@@ -540,7 +540,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "mme_session",
           "legendFormat": "Sesiones MME",
@@ -549,7 +549,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "bearers_active",
           "legendFormat": "Bearers activos",
@@ -558,7 +558,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "gtp2_sessions_active",
           "legendFormat": "GTPv2 Sessions",
@@ -567,7 +567,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "mme_enb_count",
           "legendFormat": "eNBs registrados",
@@ -580,7 +580,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Contadores acumulativos de señalización. S5 Create/Delete deben incrementar en 1 durante el escenario — confirma que la sesión GTPv2 se estableció correctamente en S5/S8. Gx CCR incrementa en 2 por ciclo: CCR-I (Initial) en attach y CCR-T (Termination) en detach — valor final = 2 × número de ciclos.",
       "fieldConfig": {
@@ -619,7 +619,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "s5c_rx_createsession",
           "legendFormat": "S5 Create Session",
@@ -628,7 +628,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "s5c_rx_deletesession",
           "legendFormat": "S5 Delete Session",
@@ -637,7 +637,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "gx_rx_ccr",
           "legendFormat": "Gx CCR",
@@ -646,7 +646,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "gx_tx_cca",
           "legendFormat": "Gx CCA",
@@ -672,7 +672,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "uid": "loki"
       },
       "description": "Logs del MME — el NF más informativo en E1. Secuencia esperada: 'eNB-S1 accepted' → 'InitialUEMessage' → 'Attach request' → 'Identity response' → 'Attach complete' → 'Detach request' → 'Removed Session' → 'UE Context Release'. Cada línea confirma un paso del procedimiento EPS Attach.",
       "fieldConfig": {
@@ -699,7 +699,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "loki"
           },
           "expr": "{nf=\"mme\"} |= ``",
           "refId": "A"
@@ -711,7 +711,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "uid": "loki"
       },
       "description": "Logs del SMF y SGWC — gestión de sesiones GTP. En E1 se observa 'Added Number of MME-Sessions is now 1' en attach y 'Removed Session: UE IMSI:[...] APN:[internet]' en detach. Estos logs confirman que el plano de control de la sesión S5/S8 se estableció correctamente.",
       "fieldConfig": {
@@ -738,7 +738,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "loki"
           },
           "expr": "{nf=~\"smf|sgwc\"} |= ``",
           "refId": "A"
@@ -750,7 +750,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "uid": "loki"
       },
       "description": "Logs del UPF y SGWU — plano de usuario. En condiciones normales de E1 estos NFs generan pocos logs porque su función principal es forwarding. Los eventos más relevantes son el establecimiento del túnel GTP-U. Si aparecen ERRORs aquí, indican problemas de conectividad en el plano de datos.",
       "fieldConfig": {
@@ -777,7 +777,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "loki"
           },
           "expr": "{nf=~\"upf|sgwu\"} |= ``",
           "refId": "A"

@@ -117,7 +117,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Escala de 0 a 4 conforme se levantan los eNBs. Observar la progresión: cada eNB que se levanta incrementa este contador. Al llegar a 4, el testbed está listo para inyectar los UEs inválidos.",
       "fieldConfig": {
@@ -182,7 +182,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "mme_enb_count",
           "refId": "A"
@@ -194,7 +194,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Debe mantenerse en 1 (solo el UE válido). Puede subir momentáneamente a 2 cuando un UE inválido llega al MME — este spike es didáctico porque demuestra que el MME procesa el intento de attach antes de rechazarlo.",
       "fieldConfig": {
@@ -259,7 +259,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "mme_session",
           "refId": "A"
@@ -271,7 +271,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Bearer del UE válido. Debe permanecer activo durante todo E2.",
       "fieldConfig": {
@@ -319,7 +319,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "bearers_active",
           "refId": "A"
@@ -344,7 +344,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "mme_enb_count sube escalonadamente de 0 a 4. mme_session sube a 1 con el UE válido y NO incrementa con los UEs inválidos — evidencia de que el rechazo funciona correctamente. El spike momentáneo a 2 indica que un UE inválido llegó al MME antes de ser rechazado.",
       "fieldConfig": {
@@ -429,7 +429,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "mme_enb_count",
           "legendFormat": "eNBs registrados",
@@ -438,7 +438,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "mme_session",
           "legendFormat": "Sesiones MME",
@@ -447,7 +447,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "bearers_active",
           "legendFormat": "Bearers activos",
@@ -456,7 +456,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "gtp2_sessions_active",
           "legendFormat": "GTPv2 Sessions",
@@ -469,7 +469,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Señalización acumulativa. S5 Create/Delete suben solo para el UE válido. Gx CCR sube 2 por ciclo (CCR-I + CCR-T). S6a AIR/AIA suben con cada intento de attach (válido e inválido). La brecha entre AIR rx y ULR rx indica los UEs que fallaron en autenticación o no llegaron al ULR.",
       "fieldConfig": {
@@ -508,7 +508,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "s5c_rx_createsession",
           "legendFormat": "S5 Create",
@@ -517,7 +517,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "s5c_rx_deletesession",
           "legendFormat": "S5 Delete",
@@ -526,7 +526,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "gx_rx_ccr",
           "legendFormat": "Gx CCR",
@@ -552,7 +552,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Mensajes S6a con brecha entre AIR y ULR. La brecha AIR − ULR = número de UEs que fallaron antes de llegar a la actualización de ubicación. En E2: AIR recibe 4 mensajes (1 válido + 3 inválidos), ULR recibe 2 (válido + bad_apn que pasa auth completa). La brecha de 2 corresponde a bad_ki y bad_imsi.\n\nIMPORTANTE: s6a_rx_air_error siempre es 0 en E2 — el HSS procesa correctamente todos los AIR. Los fallos se manifiestan en el MME (bad_ki) o antes del ULR (bad_imsi), no en el HSS.",
       "fieldConfig": {
@@ -611,7 +611,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "s6a_rx_air",
           "legendFormat": "AIR recibidos",
@@ -620,7 +620,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "s6a_tx_aia",
           "legendFormat": "AIA enviados",
@@ -629,7 +629,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "s6a_rx_ulr",
           "legendFormat": "ULR recibidos",
@@ -638,7 +638,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "s6a_tx_ula",
           "legendFormat": "ULA enviados",
@@ -647,7 +647,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "s6a_rx_air_error",
           "legendFormat": "AIR Errors ⚠️",
@@ -690,7 +690,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "uid": "loki"
       },
       "description": "Logs del MME — aquí están todas las evidencias de fallos. Para bad_ki buscar: 'Authentication failure(MAC failure)'. Para bad_imsi buscar: 'Failure in transaction; no context restoration'. Para bad_apn buscar: 'Invalid APN[invalid_apn]' (nivel ERROR en ESM). El campo IMSI en cada log permite identificar qué UE generó cada evento.",
       "fieldConfig": {
@@ -717,7 +717,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "loki"
           },
           "expr": "{nf=\"mme\"} |= ``",
           "refId": "A"
@@ -729,7 +729,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "uid": "loki"
       },
       "description": "Logs del SMF y SGWC. En E2 solo el UE válido y bad_apn llegan a establecer sesión en el SMF. Para bad_apn se observa 'Invalid APN' y 'Removed Session' inmediatamente después. Para el UE válido la sesión persiste.",
       "fieldConfig": {
@@ -756,7 +756,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "loki"
           },
           "expr": "{nf=~\"smf|sgwc\"} |= ``",
           "refId": "A"
@@ -768,7 +768,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "uid": "loki"
       },
       "description": "Logs del UPF y SGWU. Solo el UE válido y brevemente bad_apn generan actividad en el plano de usuario. Para bad_apn la sesión se establece y libera inmediatamente.",
       "fieldConfig": {
@@ -795,7 +795,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "loki"
           },
           "expr": "{nf=~\"upf|sgwu\"} |= ``",
           "refId": "A"

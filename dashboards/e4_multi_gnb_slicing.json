@@ -117,7 +117,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Escala de 0 a 3 conforme se levantan srsgnb, gNB1 y gNB2. Observar la progresión temporal.",
       "fieldConfig": {
@@ -182,7 +182,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "amf_gnb_count",
           "refId": "A"
@@ -194,7 +194,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "UEs con conexión RAN activa (gauge). Los 4 UEs válidos deben estar conectados. Los UEs inválidos intentan conectarse pero son rechazados — ran_ue solo cuenta los que tienen sesión NAS activa.",
       "fieldConfig": {
@@ -242,7 +242,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "ran_ue",
           "refId": "A"
@@ -254,7 +254,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "PDU Sessions activas por slice. upf = slice 1 (SD=000001, DNN internet). upf2 = slice 2 (SD=000002, DNN private). La separación entre ambos confirma el aislamiento del plano de usuario por slice.",
       "fieldConfig": {
@@ -306,7 +306,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_upffunction_upf_sessionnbr",
           "legendFormat": "{{container}}",
@@ -320,7 +320,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Registration failures por código de causa 3GPP TS 24.501 §9.11.3.2. cause=7: 5GS services not allowed — generado por bad_supi Y bad_ki (ambos producen el mismo código). cause=62: No network slices available (bad_sst, incluye reintentos automáticos). cause=111: Protocol error unspecified (bad_dnn). Para distinguir bad_supi de bad_ki usar amf_authfail: si authfail > 0, el fallo de cause=7 incluye bad_ki. La separación completa requiere correlación con logs del AMF.",
       "fieldConfig": {
@@ -372,7 +372,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_amffunction_rm_reginitfail",
           "refId": "A",
@@ -382,7 +382,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_amffunction_amf_authfail",
           "legendFormat": "auth fail (bad_k) causa {{cause}}",
@@ -409,7 +409,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Progresión temporal. amf_gnb_count sube escalonadamente 0→1→2→3. ran_ue sube con cada UE válido que se conecta. upf_sessionnbr y upf2_sessionnbr suben de forma independiente — la separación entre las dos líneas es la evidencia visual del aislamiento por slice.",
       "fieldConfig": {
@@ -509,7 +509,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "amf_gnb_count",
           "legendFormat": "gNBs activos",
@@ -518,7 +518,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "ran_ue",
           "legendFormat": "UEs en RAN",
@@ -527,7 +527,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf\"}",
           "legendFormat": "PDU Sessions slice 1 (upf)",
@@ -536,7 +536,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf2\"}",
           "legendFormat": "PDU Sessions slice 2 (upf2)",
@@ -562,7 +562,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Aislamiento del plano de control por slice. smf maneja SD=000001 (3 UEs, DNN internet). smf2 maneja SD=000002 (1 UE, DNN private). Los contadores de sesión son completamente independientes — smf no tiene visibilidad de las sesiones de smf2 y viceversa. Esto demuestra el aislamiento de plano de control del network slicing.",
       "fieldConfig": {
@@ -632,7 +632,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_smffunction_sm_sessionnbr{container=\"smf\"}",
           "legendFormat": "Sessions smf (slice 1)",
@@ -641,7 +641,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_smffunction_sm_sessionnbr{container=\"smf2\"}",
           "legendFormat": "Sessions smf2 (slice 2)",
@@ -650,7 +650,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_smffunction_sm_pdusessioncreationreq{container=\"smf\"}",
           "legendFormat": "PDU Req smf",
@@ -659,7 +659,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_smffunction_sm_pdusessioncreationreq{container=\"smf2\"}",
           "legendFormat": "PDU Req smf2",
@@ -672,7 +672,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Aislamiento del plano de usuario por slice. upf maneja el tráfico de los UEs con SD=000001 (192.168.100.x). upf2 maneja el tráfico de los UEs con SD=000002 (192.168.200.x). pfcp_peers_active confirma que cada UPF tiene su propia asociación PFCP con su SMF correspondiente. Los QoS flows también son independientes por slice.",
       "fieldConfig": {
@@ -711,7 +711,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf\"}",
           "legendFormat": "Sessions upf (slice 1)",
@@ -720,7 +720,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_upffunction_upf_sessionnbr{container=\"upf2\"}",
           "legendFormat": "Sessions upf2 (slice 2)",
@@ -729,7 +729,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "pfcp_peers_active{container=\"upf\"}",
           "legendFormat": "PFCP Peers upf",
@@ -738,7 +738,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "pfcp_peers_active{container=\"upf2\"}",
           "legendFormat": "PFCP Peers upf2",
@@ -764,7 +764,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus"
       },
       "description": "Counters acumulativos diferenciados por código de causa 3GPP TS 24.501 §9.11.3.2. cause=7: 5GS services not allowed (bad_supi o primer intento bad_k). cause=21: Synch failure (reintento de autenticación tras MAC failure de bad_k — mismo UE). cause=62: No network slices available (bad_sst, incluye reintentos automáticos del sistema). cause=111: Protocol error unspecified (bad_dnn — Open5GS usa este código en lugar del cause=91 estándar). rm_reginitfail total = 5 en lugar de 4 porque cause=62 acumula reintentos automáticos del AMF.",
       "fieldConfig": {
@@ -838,7 +838,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_amffunction_rm_reginitreq",
           "legendFormat": "Reg Req",
@@ -847,7 +847,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_amffunction_rm_reginitsucc",
           "legendFormat": "Reg Succ",
@@ -856,7 +856,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_amffunction_rm_reginitfail",
           "legendFormat": "Reg Fail — causa {{cause}}",
@@ -865,7 +865,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus"
           },
           "expr": "fivegs_amffunction_amf_authfail",
           "legendFormat": "Auth Fail — causa {{cause}}",
@@ -908,7 +908,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "uid": "loki"
       },
       "description": "Logs del AMF — aquí están todas las evidencias de fallos. Para bad_supi buscar: 'Cannot find SUCI'. Para bad_ki buscar: 'Authentication failure'. Para bad_dnn buscar: 'Not Supported OR Not Subscribed'. Para bad_sst buscar: 'Cannot find NSSAI'. El SUPI en cada log permite identificar el UE.",
       "fieldConfig": {
@@ -935,7 +935,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "loki"
           },
           "expr": "{nf=\"amf\"} |= ``",
           "refId": "A"
@@ -947,7 +947,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "uid": "loki"
       },
       "description": "Logs de SMF y SMF2. En E4 ambos SMFs gestionan sesiones independientes. El label 'nf' en cada log indica si el evento viene de smf (slice 1) o smf2 (slice 2). La presencia de logs en smf2 confirma que el slice 2 está activo y procesando sesiones.",
       "fieldConfig": {
@@ -974,7 +974,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "loki"
           },
           "expr": "{nf=~\"smf|smf2\"} |= ``",
           "refId": "A"
@@ -986,7 +986,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "P8E80F9AEF21F6940"
+        "uid": "loki"
       },
       "description": "Logs de UPF y UPF2. La presencia de logs en upf2 confirma que el plano de usuario del slice 2 está activo. En condiciones normales ambos UPFs loguean poco — su función es forwarding. Logs en upf2 confirman que nr_ue3 fue enrutado correctamente al slice 2.",
       "fieldConfig": {
@@ -1013,7 +1013,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "P8E80F9AEF21F6940"
+            "uid": "loki"
           },
           "expr": "{nf=~\"upf|upf2\"} |= ``",
           "refId": "A"
