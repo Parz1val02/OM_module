@@ -4,35 +4,16 @@ import "os"
 
 // Config holds all runtime configuration for the O&M module.
 type Config struct {
-	// Port the HTTP server listens on (default: 8080)
-	Port string
+	Port           string // HTTP server port
+	DockerSocket   string // path to the Docker daemon socket
+	ComposeProject string // Compose project name used to filter testbed containers
+	TempoEndpoint  string // OTLP/HTTP base URL for Grafana Tempo
 
-	// DockerSocket is the path to the Docker daemon socket.
-	DockerSocket string
+	CaptureEnabled   bool   // whether the live packet capture pipeline runs
+	CaptureInterface string // bridge interface to capture on, or "auto" to discover it
 
-	// ComposeProject is the Docker Compose project name used to filter
-	// containers that belong to the testbed (default: docker_open5gs)
-	ComposeProject string
-
-	// TempoEndpoint is the OTLP/HTTP base URL for Grafana Tempo.
-	// The tracing package POSTs to <TempoEndpoint>/v1/traces.
-	// Default: "tempo:4318"
-	TempoEndpoint string
-
-	// CaptureEnabled controls whether the live packet capture pipeline
-	// is started. Set to "false" to disable without redeployment.
-	// Default: "true"
-	CaptureEnabled bool
-
-	// CaptureInterface is the Linux bridge interface to capture on.
-	// Set to "auto" for dynamic discovery via Docker network inspection.
-	// Set to an explicit name (e.g. "br-abc123") to bypass discovery.
-	// Default: "auto"
-	CaptureInterface string
-
-	// MCC and MNC are used to reconstruct full 5G IMSI values from the
-	// SUCI MSIN extracted from NGAP Registration Request packets.
-	// These should match the values in .env.
+	// MCC and MNC reconstruct full 5G IMSI values from the SUCI MSIN in
+	// NGAP Registration Request packets; must match the values in .env.
 	MCC string
 	MNC string
 }

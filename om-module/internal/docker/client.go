@@ -80,17 +80,22 @@ func (c *Client) ListContainers(ctx context.Context, project string) ([]Containe
 	return result, nil
 }
 
-// GetBridgeInterface returns the Linux bridge interface name for the given
-// Docker network name (e.g. "docker_open5gs_default").
-//
-// Docker names bridge interfaces as "br-<first12chars_of_network_id>".
-// The method verifies the interface actually exists on the host before
-// returning it, so the caller can rely on the result being usable.
-func (c *Client) GetBridgeInterface(ctx context.Context, networkName string) (string, error) {
-	// Inspect the named network to get its ID.
+// inspectNetwork wraps NetworkInspect with consistent error context.
+func (c *Client) inspectNetwork(ctx context.Context, networkName string) (network.Inspect, error) {
 	nr, err := c.cli.NetworkInspect(ctx, networkName, network.InspectOptions{})
 	if err != nil {
-		return "", fmt.Errorf("docker: inspect network %q: %w", networkName, err)
+		return network.Inspect{}, fmt.Errorf("docker: inspect network %q: %w", networkName, err)
+	}
+	return nr, nil
+}
+
+// GetBridgeInterface returns the Linux bridge interface name for the given
+// Docker network (e.g. "docker_open5gs_default"). Docker names bridge
+// interfaces "br-<first12charsOfNetworkID>".
+func (c *Client) GetBridgeInterface(ctx context.Context, networkName string) (string, error) {
+	nr, err := c.inspectNetwork(ctx, networkName)
+	if err != nil {
+		return "", err
 	}
 
 	if len(nr.ID) < 12 {
@@ -106,9 +111,9 @@ func (c *Client) GetBridgeInterface(ctx context.Context, networkName string) (st
 // containers attached to the given Docker network. The CIDR suffix is stripped
 // from the IP (e.g. "172.22.0.10/24" becomes "172.22.0.10").
 func (c *Client) GetNetworkContainerIPs(ctx context.Context, networkName string) (map[string]string, error) {
-	nr, err := c.cli.NetworkInspect(ctx, networkName, network.InspectOptions{})
+	nr, err := c.inspectNetwork(ctx, networkName)
 	if err != nil {
-		return nil, fmt.Errorf("docker: inspect network %q: %w", networkName, err)
+		return nil, err
 	}
 
 	result := make(map[string]string, len(nr.Containers))

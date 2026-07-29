@@ -12,7 +12,7 @@ import (
 )
 
 // Packet is the parsed, normalised representation of a single tshark EK packet.
-// Only the fields the correlator needs are extracted; everything else is dropped.
+// Only the fields the pipeline needs are extracted; everything else is dropped.
 type Packet struct {
 	// Timestamp is derived from the frame epoch time in the EK output.
 	// It has nanosecond resolution and reflects the actual capture time.
@@ -29,49 +29,37 @@ type Packet struct {
 	SrcIP string
 	DstIP string
 
-	// --- S1AP fields (4G) ---
+	// S1AP fields (4G)
 	S1APProcedureCode int    // e.g. 12=InitialUEMessage, 11=DownlinkNAS, 13=UplinkNAS
-	ENBUUES1APID      string // ENB-UE-S1AP-ID, present from InitialUEMessage onward
-	MMEUUES1APID      string // MME-UE-S1AP-ID, present from DownlinkNASTransport onward
 	NASEMMType        string // hex string e.g. "0x41" for Attach Request
-	NASESMType        string // hex string for ESM messages
 	IMSI              string // only present in Identity Response (NAS 0x56)
 
-	// --- NGAP fields (5G) ---
+	// NGAP fields (5G)
 	NGAPProcedureCode int    // e.g. 15=InitialUEMessage, 4=DownlinkNAS, 46=UplinkNAS
-	RANUENGAPId       string // RAN-UE-NGAP-ID, present from InitialUEMessage onward
-	AMFUENGAPId       string // AMF-UE-NGAP-ID, present from DownlinkNASTransport onward
 	NASMMType         string // hex string e.g. "0x41" for Registration Request
 	SUCIMsin          string // MSIN portion of SUCI, only in Registration Request
 
-	// --- GTPv2-C fields (4G only, UDP 2123) ---
+	// GTPv2-C fields (4G only, UDP 2123)
 	GTPv2MessageType int    // 32=CreateSessionReq, 33=CreateSessionResp, 34=ModifyBearerReq, 35=ModifyBearerResp
-	GTPv2Seq         string // hex sequence number e.g. "0x000001" — correlation key
 	GTPv2TEID        string // tunnel endpoint ID, "0x00000000" on first request
 	GTPv2IMSI        string // only in Create Session Request
 	GTPv2APN         string // APN/DNN e.g. "internet"
 	GTPv2Cause       string // "16" = Request Accepted
-	GTPv2UEIP        string // UE IP address, assigned in Create Session Response
-	GTPv2EBI         string // EPS Bearer ID
 
-	// --- PFCP fields (4G and 5G, UDP 8805) ---
+	// PFCP fields (4G and 5G, UDP 8805)
 	PFCPMessageType int    // 50=EstReq, 51=EstResp, 52=ModReq, 53=ModResp, 54=DelReq, 55=DelResp
-	PFCPSeqNo       int    // sequence number — correlation key before SEID known
 	PFCPSEID        string // session endpoint ID (may be array on establishment)
 	PFCPIMSI        string // only in Session Establishment Request
-	PFCPUEIP        string // UE IP address
 	PFCPDNN         string // data network name e.g. "internet"
 	PFCPCause       string // "1" = success
 
-	// --- Diameter fields (4G only, TCP 3868/3873/5868) ---
+	// Diameter fields (4G only, TCP 3868/3873/5868)
 	DiameterCmdCode    int    // 318=AIR, 316=ULR, 272=CCR, 275=STR, 280=DWR
 	DiameterIsRequest  bool   // true if R flag set in Diameter flags
 	DiameterIMSI       string // from e212_e212_imsi or Subscription-Id-Data
-	DiameterSessionID  string // Diameter Session-Id AVP
 	DiameterResultCode string // "2001" = DIAMETER_SUCCESS
-	DiameterOriginHost string // origin NF hostname e.g. "mme.epc..."
 
-	// --- SBI HTTP/2 fields (5G only, TCP 7777) ---
+	// SBI HTTP/2 fields (5G only, TCP 7777)
 	SBIMethod    string // HTTP method: GET, POST, PUT, PATCH, DELETE
 	SBIPath      string // full API path e.g. /nausf-auth/v1/ue-authentications
 	SBIStatus    string // HTTP status code on responses e.g. "200"
@@ -88,14 +76,6 @@ type Packet struct {
 type ekPacket struct {
 	Timestamp json.RawMessage            `json:"timestamp"`
 	Layers    map[string]json.RawMessage `json:"layers"`
-}
-
-// tsharkProcess wraps a running tshark subprocess and its stdout pipe.
-type tsharkProcess struct {
-	cmd    *exec.Cmd
-	cancel context.CancelFunc
-	out    chan Packet
-	errc   chan error
 }
 
 // startTshark launches tshark on the given interface with explicit BPF capture
@@ -170,7 +150,7 @@ func startTshark(ctx context.Context, iface, bpf, display string) (<-chan Packet
 			}
 
 			// Drop packets we could not identify at all.
-			// PFCP packets have no generation set here — the correlator
+			// PFCP packets have no generation set here — the pipeline
 			// determines generation from IP addresses. Allow them through.
 			if pkt.Generation == "" && pkt.Protocol == "" {
 				continue
@@ -260,7 +240,7 @@ func parseEKLine(line string) (*Packet, error) {
 		parseGTPv2(gtpv2Raw, pkt)
 	} else if pfcpRaw, ok := raw.Layers["pfcp"]; ok {
 		pkt.Protocol = "pfcp"
-		parseGTPv2OrPFCP_PFCP(pfcpRaw, pkt)
+		parsePFCP(pfcpRaw, pkt)
 	} else if diameterRaw, ok := raw.Layers["diameter"]; ok {
 		pkt.Generation = Generation4G
 		pkt.Protocol = "diameter"
@@ -274,26 +254,30 @@ func parseEKLine(line string) (*Packet, error) {
 	return pkt, nil
 }
 
-// parseNGAP extracts NGAP and nested NAS-5GS fields.
-// The ngap layer may be a JSON object or a JSON array (multiple PDUs per SCTP chunk).
-// In the array case we process each element and merge the results — the first
-// element that has a UE-relevant procedure code wins for procedure routing.
-func parseNGAP(raw json.RawMessage, pkt *Packet) {
-	// Try array first.
+// parseArrayOrObject handles the tshark EK quirk where a layer may be
+// serialised as either a single JSON object or an array of objects (multiple
+// PDUs sharing one SCTP/TCP segment). Each element is parsed in turn via
+// parseObj until done reports the packet has what it needs.
+func parseArrayOrObject(raw json.RawMessage, pkt *Packet, parseObj func(json.RawMessage, *Packet), done func(*Packet) bool) {
 	var arr []json.RawMessage
 	if err := json.Unmarshal(raw, &arr); err == nil {
 		for _, elem := range arr {
-			parseNGAPObject(elem, pkt)
-			// Stop after we have found a UE procedure code.
-			if pkt.NGAPProcedureCode != 0 {
+			parseObj(elem, pkt)
+			if done(pkt) {
 				return
 			}
 		}
 		return
 	}
+	parseObj(raw, pkt)
+}
 
-	// Single object.
-	parseNGAPObject(raw, pkt)
+// parseNGAP extracts NGAP and nested NAS-5GS fields.
+// The ngap layer may be a JSON object or a JSON array (multiple PDUs per SCTP chunk).
+// In the array case we process each element and merge the results — the first
+// element that has a UE-relevant procedure code wins for procedure routing.
+func parseNGAP(raw json.RawMessage, pkt *Packet) {
+	parseArrayOrObject(raw, pkt, parseNGAPObject, func(p *Packet) bool { return p.NGAPProcedureCode != 0 })
 }
 
 func parseNGAPObject(raw json.RawMessage, pkt *Packet) {
@@ -303,8 +287,6 @@ func parseNGAPObject(raw json.RawMessage, pkt *Packet) {
 	}
 
 	pkt.NGAPProcedureCode = intField(obj, "ngap_ngap_procedureCode")
-	pkt.RANUENGAPId = strField(obj, "ngap_ngap_RAN_UE_NGAP_ID")
-	pkt.AMFUENGAPId = strField(obj, "ngap_ngap_AMF_UE_NGAP_ID")
 
 	// NAS-5GS is nested inside the ngap object under the key "nas-5gs".
 	if nasRaw, ok := obj["nas-5gs"]; ok {
@@ -320,17 +302,7 @@ func parseNGAPObject(raw json.RawMessage, pkt *Packet) {
 // parseS1AP extracts S1AP and nested NAS-EPS fields.
 // Same list-or-object handling as NGAP.
 func parseS1AP(raw json.RawMessage, pkt *Packet) {
-	var arr []json.RawMessage
-	if err := json.Unmarshal(raw, &arr); err == nil {
-		for _, elem := range arr {
-			parseS1APObject(elem, pkt)
-			if pkt.S1APProcedureCode != 0 {
-				return
-			}
-		}
-		return
-	}
-	parseS1APObject(raw, pkt)
+	parseArrayOrObject(raw, pkt, parseS1APObject, func(p *Packet) bool { return p.S1APProcedureCode != 0 })
 }
 
 func parseS1APObject(raw json.RawMessage, pkt *Packet) {
@@ -340,8 +312,6 @@ func parseS1APObject(raw json.RawMessage, pkt *Packet) {
 	}
 
 	pkt.S1APProcedureCode = intField(obj, "s1ap_s1ap_procedureCode")
-	pkt.ENBUUES1APID = strField(obj, "s1ap_s1ap_ENB_UE_S1AP_ID")
-	pkt.MMEUUES1APID = strField(obj, "s1ap_s1ap_MME_UE_S1AP_ID")
 
 	// NAS-EPS is nested inside the s1ap object under "nas-eps".
 	if nasRaw, ok := obj["nas-eps"]; ok {
@@ -349,13 +319,10 @@ func parseS1APObject(raw json.RawMessage, pkt *Packet) {
 		nasBytes, _ := json.Marshal(nasRaw)
 		if err := json.Unmarshal(nasBytes, &nas); err == nil {
 			pkt.NASEMMType = strField(nas, "nas-eps_nas-eps_nas_msg_emm_type")
-			pkt.NASESMType = strField(nas, "nas-eps_nas-eps_nas_msg_esm_type")
 			pkt.IMSI = strField(nas, "e212_e212_imsi")
 		}
 	}
 }
-
-// --- helpers ----------------------------------------------------------------
 
 // strField extracts a string value from a map, returning "" if absent or wrong type.
 // Handles arrays by returning the first element (tshark sometimes wraps values in arrays).
@@ -413,8 +380,6 @@ func intField(m map[string]interface{}, key string) int {
 	}
 }
 
-// --- GTPv2-C parser ---------------------------------------------------------
-
 // parseGTPv2 extracts GTPv2-C fields from the gtpv2 layer.
 func parseGTPv2(raw json.RawMessage, pkt *Packet) {
 	var obj map[string]interface{}
@@ -423,11 +388,8 @@ func parseGTPv2(raw json.RawMessage, pkt *Packet) {
 	}
 
 	pkt.GTPv2MessageType = intField(obj, "gtpv2_gtpv2_message_type")
-	pkt.GTPv2Seq = strField(obj, "gtpv2_gtpv2_seq")
 	pkt.GTPv2TEID = strField(obj, "gtpv2_gtpv2_teid")
 	pkt.GTPv2APN = strField(obj, "gtpv2_gtpv2_apn")
-	pkt.GTPv2EBI = strField(obj, "gtpv2_gtpv2_ebi")
-	pkt.GTPv2UEIP = strField(obj, "gtpv2_gtpv2_pdn_addr_and_prefix_ipv4")
 
 	// Cause may be a scalar or array — strField handles arrays
 	pkt.GTPv2Cause = strField(obj, "gtpv2_gtpv2_cause")
@@ -435,8 +397,6 @@ func parseGTPv2(raw json.RawMessage, pkt *Packet) {
 	// IMSI is nested under e212 fields at the gtpv2 layer level
 	pkt.GTPv2IMSI = strField(obj, "e212_e212_imsi")
 }
-
-// --- Diameter parser --------------------------------------------------------
 
 // parseDiameter extracts Diameter fields from the diameter layer.
 func parseDiameter(raw json.RawMessage, pkt *Packet) {
@@ -456,9 +416,7 @@ func parseDiameterObject(raw json.RawMessage, pkt *Packet) {
 	}
 
 	pkt.DiameterCmdCode = intField(obj, "diameter_diameter_cmd_code")
-	pkt.DiameterSessionID = strField(obj, "diameter_diameter_Session-Id")
 	pkt.DiameterResultCode = strField(obj, "diameter_diameter_Result-Code")
-	pkt.DiameterOriginHost = strField(obj, "diameter_diameter_Origin-Host")
 
 	// Determine request vs response from flags byte (bit 7 = R flag)
 	flags := strField(obj, "diameter_diameter_flags")
@@ -480,19 +438,16 @@ func parseDiameterObject(raw json.RawMessage, pkt *Packet) {
 	}
 }
 
-// parseGTPv2OrPFCP_PFCP extracts PFCP fields from the pfcp layer.
-// Named with the longer prefix to avoid collision — called parseGTPv2OrPFCP_PFCP
-// because PFCP generation (4g/5g) is determined by the correlator from IP.
-func parseGTPv2OrPFCP_PFCP(raw json.RawMessage, pkt *Packet) {
+// parsePFCP extracts PFCP fields from the pfcp layer.
+// PFCP generation (4g/5g) is determined by the pipeline from IP, not here.
+func parsePFCP(raw json.RawMessage, pkt *Packet) {
 	var obj map[string]interface{}
 	if err := json.Unmarshal(raw, &obj); err != nil {
 		return
 	}
 
 	pkt.PFCPMessageType = intField(obj, "pfcp_pfcp_msg_type")
-	pkt.PFCPSeqNo = intField(obj, "pfcp_pfcp_seqno")
 	pkt.PFCPDNN = strField(obj, "pfcp_pfcp_apn_dnn")
-	pkt.PFCPUEIP = strField(obj, "pfcp_pfcp_ue_ip_addr_ipv4")
 	pkt.PFCPCause = strField(obj, "pfcp_pfcp_cause")
 	pkt.PFCPIMSI = strField(obj, "e212_e212_imsi")
 
@@ -513,8 +468,6 @@ func parseGTPv2OrPFCP_PFCP(raw json.RawMessage, pkt *Packet) {
 	}
 	pkt.PFCPSEID = seid
 }
-
-// --- SBI HTTP/2 parser ------------------------------------------------------
 
 // parseSBI extracts 5G SBI fields from the http2 layer.
 // Open5GS uses HTTP/2 with prior knowledge (h2c) on TCP port 7777.

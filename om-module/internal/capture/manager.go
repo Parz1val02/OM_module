@@ -37,15 +37,22 @@ type Status struct {
 	Packets5G     uint64
 	RestartCount  uint64
 	UptimeSeconds float64
-	ActiveProcs   int
 }
 
-// Manager owns the tshark subprocess and feeds parsed packets to the correlator.
-// It handles:
-//   - Dynamic bridge interface discovery via the Docker socket
-//   - Active generation detection via the collector snapshot
-//   - Auto-restart with exponential backoff after subprocess crashes
-//   - Graceful shutdown when the context is cancelled
+// sleepOrDone waits for d, returning true, unless ctx is cancelled first,
+// in which case it returns false immediately.
+func sleepOrDone(ctx context.Context, d time.Duration) bool {
+	select {
+	case <-time.After(d):
+		return true
+	case <-ctx.Done():
+		return false
+	}
+}
+
+// Manager owns the tshark subprocesses: it discovers the bridge interface
+// and active generation, restarts tshark with backoff if it crashes, and
+// feeds parsed packets to whoever reads from Packets().
 type Manager struct {
 	docker           *dockerclient.Client
 	snap             *collector.Snapshot
@@ -53,7 +60,7 @@ type Manager struct {
 	mnc              string
 	captureInterface string // "auto" or explicit interface name
 
-	// out is the channel the correlator reads from.
+	// out is the channel the pipeline reads from.
 	out chan Packet
 
 	// internal state (atomic where accessed from multiple goroutines)
@@ -86,8 +93,7 @@ func NewManager(
 	}
 }
 
-// Packets returns the channel that delivers parsed packets to consumers.
-// The correlator should range over this channel.
+// Packets returns the channel the pipeline reads parsed packets from.
 func (m *Manager) Packets() <-chan Packet {
 	return m.out
 }
@@ -122,23 +128,19 @@ func (m *Manager) Run(ctx context.Context) {
 	log.Printf("📡 Capture manager started")
 
 	for {
-		// Phase 1: discover which generation is active.
 		gen := m.waitForGeneration(ctx)
 		if ctx.Err() != nil {
 			log.Printf("📡 Capture manager stopped (context cancelled during generation detection)")
 			return
 		}
 
-		// Phase 2: discover the bridge interface.
 		iface, err := m.discoverInterface(ctx)
 		if err != nil {
 			log.Printf("⚠️  Capture: interface discovery failed: %v — retrying in %s", err, generationPollInterval)
-			select {
-			case <-time.After(generationPollInterval):
-				continue
-			case <-ctx.Done():
+			if !sleepOrDone(ctx, generationPollInterval) {
 				return
 			}
+			continue
 		}
 
 		m.mu.Lock()
@@ -149,7 +151,6 @@ func (m *Manager) Run(ctx context.Context) {
 
 		log.Printf("📡 Capture ready: iface=%s generation=%s", iface, gen)
 
-		// Phase 3: run tshark, restarting on failure with backoff.
 		m.runWithRestart(ctx, iface, gen)
 
 		if ctx.Err() != nil {
@@ -178,9 +179,7 @@ func (m *Manager) waitForGeneration(ctx context.Context) string {
 		}
 
 		log.Printf("📡 No active core generation detected — waiting %s", generationPollInterval)
-		select {
-		case <-time.After(generationPollInterval):
-		case <-ctx.Done():
+		if !sleepOrDone(ctx, generationPollInterval) {
 			return ""
 		}
 	}
@@ -211,6 +210,21 @@ func (m *Manager) runWithRestart(ctx context.Context, iface, gen string) {
 		udpPkts, udpErrc := startTshark(ctx, iface, f.UDPBPF, f.UDPDisplay)
 
 		// Merge both packet channels into the manager output channel
+		forward := func(pkt Packet) bool {
+			switch pkt.Generation {
+			case Generation4G:
+				m.packets4g.Add(1)
+			case Generation5G:
+				m.packets5g.Add(1)
+			}
+			select {
+			case m.out <- pkt:
+				return true
+			case <-ctx.Done():
+				return false
+			}
+		}
+
 		done := make(chan struct{})
 		go func() {
 			defer close(done)
@@ -219,34 +233,14 @@ func (m *Manager) runWithRestart(ctx context.Context, iface, gen string) {
 				case pkt, ok := <-sctpPkts:
 					if !ok {
 						sctpPkts = nil
-					} else {
-						switch pkt.Generation {
-						case Generation4G:
-							m.packets4g.Add(1)
-						case Generation5G:
-							m.packets5g.Add(1)
-						}
-						select {
-						case m.out <- pkt:
-						case <-ctx.Done():
-							return
-						}
+					} else if !forward(pkt) {
+						return
 					}
 				case pkt, ok := <-udpPkts:
 					if !ok {
 						udpPkts = nil
-					} else {
-						switch pkt.Generation {
-						case Generation4G:
-							m.packets4g.Add(1)
-						case Generation5G:
-							m.packets5g.Add(1)
-						}
-						select {
-						case m.out <- pkt:
-						case <-ctx.Done():
-							return
-						}
+					} else if !forward(pkt) {
+						return
 					}
 				case <-ctx.Done():
 					return
@@ -279,9 +273,7 @@ func (m *Manager) runWithRestart(ctx context.Context, iface, gen string) {
 		log.Printf("⚠️  tshark exited unexpectedly (restart #%d): %v — retrying in %s",
 			m.restarts.Load(), exitErr, backoff)
 
-		select {
-		case <-time.After(backoff):
-		case <-ctx.Done():
+		if !sleepOrDone(ctx, backoff) {
 			return
 		}
 

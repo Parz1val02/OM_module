@@ -19,7 +19,6 @@ type omExporter struct {
 	snap    *collector.Snapshot
 	project string
 
-	// Descriptors
 	cpuPercent   *prometheus.Desc
 	memUsage     *prometheus.Desc
 	netRx        *prometheus.Desc
