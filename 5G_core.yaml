@@ -31,6 +31,7 @@ services:
       - .env
     environment:
       - COMPONENT_NAME=webui
+      - DB_URI=mongodb://${MONGO_IP}/open5gs
     volumes:
       - ./webui:/mnt/webui
       - /etc/timezone:/etc/timezone:ro
